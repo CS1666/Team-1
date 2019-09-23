@@ -107,6 +107,7 @@ int main() {
 	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
 	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
 	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
+	gTex.push_back(loadImage("Assets/cs1666_gjc26.png"));
 
 	for(auto image : gTex){
 		SDL_RenderClear(gRenderer);
