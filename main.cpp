@@ -104,7 +104,7 @@ int main() {
 	}
 
 	// Load media
-	gTex.push_back(loadImage("assets/cs1666_Linghai.png"));
+	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
 
 	for(auto image : gTex){
 		SDL_RenderClear(gRenderer);
