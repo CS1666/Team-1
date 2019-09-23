@@ -105,6 +105,7 @@ int main() {
 
 	// Load media
 	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
+	gTex.push_back(loadImage("Assets/CS1666_jcz18.png"));
 
 	for(auto image : gTex){
 		SDL_RenderClear(gRenderer);
