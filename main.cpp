@@ -112,7 +112,7 @@ int main() {
 	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
 	gTex.push_back(loadImage("Assets/level-generation.png"));
 	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
-	
+	gTex.push_back(loadImage("Assets/cs1666_pep24.png"));
 	gTex.push_back(loadImage("Assets/Keith C Stebler.png"));
 	gTex.push_back(loadImage("Assets/physics.png"));
 	
