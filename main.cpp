@@ -4,8 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-constexpr int SCREEN_WIDTH = 640;
-constexpr int SCREEN_HEIGHT = 480;
+constexpr int SCREEN_WIDTH = 1280;
+constexpr int SCREEN_HEIGHT = 720;
 
 // Function declarations
 bool init();
