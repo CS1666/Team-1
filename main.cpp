@@ -104,14 +104,21 @@ int main() {
 	}
 
 	// Load media
-	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
-	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
-	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
+	gTex.push_back(loadImage("Assets/credits.png"));
+	gTex.push_back(loadImage("Assets/ai.png"));
 	gTex.push_back(loadImage("Assets/cs1666_gjc26.png"));
-	gTex.push_back(loadImage("Assets/CS1666_apw50.png"));
+	
 	gTex.push_back(loadImage("Assets/CS1666_evs25.png"));
+	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
+	gTex.push_back(loadImage("Assets/level-generation.png"));
+	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
+	
 	gTex.push_back(loadImage("Assets/Keith C Stebler.png"));
+	gTex.push_back(loadImage("Assets/physics.png"));
+	
 	gTex.push_back(loadImage("Assets/cs1666_kel177.png"));
+	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
+	gTex.push_back(loadImage("Assets/CS1666_apw50.png"));
 
 	for(auto image : gTex){
 		SDL_RenderClear(gRenderer);
