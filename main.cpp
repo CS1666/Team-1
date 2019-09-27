@@ -4,8 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-constexpr int SCREEN_WIDTH = 640;
-constexpr int SCREEN_HEIGHT = 480;
+constexpr int SCREEN_WIDTH = 1280;
+constexpr int SCREEN_HEIGHT = 720;
 
 // Function declarations
 bool init();
@@ -104,15 +104,34 @@ int main() {
 	}
 
 	// Load media
+	gTex.push_back(loadImage("Assets/credits.png"));
+	gTex.push_back(loadImage("Assets/ai.png"));
+	gTex.push_back(loadImage("Assets/cs1666_gjc26.png"));
+	gTex.push_back(loadImage("Assets/CS1666_mrs185.png"));
+	gTex.push_back(loadImage("Assets/CS1666_evs25.png"));
 	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
-	SDL_RenderClear(gRenderer);
+	gTex.push_back(loadImage("Assets/level-generation.png"));
+	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
+	gTex.push_back(loadImage("Assets/cs1666_pep24.png"));
+	gTex.push_back(loadImage("Assets/Keith C Stebler.png"));
+	gTex.push_back(loadImage("Assets/physics.png"));
+	gTex.push_back(loadImage("Assets/CS1666_MCD66.png"));
+	gTex.push_back(loadImage("Assets/cs1666_kel117.png"));
+	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
+	gTex.push_back(loadImage("Assets/CS1666_apw50.png"));
+	gTex.push_back(loadImage("Assets/fin.png"));
+	
 
-	// Render the image
-	SDL_RenderCopy(gRenderer, gTex[0], NULL, NULL);
-	// Display rendering
-	SDL_RenderPresent(gRenderer);
-	// Wait 5 seconds
-	SDL_Delay(5000);
+	for(auto image : gTex){
+		SDL_RenderClear(gRenderer);
+
+		// Render the image
+		SDL_RenderCopy(gRenderer, image, NULL, NULL);
+		// Display rendering
+		SDL_RenderPresent(gRenderer);
+		// Wait 5 seconds
+		SDL_Delay(5000);
+	}
 
 	close();
 }
