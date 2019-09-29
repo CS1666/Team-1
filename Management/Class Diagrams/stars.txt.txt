@@ -1,6 +1,6 @@
 "Star" Class
 ---------------
-sprite: string
+image: string
 type: string
 size: int
 temperature: int
@@ -11,6 +11,7 @@ position: int[][]
 rotate(): void
 pull(): void
 getPosition(): int[][]
+collision(): boolean
 ---------------
 Star subclasses in order of increasing size/temperature/gravity
 1. "White Dwarf"
