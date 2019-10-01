@@ -1,0 +1,23 @@
+"Star" Class
+---------------
+image: string
+type: string
+size: int
+temperature: int
+rotation_speed: int
+gravity: int
+position: int[][]
+---------------
+rotate(): void
+pull(): void
+getPosition(): int[][]
+collision(): boolean
+---------------
+Star subclasses in order of increasing size/temperature/gravity
+1. "White Dwarf"
+2. "Red Dwarf"
+3. "Yellow Dwarf"
+4. "Red Giant"
+5. "Blue Giant"
+6. "Red Supergiant"
+7. "Blue Supergiant"
