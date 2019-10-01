@@ -3,11 +3,11 @@ Black Hole
 //Only doing stellar black holes since any larger would be kinda insane
 // black holes won't be rendered? but maybe show a secretion disk
 //math at http://hyperphysics.phy-astr.gsu.edu/hbase/Astro/blkhol.html
-X position (center)
-Y position (center)
-Mass
-Schwarzschild Radius
-constexpr 3/2* event horizon (photon sphere)
+int X position (center)
+int Y position (center)
+int Mass
+double Schwarzschild Radius
+constexpr double 3/2* event horizon (photon sphere)
 -----------
 private:
 	//Black hole can suck up other objects and get sorta larger
