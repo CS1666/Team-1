@@ -28,9 +28,10 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 			entity->getDrawCirc()->RenderFillCirc(sdlgRenderer);
 		}
 		
-		SDL_RenderPresent(sdlgRenderer);
+		
 
 	}
+	SDL_RenderPresent(sdlgRenderer);
 
 	
 

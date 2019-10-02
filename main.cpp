@@ -35,7 +35,7 @@ bool init() {
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 		
-	gWindow = SDL_CreateWindow("Hello world!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		return  false;
@@ -100,6 +100,20 @@ int main() {
 	gpEntity playerent(db, tex);
 
 	osEntity.push_back(&playerent);
+
+
+	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Rect db2 = {800,400,332,315};
+	gpEntity starent(db2, tex2);
+
+	osEntity.push_back(&starent);
+
+
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db3 = {400,300,225,300};
+	gpEntity emyent(db3, tex3);
+
+	osEntity.push_back(&emyent);
 
 
 	//Star initilization
