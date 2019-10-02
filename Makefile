@@ -6,8 +6,14 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 all: $(OUT_NAMES)
 
-%.o: %.cpp
+%.o: %.cpp gpEntity.o BasicMovementFPSlimit.o
 	$(CC) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
+gpEntity.o : ./General/gpEntity.cpp ./General/gpEntity.h
+	$(CC) -c ./General/gpEntity.cpp $(COMPILER_FLAGS) 
+
+BasicMovementFPSlimit.o : ./Physics/BasicMovementFPSlimit.cpp ./Physics/BasicMovementFPSlimit.h
+	$(CC) -c ./Physics/BasicMovementFPSlimit.cpp $(COMPILER_FLAGS) 
 
 clean:
 	rm *.o
