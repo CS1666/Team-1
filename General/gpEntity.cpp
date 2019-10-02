@@ -1,14 +1,17 @@
 
-#include <SDL.h>
-#include "gpEntity.h"
+	#include "gpEntity.h"
 
 
+	gpEntity::gpEntity(): drawBox{0,0,0,0},  drawCirc{}, assetTex{nullptr} {};
 
-	gpEntity::gpEntity(): drawBox{0,0,0,0}, assetTex{NULL} {};
+	gpEntity::gpEntity(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex} {};
 
-	gpEntity::gpEntity(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, assetTex{aTex} {};
+	gpEntity::gpEntity(NSDL_Circ dCirc, SDL_Texture* aTex):drawBox{0,0,0,0}, drawCirc{dCirc}, assetTex{aTex} {};
 
-	gpEntity::~gpEntity(){};
+	gpEntity::~gpEntity(){
+		SDL_DestroyTexture(assetTex);
+		assetTex = nullptr;
+	}
 
 	void gpEntity::setX(int x){
 			drawBox.x = x;
@@ -43,12 +46,40 @@
 			drawBox.y += vy;
 
 		}
+		NSDL_Circ* gpEntity::getDrawCirc(){
+			return &drawCirc;
+		}
+
+		void gpEntity::updateDrawCirc(){
+			drawCirc.setX(drawCirc.getX() + vx);
+			drawCirc.setY(drawCirc.getY() + vy);
+
+		}
+		bool gpEntity::isRectEnt(){
+
+			return drawBox.w != 0 && drawBox.h != 0;
+		}
+	
+
+		void gpEntity::setR(int new_r){
+			drawCirc.setR(new_r) ;
+		}
+		int gpEntity::getR(){
+			return drawCirc.getR();
+		}
 		void gpEntity::setTexture(SDL_Texture* tex){
 			assetTex = tex;
 		}
 		SDL_Texture* gpEntity::getTexture(){
 			return assetTex;
 		}
+
+		bool gpEntity::isCircEnt(){
+
+			return drawCirc.getR() != 0;
+		}
+
+
 		void gpEntity::handelEntityPos(int sw, int sh){
 			updateDrawBox();
 
