@@ -6,8 +6,11 @@
 #include "gpEntity.h"
 #include "gpRender.h"
 
+//--------------------------------Constructors--------------------------------------------------
 gpRender::gpRender(): sdlgRenderer{nullptr} {};
 gpRender::gpRender(SDL_Renderer* sdlgr) : sdlgRenderer{sdlgr} {};
+
+//--------------------------------Destructors---------------------------------------------------
 gpRender::~gpRender(){
 
 	SDL_DestroyRenderer(sdlgRenderer);
@@ -15,6 +18,7 @@ gpRender::~gpRender(){
 }
 
 
+//Method that renders images onto the window
 void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 	SDL_RenderClear(sdlgRenderer);
 	for(auto entity : osEntity){
@@ -27,15 +31,12 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 		else if(entity->isCircEnt()){
 			entity->getDrawCirc()->RenderFillCirc(sdlgRenderer);
 		}
-		
-		
 
 	}
 	SDL_RenderPresent(sdlgRenderer);
-
-	
-
 }
+
+///Provided method that loads Images
 SDL_Texture* gpRender::loadImage(std::string fname) {
 	SDL_Texture* newText = nullptr;
 

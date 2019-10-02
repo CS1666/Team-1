@@ -3,11 +3,13 @@
 #include <string>
 #include <SDL.h>
 #include "BasicMovementFPSlimit.h"
-
-
 constexpr int MAX_SPEED = 10;
 
+//NOTE: File should probably be renamed and moved to general. This deals more with handling key inputs than
+//      actual movements
 
+
+//General wrapper function to handle Key evenets
 bool handleKeyEvents(SDL_Event e, gpEntity &ent){
 	if (e.type == SDL_QUIT) {
 		return  false;
@@ -23,6 +25,7 @@ bool handleKeyEvents(SDL_Event e, gpEntity &ent){
 	
 }
 
+//Handles Up Key Events
 void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 	if(e.type == SDL_KEYUP) {
 		switch(e.key.keysym.sym) {
@@ -55,6 +58,7 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 	}
 }
 
+//Handles down Key Events
 void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 	
 		switch(e.key.keysym.sym) {

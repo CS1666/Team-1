@@ -84,8 +84,12 @@ void close() {
 
 int main() {
 
+	//Frame timiers
 	Uint32 frameStart;
 	int frameTime;
+
+	//Vector used to store all on screen entities
+
 	std::vector<gpEntity*> osEntity;
 	if (!init()) {
 		std::cout <<  "Failed to initialize!" << std::endl;
@@ -93,15 +97,18 @@ int main() {
 		return 1;
 	}
 
+	//gpRender object that is used to render object onto screen
 	gpRender gr(gRenderer);
+
+
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
 	SDL_Rect db = {100,100,150,150};
 	gpEntity playerent(db, tex);
-
 	osEntity.push_back(&playerent);
 
 
+	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
 	gpEntity starent(db2, tex2);
@@ -109,37 +116,37 @@ int main() {
 	osEntity.push_back(&starent);
 
 
+	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db3 = {400,300,225,300};
 	gpEntity emyent(db3, tex3);
 
 	osEntity.push_back(&emyent);
 
-
-	//Star initilization
-
-
-	//Capital Enemy initilization
-
 	SDL_Event e;
 	bool gameon = true;
 
+	//Game Loop
 	while(gameon) {
 		frameStart = SDL_GetTicks();
-		while(SDL_PollEvent(&e)) {
-		
 
-			gameon = handleKeyEvents(e, playerent);
-			
+		//Handles all incoming Key events
+		while(SDL_PollEvent(&e)) {
+			gameon = handleKeyEvents(e, playerent);	
 		}
 		
-		playerent.handelEntityPos(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+		//Adjusts the players entities pos based on interal values
+		playerent.handelEntityOB(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+
+		//Renders all renderable objects onto the screen
 		gr.renderOnScreenEntity(osEntity);
 		
 
-
-
+		//Calculates when the next frame should be drawn
+		//Likely reason for image studdering
 		frameTime = SDL_GetTicks() - frameStart;
 
 		if(frameDelay > frameTime)
@@ -147,16 +154,14 @@ int main() {
 			SDL_Delay(frameDelay - frameTime);
 		}
 
-
 	}
-
-	
-
 
 	close();
 }
 
 
+
+//I moved credit sequence down here til we can integrate into the gamre 
 
 /**
 	gTex.push_back(loadImage("Assets/Credits/credits.png"));

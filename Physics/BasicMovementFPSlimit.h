@@ -1,6 +1,4 @@
 
-
-
 #include "../General/gpEntity.h"
 
 bool handleKeyEvents(SDL_Event e, gpEntity &ent);
