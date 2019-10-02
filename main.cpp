@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "General/gpEntity.h"
 #include "Physics/BasicMovementFPSlimit.h"
+#include "General/gpRender.h"
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
@@ -13,7 +14,7 @@ constexpr int frameDelay = 1000/ FPS;
 
 // Function declarations
 bool init();
-SDL_Texture* loadImage(std::string fname);
+
 void close();
 
 // Globals
@@ -65,35 +66,16 @@ bool init() {
 	return true;
 }
 
-SDL_Texture* loadImage(std::string fname) {
-	SDL_Texture* newText = nullptr;
-
-	SDL_Surface* startSurf = IMG_Load(fname.c_str());
-	if (startSurf == nullptr) {
-		std::cout << "Unable to load image " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
-		return nullptr;
-	}
-
-	newText = SDL_CreateTextureFromSurface(gRenderer, startSurf);
-	if (newText == nullptr) {
-		std::cout << "Unable to create texture from " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
-	}
-
-	SDL_FreeSurface(startSurf);
-
-	return newText;
-}
-
 void close() {
 	for (auto i : gTex) {
 		SDL_DestroyTexture(i);
 		i = nullptr;
 	}
 
-	SDL_DestroyRenderer(gRenderer);
+	
 	SDL_DestroyWindow(gWindow);
 	gWindow = nullptr;
-	gRenderer = nullptr;
+	
 
 	// Quit SDL subsystems
 	IMG_Quit();
@@ -104,18 +86,27 @@ int main() {
 
 	Uint32 frameStart;
 	int frameTime;
-
+	std::vector<gpEntity*> osEntity;
 	if (!init()) {
 		std::cout <<  "Failed to initialize!" << std::endl;
 		close();
 		return 1;
 	}
 
-
-
-	SDL_Texture* tex = loadImage("Assets/Objects/ship_capital_ally.png");
+	gpRender gr(gRenderer);
+	//Player Entity Initilizaiton
+	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
 	SDL_Rect db = {100,100,150,150};
-	gpEntity testent(db, tex);
+	gpEntity playerent(db, tex);
+
+	osEntity.push_back(&playerent);
+
+
+	//Star initilization
+
+
+	//Capital Enemy initilization
+
 	SDL_Event e;
 	bool gameon = true;
 
@@ -124,17 +115,14 @@ int main() {
 		while(SDL_PollEvent(&e)) {
 		
 
-			gameon = handleKeyEvents(e, testent);
+			gameon = handleKeyEvents(e, playerent);
 			
 		}
 		
-		testent.handelEntityPos(SCREEN_WIDTH, SCREEN_HEIGHT);
+		playerent.handelEntityPos(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-		SDL_RenderClear(gRenderer);
-		SDL_RenderCopy(gRenderer, testent.getTexture(), NULL, testent.getDrawBox());
+		gr.renderOnScreenEntity(osEntity);
 		
-		SDL_RenderPresent(gRenderer);
 
 
 
