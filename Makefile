@@ -9,10 +9,11 @@ all: $(OUT_NAMES)
 %.o: %.cpp gpEntity.o BasicMovementFPSlimit.o
 	$(CC) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
-gpEntity.o: ./General/gpEntity.cpp ./General/gpEntity.h
-	$(CC) -c General/gpEntity.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) 
+gpEntity.o : ./General/gpEntity.cpp ./General/gpEntity.h
+	$(CC) -c ./General/gpEntity.cpp $(COMPILER_FLAGS) 
 
-BasicMovementFPSlimit.o: ./Physics/BasicMovementFPSlimit.cpp ./Physics/BasicMovementFPSlimit.h
-	$(CC) -c Physics/BasicMovementFPSlimit.cpp $(COMPILER_FLAGS) $(LINKER_FLAGS) 
+BasicMovementFPSlimit.o : ./Physics/BasicMovementFPSlimit.cpp ./Physics/BasicMovementFPSlimit.h
+	$(CC) -c ./Physics/BasicMovementFPSlimit.cpp $(COMPILER_FLAGS) 
+
 clean:
 	rm *.o

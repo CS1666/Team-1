@@ -101,39 +101,42 @@ void close() {
 }
 
 int main() {
+
 	Uint32 frameStart;
 	int frameTime;
+
 	if (!init()) {
 		std::cout <<  "Failed to initialize!" << std::endl;
 		close();
 		return 1;
 	}
 
-	SDL_Rect dr = {100, 100, 150, 150};
-	SDL_Texture* tex = loadImage("Assets/Objects/ship_cruiser_ally.png");
 
-	gpEntity testent(dr, tex);
 
+	SDL_Texture* tex = loadImage("Assets/Objects/ship_capital_ally.png");
+	SDL_Rect db = {100,100,150,150};
+	gpEntity testent(db, tex);
 	SDL_Event e;
-
-	// Flag to control game loop
 	bool gameon = true;
 
-	// Game loop
 	while(gameon) {
 		frameStart = SDL_GetTicks();
 		while(SDL_PollEvent(&e)) {
-			// Only handling 1 event at the moment: closing the game window
+		
+
 			gameon = handleKeyEvents(e, testent);
 			
 		}
 		
 		testent.handelEntityPos(SCREEN_WIDTH, SCREEN_HEIGHT);
-		SDL_RenderClear(gRenderer);	
-		std::cout <<  testent.getVY()  << std::endl;
 
+		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
+		SDL_RenderClear(gRenderer);
 		SDL_RenderCopy(gRenderer, testent.getTexture(), NULL, testent.getDrawBox());
+		
 		SDL_RenderPresent(gRenderer);
+
+
 
 		frameTime = SDL_GetTicks() - frameStart;
 
@@ -141,16 +144,19 @@ int main() {
 		{
 			SDL_Delay(frameDelay - frameTime);
 		}
+
+
 	}
 
 	
+
+
 	close();
 }
 
 
-	/**gpEntity testent;
 
-	// Load media
+/**
 	gTex.push_back(loadImage("Assets/Credits/credits.png"));
 	gTex.push_back(loadImage("Assets/Credits/ai.png"));
 	gTex.push_back(loadImage("Assets/Credits/cs1666_gjc26.png"));
@@ -178,4 +184,7 @@ int main() {
 		SDL_RenderPresent(gRenderer);
 		// Wait 5 seconds
 		SDL_Delay(5000);
-	}**/
+
+	}
+
+**/
