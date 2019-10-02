@@ -5,22 +5,7 @@
 #include "BasicMovementFPSlimit.h"
 
 
-constexpr int MAX_SPEED = 5;
-/**struct NOTSDL_Circ {
-	int x;
-	int y;
-	int r;
-};
-
-void NOTSDL_RenderFillCirc(SDL_Renderer* rend, NOTSDL_Circ* circ) {
-	for (int x = -circ->r; x < circ->r; x++) {
-		for (int y = -circ->r; y < circ->r; y++) {
-			if ((x*x + y*y) < (circ->r * circ->r)) {
-				SDL_RenderDrawPoint(rend, circ->x + x, circ->y + y);
-			}
-		}
-	}
-}**/
+constexpr int MAX_SPEED = 10;
 
 
 bool handleKeyEvents(SDL_Event e, gpEntity &ent){
