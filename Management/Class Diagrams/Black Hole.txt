@@ -1,0 +1,22 @@
+Black Hole
+-----------
+//Only doing stellar black holes since any larger would be kinda insane
+// black holes won't be rendered? but maybe show a secretion disk
+//math at http://hyperphysics.phy-astr.gsu.edu/hbase/Astro/blkhol.html
+int X position (center)
+int Y position (center)
+int Mass
+double Schwarzschild Radius
+constexpr double 3/2* event horizon (photon sphere)
+-----------
+private:
+	//Black hole can suck up other objects and get sorta larger
+	void updateMass(int addedMass)
+public:
+	//calculate the grativational pull in both the x and y directions from the black hole 
+	double[] gravitationalPull(int otherX, int otherY, int otherMass)
+	//determine whether the other object is in the event horizon
+	bool isColliding(double distance)
+	//get the distance to the blackhole
+	double calcutateDistance(int otherX, int otherY)
+-----------
