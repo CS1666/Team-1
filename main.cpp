@@ -134,7 +134,7 @@ int main() {
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		
+		updatePosition(playerent);
 
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
