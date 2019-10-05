@@ -86,11 +86,14 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 	}
 	SDL_RenderPresent(gRenderer);
 
-	setFrameTime(SDL_GetTicks() - frameStart);
+	//If you are using new functionality
+	if(gWindow != nullptr){
+		setFrameTime(SDL_GetTicks() - frameStart);
 
-	if(frameDelay > frameTime)
-	{
+		if(frameDelay > frameTime)
+		{
 			SDL_Delay(frameDelay - frameTime);
+		}
 	}
 }
 
