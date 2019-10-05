@@ -6,10 +6,7 @@
 
 #pragma once
 
-constexpr int gSCREEN_WIDTH = 1280;
-constexpr int gSCREEN_HEIGHT = 720;
-constexpr int gFPS = 60;
-constexpr int gframeDelay = 1000/ gFPS;
+
 class gpRender{
 
 	public:
@@ -37,6 +34,9 @@ class gpRender{
 
 		bool isRInit();
 
+		int getSW();
+		int getSH();
+		int getFD();
 
 
 
@@ -46,5 +46,9 @@ class gpRender{
 		bool isInit = true;
 		Uint32 frameStart;
 		int frameTime;
+		int SCREEN_WIDTH = 1280;
+		int SCREEN_HEIGHT = 720;
+		int FPS = 60;
+		int frameDelay = 1000/ FPS;
 		
 };

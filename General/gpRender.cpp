@@ -20,7 +20,7 @@ gpRender::gpRender(){
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 		
-	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, gSCREEN_WIDTH, gSCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr && isInit) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -88,9 +88,9 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 
 	setFrameTime(SDL_GetTicks() - frameStart);
 
-	if(gframeDelay > frameTime)
+	if(frameDelay > frameTime)
 	{
-			SDL_Delay(gframeDelay - frameTime);
+			SDL_Delay(frameDelay - frameTime);
 	}
 }
 
@@ -133,4 +133,16 @@ int gpRender::getFrameTime(){
 bool gpRender::isRInit(){
 	return isInit;
 }
+
+
+int gpRender::getSW(){
+	return SCREEN_WIDTH;
+}
+int gpRender::getSH(){
+	return SCREEN_HEIGHT;
+}
+int gpRender::getFD(){
+	return frameDelay;
+}
+
 

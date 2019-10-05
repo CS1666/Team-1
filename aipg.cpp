@@ -64,7 +64,7 @@ int main(){
 
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
-		playerent.handelEntityOB(gSCREEN_WIDTH, gSCREEN_HEIGHT);
+		playerent.handelEntityOB(gr.getSW(), gr.getSH());
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 
 		//Renders all renderable objects onto the screen
