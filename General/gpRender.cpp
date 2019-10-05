@@ -74,9 +74,11 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 	SDL_RenderClear(gRenderer);
 	for(auto entity : osEntity){
 		
-	
+		SDL_Point center;
 		if (entity->isRectEnt()){
-			SDL_RenderCopy(gRenderer, entity->getTexture(), NULL, entity->getDrawBox());
+			center.x = entity->getX()/2;
+			center.y = entity->getY()/2;
+			SDL_RenderCopyEx(sdlgRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
 			
 		}
 		else if(entity->isCircEnt()){
@@ -116,6 +118,7 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 
 	return newText;
 }
+
 
 
 void gpRender::setFrameStart(Uint32 tick){

@@ -9,6 +9,7 @@
 
 	gpEntity::gpEntity(NSDL_Circ dCirc, SDL_Texture* aTex):drawBox{0,0,0,0}, drawCirc{dCirc}, assetTex{aTex} {};
 
+
 	//------------------------------------Destructor--------------------------------------------------
 	gpEntity::~gpEntity(){
 		SDL_DestroyTexture(assetTex);
@@ -53,6 +54,13 @@
 	SDL_Texture* gpEntity::getTexture(){
 			return assetTex;
 	}
+	void gpEntity::setAngle(double new_angle){
+		angle = new_angle;
+	}
+	double gpEntity::getAngle(){
+		return angle;
+	}
+	
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* gpEntity::getDrawBox(){
