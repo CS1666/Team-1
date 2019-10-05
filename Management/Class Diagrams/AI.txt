@@ -1,0 +1,6 @@
+AI Class
+------------------
+ships: Ship[]
+------------------
+setShips(): void
+setShipMovement(int[], int[], Ship): void
