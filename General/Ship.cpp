@@ -17,7 +17,7 @@ class Ship
         string currKey;
 
         //ai
-        vector<vector<int>> path;
+        vector<vector<int> > path;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -55,7 +55,7 @@ class Ship
             return position;
         }
 
-        void setPath(vector<vector<int>> newPath)
+        void setPath(vector<vector<int> > newPath)
         {
         	path = newPath;
         }
