@@ -23,12 +23,14 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 	SDL_RenderClear(sdlgRenderer);
 	for(auto entity : osEntity){
 		
-	
+		SDL_Point center;
 		if (entity->isRectEnt()){
-			SDL_RenderCopy(sdlgRenderer, entity->getTexture(), NULL, entity->getDrawBox());
+			center.x = entity->getX()/2;
+			center.y = entity->getY()/2;
+			SDL_RenderCopyEx(sdlgRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
 			
 		}
-		else if(entity->isCircEnt()){
+		else if(entity->isCircEnt()){			
 			entity->getDrawCirc()->RenderFillCirc(sdlgRenderer);
 		}
 
@@ -55,4 +57,6 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 
 	return newText;
 }
+
+
 
