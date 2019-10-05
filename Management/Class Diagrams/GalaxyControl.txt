@@ -2,7 +2,7 @@
 --------------------
 enemy_contr_count: int
 player_contr_count: int
-bool inControl[]
+inControl[]: bool
 
 --------------------
 

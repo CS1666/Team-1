@@ -9,6 +9,7 @@ weaponType: int
 damageTaken: boolean
 currKey: string
 isUser: boolean
+isAlly: boolean
 path: int[][2]
 controller: controllerClass(?)
 ---
@@ -17,7 +18,7 @@ updateMovement(): void
 checkAction(stream*): void
 shootWeapon(): weaponClass(?)
 updateHull(int): void
-updatePosition(int[][]): void
+updatePosition(int x, int y): void
 getPosition(): int[2]
 setPath(): void
 followPath(): boolean
