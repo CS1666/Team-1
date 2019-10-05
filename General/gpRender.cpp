@@ -20,7 +20,7 @@ gpRender::~gpRender(){
 
 //Method that renders images onto the window
 void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
-	SDL_RenderClear(sdlgRenderer);
+	SDL_RenderClear(gRenderer);
 	for(auto entity : osEntity){
 		
 		SDL_Point center;
@@ -30,12 +30,22 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 			SDL_RenderCopyEx(sdlgRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
 			
 		}
-		else if(entity->isCircEnt()){			
-			entity->getDrawCirc()->RenderFillCirc(sdlgRenderer);
+		else if(entity->isCircEnt()){
+			entity->getDrawCirc()->RenderFillCirc(gRenderer);
 		}
 
 	}
-	SDL_RenderPresent(sdlgRenderer);
+	SDL_RenderPresent(gRenderer);
+
+	//If you are using new functionality
+	if(gWindow != nullptr){
+		setFrameTime(SDL_GetTicks() - frameStart);
+
+		if(frameDelay > frameTime)
+		{
+			SDL_Delay(frameDelay - frameTime);
+		}
+	}
 }
 
 ///Provided method that loads Images
