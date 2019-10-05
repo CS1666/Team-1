@@ -5,12 +5,14 @@
 #include "BasicMovementFPSlimit.h"
 constexpr int MAX_SPEED = 5;
 constexpr int MAX_DELTAV = 2;
+constexpr double MAX_ROTSPEED = 100;
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
 int speedX = 0;
 int speedY = 0;
 int deltaVX = 0;
 int deltaVY = 0;
+double rotation = 0;
 
 //General wrapper function to handle Key evenets
 bool handleKeyEvents(SDL_Event e, gpEntity &ent){
@@ -50,12 +52,14 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() + MAX_SPEED);
 				//}
-				//break;
+				rotation = 0;
+				break;
 			case SDLK_d:
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() - MAX_SPEED);
 				//}
 				deltaVX = 0;
+				rotation = 0;
 				break;
 		}
 	
@@ -75,7 +79,7 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			deltaVX--;
+			rotation -= 20;
 			break;
 
 		case SDLK_s:
@@ -87,7 +91,7 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			deltaVX++;
+			rotation += 20;
 			break;
 		
 	}
@@ -107,6 +111,7 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 	{
 		deltaVY = -MAX_DELTAV;
 	}
+	
 }
 
 
@@ -130,9 +135,18 @@ void updatePosition(gpEntity &ent)
 	{
 		speedY = -MAX_SPEED;
 	}
+	if(rotation > MAX_ROTSPEED)
+	{
+		rotation = MAX_ROTSPEED;
+	}
+	else if(rotation < -MAX_ROTSPEED)
+	{
+		rotation = -MAX_ROTSPEED;
+	}
 	std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setX(ent.getX() + speedX);
 	ent.setY(ent.getY() + speedY);
+	ent.setAngle(ent.getAngle() + rotation);
 }
 
 
