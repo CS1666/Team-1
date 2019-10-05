@@ -3,16 +3,22 @@
 #include <string>
 #include <SDL.h>
 #include "BasicMovementFPSlimit.h"
+
+#define PI 3.14159265
+
 constexpr int MAX_SPEED = 5;
 constexpr int MAX_DELTAV = 2;
-constexpr double MAX_ROTSPEED = 100;
+constexpr double MAX_ROTSPEED = 180;
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
 int speedX = 0;
 int speedY = 0;
 int deltaVX = 0;
 int deltaVY = 0;
+//int acceleration = 0;
 double rotation = 0;
+double direction;
+
 
 //General wrapper function to handle Key evenets
 bool handleKeyEvents(SDL_Event e, gpEntity &ent){
@@ -52,14 +58,14 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() + MAX_SPEED);
 				//}
-				rotation = 0;
+				
 				break;
 			case SDLK_d:
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() - MAX_SPEED);
 				//}
 				deltaVX = 0;
-				rotation = 0;
+				
 				break;
 		}
 	
@@ -68,30 +74,35 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 
 //Handles down Key Events
 void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
+	direction = ent.getAngle();	
+
 	switch(e.key.keysym.sym) {
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			deltaVY--;
 			
+			deltaVX -= sin(direction*PI/180);
+			deltaVY += cos(direction*PI/180);		
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			rotation -= 20;
+			rotation -= 20.0;
 			break;
 
 		case SDLK_s:
 		
 			//ent.setVY(ent.getVY() + MAX_SPEED);
-			deltaVY++;
+			
+			deltaVX += sin(direction*PI/180);
+			deltaVY -= cos(direction*PI/180);
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			rotation += 20;
+			rotation += 20.0;
 			break;
 		
 	}
@@ -147,6 +158,7 @@ void updatePosition(gpEntity &ent)
 	ent.setX(ent.getX() + speedX);
 	ent.setY(ent.getY() + speedY);
 	ent.setAngle(ent.getAngle() + rotation);
+	
 }
 
 
