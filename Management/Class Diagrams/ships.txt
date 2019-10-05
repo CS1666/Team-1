@@ -2,12 +2,14 @@
 ---
 hull: int
 sprite: string
-position: int[][]
+position: int[2]
 velocity: int
 rotation: float
 weaponType: int
 damageTaken: boolean
 currKey: string
+isUser: boolean
+path: int[][2]
 controller: controllerClass(?)
 ---
 checkPhysics(): void
@@ -16,7 +18,9 @@ checkAction(stream*): void
 shootWeapon(): weaponClass(?)
 updateHull(int): void
 updatePosition(int[][]): void
-getPosition(): int[][]
+getPosition(): int[2]
+setPath(): void
+followPath(): boolean
 ------------------
 "Fighter Ship" Class
 Subclass/Inherit "Ship" Class

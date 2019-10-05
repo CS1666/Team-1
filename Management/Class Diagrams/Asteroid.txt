@@ -2,16 +2,14 @@
 --------------------
 Implements: Sprite, Physics Object
 --------------------
-int radius
-int velocity
-int xPos
-int yPos
-SDL_Rect *sprite
+radius: int
+velocity: int
+position: int[2]
+sprite: SDL_Rect *
 --------------------
 getRadius(): int
 getVelocity(): int
-getXPos(): int
-getYPos(): int
+getPosition(): int[2];
 getSprite(): SDL_Rect *
 
 setRadius(int r): void

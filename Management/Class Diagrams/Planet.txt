@@ -1,11 +1,10 @@
 "Planet" Class
 ----------------
-int radius
-int velocity
-int direction
-int gravity
-int xPos
-int yPos
+radius: int
+velocity: int
+direction: int
+gravity:int
+position: int[2]
 SDL_Rect * planet_sprite
 
 ----------------------
@@ -14,8 +13,7 @@ getRadius(): int
 getVelocity(): int
 getDirection(): int
 getGravity(): int
-getXPos(): int
-getYPos(): int
+getPosition(): int[2]
 getSprite(): SDL_Rect *
 
 setRadius(int r): void
