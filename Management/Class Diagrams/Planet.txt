@@ -20,5 +20,5 @@ setRadius(int r): void
 setVelocity(int v): void
 setDirection(int d): void
 setGravity(int g): void
-setPosition(int x y, int): void
+setPosition(int x, int y): void
 setSprite(int x, int y, int w, int h): void
