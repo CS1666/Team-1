@@ -1,0 +1,11 @@
+Sector Class
+------------------
+ships: Ship[]
+planets: Planet[]
+stars: Star[]
+asteroids: asteroid[]
+blackHoles: BlackHole[]
+------------------
+getShips(): *Ship[]
+addShip(Ship): void
+removeShip(Ship): Ship

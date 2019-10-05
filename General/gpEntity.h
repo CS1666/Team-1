@@ -14,6 +14,7 @@ class gpEntity{
 		gpEntity(SDL_Rect dBox, SDL_Texture* aTex);
 		gpEntity(NSDL_Circ dCirc, SDL_Texture* aTex);
 
+
 		//Destructors
 		~gpEntity();
 
@@ -29,6 +30,8 @@ class gpEntity{
 		int getR();
 		void setTexture(SDL_Texture* tex);
 		SDL_Texture* getTexture();
+		void setAngle(double new_angle);
+		double getAngle();
 
 		//Velocity Setters and getters
 		//Probably should be moved to some physic related object
@@ -61,6 +64,6 @@ class gpEntity{
 		//Probably should be moved to some physic related object
 		int vx =0;
 		int vy = 0; 
-	
+		float angle = 0.0;
 
 };

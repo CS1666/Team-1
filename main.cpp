@@ -143,8 +143,7 @@ int main() {
 
 		//Renders all renderable objects onto the screen
 		gr.renderOnScreenEntity(osEntity);
-		
-
+	
 		//Calculates when the next frame should be drawn
 		//Likely reason for image studdering
 		frameTime = SDL_GetTicks() - frameStart;
