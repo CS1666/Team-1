@@ -16,7 +16,11 @@ all:
 	+$(MAKE) -C Physics
 	+$(MAKE) -C 'Level Generation'
 	+$(MAKE) main.o
+	+$(MAKE) aipg.o
 main.o: main.cpp 
+	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
+aipg.o : aipg.cpp
 	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 clean:
