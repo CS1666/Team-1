@@ -17,7 +17,7 @@ class Ship
         string currKey;
 
         //ai
-        vector<vector<int>> path;
+        vector<vector<int> > path;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -31,7 +31,7 @@ class Ship
         void checkAction(/*stream*/);
         void updateHull(int newHull);
         vector<int> getPosition();
-        void setPath(vector<vector<int>> newPath);
+        void setPath(vector<vector<int> > newPath);
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();
