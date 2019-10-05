@@ -78,7 +78,7 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 		if (entity->isRectEnt()){
 			center.x = entity->getX()/2;
 			center.y = entity->getY()/2;
-			SDL_RenderCopyEx(sdlgRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
 			
 		}
 		else if(entity->isCircEnt()){
