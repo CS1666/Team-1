@@ -3,16 +3,22 @@
 #include <string>
 #include <SDL.h>
 #include "BasicMovementFPSlimit.h"
-constexpr int MAX_SPEED = 5;
-constexpr int MAX_DELTAV = 2;
-constexpr double MAX_ROTSPEED = 100;
+
+#define PI 3.14159265
+
+constexpr double MAX_SPEED = 5;
+constexpr double MAX_DELTAV = 2;
+constexpr double MAX_ROTSPEED = 40;
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
-int speedX = 0;
-int speedY = 0;
-int deltaVX = 0;
-int deltaVY = 0;
+double speedX = 0;
+double speedY = 0;
+double deltaVX = 0;
+double deltaVY = 0;
+//int acceleration = 0;
 double rotation = 0;
+double direction;
+
 
 //General wrapper function to handle Key evenets
 bool handleKeyEvents(SDL_Event e, gpEntity &ent){
@@ -46,6 +52,7 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 				//if(ent.getVY() != 0){
 					//ent.setVY(ent.getVY() - MAX_SPEED);
 				//}
+								
 				deltaVY = 0;
 				break;
 			case SDLK_a:
@@ -58,8 +65,9 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() - MAX_SPEED);
 				//}
-				deltaVX = 0;
 				rotation = 0;
+				deltaVX = 0;
+				
 				break;
 		}
 	
@@ -68,30 +76,35 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 
 //Handles down Key Events
 void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
+	direction = (ent.getAngle() - 90.0)*PI/180;	
+
 	switch(e.key.keysym.sym) {
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			deltaVY--;
 			
+			deltaVX += cos(direction);
+			deltaVY += sin(direction);		
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			rotation -= 20;
+			rotation -= 10.0;
 			break;
 
 		case SDLK_s:
 		
 			//ent.setVY(ent.getVY() + MAX_SPEED);
-			deltaVY++;
+			
+			deltaVX -= cos(direction);
+			deltaVY -= sin(direction);
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			rotation += 20;
+			rotation += 10.0;
 			break;
 		
 	}
@@ -143,10 +156,14 @@ void updatePosition(gpEntity &ent)
 	{
 		rotation = -MAX_ROTSPEED;
 	}
-	std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
-	ent.setX(ent.getX() + speedX);
-	ent.setY(ent.getY() + speedY);
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	ent.setX(ent.getX() + (int)speedX);
+	ent.setY(ent.getY() + (int)speedY);
 	ent.setAngle(ent.getAngle() + rotation);
+	std::cout << ent.getAngle() - 90 << std::endl;
+	std::cout << "y: " << sin((ent.getAngle() - 90.0)*PI/180) << std::endl;	
+	std::cout << "x: " << cos((ent.getAngle() - 90.0)*PI/180) << std::endl;
+	
 }
 
 
