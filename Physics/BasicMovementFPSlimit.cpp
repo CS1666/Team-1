@@ -6,17 +6,17 @@
 
 #define PI 3.14159265
 
-constexpr double MAX_SPEED = 5;
+constexpr double MAX_SPEED = 6;
 constexpr double MAX_DELTAV = 2;
-constexpr double MAX_ROTSPEED = 40;
+constexpr double MAX_ROTATIONSPEED = 6;
+constexpr double MAX_ROTATIONRATE = 2;
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
-double speedX = 0;
-double speedY = 0;
-double deltaVX = 0;
-double deltaVY = 0;
+double speed = 0;
+double deltaV = 0;
 //int acceleration = 0;
-double rotation = 0;
+double rotationRate = 0;
+double rotationSpeed = 0;
 double direction;
 
 
@@ -38,9 +38,8 @@ bool handleKeyEvents(SDL_Event e, gpEntity &ent){
 
 //Handles Up Key Events
 void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
-	if(e.type == SDL_KEYUP) {
-		switch(e.key.keysym.sym) {
-			case SDLK_w:
+	if(e.type == SDL_KEYUP){
+		switch(e.key.keysym.sym){
 				//std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
 				//if(ent.getVY() != 0){
 
@@ -53,20 +52,18 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 					//ent.setVY(ent.getVY() - MAX_SPEED);
 				//}
 								
-				deltaVY = 0;
+				deltaV = 0;
 				break;
 			case SDLK_a:
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() + MAX_SPEED);
 				//}
-				rotation = 0;
-				break;
 			case SDLK_d:
 				//if(ent.getVX() != 0){
 					//ent.setVX(ent.getVX() - MAX_SPEED);
 				//}
-				rotation = 0;
-				deltaVX = 0;
+				rotationRate = 0;
+				
 				
 				break;
 		}
@@ -83,46 +80,44 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
 			
-			deltaVX += cos(direction);
-			deltaVY += sin(direction);		
+			deltaV++;
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			rotation -= 10.0;
+			rotationRate -= 2.0;
 			break;
 
 		case SDLK_s:
 		
 			//ent.setVY(ent.getVY() + MAX_SPEED);
 			
-			deltaVX -= cos(direction);
-			deltaVY -= sin(direction);
+			deltaV--;
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			rotation += 10.0;
+			rotationRate += 2.0;
 			break;
 		
 	}
-	if(deltaVX > MAX_DELTAV)
+	if(deltaV > MAX_DELTAV)
 	{
-		deltaVX = MAX_DELTAV;
+		deltaV = MAX_DELTAV;
 	}
-	else if(deltaVX < -MAX_DELTAV)
+	else if(deltaV < -MAX_DELTAV)
 	{
-		deltaVX = -MAX_DELTAV;
+		deltaV = -MAX_DELTAV;
 	}
-	if(deltaVY > MAX_DELTAV)
+	if(rotationRate > MAX_ROTATIONRATE)
 	{
-		deltaVY = MAX_DELTAV;
+		rotationRate = MAX_ROTATIONRATE;
 	}
-	else if(deltaVY < -MAX_DELTAV)
+	else if(rotationRate < -MAX_ROTATIONRATE)
 	{
-		deltaVY = -MAX_DELTAV;
+		rotationRate = -MAX_ROTATIONRATE;
 	}
 	
 }
@@ -130,39 +125,44 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 
 void updatePosition(gpEntity &ent)
 {
-	speedX += deltaVX;
-	speedY += deltaVY;
-	if(speedX >MAX_SPEED)
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
 	{
-		speedX = MAX_SPEED;
+		rotationSpeed++;
 	}
-	else if(speedX <-MAX_SPEED)
+	else if (rotationSpeed > 0)
 	{
-		speedX = -MAX_SPEED;	
+		rotationSpeed--;
 	}
-	if(speedY >MAX_SPEED)
+	if(speed >MAX_SPEED)
 	{
-		speedY = MAX_SPEED;
+		speed = MAX_SPEED;
 	}
-	else if(speedY < -MAX_SPEED)
+	else if(speed < -MAX_SPEED)
 	{
-		speedY = -MAX_SPEED;
+		speed = -MAX_SPEED;
 	}
-	if(rotation > MAX_ROTSPEED)
+	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{
-		rotation = MAX_ROTSPEED;
+		rotationSpeed = MAX_ROTATIONSPEED;
 	}
-	else if(rotation < -MAX_ROTSPEED)
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
 	{
-		rotation = -MAX_ROTSPEED;
+		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
+	
 	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	ent.setAngle(ent.getAngle() + rotationSpeed);
+	double speedX = speed*cos(ent.getAngle());
+	double speedY = -speed*sin(ent.getAngle());
 	ent.setX(ent.getX() + (int)speedX);
 	ent.setY(ent.getY() + (int)speedY);
-	ent.setAngle(ent.getAngle() + rotation);
+	
 	std::cout << ent.getAngle() - 90 << std::endl;
-	std::cout << "y: " << sin((ent.getAngle() - 90.0)*PI/180) << std::endl;	
-	std::cout << "x: " << cos((ent.getAngle() - 90.0)*PI/180) << std::endl;
+	std::cout << "y: " << ent.getX()  << std::endl;	
+	std::cout << "x: " << ent.getY()  << std::endl;
+	std::cout << "speed: " << speed << std::endl;
 	
 }
 
