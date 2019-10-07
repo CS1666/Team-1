@@ -6,11 +6,11 @@ size: int
 temperature: int
 rotation_speed: int
 gravity: int
-position: int[][]
+position: int[2]
 ---------------
 rotate(): void
 pull(): void
-getPosition(): int[][]
+getPosition(): int[2]
 collision(): boolean
 ---------------
 Star subclasses in order of increasing size/temperature/gravity
