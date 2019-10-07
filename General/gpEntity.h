@@ -32,6 +32,8 @@ class gpEntity{
 		SDL_Texture* getTexture();
 		void setAngle(double new_angle);
 		double getAngle();
+		int getH();
+		int getW();
 
 		//Velocity Setters and getters
 		//Probably should be moved to some physic related object

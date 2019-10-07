@@ -60,6 +60,12 @@
 	double gpEntity::getAngle(){
 		return angle;
 	}
+	int gpEntity::getH(){
+			return drawBox.h;
+	}
+	int gpEntity::getW(){
+			return drawBox.w;
+	}
 	
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
