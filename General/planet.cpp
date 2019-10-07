@@ -13,65 +13,65 @@ class Planet
 		tuple<int, int> position;
 		sting sprite;
 
-	public:
-		int getRadius()
-		{
-			return radius;
-		}
-	
-		int getVelocity()
-		{
-			return velocity;
-		}
+		public:
+			int getRadius()
+			{
+				return radius;
+			}
 
-		float getDirection()
-		{
-			return direction;
-		}
+			int getVelocity()
+			{
+				return velocity;
+			}
 
-		int getGravity()
-		{
-			return gravity;
-		}
+			float getDirection()
+			{
+				return direction;
+			}
 
-		tuple getPosition()
-		{
-			return position;
-		}
+			int getGravity()
+			{
+				return gravity;
+			}
 
-		string getSprite()
-		{
-			return sprite;
-		}
+			tuple<int, int> getPosition()
+			{
+				return position;
+			}
 
-		void setRadius(int r)
-		{
-			radius = r;
-		}
+			string getSprite()
+			{
+				return sprite;
+			}
 
-		void setVelocity(int v)
-		{
-			velocity = v;
-		}
+			void setRadius(int r)
+			{
+				radius = r;
+			}
 
-		void setDirection(float d)
-		{
-			direction = d;
-		}
+			void setVelocity(int v)
+			{
+				velocity = v;
+			}
 
-		void setGravity(int g)
-		{
-			gravity = g;
-		}
+			void setDirection(float d)
+			{
+				direction = d;
+			}
 
-		void setPosition(tuple<int, int> newPos)
-		{
-			position = newPos;
-		}
+			void setGravity(int g)
+			{
+				gravity = g;
+			}
 
-		void setSprite(string s)
-		{
-			sprite = s;
-		}
+			void setPosition(tuple<int, int> newPos)
+			{
+				position = newPos;
+			}
+
+			void setSprite(string s)
+			{
+				sprite = s;
+			}
 
 }
