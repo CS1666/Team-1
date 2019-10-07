@@ -7,7 +7,7 @@ class Star
 {
 	private:
 		int radius;
-		int gravity
+		int gravity;
 		string type;
 		tuple<int, int> position;
 		string sprite;
@@ -62,4 +62,4 @@ class Star
 		{
 			sprite = s;
 		}
-}
+};

@@ -154,8 +154,8 @@ void updatePosition(gpEntity &ent)
 	
 	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setAngle(ent.getAngle() + rotationSpeed);
-	double speedX = speed*cos(ent.getAngle());
-	double speedY = -speed*sin(ent.getAngle());
+	double speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
+	double speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
 	ent.setX(ent.getX() + (int)speedX);
 	ent.setY(ent.getY() + (int)speedY);
 	
