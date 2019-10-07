@@ -11,7 +11,7 @@ class Planet
 		float direction;
 		int gravity;
 		tuple<int, int> position;
-		sting sprite;
+		string sprite;
 
 		public:
 			int getRadius()
@@ -74,4 +74,4 @@ class Planet
 				sprite = s;
 			}
 
-}
+};

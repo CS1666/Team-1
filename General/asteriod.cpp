@@ -8,7 +8,7 @@ class Asteroid
 	private:
 		int radius;
 		int velocity;
-		float direciton;
+		float direction;
 		tuple<int, int> position;
 		string sprite;
 
@@ -63,4 +63,4 @@ class Asteroid
 			sprite = s;
 		}
 
-}
+};
