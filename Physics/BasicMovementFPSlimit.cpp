@@ -154,7 +154,7 @@ void updatePosition(gpEntity &ent)
 	{
 		rotation = -MAX_ROTSPEED;
 	}
-	std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	std::cout << speedX << ", " << speedY <<std::endl;
 	ent.setX(ent.getX() + speedX);
 	ent.setY(ent.getY() + speedY);
 	ent.setAngle(ent.getAngle() + rotation);
