@@ -1,0 +1,40 @@
+"Ship" Class
+---
+hull: int
+sprite: string
+position: int[2]
+velocity: int
+rotation: float
+weaponType: int
+damageTaken: boolean
+currKey: string
+isUser: boolean
+isAlly: boolean
+path: int[][2]
+controller: controllerClass(?)
+---
+checkPhysics(): void
+updateMovement(): void
+checkAction(stream*): void
+shootWeapon(): weaponClass(?)
+updateHull(int): void
+updatePosition(int x, int y): void
+getPosition(): int[2]
+setPath(): void
+followPath(): boolean
+------------------
+"Fighter Ship" Class
+Subclass/Inherit "Ship" Class
+Should be same attributes and functions
+---
+"Hero Ship" Class
+Subclass/Inherit "Ship" Class
+Should be same attributes and functions
+---
+"Cruiser Ship" Class
+Subclass/Inherit "Ship" Class
+Should be same attributes and functions
+---
+"Capital Ship" Class
+Subclass/Inherit "Ship" Class
+Should be same attributes and functions

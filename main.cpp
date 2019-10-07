@@ -3,9 +3,14 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "General/gpEntity.h"
+#include "Physics/BasicMovementFPSlimit.h"
+#include "General/gpRender.h"
 
-constexpr int SCREEN_WIDTH = 640;
-constexpr int SCREEN_HEIGHT = 480;
+constexpr int SCREEN_WIDTH = 1280;
+constexpr int SCREEN_HEIGHT = 720;
+constexpr int FPS = 60;
+constexpr int frameDelay = 1000/ FPS;
 
 // Function declarations
 bool init();
@@ -30,7 +35,7 @@ bool init() {
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 		
-	gWindow = SDL_CreateWindow("Hello world!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		return  false;
@@ -61,54 +66,180 @@ bool init() {
 	return true;
 }
 
-SDL_Texture* loadImage(std::string fname) {
-	SDL_Texture* newText = nullptr;
-
-	SDL_Surface* startSurf = IMG_Load(fname.c_str());
-	if (startSurf == nullptr) {
-		std::cout << "Unable to load image " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
-		return nullptr;
-	}
-
-	newText = SDL_CreateTextureFromSurface(gRenderer, startSurf);
-	if (newText == nullptr) {
-		std::cout << "Unable to create texture from " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
-	}
-
-	SDL_FreeSurface(startSurf);
-
-	return newText;
-}
-
 void close() {
 	for (auto i : gTex) {
 		SDL_DestroyTexture(i);
 		i = nullptr;
 	}
 
-	SDL_DestroyRenderer(gRenderer);
+	
 	SDL_DestroyWindow(gWindow);
 	gWindow = nullptr;
-	gRenderer = nullptr;
+	
 
 	// Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
 }
 
-int main() {
+SDL_Texture* loadImage(std::string fname)
+{
+	SDL_Texture* newText=nullptr;
+	SDL_Surface* startSurf=IMG_Load(fname.c_str());
+	if(startSurf==nullptr)
+	{
+	    std::cout <<"Unable to load image "<<fname<<"! SDL Error:"<< SDL_GetError() << std::endl;
+	    return nullptr;
+	}
+	newText=SDL_CreateTextureFromSurface(gRenderer, startSurf);
+	if(newText==nullptr)
+	    std::cout<<"Unable to create texture from "<<fname<<std::endl;
+	SDL_FreeSurface(startSurf);
+	return newText;
+
+}
+int main(int argc, char** argv) {
+
+	//Frame timiers
+	Uint32 frameStart;
+	int frameTime;
+
+	//Vector used to store all on screen entities
+
+	std::vector<gpEntity*> osEntity;
 	if (!init()) {
 		std::cout <<  "Failed to initialize!" << std::endl;
 		close();
 		return 1;
 	}
 
-	// Load media
-	gTex.push_back(loadImage("Assets/CS1666_Linghai.png"));
-	gTex.push_back(loadImage("Assets/cs1666_jcz18.png"));
-	gTex.push_back(loadImage("Assets/CS1666_pjo13.png"));
-	gTex.push_back(loadImage("Assets/cs1666_gjc26.png"));
-	gTex.push_back(loadImage("Assets/CS1666_apw50.png"));
+	//gpRender object that is used to render object onto screen
+	gpRender gr(gRenderer);
+
+
+	//Player Entity Initilizaiton
+	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
+	SDL_Rect db = {100,100,150,150};
+	gpEntity playerent(db, tex);
+	osEntity.push_back(&playerent);
+
+
+	//Red giant Initilzation-
+	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Rect db2 = {800,400,332,315};
+	gpEntity starent(db2, tex2);
+
+	osEntity.push_back(&starent);
+
+
+	//Ship Cruiser initilization
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db3 = {400,300,225,300};
+	gpEntity emyent(db3, tex3);
+
+	osEntity.push_back(&emyent);
+
+	SDL_Event e;
+	bool gameon = true;
+	//main game mode: n
+	if(argc==1 || strcmp(argv[1],"n")==0)
+	{
+	//Game Loop
+	while(gameon) {
+		frameStart = SDL_GetTicks();
+
+		//Handles all incoming Key events
+		while(SDL_PollEvent(&e)) {
+			gameon = handleKeyEvents(e, playerent);	
+		}
+		updatePosition(playerent);
+
+		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+		//Adjusts the players entities pos based on interal values
+		playerent.handelEntityOB(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+
+		//Renders all renderable objects onto the screen
+		gr.renderOnScreenEntity(osEntity);
+	
+		//Calculates when the next frame should be drawn
+		//Likely reason for image studdering
+		frameTime = SDL_GetTicks() - frameStart;
+
+		if(frameDelay > frameTime)
+		{
+			SDL_Delay(frameDelay - frameTime);
+		}
+
+	}
+	}
+	//credits mode: c
+	else if(argc>1 && strcmp(argv[1],"c")==0)
+	{
+	gTex.push_back(loadImage("Assets/Credits/credits.png"));
+        gTex.push_back(loadImage("Assets/Credits/ai.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_gjc26.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_mrs185.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_evs25.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_jcz18.png"));
+        gTex.push_back(loadImage("Assets/Credits/level-generation.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_pjo13.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_pep24.png"));
+        gTex.push_back(loadImage("Assets/Credits/Keith C Stebler.png"));
+        gTex.push_back(loadImage("Assets/Credits/physics.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_MCD66.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_kel117.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_Linghai.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_apw50.png"));
+        gTex.push_back(loadImage("Assets/Credits/fin.png"));
+        for(auto image : gTex){
+                SDL_RenderClear(gRenderer);
+
+                // Render the image
+                SDL_RenderCopy(gRenderer, image, NULL, NULL);
+                // Display rendering
+                SDL_RenderPresent(gRenderer);
+                // Wait 5 seconds
+                SDL_Delay(5000);
+
+        }
+	}
+	//ai mode: a
+	else if(argc>1 && strcmp(argv[1],"a")==0)
+	{
+		//copy and paste stuffs
+	}
+	/*format for other stuffs
+	else if(argc>1 && strcmp(argv[1],"CHAR")==0)
+	{
+		//copy and paste stuffs
+	}
+	*/
+	close();
+}
+
+
+
+//I moved credit sequence down here til we can integrate into the gamre 
+
+/**
+	gTex.push_back(loadImage("Assets/Credits/credits.png"));
+	gTex.push_back(loadImage("Assets/Credits/ai.png"));
+	gTex.push_back(loadImage("Assets/Credits/cs1666_gjc26.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_mrs185.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_evs25.png"));
+	gTex.push_back(loadImage("Assets/Credits/cs1666_jcz18.png"));
+	gTex.push_back(loadImage("Assets/Credits/level-generation.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_pjo13.png"));
+	gTex.push_back(loadImage("Assets/Credits/cs1666_pep24.png"));
+	gTex.push_back(loadImage("Assets/Credits/Keith C Stebler.png"));
+	gTex.push_back(loadImage("Assets/Credits/physics.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_MCD66.png"));
+	gTex.push_back(loadImage("Assets/Credits/cs1666_kel117.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_Linghai.png"));
+	gTex.push_back(loadImage("Assets/Credits/CS1666_apw50.png"));
+	gTex.push_back(loadImage("Assets/Credits/fin.png"));
+	
 
 	for(auto image : gTex){
 		SDL_RenderClear(gRenderer);
@@ -119,7 +250,7 @@ int main() {
 		SDL_RenderPresent(gRenderer);
 		// Wait 5 seconds
 		SDL_Delay(5000);
+
 	}
 
-	close();
-}
+**/

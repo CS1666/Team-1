@@ -1,0 +1,23 @@
+"GalaxyControl" class
+--------------------
+enemy_contr_count: int
+player_contr_count: int
+inControl[]: bool
+
+--------------------
+
+getEnemyCount(): int
+getPlayerCount(): int
+getInControl(int zone): bool
+getWinGame(): bool
+getLoseGame(): bool
+
+enemyLoseZone(int zone): void
+enemyWinZone(int zone): void
+playerLoseZone(int zone): void
+playerWinZone(int zone): void
+
+
+
+
+
