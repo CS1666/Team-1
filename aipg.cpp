@@ -6,7 +6,7 @@
 #include "General/gpEntity.h"
 #include "Physics/BasicMovementFPSlimit.h"
 #include "General/gpRender.h"
-#include "General/Ship.cpp"
+#include "AI/AI.cpp"
 
 
 
@@ -25,11 +25,13 @@ int main(){
 	}
 
 	//gpRender object that is used to render object onto screen
-	
-
 
 	//Player Entity Initilizaiton
 	Ship aiShip;
+
+	//AI init
+
+	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 
