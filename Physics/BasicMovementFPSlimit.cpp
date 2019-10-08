@@ -11,6 +11,11 @@ constexpr double MAX_DELTAV = 2;
 constexpr double MAX_ROTATIONSPEED = 6;
 constexpr double MAX_ROTATIONRATE = 2;
 
+constexpr int SCREEN_WIDTH = 1280; 
+constexpr int SCREEN_HEIGHT = 720;
+constexpr int BOX_WIDTH = 20;
+constexpr int BOX_HEIGHT = 20;
+
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
 double speed = 0;
 double deltaV = 0;
@@ -122,9 +127,38 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 	
 }
 
+//tis is te simple collision check from the examples
+bool check_collision(SDL_Rect* a, SDL_Rect* b) {
+	// Check vertical overlap
+	if (a->y + a->h <= b->y)
+		return false;
+	if (a->y >= b->y + b->h)
+		return false;
 
-void updatePosition(gpEntity &ent)
-{
+	// Check horizontal overlap
+	if (a->x >= b->x + b->w)
+		return false;
+	if (a->x + a->w <= b->x)
+		return false;
+
+	// Must overlap in both
+	return true;
+}
+
+bool check_all_collisions(SDL_Rect* a, std::vector<gpEntity*> &osEntity){
+	bool isCollision = false;
+	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+	for(int i = 0;  i < osEntity.size(); i++){
+		//so, one of these should result in collison if they are the same box
+		isCollision = check_collision(a, osEntity.at(i)->getDrawBox());
+		//std::cout << "Is last command Illegal?" << std::endl;
+		//std::cout << "Checked collisions: " << i << std::endl;
+	}
+	return isCollision;
+}
+
+void updatePosition(gpEntity &ent, std::vector<gpEntity*> &osEntity){
+
 	speed += deltaV;
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
@@ -156,8 +190,22 @@ void updatePosition(gpEntity &ent)
 	ent.setAngle(ent.getAngle() + rotationSpeed);
 	double speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
 	double speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
 	ent.setX(ent.getX() + (int)speedX);
+	//std::cout << "Things work up until here?" << std::endl;
+	if(ent.getX() < 0 
+		|| (ent.getX() + BOX_WIDTH > SCREEN_WIDTH) 
+		|| check_all_collisions(ent.getDrawBox(), osEntity)){
+
+		ent.setX(ent.getX() - (int)speedX);
+	}
 	ent.setY(ent.getY() + (int)speedY);
+	if(ent.getY() < 0 
+		|| (ent.getY() + BOX_WIDTH > SCREEN_WIDTH) 
+		|| check_all_collisions(ent.getDrawBox(), osEntity)){
+
+		ent.setY(ent.getY() - (int)speedY);
+	}
 	
 	std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "y: " << ent.getX()  << std::endl;	
