@@ -6,6 +6,7 @@
 #include "General/gpEntity.h"
 #include "Physics/BasicMovementFPSlimit.h"
 #include "General/gpRender.h"
+#include "General/Ship.cpp"
 
 
 
@@ -28,7 +29,11 @@ int main(){
 
 
 	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
+	Ship aiShip;
+
+	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+
+	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	SDL_Rect db = {100,100,150,150};
 	gpEntity playerent(db, tex);
 	osEntity.push_back(&playerent);
@@ -60,7 +65,7 @@ int main(){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent);
+		updatePosition(playerent, osEntity);
 
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
