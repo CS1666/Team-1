@@ -1,5 +1,4 @@
-#ifndef SHIP_H
-#define SHIP_H
+#pragma once
 
 #include <iostream>
 #include <string>
