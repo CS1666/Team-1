@@ -23,6 +23,16 @@ class Ship
         bool pathComplete;
 
     public:
+        void setSprite(string newSprite)
+        {
+            sprite = newSprite;
+        }
+
+        string getSprite()
+        {
+            return sprite;
+        }
+
         void checkPhysics()
         {
 
@@ -70,6 +80,8 @@ class Ship
         {
         	return pathComplete;
         }
+
+
 };
 
 class Hero:Ship{};
