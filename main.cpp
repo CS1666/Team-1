@@ -152,8 +152,9 @@ int main(int argc, char** argv) {
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent);
-
+		updatePosition(playerent, osEntity);
+		
+		// vvv Collisions are being handled in updatePosition at the moment. - Welby
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
 		playerent.handelEntityOB(SCREEN_WIDTH, SCREEN_HEIGHT);
