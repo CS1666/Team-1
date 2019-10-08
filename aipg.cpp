@@ -6,8 +6,8 @@
 #include "General/gpEntity.h"
 #include "Physics/BasicMovementFPSlimit.h"
 #include "General/gpRender.h"
-#include "AI/AI.cpp"
-
+#include "AI/AI.h"
+#include "General/Ship.h"
 
 
 int main(){

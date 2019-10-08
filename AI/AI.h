@@ -1,5 +1,4 @@
-#ifndef AI_H
-#define AI_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -12,10 +11,10 @@ using namespace std;
 class AI
 {
     private:
-        vector<Ship> ships;
+        vector<Ship> __ships;
 
     public:
         void setShips(vector<Ship> newShips);
 
-        void setShipMovement();
+        void setShipPath(Ship shipToPath);
 };
