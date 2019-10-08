@@ -1,6 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
+
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
@@ -23,6 +26,8 @@ class Ship
         bool pathComplete;
 
     public:
+        void setSprite(string newSprite);
+        string getSprite();
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
         void updatePosition(vector<int> newPos);

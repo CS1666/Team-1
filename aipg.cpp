@@ -6,7 +6,8 @@
 #include "General/gpEntity.h"
 #include "Physics/BasicMovementFPSlimit.h"
 #include "General/gpRender.h"
-
+#include "AI/AI.h"
+#include "General/Ship.h"
 
 
 int main(){
@@ -24,11 +25,17 @@ int main(){
 	}
 
 	//gpRender object that is used to render object onto screen
-	
-
 
 	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
+	Ship aiShip;
+
+	//AI init
+
+	AI ai;
+
+	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+
+	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	SDL_Rect db = {100,100,150,150};
 	gpEntity playerent(db, tex);
 	osEntity.push_back(&playerent);
@@ -60,7 +67,7 @@ int main(){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent);
+		updatePosition(playerent, osEntity);
 
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values

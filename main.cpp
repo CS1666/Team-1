@@ -14,7 +14,7 @@ constexpr int frameDelay = 1000/ FPS;
 
 // Function declarations
 bool init();
-
+SDL_Texture* loadImage(std::string fname);
 void close();
 
 // Globals
@@ -82,7 +82,23 @@ void close() {
 	SDL_Quit();
 }
 
-int main() {
+SDL_Texture* loadImage(std::string fname)
+{
+	SDL_Texture* newText=nullptr;
+	SDL_Surface* startSurf=IMG_Load(fname.c_str());
+	if(startSurf==nullptr)
+	{
+	    std::cout <<"Unable to load image "<<fname<<"! SDL Error:"<< SDL_GetError() << std::endl;
+	    return nullptr;
+	}
+	newText=SDL_CreateTextureFromSurface(gRenderer, startSurf);
+	if(newText==nullptr)
+	    std::cout<<"Unable to create texture from "<<fname<<std::endl;
+	SDL_FreeSurface(startSurf);
+	return newText;
+
+}
+int main(int argc, char** argv) {
 
 	//Frame timiers
 	Uint32 frameStart;
@@ -125,7 +141,9 @@ int main() {
 
 	SDL_Event e;
 	bool gameon = true;
-
+	//main game mode: n
+	if(argc==1 || strcmp(argv[1],"n")==0)
+	{
 	//Game Loop
 	while(gameon) {
 		frameStart = SDL_GetTicks();
@@ -134,8 +152,9 @@ int main() {
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent);
-
+		updatePosition(playerent, osEntity);
+		
+		// vvv Collisions are being handled in updatePosition at the moment. - Welby
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
 		playerent.handelEntityOB(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -154,7 +173,49 @@ int main() {
 		}
 
 	}
+	}
+	//credits mode: c
+	else if(argc>1 && strcmp(argv[1],"c")==0)
+	{
+	gTex.push_back(loadImage("Assets/Credits/credits.png"));
+        gTex.push_back(loadImage("Assets/Credits/ai.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_gjc26.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_mrs185.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_evs25.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_jcz18.png"));
+        gTex.push_back(loadImage("Assets/Credits/level-generation.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_pjo13.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_pep24.png"));
+        gTex.push_back(loadImage("Assets/Credits/Keith C Stebler.png"));
+        gTex.push_back(loadImage("Assets/Credits/physics.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_MCD66.png"));
+        gTex.push_back(loadImage("Assets/Credits/cs1666_kel117.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_Linghai.png"));
+        gTex.push_back(loadImage("Assets/Credits/CS1666_apw50.png"));
+        gTex.push_back(loadImage("Assets/Credits/fin.png"));
+        for(auto image : gTex){
+                SDL_RenderClear(gRenderer);
 
+                // Render the image
+                SDL_RenderCopy(gRenderer, image, NULL, NULL);
+                // Display rendering
+                SDL_RenderPresent(gRenderer);
+                // Wait 5 seconds
+                SDL_Delay(5000);
+
+        }
+	}
+	//ai mode: a
+	else if(argc>1 && strcmp(argv[1],"a")==0)
+	{
+		//copy and paste stuffs
+	}
+	/*format for other stuffs
+	else if(argc>1 && strcmp(argv[1],"CHAR")==0)
+	{
+		//copy and paste stuffs
+	}
+	*/
 	close();
 }
 
