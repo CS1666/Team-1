@@ -7,7 +7,8 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
-
+#include "AI.h"
+#include "../General/Ship.h"
 
 
 void run_ai_enviro(gpRender gr){
@@ -21,11 +22,18 @@ void run_ai_enviro(gpRender gr){
 
 	//gpRender object that is used to render object onto screen
 	
+	//Ship object init
+	Ship aiShip;
 
+	//AI init
 
-	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
-	SDL_Rect db = {100,100,150,150};
+	AI ai;
+
+	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+
+	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
+	SDL_Rect db = {50,50,75,75};
+
 	gpEntity playerent(db, tex);
 	osEntity.push_back(&playerent);
 
