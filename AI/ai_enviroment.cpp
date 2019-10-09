@@ -32,7 +32,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
-	SDL_Rect db = {50,50,75,75};
+	SDL_Rect db = {50,325,75,75};
 
 	gpEntity playerent(db, tex);
 	osEntity.push_back(&playerent);
@@ -40,18 +40,10 @@ void run_ai_enviro(gpRender gr){
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
+	SDL_Rect db2 = {500,200,300,300};
 	gpEntity starent(db2, tex2);
 
 	osEntity.push_back(&starent);
-
-
-	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	gpEntity emyent(db3, tex3);
-
-	osEntity.push_back(&emyent);
 
 	SDL_Event e;
 	bool gameon = true;
