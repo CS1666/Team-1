@@ -6,6 +6,9 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 all: $(OUT_NAMES)
 
+poi:
+	clang++ Poisson.cpp -std=c++11 -lstdc++
+
 %.o: %.cpp
 	$(CC) -c $^ $(COMPILER_FLAGS) 
 
