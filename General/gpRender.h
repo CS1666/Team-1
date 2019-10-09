@@ -1,7 +1,7 @@
 
-
 #include <SDL.h>
 #include <SDL_image.h>
+#include <string>
 #include "gpEntity.h"
 
 #pragma once
@@ -13,7 +13,7 @@ class gpRender{
 
 		//Constructors
 		gpRender();
-		gpRender(SDL_Renderer* sdlgr);
+		gpRender(const char* win_name);
 
 		//Destructor
 		~gpRender();
@@ -37,6 +37,8 @@ class gpRender{
 		int getSW();
 		int getSH();
 		int getFD();
+
+		SDL_Renderer* getRender();
 
 
 
