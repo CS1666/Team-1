@@ -1,9 +1,9 @@
 CPP_FILES = $(wildcard *.cpp)  
 OUT_NAMES = $(patsubst %.cpp,%.o,$(CPP_FILES))
 FOLDERS = $(wildcard ./General/*.o)\
-		$(wildcard ./Physics/*.o)
-		#$(wildcard ./AI/*.o)\
-		#$(wildcard ./Level Generation/*.o)\
+		$(wildcard ./Physics/*.o)\
+		$(wildcard ./AI/*.o)\
+		$(wildcard ./Level_Generation/*.o)
 		
 CC = clang++
 COMPILER_FLAGS = -Wall -I/usr/include/SDL2
@@ -14,13 +14,10 @@ all:
 	+$(MAKE) -C AI
 	+$(MAKE) -C General
 	+$(MAKE) -C Physics
-	+$(MAKE) -C 'Level Generation'
+	+$(MAKE) -C Level_Generation
 	+$(MAKE) main.o
-	+$(MAKE) aipg.o
-main.o: main.cpp 
-	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
-aipg.o : aipg.cpp
+main.o: main.cpp 
 	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 clean:

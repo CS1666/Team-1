@@ -1,5 +1,8 @@
 #include <SDL.h>
+#include <string>
+#include <vector>
 #include "NSDL_Circ.h"
+
 
 #pragma once
 

@@ -7,7 +7,8 @@
 #include "gpRender.h"
 
 //--------------------------------Constructors--------------------------------------------------
-gpRender::gpRender(){
+gpRender::gpRender() {};
+gpRender::gpRender(const char* win_name){
 	// Flag what subsystems to initialize
 	// For now, just video
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -20,7 +21,7 @@ gpRender::gpRender(){
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 		
-	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow(win_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr && isInit) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -50,7 +51,6 @@ gpRender::gpRender(){
 	}
 };
 
-gpRender::gpRender(SDL_Renderer* sdlgr) : gRenderer{sdlgr}, gWindow{nullptr} {};
 //--------------------------------Destructors---------------------------------------------------
 gpRender::~gpRender(){
 
@@ -66,7 +66,7 @@ gpRender::~gpRender(){
 	// Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
-}
+};
 
 
 //Method that renders images onto the window
@@ -151,4 +151,6 @@ int gpRender::getFD(){
 	return frameDelay;
 }
 
-
+SDL_Renderer* gpRender::getRender(){
+	return gRenderer;
+}
