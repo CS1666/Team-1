@@ -36,7 +36,7 @@ int main(){
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
-	SDL_Rect db = {100,100,150,150};
+	SDL_Rect db = {50,50,75,75};
 	gpEntity playerent(db, tex);
 	osEntity.push_back(&playerent);
 
