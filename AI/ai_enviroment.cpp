@@ -7,8 +7,8 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
-#include "AI/AI.h"
-#include "General/Ship.h"
+#include "AI.h"
+#include "../General/Ship.h"
 
 
 void run_ai_enviro(gpRender gr){
@@ -22,8 +22,12 @@ void run_ai_enviro(gpRender gr){
 
 	//gpRender object that is used to render object onto screen
 	
+	//Ship object init
+	Ship aiShip;
 
+	//AI init
 
+	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 
