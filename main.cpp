@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 		run_phy_enviro(gr);
 	}
 	//credits mode: c
-	else if(argc>2 && strcmp(argv[1],"c")==0)
+	else if(argc==2 && strcmp(argv[1],"c")==0)
 	{
 		gpRender gr("CREDITS");
 

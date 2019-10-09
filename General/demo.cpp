@@ -3,28 +3,16 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "General/gpEntity.h"
-#include "Physics/BasicMovementFPSlimit.h"
-#include "General/gpRender.h"
+#include "../General/gpEntity.h"
+#include "../Physics/BasicMovementFPSlimit.h"
+#include "../General/gpRender.h"
+#include "demo.h"
 
 
-
-int main(){
-
-
+void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<gpEntity*> osEntity;
-
-	gpRender gr;
-
-	if (!gr.isRInit()) {
-		std::cout <<  "Failed to initialize!" << std::endl;
-		return 1;
-	}
-
-	//gpRender object that is used to render object onto screen
-	
 
 
 	//Player Entity Initilizaiton
