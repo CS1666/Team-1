@@ -1,8 +1,8 @@
 "GalaxyControl" class
 --------------------
-int enemy_contr_count
-int player_contr_count
-bool inControl[]
+enemy_contr_count: int
+player_contr_count: int
+inControl[]: bool
 
 --------------------
 
