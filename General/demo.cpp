@@ -3,7 +3,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "../General/gpEntity.h"
+#include "../General/Sprite.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "demo.h"
@@ -14,7 +14,7 @@ constexpr int PLAYER_HEIGHT = 50;
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
-	std::vector<gpEntity*> osEntity;
+	std::vector<Sprite*> osSprite;
 
 	//Camera Initilization
 	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
@@ -23,29 +23,29 @@ void run_demo(gpRender gr){
 	/*
 	//Player Cam Initilization
 	SDL_Rect playercam = {ZONE_WIDTH/2 - SCREEN_WIDTH/2, ZONE_HEIGHT/2 - SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT};
-	gpEntity cameraent(db, tex);
+	Sprite cameraent(db, tex);
 	osEntity.push_back(&cameraent);
 	*/
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/ship_capital_ally.png");
 	SDL_Rect db2 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	gpEntity playerent(db2, tex2);
-	osEntity.push_back(&playerent);
+	Sprite playerent(db2, tex2);
+	osSprite.push_back(&playerent);
 
 	
 	//Red giant Initilzation-
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db3 = {800,400,332,315};
-	gpEntity starent(db3, tex3);
+	Sprite starent(db3, tex3);
 
-	osEntity.push_back(&starent);
+	osSprite.push_back(&starent);
 
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db4 = {400,300,225,300};
-	gpEntity emyent(db4, tex4);
+	Sprite emyent(db4, tex4);
 
 	osEntity.push_back(&emyent);
 	*/
@@ -73,12 +73,9 @@ void run_demo(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent, osEntity);
+		updatePosition(playerent, osSprite);
 
-		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
-		//Adjusts the players entities pos based on interal values
-		playerent.handelEntityOB(gr.getSW() * 3, gr.getSH() * 3);
-		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+	
 
 		//Renders all renderable objects onto the screen
 
@@ -97,7 +94,7 @@ void run_demo(gpRender gr){
 		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT)
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;*/
 		
-		gr.renderOnScreenEntity(osEntity, camera);
+		gr.renderOnScreenEntity(osSprite, camera);
 		
 	}
 }
