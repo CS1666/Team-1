@@ -10,11 +10,13 @@ constexpr double MAX_SPEED = 6;
 constexpr double MAX_DELTAV = 2;
 constexpr double MAX_ROTATIONSPEED = 6;
 constexpr double MAX_ROTATIONRATE = 2;
-
-constexpr int SCREEN_WIDTH = 1280; 
+/*
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
+constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int BOX_WIDTH = 20;
-constexpr int BOX_HEIGHT = 20;
+constexpr int BOX_HEIGHT = 20;*/
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
 double speed = 0;
@@ -194,22 +196,22 @@ void updatePosition(gpEntity &ent, std::vector<gpEntity*> &osEntity){
 	ent.setX(ent.getX() + (int)speedX);
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
-		|| (ent.getX() + BOX_WIDTH > SCREEN_WIDTH) 
+		|| (ent.getX() + BOX_WIDTH > ZONE_WIDTH) 
 		|| check_all_collisions(ent.getDrawBox(), osEntity)){
 
 		ent.setX(ent.getX() - (int)speedX);
 	}
 	ent.setY(ent.getY() + (int)speedY);
 	if(ent.getY() < 0 
-		|| (ent.getY() + BOX_WIDTH > SCREEN_WIDTH) 
+		|| (ent.getY() + BOX_WIDTH > ZONE_WIDTH) 
 		|| check_all_collisions(ent.getDrawBox(), osEntity)){
 
 		ent.setY(ent.getY() - (int)speedY);
 	}
 	
 	std::cout << ent.getAngle() - 90 << std::endl;
-	std::cout << "y: " << ent.getX()  << std::endl;	
-	std::cout << "x: " << ent.getY()  << std::endl;
+	std::cout << "x: " << ent.getX()  << std::endl;	
+	std::cout << "y: " << ent.getY()  << std::endl;
 	std::cout << "speed: " << speed << std::endl;
 	
 }
