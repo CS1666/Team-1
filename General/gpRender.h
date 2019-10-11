@@ -1,8 +1,8 @@
 
-
 #include <SDL.h>
 #include <SDL_image.h>
-#include "gpEntity.h"
+#include <string>
+#include "Sprite.h"
 
 #pragma once
 
@@ -13,7 +13,7 @@ class gpRender{
 
 		//Constructors
 		gpRender();
-		gpRender(SDL_Renderer* sdlgr);
+		gpRender(const char* win_name);
 
 		//Destructor
 		~gpRender();
@@ -21,7 +21,10 @@ class gpRender{
 		//Needs Mover and Copier
 
 		//Renders passend in entities on screen
-		void renderOnScreenEntity(std::vector<gpEntity*> osEntity);
+		void renderOnScreenEntity(std::vector<Sprite*> osSprite, SDL_Rect camera);
+
+		//Renders background on screen (camera?)
+		//void renderBackground(std::);
 
 		//Loads Images into a Texture
 		SDL_Texture* loadImage(std::string fname);
@@ -37,6 +40,8 @@ class gpRender{
 		int getSW();
 		int getSH();
 		int getFD();
+
+		SDL_Renderer* getRender();
 
 
 

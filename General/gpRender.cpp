@@ -3,11 +3,12 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "gpEntity.h"
+#include "Sprite.h"
 #include "gpRender.h"
 
 //--------------------------------Constructors--------------------------------------------------
-gpRender::gpRender(){
+gpRender::gpRender() {};
+gpRender::gpRender(const char* win_name){
 	// Flag what subsystems to initialize
 	// For now, just video
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -20,7 +21,7 @@ gpRender::gpRender(){
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 		
-	gWindow = SDL_CreateWindow("A DEMO!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow(win_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr && isInit) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -50,7 +51,6 @@ gpRender::gpRender(){
 	}
 };
 
-gpRender::gpRender(SDL_Renderer* sdlgr) : gRenderer{sdlgr}, gWindow{nullptr} {};
 //--------------------------------Destructors---------------------------------------------------
 gpRender::~gpRender(){
 
@@ -66,25 +66,69 @@ gpRender::~gpRender(){
 	// Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
-}
+};
 
 
 //Method that renders images onto the window
-void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera){
+	
+	int d;
+	int c;
+	SDL_Rect cur_out;
+	SDL_Rect bgtile[16];
+	//SDL_Rect bgzonelayer1[ZONE_WIDTH/100 * ZONE_HEIGHT/100];
+	
+	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
+
+	for (int x = 0; x < 4; x++) {
+		for (int y = 0; y < 4; y++) {
+			bgtile[x + 4*y].x = x * 100;
+			bgtile[x + 4*y].y = y * 100;
+			bgtile[x + 4*y].w = 100;
+			bgtile[x + 4*y].h = 100;
+		}
+	}
 	SDL_RenderClear(gRenderer);
+
+	d = 0;
+	while (d * 100 < SCREEN_HEIGHT) {
+		c = 0;
+		while (c * 100 < SCREEN_WIDTH) {
+			cur_out = {camera.x + (c * 100), camera.y + (d * 100), 100, 100};
+			SDL_RenderCopy(gRenderer, bgsheet, &bgtile[c % 16], &cur_out);
+			c += 1;
+		}
+		d+= 1;
+	}
+	
 	for(auto entity : osEntity){
-		
-		SDL_Point center;
-		if (entity->isRectEnt()){
+
+		//To check if entity is player, player must be the first entity added
+		if (entity == osEntity.at(0)){
+			SDL_Point center;
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
-			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, entity->getDrawBox(), entity->getAngle(), &center, SDL_FLIP_NONE);
-			
-		}
-		else if(entity->isCircEnt()){
-			entity->getDrawCirc()->RenderFillCirc(gRenderer);
+			SDL_Rect camcenter = {SCREEN_WIDTH/2 - entity->getW()/2, SCREEN_HEIGHT/2 - entity->getH()/2, entity->getW(), entity->getH()};
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
 
+		//check if entity within range of camera
+		else if ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
+			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH())){
+			
+			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
+
+			SDL_Point center;
+			if (entity->isRectEnt()){
+				center.x = entity->getW()/2;
+				center.y = entity->getH()/2;
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
+				
+			}
+			else if(entity->isCircEnt()){
+				entity->getDrawCirc()->RenderFillCirc(gRenderer);
+			}
+		}
 	}
 	SDL_RenderPresent(gRenderer);
 
@@ -98,6 +142,7 @@ void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity){
 		}
 	}
 }
+
 
 ///Provided method that loads Images
 SDL_Texture* gpRender::loadImage(std::string fname) {
@@ -151,4 +196,6 @@ int gpRender::getFD(){
 	return frameDelay;
 }
 
-
+SDL_Renderer* gpRender::getRender(){
+	return gRenderer;
+}
