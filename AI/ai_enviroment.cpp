@@ -3,11 +3,12 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "../General/gpEntity.h"
+#include "../General/Sprite.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
-
+#include "AI.h"
+#include "../General/Ship.h"
 
 
 void run_ai_enviro(gpRender gr){
@@ -15,35 +16,35 @@ void run_ai_enviro(gpRender gr){
 
 	//Vector used to store all on screen entities
 
-	std::vector<gpEntity*> osEntity;
+	std::vector<Sprite*> osSprite;
 
-	
+	//Camera Initilization
+	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	//gpRender object that is used to render object onto screen
 	
+	//Ship object init
+	Ship aiShip;
 
+	//AI init
 
-	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
-	SDL_Rect db = {100,100,150,150};
-	gpEntity playerent(db, tex);
-	osEntity.push_back(&playerent);
+	AI ai;
+
+	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+
+	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
+	SDL_Rect db = {50,325,75,75};
+
+	Sprite playerent(db, tex);
+	osSprite.push_back(&playerent);
 
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
-	gpEntity starent(db2, tex2);
+	SDL_Rect db2 = {500,200,300,300};
+	Sprite starent(db2, tex2);
 
-	osEntity.push_back(&starent);
-
-
-	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	gpEntity emyent(db3, tex3);
-
-	osEntity.push_back(&emyent);
+	osSprite.push_back(&starent);
 
 	SDL_Event e;
 	bool gameon = true;
@@ -56,15 +57,12 @@ void run_ai_enviro(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent, osEntity);
+		updatePosition(playerent, osSprite);
 
-		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
-		//Adjusts the players entities pos based on interal values
-		playerent.handelEntityOB(gr.getSW(), gr.getSH());
-		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
+		
 
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osEntity);
+		gr.renderOnScreenEntity(osSprite, camera);
 		
 	}
 }

@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
 		}
 
 		run_demo(gr);
+		gr = nullptr;
 	}
 	
 	//AI Enviroment: a
@@ -35,6 +36,7 @@ int main(int argc, char** argv) {
 			return 1;
 		}
 		run_ai_enviro(gr);
+		gr = nullptr;
 	}
 
 	//Level Gen Enviroment: l
@@ -47,6 +49,8 @@ int main(int argc, char** argv) {
 			return 1;
 		}
 		run_lg_enviro(gr);
+		gr = nullptr;
+
 	}
 	//Physic Enviroment:p
 	else if(argc==2 && strcmp(argv[1],"p")==0){
@@ -57,6 +61,9 @@ int main(int argc, char** argv) {
 			return 1;
 		}
 		run_phy_enviro(gr);
+		delete &gr;
+		gr = nullptr;
+
 	}
 	//credits mode: c
 	else if(argc==2 && strcmp(argv[1],"c")==0)
@@ -96,6 +103,8 @@ int main(int argc, char** argv) {
                 SDL_Delay(5000);
 
         }
+        gr = nullptr;
+
 	}
 
 

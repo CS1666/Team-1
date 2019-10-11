@@ -16,7 +16,9 @@ all:
 	+$(MAKE) -C Physics
 	+$(MAKE) -C Level_Generation
 	+$(MAKE) main.o
-
+	+@echo How to run:
+	+@echo Type  ./main.o arg,
+	+@echo args currently supported: none, c, a, l, p
 main.o: main.cpp 
 	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
