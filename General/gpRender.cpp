@@ -3,7 +3,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "gpEntity.h"
+#include "Sprite.h"
 #include "gpRender.h"
 
 //--------------------------------Constructors--------------------------------------------------
@@ -70,7 +70,7 @@ gpRender::~gpRender(){
 
 
 //Method that renders images onto the window
-void gpRender::renderOnScreenEntity(std::vector<gpEntity*> osEntity, SDL_Rect camera){
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera){
 	
 	int d;
 	int c;
