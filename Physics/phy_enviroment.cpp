@@ -8,17 +8,22 @@
 #include "../General/gpRender.h"
 #include "phy_enviroment.h"
 
+constexpr int PLAYER_WIDTH = 150;
+constexpr int PLAYER_HEIGHT = 150;
 
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<gpEntity*> osEntity;
 
-	
+	//Camera Initilization
+	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	//gpRender object that is used to render object onto screen
 	
-
+	//Camera Initilization
+	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
+	SDL_Rect camera = {ZONE_WIDTH/2 - SCREEN_WIDTH/2, ZONE_HEIGHT/2 - SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
@@ -60,8 +65,11 @@ void run_phy_enviro(gpRender gr){
 		playerent.handelEntityOB(gr.getSW(), gr.getSH());
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 
+		camera.x = playerent.getX() + SCREEN_WIDTH/2 - PLAYER_WIDTH/2;
+		camera.y = playerent.getY() + SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2;
+
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osEntity);
+		gr.renderOnScreenEntity(osEntity, camera);
 		
 	}
 }
