@@ -8,34 +8,59 @@
 #include "../General/gpRender.h"
 #include "demo.h"
 
+constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_HEIGHT = 50;
 
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<gpEntity*> osEntity;
 
+	//Camera Initilization
+	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
+	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+	/*
+	//Player Cam Initilization
+	SDL_Rect playercam = {ZONE_WIDTH/2 - SCREEN_WIDTH/2, ZONE_HEIGHT/2 - SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT};
+	gpEntity cameraent(db, tex);
+	osEntity.push_back(&cameraent);
+	*/
 
 	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_capital_ally.png");
-	SDL_Rect db = {100,100,150,150};
-	gpEntity playerent(db, tex);
+	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/ship_capital_ally.png");
+	SDL_Rect db2 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
+	gpEntity playerent(db2, tex2);
 	osEntity.push_back(&playerent);
 
-
+	
 	//Red giant Initilzation-
-	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
-	gpEntity starent(db2, tex2);
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Rect db3 = {800,400,332,315};
+	gpEntity starent(db3, tex3);
 
 	osEntity.push_back(&starent);
 
-
+	/*
 	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	gpEntity emyent(db3, tex3);
+	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db4 = {400,300,225,300};
+	gpEntity emyent(db4, tex4);
 
 	osEntity.push_back(&emyent);
+	*/
+	//Background initilization
+	/*SDL_Texture* bgsheet = gr.loadImage("Assets/Objects/backgroundss.png");
+	SDL_Rect bgtile[16];
+
+	for (int x = 0; x < 4; x++) {
+		for (int y = 0; y < 4; y++) {
+			bgtile[x + 4*y].x = x * 100;
+			bgtile[x + 4*y].y = y * 100;
+			bgtile[x + 4*y].w = 100;
+			bgtile[x + 4*y].h = 100;
+		}
+	}*/
 
 	SDL_Event e;
 	bool gameon = true;
@@ -52,11 +77,27 @@ void run_demo(gpRender gr){
 
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 		//Adjusts the players entities pos based on interal values
-		playerent.handelEntityOB(gr.getSW(), gr.getSH());
+		playerent.handelEntityOB(gr.getSW() * 3, gr.getSH() * 3);
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osEntity);
+
+		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
+		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
+		
+
+		/*
+		if (camera.x < 0)
+			camera.x = 0;
+		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH)
+			camera.x = ZONE_WIDTH - SCREEN_WIDTH;
+
+		if (camera.y < 0)
+			camera.y = 0;
+		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT)
+			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;*/
+		
+		gr.renderOnScreenEntity(osEntity, camera);
 		
 	}
 }

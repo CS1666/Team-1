@@ -21,7 +21,10 @@ class gpRender{
 		//Needs Mover and Copier
 
 		//Renders passend in entities on screen
-		void renderOnScreenEntity(std::vector<gpEntity*> osEntity);
+		void renderOnScreenEntity(std::vector<gpEntity*> osEntity, SDL_Rect camera);
+
+		//Renders background on screen (camera?)
+		//void renderBackground(std::);
 
 		//Loads Images into a Texture
 		SDL_Texture* loadImage(std::string fname);

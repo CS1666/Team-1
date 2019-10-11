@@ -15,7 +15,8 @@ void run_lg_enviro(gpRender gr){
 
 	std::vector<gpEntity*> osEntity;
 
-	
+	//Camera Initilization
+	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	//gpRender object that is used to render object onto screen
 	
@@ -62,7 +63,7 @@ void run_lg_enviro(gpRender gr){
 		//---------------COLLISION SHOULD BE HANDLED HERE------------------------
 
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osEntity);
+		gr.renderOnScreenEntity(osEntity, camera);
 		
 	}
 }
