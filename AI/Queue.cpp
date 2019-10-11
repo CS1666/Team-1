@@ -14,6 +14,16 @@ Queue::Queue(int size)
     tail=0;
     keys=vector<char>(size);
 }
+//todo: actually assignment
+Queue& Queue::operator = (const Queue& other)
+{
+
+}
+//todo: copy?
+Queue::Queue(const Queue& other)
+{
+
+}
 Queue::~Queue()
 {
     //probably don't need to manually destroy anything?
