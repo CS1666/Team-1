@@ -6,7 +6,7 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 all: $(OUT_NAMES)
 
-%.o: %.cpp
+%.o: %.cpp 
 	$(CC) -c $^ $(COMPILER_FLAGS) 
 
 clean:
