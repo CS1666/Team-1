@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include "../AI/Queue.h"
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
@@ -20,7 +20,7 @@ class Ship
         string currKey;
 
         //ai
-        vector<vector<int> > path;
+        Queue path;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -36,7 +36,7 @@ class Ship
         void checkAction(/*stream*/);
         void updateHull(int newHull);
         vector<int> getPosition();
-        void setPath(vector<vector<int> > newPath);
+        void setPath(Queue thePath);
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();

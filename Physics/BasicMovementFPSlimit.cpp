@@ -159,7 +159,9 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	return isCollision;
 }
 
-void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite){
+
+void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+
 
 	speed += deltaV;
 	rotationSpeed += rotationRate;
@@ -196,14 +198,18 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite){
 	ent.setX(ent.getX() + (int)speedX);
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
-		|| (ent.getX() + BOX_WIDTH > ZONE_WIDTH) 
+
+		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getX() - (int)speedX);
 	}
 	ent.setY(ent.getY() + (int)speedY);
 	if(ent.getY() < 0 
-		|| (ent.getY() + BOX_WIDTH > ZONE_WIDTH) 
+
+		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getY() - (int)speedY);

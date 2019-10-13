@@ -68,9 +68,8 @@ gpRender::~gpRender(){
 	SDL_Quit();
 };
 
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera, bool fixed){
 
-//Method that renders images onto the window
-void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera){
 	
 	int d;
 	int c;
@@ -89,7 +88,7 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 		}
 	}
 	SDL_RenderClear(gRenderer);
-
+/*
 	d = 0;
 	while (d * 100 < SCREEN_HEIGHT) {
 		c = 0;
@@ -100,11 +99,12 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 		}
 		d+= 1;
 	}
-	
+*/	
 	for(auto entity : osEntity){
 
 		//To check if entity is player, player must be the first entity added
-		if (entity == osEntity.at(0)){
+		//Also checks if camera should be fixed
+		if ((entity == osEntity.at(0)) && !fixed){
 			SDL_Point center;
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;

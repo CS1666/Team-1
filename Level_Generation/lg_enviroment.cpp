@@ -8,7 +8,10 @@
 #include "../General/gpRender.h"
 #include "lg_enviroment.h"
 
-
+constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_HEIGHT = 50;
+constexpr int ZONE_WIDTH = 1280; 
+constexpr int ZONE_HEIGHT = 720;
 
 void run_lg_enviro(gpRender gr){
 	//Vector used to store all on screen entities
@@ -17,6 +20,7 @@ void run_lg_enviro(gpRender gr){
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	bool fixed = false;
 
 	//gpRender object that is used to render object onto screen
 	
@@ -55,11 +59,13 @@ void run_lg_enviro(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent, osSprite);
+
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osSprite, camera);
+		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 		
 	}
 }

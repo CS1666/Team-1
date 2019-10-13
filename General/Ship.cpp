@@ -43,15 +43,21 @@
             return position;
         }
 
-        void Ship::setPath(vector<vector<int> > newPath)
+        void Ship::setPath(Queue thePath)
         {
-        	path = newPath;
+        	path = thePath;
+		pathComplete=false;
         }
 
         //ai follows path assigned to it by ai class
         void Ship::followPath()
         {
-
+	    while(!path.isEmpty())
+	    {
+		char key=path.pop();
+		//do some stuff...
+	    }
+	    pathComplete=true;
         }
 
         bool Ship::getPathComplete()
