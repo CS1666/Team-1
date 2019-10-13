@@ -10,6 +10,8 @@
 
 constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
@@ -19,13 +21,7 @@ void run_demo(gpRender gr){
 	//Camera Initilization
 	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
-	/*
-	//Player Cam Initilization
-	SDL_Rect playercam = {ZONE_WIDTH/2 - SCREEN_WIDTH/2, ZONE_HEIGHT/2 - SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT};
-	Sprite cameraent(db, tex);
-	osEntity.push_back(&cameraent);
-	*/
+	bool fixed = false;
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/ship_capital_ally.png");
@@ -73,7 +69,7 @@ void run_demo(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent, osSprite);
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 	
 
@@ -82,19 +78,23 @@ void run_demo(gpRender gr){
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
 		
-
-		/*
-		if (camera.x < 0)
+		if (camera.x < 0){
 			camera.x = 0;
-		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH)
+			fixed = true;
+		}
+		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH){
 			camera.x = ZONE_WIDTH - SCREEN_WIDTH;
-
-		if (camera.y < 0)
+			fixed = true;
+		}
+		if (camera.y < 0){
 			camera.y = 0;
-		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT)
-			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;*/
-		
-		gr.renderOnScreenEntity(osSprite, camera);
+			fixed = true;
+		}
+		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
+			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
+			fixed = true;
+		}
+		gr.renderOnScreenEntity(osSprite, camera, fixed);
 		
 	}
 }
