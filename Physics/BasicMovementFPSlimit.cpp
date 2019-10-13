@@ -86,7 +86,6 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			
 			deltaV++;
 			break;
 
@@ -107,6 +106,10 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += 2.0;
+			break;
+		
+		case SDLK_SPACE:
+			//Fire laser
 			break;
 		
 	}
@@ -208,7 +211,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 
 		ent.setY(ent.getY() - (int)speedY);
 	}
-	
+
 	std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getX()  << std::endl;	
 	std::cout << "y: " << ent.getY()  << std::endl;
