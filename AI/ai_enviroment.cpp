@@ -83,12 +83,16 @@ void run_ai_enviro(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
 
 		
 
 		//Renders all renderable objects onto the screen
+
 		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 		
 	}
 }

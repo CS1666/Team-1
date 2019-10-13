@@ -21,7 +21,9 @@ void run_demo(gpRender gr){
 	//Camera Initilization
 	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
 	bool fixed = false;
+
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/ship_capital_ally.png");
@@ -69,7 +71,9 @@ void run_demo(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
 
 	
 
@@ -88,6 +92,7 @@ void run_demo(gpRender gr){
 		}
 		if (camera.y < 0){
 			camera.y = 0;
+
 			fixed = true;
 		}
 		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
@@ -95,6 +100,7 @@ void run_demo(gpRender gr){
 			fixed = true;
 		}
 		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 		
 	}
 }
