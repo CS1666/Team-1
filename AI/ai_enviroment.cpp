@@ -11,6 +11,15 @@
 #include "../General/Ship.h"
 #include "Queue.h"
 using namespace std;
+<<<<<<< HEAD
+=======
+
+constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_HEIGHT = 50;
+constexpr int ZONE_WIDTH = 1280; 
+constexpr int ZONE_HEIGHT = 720;
+
+>>>>>>> c265aa7027f02e7f7afc1662d9ed4404e8df597a
 void run_ai_enviro(gpRender gr){
 
 
@@ -20,6 +29,7 @@ void run_ai_enviro(gpRender gr){
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	bool fixed = true;
 
 	//gpRender object that is used to render object onto screen
 	
@@ -51,7 +61,8 @@ void run_ai_enviro(gpRender gr){
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
-	SDL_Rect db = {50,325,75,75};
+	//SDL_Rect db = {50,325,75,75};
+	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	Sprite playerent(db, tex);
 	osSprite.push_back(&playerent);
@@ -75,12 +86,12 @@ void run_ai_enviro(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
-		updatePosition(playerent, osSprite);
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		
 
 		//Renders all renderable objects onto the screen
-		gr.renderOnScreenEntity(osSprite, camera);
+		gr.renderOnScreenEntity(osSprite, camera, fixed);
 		
 	}
 }
