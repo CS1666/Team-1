@@ -59,7 +59,8 @@ void run_ai_enviro(gpRender gr){
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
-	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Rect db = {50,325,PLAYER_WIDTH,PLAYER_HEIGHT};
+	aiShip.updatePosition({50, 325});
 
 	Sprite playerent(db, tex);
 	osSprite.push_back(&playerent);

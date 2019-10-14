@@ -43,10 +43,20 @@
             return position;
         }
 
+        vector<int> Ship::getDestination()
+        {
+            return destination;
+        }
+
         void Ship::setPath(Queue thePath)
         {
         	path = thePath;
 		pathComplete=false;
+        }
+
+        int Ship::getMaxVelocity()
+        {
+            return maxVelocity;
         }
 
         //ai follows path assigned to it by ai class

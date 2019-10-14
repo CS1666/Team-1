@@ -17,10 +17,12 @@ class Ship
         float rotation;
         int weaponType;
         bool damageTaken;
+        int maxVelocity;
         string currKey;
 
         //ai
         Queue path;
+        vector<int> destination;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -40,6 +42,8 @@ class Ship
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();
+        vector<int> getDestination();
+        int getMaxVelocity();
 };
 
 class Hero:Ship{};
