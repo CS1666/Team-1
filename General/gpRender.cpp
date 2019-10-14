@@ -70,6 +70,9 @@ gpRender::~gpRender(){
 
 void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera, bool fixed){
 
+//Method that renders images onto the window
+//void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
+
 	
 	int d;
 	int c;
@@ -77,16 +80,25 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 	SDL_Rect bgtile[16];
 	//SDL_Rect bgzonelayer1[ZONE_WIDTH/100 * ZONE_HEIGHT/100];
 	
+	SDL_RenderClear(gRenderer);
+
+	//Render 2 Background Layers
 	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
 
-	for (int x = 0; x < 4; x++) {
-		for (int y = 0; y < 4; y++) {
-			bgtile[x + 4*y].x = x * 100;
-			bgtile[x + 4*y].y = y * 100;
-			bgtile[x + 4*y].w = 100;
-			bgtile[x + 4*y].h = 100;
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=20){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=20){
+			//random background galaxy
+			//if(background1[i/20][j/20]->x == 400){
+			//	SDL_Rect campos = {i - camera.x - (i % 200), j - camera.y - (j % 200), 200, 200};
+			//	SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
+			//}
+			//else{
+				SDL_Rect campos = {i - camera.x - (i % 20), j - camera.y - (j % 20), 20, 20};
+				SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
+			//}
 		}
 	}
+
 	SDL_RenderClear(gRenderer);
 /*
 	d = 0;
@@ -97,9 +109,12 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 			SDL_RenderCopy(gRenderer, bgsheet, &bgtile[c % 16], &cur_out);
 			c += 1;
 		}
-		d+= 1;
 	}
+
+
+
 */	
+
 	for(auto entity : osEntity){
 
 		//To check if entity is player, player must be the first entity added
@@ -109,7 +124,8 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
 			SDL_Rect camcenter = {SCREEN_WIDTH/2 - entity->getW()/2, SCREEN_HEIGHT/2 - entity->getH()/2, entity->getW(), entity->getH()};
-			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
+			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
 
 		//check if entity within range of camera
@@ -122,8 +138,13 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect came
 			if (entity->isRectEnt()){
 				center.x = entity->getW()/2;
 				center.y = entity->getH()/2;
-				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
-				
+				if(entity->getF() < 0){
+					SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
+				}
+				else{
+					SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+					SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
+				}
 			}
 			else if(entity->isCircEnt()){
 				entity->getDrawCirc()->RenderFillCirc(gRenderer);
