@@ -123,7 +123,7 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		if(ai.checkMapState(positions))
 		{
-			ai.createMapState(sector);
+			//ai.createMapState(sector);
 		    aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    aiShip.followPath();
 		}
