@@ -11,6 +11,7 @@ class Star
 		string type;
 		tuple<int, int> position;
 		string sprite;
+		long mass;
 
 	public:
 		int getRadius()
@@ -61,5 +62,13 @@ class Star
 		void setSprite(string s)
 		{
 			sprite = s;
+		}
+	
+		long getMass(){
+			return mass;	
+		}
+	
+		void setMass(long newMass){
+			mass = newMass;	
 		}
 };
