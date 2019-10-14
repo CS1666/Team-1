@@ -17,9 +17,9 @@
         }
 
         //integrate BasicMovementFPSlimit.cpp
-        void Ship::updatePosition(vector<int> newPos)
+        void Ship::setPosition(vector<int> newPosition)
         {
-            position = newPos;
+            position = newPosition;
         }
 
         //integrate BasicMovementFPSlimit.cpp
@@ -37,13 +37,15 @@
         {
             hull = newHull;
         }
-	void Ship::setPosition(vector<int> pos)
-	{
-	    position=pos;
-	}
+        
         vector<int> Ship::getPosition()
         {
             return position;
+        }
+
+        void Ship::setDestination(vector<int> newDestination)
+        {
+            destination = newDestination;
         }
 
         vector<int> Ship::getDestination()
@@ -54,7 +56,7 @@
         void Ship::setPath(Queue thePath)
         {
         	path = thePath;
-		pathComplete=false;
+            pathComplete=false;
         }
 
         int Ship::getMaxVelocity()

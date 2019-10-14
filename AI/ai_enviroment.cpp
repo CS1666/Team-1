@@ -10,6 +10,7 @@
 #include "AI.h"
 #include "../General/Ship.h"
 #include "Queue.h"
+#include "../General/Sector.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -30,7 +31,7 @@ void run_ai_enviro(gpRender gr){
 	bool fixed = true;
 
 	//gpRender object that is used to render object onto screen
-	
+
 	//Ship object init
 	Ship aiShip;
 //testing for queue
@@ -56,11 +57,12 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+	aiShip.setPosition({50, 325});
+	aiShip.setDestination({600, 325});
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
 	SDL_Rect db = {50,325,PLAYER_WIDTH,PLAYER_HEIGHT};
-	aiShip.updatePosition({50, 325});
 
 	Sprite playerent(db, tex);
 	osSprite.push_back(&playerent);
@@ -68,7 +70,7 @@ void run_ai_enviro(gpRender gr){
 	//positions = gameState, only track the ship for now
 	//destination is also a vector
 	positions.push_back({10,10});
-	aiShip.setPosition({10,10});
+
 	vector<int> destination={325,325};
 
 
@@ -83,6 +85,13 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect bgtile2[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
+
+	Star star;
+
+	Sector sector;
+
+	sector.setSize({1280, 720});
+	sector.setStars({star});
 
 	for (int x = 0; x < 20; x++) {
 		for (int y = 0; y < 20; y++) {
@@ -114,6 +123,7 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		if(ai.checkMapState(positions))
 		{
+			//ai.createMapState(sector);
 		    aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    aiShip.followPath();
 		}
