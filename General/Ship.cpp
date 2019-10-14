@@ -64,3 +64,8 @@
         {
         	return pathComplete;
         }
+
+	long Ship::getMass()
+	{
+		return mass;	
+	}
