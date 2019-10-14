@@ -68,9 +68,17 @@ gpRender::~gpRender(){
 	SDL_Quit();
 };
 
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera, bool fixed){
 
 //Method that renders images onto the window
-void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
+//void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
+
+	
+	int d;
+	int c;
+	SDL_Rect cur_out;
+	SDL_Rect bgtile[16];
+	//SDL_Rect bgzonelayer1[ZONE_WIDTH/100 * ZONE_HEIGHT/100];
 	
 	SDL_RenderClear(gRenderer);
 
@@ -91,13 +99,21 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<s
 		}
 	}
 
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=40){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=40){
-			SDL_Rect campos = {(i - camera.x - (i % 40))*2, (j - camera.y - (j % 40))*2, 40, 40};
-			SDL_RenderCopy(gRenderer, bgsheet, background2[i/40][j/40], &campos);
+	SDL_RenderClear(gRenderer);
+/*
+	d = 0;
+	while (d * 100 < SCREEN_HEIGHT) {
+		c = 0;
+		while (c * 100 < SCREEN_WIDTH) {
+			cur_out = {camera.x + (c * 100), camera.y + (d * 100), 100, 100};
+			SDL_RenderCopy(gRenderer, bgsheet, &bgtile[c % 16], &cur_out);
+			c += 1;
 		}
 	}
 
+
+
+*/	
 
 	for(auto entity : osEntity){
 

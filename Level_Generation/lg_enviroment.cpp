@@ -8,10 +8,11 @@
 #include "../General/gpRender.h"
 #include "lg_enviroment.h"
 
-constexpr int PLAYER_WIDTH = 52;
+
+constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
-constexpr int ZONE_WIDTH = 3840; 
-constexpr int ZONE_HEIGHT = 2160;
+constexpr int ZONE_WIDTH = 1280; 
+constexpr int ZONE_HEIGHT = 720;
 
 void run_lg_enviro(gpRender gr){
 	//Vector used to store all on screen entities
@@ -109,6 +110,7 @@ void run_lg_enviro(gpRender gr){
 			}
 		}
 
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		if (animate){
@@ -137,27 +139,9 @@ void run_lg_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-		
-		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
-		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
-		
-		if (camera.x < 0){
-			camera.x = 0;
-			fixed = true;
-		}
-		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH){
-			camera.x = ZONE_WIDTH - SCREEN_WIDTH;
-			fixed = true;
-		}
-		if (camera.y < 0){
-			camera.y = 0;
-			fixed = true;
-		}
-		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
-			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
-			fixed = true;
-		}
-		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
+
+		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 		
 	}
 }

@@ -8,8 +8,9 @@
 #include "../General/gpRender.h"
 #include "demo.h"
 
-constexpr int PLAYER_WIDTH = 52;
-constexpr int PLAYER_HEIGHT = 60;
+
+constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
@@ -20,7 +21,10 @@ void run_demo(gpRender gr){
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+
 	bool fixed = false;
+
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -138,6 +142,10 @@ void run_demo(gpRender gr){
 			playerent.setF(animation);
 		}
 
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
+
+
 		//Renders all renderable objects onto the screen
 
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
@@ -153,12 +161,16 @@ void run_demo(gpRender gr){
 		}
 		if (camera.y < 0){
 			camera.y = 0;
+
 			fixed = true;
 		}
 		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
+		//gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
+
+		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 	}
 }
