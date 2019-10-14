@@ -18,6 +18,7 @@ class Ship
         int weaponType;
         bool damageTaken;
         string currKey;
+        long mass;
 
         //ai
         Queue path;
@@ -41,6 +42,7 @@ class Ship
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();
+        long getMass();
 };
 
 class Hero:Ship{};

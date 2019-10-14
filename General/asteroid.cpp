@@ -11,6 +11,7 @@ class Asteroid
 		float direction;
 		tuple<int, int> position;
 		string sprite;
+		long mass;
 
 	public:
 		int getRadius()
@@ -26,6 +27,11 @@ class Asteroid
 		float getDirection()
 		{
 			return direction;
+		}
+	
+		long getMass()
+		{
+			return mass;	
 		}
 
 		tuple<int, int> getPosition()
@@ -62,5 +68,11 @@ class Asteroid
 		{
 			sprite = s;
 		}
+	
+		void setMass(long m)
+		{
+			mass = m;	
+		}
+		
 
 };
