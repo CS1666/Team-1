@@ -15,7 +15,6 @@ class Sprite{
 		//Constructors
 		Sprite();
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
-		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
 		Sprite(NSDL_Circ dCirc, SDL_Texture* aTex);
 
 
@@ -38,8 +37,6 @@ class Sprite{
 		double getAngle();
 		int getH();
 		int getW();
-		void setF(int anim);
-		int getF();
 
 	
 
@@ -59,7 +56,6 @@ class Sprite{
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
-		int animFrame;
 
 		//Velocity variables
 		//Probably should be moved to some physic related object

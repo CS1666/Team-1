@@ -5,9 +5,7 @@
 	//------------------------------------Constructors-----------------------------------------------
 	Sprite::Sprite(): drawBox{0,0,0,0},  drawCirc{}, assetTex{nullptr} {};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{-1} {};
-
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} {};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex} {};
 
 	Sprite::Sprite(NSDL_Circ dCirc, SDL_Texture* aTex):drawBox{0,0,0,0}, drawCirc{dCirc}, assetTex{aTex} {};
 
@@ -52,16 +50,10 @@
 		return angle;
 	}
 	int Sprite::getH(){
-		return drawBox.h;
+			return drawBox.h;
 	}
 	int Sprite::getW(){
-		return drawBox.w;
-	}
-	void Sprite::setF(int anim){
-		animFrame = anim;
-	}
-	int Sprite::getF(){
-		return animFrame;
+			return drawBox.w;
 	}
 	
 
