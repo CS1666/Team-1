@@ -57,12 +57,12 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
-	aiShip.setPosition({50, 325});
+	aiShip.setPosition({10, 10});
 	aiShip.setDestination({600, 325});
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
-	SDL_Rect db = {50,325,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	Sprite playerent(db, tex);
 	osSprite.push_back(&playerent);
@@ -123,7 +123,7 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		if(ai.checkMapState(positions))
 		{
-			//ai.createMapState(sector);
+			ai.createMapState(sector);
 		    aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    aiShip.followPath();
 		}

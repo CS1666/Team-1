@@ -47,7 +47,7 @@
 
     	}
 
-    	void createMapState(Sector currentSector)
+    	void AI::createMapState(Sector currentSector)
     	{
 
     		vector<int> sectorSize = currentSector.getSize();
@@ -56,7 +56,7 @@
 
     	}
 
-        bool checkMapState(vector<vector<int> > newState)
+        bool AI::checkMapState(vector<vector<int> > newState)
         {
 
         	return false;
