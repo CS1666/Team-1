@@ -11,6 +11,7 @@ class Star
 		string type;
 		vector<int> position;
 		string sprite;
+		long mass;
 
 	public:
 		int getRadius();
