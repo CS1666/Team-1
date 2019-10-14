@@ -17,9 +17,9 @@
         }
 
         //integrate BasicMovementFPSlimit.cpp
-        void Ship::updatePosition(vector<int> newPos)
+        void Ship::setPosition(vector<int> newPosition)
         {
-            position = newPos;
+            position = newPosition;
         }
 
         //integrate BasicMovementFPSlimit.cpp
@@ -37,30 +37,42 @@
         {
             hull = newHull;
         }
-	void Ship::setPosition(vector<int> pos)
-	{
-	    position=pos;
-	}
+        
         vector<int> Ship::getPosition()
         {
             return position;
         }
 
+        void Ship::setDestination(vector<int> newDestination)
+        {
+            destination = newDestination;
+        }
+
+        vector<int> Ship::getDestination()
+        {
+            return destination;
+        }
+
         void Ship::setPath(Queue thePath)
         {
         	path = thePath;
-		pathComplete=false;
+            pathComplete=false;
+        }
+
+        int Ship::getMaxVelocity()
+        {
+            return maxVelocity;
         }
 
         //ai follows path assigned to it by ai class
         void Ship::followPath()
         {
-	    while(!path.isEmpty())
-	    {
-		char key=path.pop();
-		//do some stuff...
-	    }
-	    pathComplete=true;
+    	    while(!path.isEmpty())
+    	    {
+    		  char key=path.pop();
+    		  //do some stuff...
+    	    }
+    	    pathComplete=true;
         }
 
         bool Ship::getPathComplete()
@@ -68,7 +80,7 @@
         	return pathComplete;
         }
 
-	long Ship::getMass()
-	{
-		return mass;	
-	}
+    	long Ship::getMass()
+    	{
+    		return mass;	
+    	}
