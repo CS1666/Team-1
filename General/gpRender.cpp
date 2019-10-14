@@ -90,6 +90,13 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<s
 			//}
 		}
 	}
+	
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=40){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=40){
+			SDL_Rect campos = {(i - camera.x - (i % 40))*2, (j - camera.y - (j % 40))*2, 40, 40};
+			SDL_RenderCopy(gRenderer, bgsheet, background2[i/40][j/40], &campos);
+		}
+	}
 
 	for(auto entity : osEntity){
 
