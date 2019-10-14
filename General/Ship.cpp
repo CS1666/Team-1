@@ -37,7 +37,10 @@
         {
             hull = newHull;
         }
-
+	void Ship::setPosition(vector<int> pos)
+	{
+	    position=pos;
+	}
         vector<int> Ship::getPosition()
         {
             return position;

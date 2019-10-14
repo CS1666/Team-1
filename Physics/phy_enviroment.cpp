@@ -61,13 +61,17 @@ void run_phy_enviro(gpRender gr){
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
 		}
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
 
 		camera.x = playerent.getX() + SCREEN_WIDTH/2 - PLAYER_WIDTH/2;
 		camera.y = playerent.getY() + SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2;
 
 		//Renders all renderable objects onto the screen
+
 		gr.renderOnScreenEntity(osSprite, camera, fixed);
+
 		
 	}
 }

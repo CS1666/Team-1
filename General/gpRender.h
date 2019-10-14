@@ -21,7 +21,9 @@ class gpRender{
 		//Needs Mover and Copier
 
 		//Renders passend in entities on screen
+
 		void renderOnScreenEntity(std::vector<Sprite*> osSprite, SDL_Rect camera, bool fixed);
+
 
 		//Renders background on screen (camera?)
 		//void renderBackground(std::);

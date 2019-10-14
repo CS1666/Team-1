@@ -68,9 +68,8 @@ gpRender::~gpRender(){
 	SDL_Quit();
 };
 
-
-//Method that renders images onto the window
 void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, SDL_Rect camera, bool fixed){
+
 	
 	int d;
 	int c;
