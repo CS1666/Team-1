@@ -56,15 +56,8 @@
 
     	}
 
-        bool AI::checkMapState(vector<vector<int> > newState)
-        {
-
-        	return false;
-
-        }
-
 		//true if different, false if same
-		bool AI::checkMapState(vector<vector<int>> newState)
+		bool AI::checkMapState(vector<vector<int> > newState)
 		{
 		    if(storedMapState==newState)
 			return false;
