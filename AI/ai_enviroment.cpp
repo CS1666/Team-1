@@ -16,14 +16,14 @@ constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
-
 void run_ai_enviro(gpRender gr){
 
 
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite;
-
+	//note: maybe merge positions and osSprite?
+	vector<vector<int>> positions;
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = true;
@@ -33,7 +33,6 @@ void run_ai_enviro(gpRender gr){
 	//Ship object init
 	Ship aiShip;
 //testing for queue
-    std::cout << "PRINT SOMETHING???" << std::endl;
     Queue test=Queue(5);
     std::cout << test.push(65) << endl; //A
     cout << test.push(66) << endl; //B
@@ -63,7 +62,11 @@ void run_ai_enviro(gpRender gr){
 
 	Sprite playerent(db, tex);
 	osSprite.push_back(&playerent);
-
+	//positions = gameState, only track the ship for now
+	//destination is also a vector
+	positions.push_back({10,10});
+	aiShip.setPosition({10,10});
+	vector<int> destination={325,325};
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
@@ -78,7 +81,11 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-
+		if(ai.checkMapState(positions))
+		{
+		    aiShip.setPath(ai.calculatePath(aiShip,destination));
+		    aiShip.followPath();
+		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	

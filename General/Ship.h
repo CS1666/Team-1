@@ -35,7 +35,8 @@ class Ship
         void updateMovement();
         void checkAction(/*stream*/);
         void updateHull(int newHull);
-        vector<int> getPosition();
+        void setPosition(vector<int> pos);
+	vector<int> getPosition();
         void setPath(Queue thePath);
         //ai follows path assigned to it by ai class
         void followPath();
