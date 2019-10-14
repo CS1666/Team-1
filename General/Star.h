@@ -23,4 +23,6 @@ class Star
 		void setType(string t);
 		void setPosition(vector<int> newPos);
 		void setSprite(string s);
+		long getMass();
+		void setMass(long newMass);
 };

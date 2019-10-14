@@ -49,3 +49,11 @@ void Star::setSprite(string s)
 {
 	sprite = s;
 }
+	
+long Star::getMass(){
+	return mass;	
+}
+
+void Star::setMass(long newMass){
+	mass = newMass;	
+}

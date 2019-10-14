@@ -19,6 +19,7 @@ class Ship
         bool damageTaken;
         int maxVelocity;
         string currKey;
+        long mass;
 
         //ai
         Queue path;
@@ -44,6 +45,7 @@ class Ship
         vector<int> getDestination();
         int getMaxVelocity();
         void setDestination(vector<int> newDestination);
+        long getMass();
 };
 
 class Hero:Ship{};

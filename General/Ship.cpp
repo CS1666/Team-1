@@ -67,15 +67,20 @@
         //ai follows path assigned to it by ai class
         void Ship::followPath()
         {
-	    while(!path.isEmpty())
-	    {
-		char key=path.pop();
-		//do some stuff...
-	    }
-	    pathComplete=true;
+    	    while(!path.isEmpty())
+    	    {
+    		  char key=path.pop();
+    		  //do some stuff...
+    	    }
+    	    pathComplete=true;
         }
 
         bool Ship::getPathComplete()
         {
         	return pathComplete;
         }
+
+    	long Ship::getMass()
+    	{
+    		return mass;	
+    	}
