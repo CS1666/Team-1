@@ -88,6 +88,9 @@ void run_ai_enviro(gpRender gr){
 
 	Star star;
 
+	star.setSize({300, 300});
+	star.setPosition({500, 200});
+
 	Sector sector;
 
 	sector.setSize({1280, 720});
@@ -123,9 +126,10 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		if(ai.checkMapState(positions))
 		{
-			//ai.createMapState(sector);
-		    aiShip.setPath(ai.calculatePath(aiShip,destination));
-		    aiShip.followPath();
+			ai.createMapState(sector);
+			//I think these were causing errors
+		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
+		    //aiShip.followPath();
 		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {

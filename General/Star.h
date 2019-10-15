@@ -12,6 +12,7 @@ class Star
 		vector<int> position;
 		string sprite;
 		long mass;
+		vector<int> size;
 
 	public:
 		int getRadius();
@@ -26,4 +27,6 @@ class Star
 		void setSprite(string s);
 		long getMass();
 		void setMass(long newMass);
+		vector<int> getSize();
+		void setSize(vector<int> newSize);
 };

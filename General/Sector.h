@@ -15,7 +15,6 @@ class Sector
 		vector<int> __size;
 
 	public:
-
 		void setStars(vector<Star> newStars);
 		vector<Star> getStars();
 		void setSize(vector<int> newSize);

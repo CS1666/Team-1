@@ -52,7 +52,30 @@
 
     		vector<int> sectorSize = currentSector.getSize();
 
-    		vector<vector<int> > storedMapState (sectorSize[0], std::vector<int>(sectorSize[1], 0));
+    		vector<vector<int> > newStoredMapState (sectorSize[0], std::vector<int>(sectorSize[1], 0));
+
+            vector<Star> stars = currentSector.getStars();
+            
+            for (Star star : stars)
+            {
+                vector<int> starSize = star.getSize();
+
+                vector<int> starPosition = star.getPosition();
+
+                for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
+                {
+                    newStoredMapState[x][starPosition[1]] = 1;
+                    newStoredMapState[x][starPosition[1] - starSize[1]] = 1;
+                }
+
+                for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
+                {
+                    newStoredMapState[starPosition[0]][y] = 1;
+                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
+                }
+            }
+            
+            AI::storedMapState = newStoredMapState;
 
     	}
 

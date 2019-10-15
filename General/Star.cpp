@@ -57,3 +57,13 @@ long Star::getMass(){
 void Star::setMass(long newMass){
 	mass = newMass;	
 }
+
+vector<int> Star::getSize()
+{
+	return size;
+}
+
+void Star::setSize(vector<int> newSize)
+{
+	size = newSize;
+}
