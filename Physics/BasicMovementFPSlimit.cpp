@@ -86,7 +86,6 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			
 			deltaV++;
 			break;
 
@@ -107,6 +106,10 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += 2.0;
+			break;
+		
+		case SDLK_SPACE:
+			//Fire laser
 			break;
 		
 	}
@@ -159,6 +162,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	return isCollision;
 }
 
+
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 
 	speed += deltaV;
@@ -196,6 +200,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	ent.setX(ent.getX() + (int)speedX);
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
+
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
@@ -208,7 +213,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 
 		ent.setY(ent.getY() - (int)speedY);
 	}
-	
+
 	std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getX()  << std::endl;	
 	std::cout << "y: " << ent.getY()  << std::endl;
