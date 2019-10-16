@@ -7,6 +7,8 @@
 
 #define PI 3.14159265
 
+#define G .00000000006674
+
 constexpr double MAX_SPEED = 3;
 constexpr double MAX_DELTAV = 2;
 
@@ -64,7 +66,6 @@ void gravity_pull(Sprite &playerent, Sprite &bodyent){
 		if((playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){
 			
 			deltaY++;
-		}else if((playerent.getY() + playerent.getW()/2) > (bodyent.getY() + bodyent.getW()/2)){
 			
 			deltaY--;
 		}
@@ -95,6 +96,7 @@ void gravity_pull(Sprite &playerent, Sprite &bodyent){
 	}
 	std::cout << "Width: " << bodyent.getW()*1.5 << std::endl;
 	std::cout << "Height: " << bodyent.getH()*1.5 << std::endl;
+
 	std::cout << "distance: " << pointDistance << std::endl;
 	std::cout << "angle: " << pointAngle << std::endl;
 	
