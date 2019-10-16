@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math>
+#include <cmath>
 #include <queue>
 #include <vector>
 #include <map>
