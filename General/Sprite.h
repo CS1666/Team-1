@@ -8,18 +8,19 @@
 
 
 
-class gpEntity{
+class Sprite{
 
 	public:
 
 		//Constructors
-		gpEntity();
-		gpEntity(SDL_Rect dBox, SDL_Texture* aTex);
-		gpEntity(NSDL_Circ dCirc, SDL_Texture* aTex);
+		Sprite();
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
+		Sprite(NSDL_Circ dCirc, SDL_Texture* aTex);
 
 
 		//Destructors
-		~gpEntity();
+		~Sprite();
 
 		//Needs Mover and Copier
 
@@ -37,38 +38,31 @@ class gpEntity{
 		double getAngle();
 		int getH();
 		int getW();
+		void setF(int anim);
+		int getF();
 
-		//Velocity Setters and getters
-		//Probably should be moved to some physic related object
-		void setVX(int new_vx);
-		int getVX();
-		void setVY(int new_vy);
-		int getVY();
+	
 
 		
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
-		void updateDrawBox();
 		bool isRectEnt();  
 
 		//Methods that deal with Circle drawn entities
 		NSDL_Circ* getDrawCirc();
-		void updateDrawCirc();
 		bool isCircEnt(); 
 
-		//Should be collision functionss
-		void handelEntityOB(int sw, int sh);
+	
 
 	private:
 
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
+		int animFrame;
 
 		//Velocity variables
 		//Probably should be moved to some physic related object
-		int vx =0;
-		int vy = 0; 
 		float angle = 0.0;
 
 };

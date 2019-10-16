@@ -34,7 +34,7 @@ const int   ImageSize   = 720;	// generate RGB image [ImageSize x ImageSize]
 #endif // __GNUC__
 
 
-int main( int argc, char** argv )
+void mPoissonGenerator( int argc, char** argv )
 {
 	//vector<float> solarSystemObjects;
 
@@ -72,5 +72,4 @@ int main( int argc, char** argv )
 		File << "X = " << p.x << "; Y = " << p.y << std::endl;
 	}
 
-	return 0;
 }
