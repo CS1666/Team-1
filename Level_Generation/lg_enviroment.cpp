@@ -12,6 +12,7 @@
 #include "../General/gpRender.h"
 #include "lg_enviroment.h"
 
+
 //#define POISSON_PROGRESS_INDICATOR 1
 //#include "PoissonGenerator.h"
 
@@ -82,8 +83,6 @@ void run_lg_enviro(gpRender gr){
 
 	//osSprite.push_back(&emyent);
 
-
-
 	SDL_Rect bgtile1[400];
 	SDL_Rect bgtile2[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -145,6 +144,7 @@ void run_lg_enviro(gpRender gr){
 			}
 		}
 
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		if (animate){
@@ -173,7 +173,6 @@ void run_lg_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-		
 
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;

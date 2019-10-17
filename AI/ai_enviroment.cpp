@@ -86,6 +86,7 @@ void run_ai_enviro(gpRender gr){
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
 
+
 	Star star;
 
 	star.setSize({300, 300});
@@ -145,7 +146,6 @@ void run_ai_enviro(gpRender gr){
 					break;
 			}*/
 		}
-
 
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
