@@ -9,8 +9,9 @@
 #include "demo.h"
 
 
-constexpr int PLAYER_WIDTH = 50;
-constexpr int PLAYER_HEIGHT = 50;
+
+constexpr int PLAYER_WIDTH = 52;
+constexpr int PLAYER_HEIGHT = 60;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
@@ -24,7 +25,6 @@ void run_demo(gpRender gr){
 
 
 	bool fixed = false;
-
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -73,6 +73,7 @@ void run_demo(gpRender gr){
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
 			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
+
 		}
 	}
 
@@ -140,10 +141,6 @@ void run_demo(gpRender gr){
 		else{
 			animation = 0;
 			playerent.setF(animation);
-		}
-
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-
 
 
 		//Renders all renderable objects onto the screen
@@ -168,9 +165,8 @@ void run_demo(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		//gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
 
-		gr.renderOnScreenEntity(osSprite, camera, fixed);
+		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
 
 	}
 }

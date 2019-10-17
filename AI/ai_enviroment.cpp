@@ -10,6 +10,7 @@
 #include "AI.h"
 #include "../General/Ship.h"
 #include "Queue.h"
+#include "../General/Sector.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -30,7 +31,7 @@ void run_ai_enviro(gpRender gr){
 	bool fixed = true;
 
 	//gpRender object that is used to render object onto screen
-	
+
 	//Ship object init
 	Ship aiShip;
 //testing for queue
@@ -56,6 +57,8 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
+	aiShip.setPosition({10, 10});
+	aiShip.setDestination({600, 325});
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
@@ -67,8 +70,9 @@ void run_ai_enviro(gpRender gr){
 	//positions = gameState, only track the ship for now
 	//destination is also a vector
 	positions.push_back({10,10});
-	aiShip.setPosition({10,10});
+
 	vector<int> destination={325,325};
+
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
@@ -81,6 +85,17 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect bgtile2[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
+
+
+	Star star;
+
+	star.setSize({300, 300});
+	star.setPosition({500, 200});
+
+	Sector sector;
+
+	sector.setSize({1280, 720});
+	sector.setStars({star});
 
 	for (int x = 0; x < 20; x++) {
 		for (int y = 0; y < 20; y++) {
@@ -112,8 +127,10 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		if(ai.checkMapState(positions))
 		{
-		    aiShip.setPath(ai.calculatePath(aiShip,destination));
-		    aiShip.followPath();
+			ai.createMapState(sector);
+			//I think these were causing errors
+		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
+		    //aiShip.followPath();
 		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -160,10 +177,6 @@ void run_ai_enviro(gpRender gr){
 
 		//Renders all renderable objects onto the screen
 
-		//gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
-
-
-		gr.renderOnScreenEntity(osSprite, camera, fixed);
-
+		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
 }

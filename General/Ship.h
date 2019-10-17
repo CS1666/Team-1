@@ -17,10 +17,13 @@ class Ship
         float rotation;
         int weaponType;
         bool damageTaken;
+        int maxVelocity;
         string currKey;
+        long mass;
 
         //ai
         Queue path;
+        vector<int> destination;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -30,17 +33,19 @@ class Ship
         string getSprite();
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
-        void updatePosition(vector<int> newPos);
-        //integrate BasicMovementFPSlimit.cpp
         void updateMovement();
         void checkAction(/*stream*/);
         void updateHull(int newHull);
-        void setPosition(vector<int> pos);
-	vector<int> getPosition();
+        void setPosition(vector<int> newPosition);
+        vector<int> getPosition();
         void setPath(Queue thePath);
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();
+        vector<int> getDestination();
+        int getMaxVelocity();
+        void setDestination(vector<int> newDestination);
+        long getMass();
 };
 
 class Hero:Ship{};

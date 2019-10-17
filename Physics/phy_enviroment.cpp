@@ -8,11 +8,11 @@
 #include "../General/gpRender.h"
 #include "phy_enviroment.h"
 
-
-constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 50;
-constexpr int ZONE_WIDTH = 1280; 
-constexpr int ZONE_HEIGHT = 720;
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
+
 
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
@@ -24,12 +24,6 @@ void run_phy_enviro(gpRender gr){
 	bool fixed = false;
 	
 	//gpRender object that is used to render object onto screen
-	
-
-	//Camera Initilization
-	//SDL_Texture* tex = gr.loadImage("Assets/Objects/backgroundss.png");
-	SDL_Rect camera = {ZONE_WIDTH/2 - SCREEN_WIDTH/2, ZONE_HEIGHT/2 - SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT};
-	bool fixed = false;
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -145,10 +139,6 @@ void run_phy_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-
-		gr.renderOnScreenEntity(osSprite, camera, fixed);
-
-
 		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
