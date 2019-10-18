@@ -9,6 +9,7 @@
 #include "./Queue.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
+#include "./theta.h"
 
 #include <math.h>
 
