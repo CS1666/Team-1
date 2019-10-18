@@ -98,7 +98,8 @@ void run_demo(gpRender gr){
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
-	while(gameon) {
+	while(gameon)
+	{
 		gr.setFrameStart(SDL_GetTicks());
 
 		//Handles all incoming Key events
@@ -141,7 +142,7 @@ void run_demo(gpRender gr){
 		else{
 			animation = 0;
 			playerent.setF(animation);
-
+		}
 
 		//Renders all renderable objects onto the screen
 
@@ -167,6 +168,5 @@ void run_demo(gpRender gr){
 		}
 
 		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
-
 	}
 }
