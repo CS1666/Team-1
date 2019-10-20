@@ -141,6 +141,7 @@ void run_demo(gpRender gr){
 		else{
 			animation = 0;
 			playerent.setF(animation);
+		}
 
 
 		//Renders all renderable objects onto the screen
