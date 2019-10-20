@@ -70,6 +70,7 @@ gpRender::~gpRender(){
 
 
 //Method that renders images onto the window
+
 void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
 	
 	SDL_RenderClear(gRenderer);
@@ -97,6 +98,8 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<s
 			SDL_RenderCopy(gRenderer, bgsheet, background2[i/40][j/40], &campos);
 		}
 	}
+
+	SDL_RenderClear(gRenderer);
 
 	for(auto entity : osEntity){
 

@@ -24,7 +24,6 @@ void run_phy_enviro(gpRender gr){
 	bool fixed = false;
 	
 	//gpRender object that is used to render object onto screen
-	
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -140,7 +139,6 @@ void run_phy_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-
 		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;

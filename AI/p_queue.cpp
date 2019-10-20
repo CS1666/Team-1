@@ -1,55 +1,61 @@
 #include "p_queue.h"
 
-using namespace std;
+using namespace AI;
 
 template <class T>
 struct lessPriority
 {
-    bool operator(const pair<T, int> &p1, const pair<T, int> &p2)
+    bool &operator()(const std::pair<T, int> &p1, const std::pair<T, int> &p2)
     {
         return p1.second < p2.second;
     }
+};
+
+template<class T>
+void p_queue<T>::push(const T& x, int p)
+{
+    auto elem = std::pair<T, int>(x,p);
+    p_queue<T>::container.push_back(elem);
+    std::push_heap(p_queue<T>::container.begin(), p_queue<T>::container.end(), lessPriority<T>());
 }
 
 template<class T>
-void p_queue::push(const T& x, int p)
+const T& p_queue<T>::top()
 {
-    auto elem = pair<T, int>(x,p);
-    container.push_back(elem);
-    push_heap(container.begin(), container.end(), lessPriority);
-}
-
-template<class T>
-T& top()
-{
-    if (!container.empty()
+    if (!p_queue<T>::container.empty())
     {
-        return container[0].first;
+        return p_queue<T>::container[0].first;
     }
     return NULL;
 }
 
 template<class T>
-T& pop()
+const T& pop()
 {
-    if (!container.empty())
+    if (!p_queue<T>::container.empty())
     {
-        pop_heap(container.begin(), container.end(), lessPriority);
-        auto result = container.back();
-        container.pop_back();
+        std::pop_heap(p_queue<T>::container.begin(), p_queue<T>::container.end(), lessPriority<T>());
+        auto result = p_queue<T>::container.back();
+        p_queue<T>::container.pop_back();
         return result;
     }
 }
 
 template<class T>
+bool empty()
+{
+    return p_queue<T>::container.empty();
+}
+
+template<class T>
 bool contains(const T& key)
 {
-    return find(container.begin(), container.end(), key); != container.end()
+    return std::find(p_queue<T>::container.begin(), p_queue<T>::container.end(), key) != p_queue<T>::container.end();
 }
 
 template<class T>
 void remove(const T& key)
 {
-    auto found = find(container.begin(), container.end(), key);
-    container.erase(found);
+    auto found = std::find(p_queue<T>::container.begin(), p_queue<T>::container.end(), key);
+    p_queue<T>::container.erase(found);
 }

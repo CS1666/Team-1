@@ -9,6 +9,7 @@
 #include "demo.h"
 
 
+
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
 constexpr int ZONE_WIDTH = 3840; 
@@ -21,6 +22,7 @@ void run_demo(gpRender gr){
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
 
 	bool fixed = false;
 
@@ -71,6 +73,7 @@ void run_demo(gpRender gr){
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
 			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
+
 		}
 	}
 
@@ -95,7 +98,8 @@ void run_demo(gpRender gr){
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
-	while(gameon) {
+	while(gameon)
+	{
 		gr.setFrameStart(SDL_GetTicks());
 
 		//Handles all incoming Key events
@@ -140,7 +144,6 @@ void run_demo(gpRender gr){
 			playerent.setF(animation);
 		}
 
-
 		//Renders all renderable objects onto the screen
 
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
@@ -165,6 +168,5 @@ void run_demo(gpRender gr){
 		}
 
 		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
-
 	}
 }

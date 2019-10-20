@@ -2,19 +2,22 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
 
 // Priority queue with random access
-template <class T>
-class p_queue
+namespace Pathfinding
 {
-    public:
-    p_queue(): container{new vector<pair<T,int>>} {}
-    void push(const T& x);
-    T& top();
-    T& pop();
-    bool contains(const T& key);
-    void remove(const T& key);
-    private:
-    vector<pair<T, int>> container;
-};
+    template <class T>
+    class p_queue
+    {
+        public:
+            p_queue() : container(std::vector<std::pair<T,int> >()) {}
+            void push(const T& x, int p);
+            const T& top();
+            const T& pop();
+            bool empty();
+            bool contains(const T& key);
+            void remove(const T& key);
+        private:
+            std::vector<std::pair<T, int> > container;
+    };
+}
