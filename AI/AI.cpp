@@ -7,10 +7,11 @@
 
         void AI::setShipPath(Ship *shipToPath)
         {
+        	/*
         	//somebody could get rid of this
         	//get start and end points
         	vector<int> start = shipToPath->getPosition();
-        	vector<int> destination = shipToPath->getDestination();
+        	vector<int> destination s= shipToPath->getDestination();
 
         	int distance = calculateDistance(start, destination);
 
@@ -58,16 +59,9 @@
                         }
                     }
                 }
-
-
-        		
         	}
+        	*/
 
-        }
-
-        void AI::updateVertex(vector<int> s, vector<int> neighbor)
-        {
-            
         }
 
         int AI::calculateDistance(vector<int> start, vector<int> stop)
