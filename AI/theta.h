@@ -12,8 +12,8 @@
 // I think the AI can just instantiate one of these and use it repeatedly
 // To use the pathfinding just instantiate this object and call pathfind() as needed
 // The collision mesh will change over time so modify it as needed with update_mesh()
-namespace Pathfinding
-{
+
+
     class Pathfinder
     {
         public:
@@ -30,7 +30,7 @@ namespace Pathfinding
             Mesh &mesh;
             std::map<Point, int> gScore;
             std::map<Point, Point> parent;
-            p_queue<Point> open;
+            p_queue open;
             std::set<Point> closed;
             int heuristic(Point p1, Point p2);
             int distance(Point p1, Point p2);
@@ -39,4 +39,5 @@ namespace Pathfinding
             void update_vertex(Point s, Point neighbor, Point goal);
             Path reconstruct_path(Point s);
     };
-}
+
+
