@@ -22,6 +22,7 @@ class gpRender{
 
 		//Renders passend in entities on screen
 
+
 		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
 
 		//Renders background on screen (camera?)

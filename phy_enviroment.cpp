@@ -5,26 +5,26 @@
 #include <SDL_image.h>
 #include "../General/Sprite.h"
 #include "../Physics/BasicMovementFPSlimit.h"
+#include "../Physics/BasicGravity.h"
 #include "../General/gpRender.h"
-#include "demo.h"
-
-
+#include "phy_enviroment.h"
 
 constexpr int PLAYER_WIDTH = 52;
-constexpr int PLAYER_HEIGHT = 60;
+constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
-void run_demo(gpRender gr){
+
+void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite;
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
-
 	bool fixed = false;
+	
+	//gpRender object that is used to render object onto screen
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -32,20 +32,21 @@ void run_demo(gpRender gr){
 	Sprite playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
-	
+
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
+	SDL_Rect db2 = {1000,800,1000,1000};
 	Sprite starent(db2, tex2);
 
 	osSprite.push_back(&starent);
 
-	/*
+
 	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	Sprite emyent(db3, tex3);
-	*/
+	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	//SDL_Rect db3 = {400,300,225,300};
+	//Sprite emyent(db3, tex3);
+
+	//osSprite.push_back(&emyent);
 
 	SDL_Rect bgtile1[400];
 	SDL_Rect bgtile2[100];
@@ -73,22 +74,15 @@ void run_demo(gpRender gr){
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
 			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
-
 		}
 	}
-
-	//random background galaxy
-	//SDL_Rect galaxy1 = {400, 0, 200, 200};
-	//SDL_Rect galaxy2 = {400, 200, 200, 200};
-
-	//bgzonelayer1[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy1;
-	//bgzonelayer2[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy2;
 
 	for (int x = 0; x < ZONE_WIDTH/40; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/40; y++) {
 			bgzonelayer2[x][y] = &bgtile2[rand() % 100];
 		}
 	}
+
 
 	SDL_Event e;
 	bool gameon = true;
@@ -98,9 +92,12 @@ void run_demo(gpRender gr){
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
-	while(gameon)
-	{
+	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
+
+		gravity_pull(playerent, starent);
+
+		updatePositionGrav(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -116,8 +113,10 @@ void run_demo(gpRender gr){
 					break;
 			}
 		}
-		
+
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
+		//Renders all renderable objects onto the screen
 
 		if (animate){
 			if (SDL_GetTicks() - anim_last_time > 150) {
@@ -145,7 +144,7 @@ void run_demo(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-
+		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
 		
@@ -159,14 +158,12 @@ void run_demo(gpRender gr){
 		}
 		if (camera.y < 0){
 			camera.y = 0;
-
 			fixed = true;
 		}
 		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-
-		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
+		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
 }

@@ -30,6 +30,8 @@ SDL_Point bodyCenter;
 double pointDistance;
 double pointAngle;
 double pointSlope;
+long mass1 = 20000;
+long mass2 = 4385000000;
 
 // function to handle gravitational pull
 void gravity_pull(Sprite &playerent, Sprite &bodyent){
@@ -40,43 +42,26 @@ void gravity_pull(Sprite &playerent, Sprite &bodyent){
 	pointDistance = sqrt((bodyCenter.x - playerCenter.x)*(bodyCenter.x - playerCenter.x) + (bodyCenter.y - playerCenter.y)*(bodyCenter.y - playerCenter.y));
 	//pointSlope = (bodyCenter.y - playerCenter.y)/(bodyCenter.x - playerCenter.x);
 	//pointAngle = atan(pointSlope);
-	if(pointDistance < bodyent.getW()*1.5 || pointDistance < bodyent.getH()*1.5){
-		if((playerent.getX() + playerent.getW()/2) < (bodyent.getX() + bodyent.getW()/2)){
-			deltaX = deltaX + .5;
+	double gravForce = G*(mass1 * mass2)/(pointDistance*pointDistance);
+	
+	if((playerent.getX() + playerent.getW()/2) < (bodyent.getX() + bodyent.getW()/2) && (playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){
+		deltaX = deltaX + gravForce;
+		deltaY = deltaY + gravForce;
 			
-		}else if((playerent.getX() + playerent.getW()/2) > (bodyent.getX() + bodyent.getW()/2)){
-			deltaX = deltaX - .5;
-		}
+	}else if((playerent.getX() + playerent.getW()/2) > (bodyent.getX() + bodyent.getW()/2) && (playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){
+		deltaX = deltaX - gravForce;
+		deltaY = deltaY + gravForce;
 
-		if((playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){
-			
-			deltaY++;
-		}else if((playerent.getY() + playerent.getW()/2) > (bodyent.getY() + bodyent.getW()/2)){
-			
-			deltaY--;
-		}
-	}else if(pointDistance < bodyent.getW() || pointDistance < bodyent.getH()){
-		if((playerent.getX() + playerent.getW()/2) < (bodyent.getX() + bodyent.getW()/2)){
-			deltaX++;
-			
-		}else if((playerent.getX() + playerent.getW()/2) > (bodyent.getX() + bodyent.getW()/2)){
-			deltaX--;
-		}
+	}else if((playerent.getX() + playerent.getW()/2) > (bodyent.getX() + bodyent.getW()/2) && (playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){	
+		deltaX = deltaX - gravForce;		
+		deltaY = deltaY + gravForce;
 
-		if((playerent.getY() + playerent.getW()/2) < (bodyent.getY() + bodyent.getW()/2)){
-			
-			deltaY++;
-			
-			deltaY--;
-		}
-
-	}else{
-		deltaX = 0;
-		deltaY = 0;
-		speedX = 0;
-		speedY = 0;
+	}else if((playerent.getX() + playerent.getW()/2) < (bodyent.getX() + bodyent.getW()/2) && (playerent.getY() + playerent.getW()/2) > (bodyent.getY() + bodyent.getW()/2)){
+		deltaX = deltaX + gravForce;	
+		deltaY = deltaY - gravForce;
 	}
-
+	
+	
 	if(deltaX > MAX_DELTAV)
 	{
 		deltaX = MAX_DELTAV;
@@ -94,9 +79,9 @@ void gravity_pull(Sprite &playerent, Sprite &bodyent){
 	{
 		deltaY = -MAX_DELTAV;
 	}
-	std::cout << "Width: " << bodyent.getW()*1.5 << std::endl;
-	std::cout << "Height: " << bodyent.getH()*1.5 << std::endl;
-
+	std::cout << "GForce: " << gravForce << std::endl;
+	std::cout << "deltaX: " << deltaX << std::endl;
+	std::cout << "deltaY: " << deltaY << std::endl;
 	std::cout << "distance: " << pointDistance << std::endl;
 	std::cout << "angle: " << pointAngle << std::endl;
 	
@@ -128,7 +113,7 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 	
 	
 	
-	ent.setY(ent.getY() + (int)speedY);
+	ent.setX(ent.getX() + (int)speedX);
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
@@ -146,6 +131,8 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 
 	std::cout << "x: " << ent.getX()  << std::endl;	
 	std::cout << "y: " << ent.getY()  << std::endl;
+	std::cout << "x speed: " << speedX  << std::endl;	
+	std::cout << "y speed: " << speedY  << std::endl;
 
 	
 }
