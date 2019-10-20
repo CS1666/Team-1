@@ -1,4 +1,7 @@
 #include "theta.h"
+#include "Queue.h"
+#include <vector>
+#include <math.h>
 
 using namespace AI;
 typedef std::vector<int> Point;
@@ -106,7 +109,8 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
             }
             open.push(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
         }
-    } else
+    } 
+    else
     {
         if (gScore[s] + distance(s, neighbor) < gScore[neighbor])
         {
@@ -121,6 +125,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
     }
 }
 
+
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
@@ -129,7 +134,8 @@ Path Pathfinder::reconstruct_path(Point s)
     {
         total_path.push(s);
         return total_path;
-    } else
+    } 
+    else
     {
         total_path = reconstruct_path(parent[s]);
         total_path.push(s);
