@@ -1,22 +1,29 @@
 #include "theta.h"
+#include "Queue.h"
+#include <vector>
+#include <math.h>
 
+typedef vector<int> Point;
 using namespace std;
-    
+
+bool inOpen(Point s) {return false}
+void removeOpen(Point s) {
+
+}
 // Takes 2 points and gives a queue representing a path of points to the destination
-queue<Point> Pathfinder::pathfind(Point start, Point goal)
-{
+queue<Point> Pathfinder::pathfind(Point start, Point goal){
     // gScore is our cost map for each point
-    gScore = new map<Point, int>();
+    map<Point, int> gScore;
     gScore.insert(pair<Point, int>(start, 0));
     
     // Parent is used for backtracing in reconstruct_path()
-    parent = new map<Point, Point>();
+    map<Point, Point> parent;
     parent.insert(pair<Point, Point>(start, start));
     
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
-    open = new priority_queue<pair<Point, int>, vector<pair<Point, int>, lessPriority>();
-    open.push(pair<Point, int>>(start, gScore[start] + distance(start, goal));
+    priority_queue<auto> * open = new priority_queue<pair<Point, int>, vector<pair<Point, int>, lessPriority>>();
+    open.push(pair<Point, int>(start, gScore[start] + distance(start, goal)));
     
     // Closed is the closed set unsurprisingly
     closed = new set<Point>;
@@ -24,7 +31,7 @@ queue<Point> Pathfinder::pathfind(Point start, Point goal)
     // This is basically A*
     while (!open.empty())
     {
-        Point s = open.top()
+        Point s = open.top();
         open.pop();
         if (s = goal)
         {
@@ -50,12 +57,13 @@ queue<Point> Pathfinder::pathfind(Point start, Point goal)
     return NULL;
 }
 
+
 // Use this to update the mesh
-void Pathfinder::update_mesh(Vector<Vector<bool>> &m) {mesh = m;}
+void Pathfinder::update_mesh(vector<vector<bool>> &m) {mesh = m;}
 
 int Pathfinder::distance(Point p1, Point p2)
 {
-    return math::floor(math::sqrt(math::pow(math::abs(p1[0] - p2[0])), 2) + math::pow(math::abs(p1[1] - p2[1])));
+    return floor(sqrt(pow(abs(p1[0] - p2[0]), 2) + pow(abs(p1[1] - p2[1]),2)));
 }
 
 bool Pathfinder::line_of_sight(Point p1, Point p2)
@@ -91,7 +99,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor)
     {
         if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
         {
-            gScore[neighbor] = gScore[parent[s] + distance(parent[s], neighbor);
+            gScore[neighbor] = gScore[parent[s]] + distance(parent[s], neighbor);
             parent[neighbor] = parent[s];
             // Priority queues don't have search fuck my life
             if (inOpen(neighbor))
@@ -99,9 +107,10 @@ void Pathfinder::update_vertex(Point s, Point neighbor)
                 //Priority queues also dont have random access holy shit why
                 removeOpen(neighbor);
             }
-            open.push(pair<Point, int>(neighbor, gScore[neighbor] + distance(neighbor, goal)))
+            open.push(pair<Point, int>(neighbor, gScore[neighbor] + distance(neighbor, goal)));
         }
-    } else
+    } 
+    else
     {
         if (gScore[s] + distance(s, neighbor) < gScore[neighbor])
         {
@@ -112,10 +121,11 @@ void Pathfinder::update_vertex(Point s, Point neighbor)
             {
                 removeOpen(neighbor);
             }
-            open.push(pair<Point, int>(neighbor, gScore[neighbor] + distance(neighbor, goal));
+            open.push(pair<Point, int>(neighbor, gScore[neighbor] + distance(neighbor, goal)));
         }
     }
 }
+
 
 // Back traces to build a path
 queue<Point> Pathfinder::reconstruct_path(Point s)
@@ -125,7 +135,8 @@ queue<Point> Pathfinder::reconstruct_path(Point s)
     {
         total_path.push(s);
         return total_path;
-    } else
+    } 
+    else
     {
         total_path = reconstruct_path(parent[s]);
         total_path.push(s);
@@ -133,6 +144,3 @@ queue<Point> Pathfinder::reconstruct_path(Point s)
     }
 }
 
-// TODO fix the open set this is just to make it compile
-bool inOpen(Point s) {return false;}
-void removeOpen(Point s) {}

@@ -16,16 +16,16 @@ class Pathfinder
     public:
     typedef vector<int> Point;
     // Give a 2D vector to represent the collision mesh, and an integer vision radius
-    Pathfinder(Vector<Vector<bool>> &m, int v): mesh{m}, visionRange{v} {}
+    Pathfinder(vector<vector<bool>> &m, int v): mesh{m}, visionRange{v} {}
     queue<Point> pathfind(Point start, Point goal);
-    void update_mesh(Vector<Vector<bool>> &m);
+    void update_mesh(vector<vector<bool>> &m);
     
     private:
     int visionRange;
     vector<vector<bool>> &mesh;
     map<Point, int> gScore;
     map<Point, Point> parent;
-    priority_queue<pair<Point, int>, vector<pair<Point, int>, lessPriority>() open;
+    priority_queue<pair<Point, int>, vector<pair<Point, int>, lessPriority>>() open;
     set<Point> closed;
     struct lessPriority
     {
@@ -40,4 +40,4 @@ class Pathfinder
     void update_vertex(Point s, Point neighbor);
     queue<Point> reconstruct_path(Point s);
     
-}
+};
