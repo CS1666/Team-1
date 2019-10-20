@@ -1,0 +1,18 @@
+"Asteroid" Class
+--------------------
+Implements: Sprite, Physics Object
+--------------------
+radius: int
+velocity: int
+position: int[2]
+sprite: SDL_Rect *
+--------------------
+getRadius(): int
+getVelocity(): int
+getPosition(): int[2];
+getSprite(): SDL_Rect *
+
+setRadius(int r): void
+setVelocity(int v): void
+setPosition(int x, int y): void
+setSprite(int x, int y, int w, int h): void
