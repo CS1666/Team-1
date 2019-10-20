@@ -1,6 +1,6 @@
 #include "p_queue.h"
 
-using namespace AI;
+using namespace Pathfinding;
 
 template <class T>
 struct lessPriority

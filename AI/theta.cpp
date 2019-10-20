@@ -3,7 +3,7 @@
 #include <vector>
 #include <math.h>
 
-using namespace AI;
+using namespace Pathfinding;
 typedef std::vector<int> Point;
 typedef std::queue<Point> Path;
 typedef std::vector<std::vector<bool> > Mesh;
