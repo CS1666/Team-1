@@ -9,8 +9,8 @@ template <class T>
 class p_queue
 {
     public:
-    p_queue(): container{new vector<pair<T,int>>} {}
-    void push(const T& x);
+    p_queue(): container{new vector<pair<T,int> >} {}
+    void push(const T& x, int p);
     T& top();
     T& pop();
     bool contains(const T& key);
