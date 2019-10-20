@@ -10,11 +10,13 @@ constexpr double MAX_SPEED = 6;
 constexpr double MAX_DELTAV = 2;
 constexpr double MAX_ROTATIONSPEED = 6;
 constexpr double MAX_ROTATIONRATE = 2;
-
-constexpr int SCREEN_WIDTH = 1280; 
+/*
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
+constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int BOX_WIDTH = 20;
-constexpr int BOX_HEIGHT = 20;
+constexpr int BOX_HEIGHT = 20;*/
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
 double speed = 0;
@@ -26,7 +28,7 @@ double direction;
 
 
 //General wrapper function to handle Key evenets
-bool handleKeyEvents(SDL_Event e, gpEntity &ent){
+bool handleKeyEvents(SDL_Event e, Sprite &ent){
 	if (e.type == SDL_QUIT) {
 		return  false;
 	}
@@ -42,7 +44,7 @@ bool handleKeyEvents(SDL_Event e, gpEntity &ent){
 }
 
 //Handles Up Key Events
-void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
+void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
 				//std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
@@ -77,14 +79,13 @@ void handleKeyUpEvent(SDL_Event e, gpEntity &ent){
 }
 
 //Handles down Key Events
-void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
+void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 	direction = (ent.getAngle() - 90.0)*PI/180;	
 
 	switch(e.key.keysym.sym) {
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			
 			deltaV++;
 			break;
 
@@ -105,6 +106,10 @@ void handleKeyDownEvent(SDL_Event e, gpEntity &ent){
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += 2.0;
+			break;
+		
+		case SDLK_SPACE:
+			//Fire laser
 			break;
 		
 	}
@@ -145,19 +150,21 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 	return true;
 }
 
-bool check_all_collisions(SDL_Rect* a, std::vector<gpEntity*> &osEntity){
+bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 0;  i < osEntity.size(); i++){
+	for(int i = 0;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
-		isCollision = check_collision(a, osEntity.at(i)->getDrawBox());
+		isCollision = check_collision(a, osSprite.at(i)->getDrawBox());
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;
 	}
 	return isCollision;
 }
 
-void updatePosition(gpEntity &ent, std::vector<gpEntity*> &osEntity){
+
+
+void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 
 	speed += deltaV;
 	rotationSpeed += rotationRate;
@@ -194,22 +201,24 @@ void updatePosition(gpEntity &ent, std::vector<gpEntity*> &osEntity){
 	ent.setX(ent.getX() + (int)speedX);
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
-		|| (ent.getX() + BOX_WIDTH > SCREEN_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osEntity)){
+
+
+		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getX() - (int)speedX);
 	}
 	ent.setY(ent.getY() + (int)speedY);
 	if(ent.getY() < 0 
-		|| (ent.getY() + BOX_WIDTH > SCREEN_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osEntity)){
+		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getY() - (int)speedY);
 	}
-	
+
 	std::cout << ent.getAngle() - 90 << std::endl;
-	std::cout << "y: " << ent.getX()  << std::endl;	
-	std::cout << "x: " << ent.getY()  << std::endl;
+	std::cout << "x: " << ent.getX()  << std::endl;	
+	std::cout << "y: " << ent.getY()  << std::endl;
 	std::cout << "speed: " << speed << std::endl;
 	
 }

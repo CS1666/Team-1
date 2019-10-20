@@ -1,8 +1,8 @@
-
+#include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
-#include "gpEntity.h"
+#include "Sprite.h"
 
 #pragma once
 
@@ -21,7 +21,12 @@ class gpRender{
 		//Needs Mover and Copier
 
 		//Renders passend in entities on screen
-		void renderOnScreenEntity(std::vector<gpEntity*> osEntity);
+
+
+		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
+
+		//Renders background on screen (camera?)
+		//void renderBackground(std::);
 
 		//Loads Images into a Texture
 		SDL_Texture* loadImage(std::string fname);
