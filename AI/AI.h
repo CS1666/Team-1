@@ -4,9 +4,12 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <set>
+#include <algorithm>
 #include "./Queue.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
+#include "./theta.h"
 
 #include <math.h>
 
@@ -22,10 +25,10 @@ class AI
     public:
         void setShips(vector<Ship> newShips);
 		bool checkMapState(vector<vector<int> > newState); //change mapstate
-        void setShipPath(Ship shipToPath);
+        void setShipPath(Ship *shipToPath);
         void lineOfSight();
         void createMapState(Sector currentSector);
         Queue calculatePath(Ship theShip, vector<int> destination);
-        double calculateDistance(vector<int> start, vector<int> stop);
+        int calculateDistance(vector<int> start, vector<int> stop);
 	
 };
