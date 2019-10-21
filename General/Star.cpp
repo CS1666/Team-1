@@ -1,4 +1,8 @@
 #include "Star.h"
+Star::Star(): Sprite() {};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {};
 
 int Star::getRadius()
 {
@@ -50,11 +54,11 @@ void Star::setSprite(string s)
 	sprite = s;
 }
 	
-long Star::getMass(){
+int Star::getMass(){
 	return mass;	
 }
 
-void Star::setMass(long newMass){
+void Star::setMass(int newMass){
 	mass = newMass;	
 }
 

@@ -1,86 +1,98 @@
 
 #include "Ship.h"
 
-        void Ship::setSprite(string newSprite)
-        {
-            sprite = newSprite;
-        }
+    Ship::Ship(): Sprite() {};
 
-        string Ship::getSprite()
-        {
-            return sprite;
-        }
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {};
 
-        void Ship::checkPhysics()
-        {
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {};
 
-        }
+    Ship::~Ship()
+    {
+        SDL_DestroyTexture(assetTex);
+        assetTex = nullptr;
+    }
 
-        //integrate BasicMovementFPSlimit.cpp
-        void Ship::setPosition(vector<int> newPosition)
-        {
-            position = newPosition;
-        }
+    void Ship::setSprite(string newSprite)
+    {
+        sprite = newSprite;
+    }
 
-        //integrate BasicMovementFPSlimit.cpp
-        void Ship::updateMovement()
-        {
-            
-        }
+    string Ship::getSprite()
+    {
+        return sprite;
+    }
 
-        void Ship::checkAction(/*stream*/)
-        {
+    void Ship::checkPhysics()
+    {
 
-        }
+    }
 
-        void Ship::updateHull(int newHull)
-        {
-            hull = newHull;
-        }
+    //integrate BasicMovementFPSlimit.cpp
+    void Ship::setPosition(vector<int> newPosition)
+    {
+        position = newPosition;
+    }
+
+    //integrate BasicMovementFPSlimit.cpp
+    void Ship::updateMovement()
+    {
         
-        vector<int> Ship::getPosition()
-        {
-            return position;
-        }
+    }
 
-        void Ship::setDestination(vector<int> newDestination)
-        {
-            destination = newDestination;
-        }
+    void Ship::checkAction(/*stream*/)
+    {
 
-        vector<int> Ship::getDestination()
-        {
-            return destination;
-        }
+    }
 
-        void Ship::setPath(Queue thePath)
-        {
-        	path = thePath;
-            pathComplete=false;
-        }
+    void Ship::updateHull(int newHull)
+    {
+        hull = newHull;
+    }
+    
+    vector<int> Ship::getPosition()
+    {
+        return position;
+    }
 
-        int Ship::getMaxVelocity()
-        {
-            return maxVelocity;
-        }
+    void Ship::setDestination(vector<int> newDestination)
+    {
+        destination = newDestination;
+    }
 
-        //ai follows path assigned to it by ai class
-        void Ship::followPath()
-        {
-    	    while(!path.isEmpty())
-    	    {
-    		  char key=path.pop();
-    		  //do some stuff...
-    	    }
-    	    pathComplete=true;
-        }
+    vector<int> Ship::getDestination()
+    {
+        return destination;
+    }
 
-        bool Ship::getPathComplete()
-        {
-        	return pathComplete;
-        }
+    void Ship::setPath(Queue thePath)
+    {
+    	path = thePath;
+        pathComplete=false;
+    }
 
-    	long Ship::getMass()
-    	{
-    		return mass;	
-    	}
+    int Ship::getMaxVelocity()
+    {
+        return maxVelocity;
+    }
+
+    //ai follows path assigned to it by ai class
+    void Ship::followPath()
+    {
+	    while(!path.isEmpty())
+	    {
+		  char key=path.pop();
+		  //do some stuff...
+	    }
+	    pathComplete=true;
+    }
+
+    bool Ship::getPathComplete()
+    {
+    	return pathComplete;
+    }
+
+	int Ship::getMass()
+	{
+		return mass;	
+	}
