@@ -1,61 +1,60 @@
 #include "p_queue.h"
 
-using namespace Pathfinding;
-
-template <class T>
 struct lessPriority
 {
-    bool &operator()(const std::pair<T, int> &p1, const std::pair<T, int> &p2)
+    const bool &operator()(const std::pair<Point, int> &p1, const std::pair<Point, int> &p2)
     {
         return p1.second < p2.second;
     }
 };
 
-template<class T>
-void p_queue<T>::push(const T& x, int p)
+
+void p_queue::push(Point& x, int p)
 {
-    auto elem = std::pair<T, int>(x,p);
-    p_queue<T>::container.push_back(elem);
-    std::push_heap(p_queue<T>::container.begin(), p_queue<T>::container.end(), lessPriority<T>());
+    auto elem = std::pair<Point, int>(x,p);
+    container.push_back(elem);
+    std::push_heap(container.begin(), container.end(), lessPriority());
 }
 
-template<class T>
-const T& p_queue<T>::top()
-{
-    if (!p_queue<T>::container.empty())
-    {
-        return p_queue<T>::container[0].first;
-    }
-    return NULL;
-}
 
-template<class T>
-const T& pop()
+Point& p_queue::top()
 {
-    if (!p_queue<T>::container.empty())
+    if (!container.empty())
     {
-        std::pop_heap(p_queue<T>::container.begin(), p_queue<T>::container.end(), lessPriority<T>());
-        auto result = p_queue<T>::container.back();
-        p_queue<T>::container.pop_back();
-        return result;
+        return container[0].first;
     }
 }
 
-template<class T>
-bool empty()
+
+Point& p_queue::pop()
 {
-    return p_queue<T>::container.empty();
+    if (!container.empty())
+    {
+        std::pop_heap(container.begin(), container.end(), lessPriority());
+        auto result = container.back();
+        container.pop_back();
+        return result.first;
+    }
 }
 
-template<class T>
-bool contains(const T& key)
+
+bool p_queue::empty()
 {
-    return std::find(p_queue<T>::container.begin(), p_queue<T>::container.end(), key) != p_queue<T>::container.end();
+    return container.empty();
 }
 
-template<class T>
-void remove(const T& key)
+
+bool p_queue::contains(Point& key)
 {
-    auto found = std::find(p_queue<T>::container.begin(), p_queue<T>::container.end(), key);
-    p_queue<T>::container.erase(found);
+    //return std::find(container.begin(), container.end(), key) != container.end();
+    return false;
 }
+
+
+void p_queue::remove(const Point& key)
+{
+    //auto found = std::find(container.begin(), container.end(), key);
+    //container.erase(found);
+}
+
+

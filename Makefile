@@ -6,7 +6,7 @@ FOLDERS = $(wildcard ./General/*.o)\
 		$(wildcard ./Level_Generation/*.o)
 		
 CC = clang++
-COMPILER_FLAGS = -Wall -I/usr/include/SDL2
+COMPILER_FLAGS = -Wall -I/usr/include/SDL2 -std=c++11
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 
