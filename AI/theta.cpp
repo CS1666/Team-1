@@ -1,4 +1,4 @@
-  
+
 #include "theta.h"
 #include "Queue.h"
 #include <vector>
@@ -143,5 +143,4 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
-
 

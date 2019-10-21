@@ -40,3 +40,4 @@ namespace Pathfinding
             Path reconstruct_path(Point s);
     };
 }
+
