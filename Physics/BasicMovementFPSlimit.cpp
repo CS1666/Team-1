@@ -6,10 +6,10 @@
 
 #define PI 3.14159265
 
-constexpr double MAX_SPEED = 6;
-constexpr double MAX_DELTAV = 2;
-constexpr double MAX_ROTATIONSPEED = 6;
-constexpr double MAX_ROTATIONRATE = 2;
+constexpr float MAX_SPEED = 6;
+constexpr float MAX_DELTAV = 2;
+constexpr float MAX_ROTATIONSPEED = 6;
+constexpr float MAX_ROTATIONRATE = 2;
 /*
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
@@ -19,12 +19,12 @@ constexpr int BOX_WIDTH = 20;
 constexpr int BOX_HEIGHT = 20;*/
 
 //movement is handled by increasing and decreasing the thrust (acceleration) in a particular direction and is capped by a max speed and acceleration
-double speed = 0;
-double deltaV = 0;
+float speed = 0;
+float deltaV = 0;
 //int acceleration = 0;
-double rotationRate = 0;
-double rotationSpeed = 0;
-double direction;
+float rotationRate = 0;
+float rotationSpeed = 0;
+float direction;
 
 
 //General wrapper function to handle Key evenets
@@ -165,7 +165,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 
 
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
-
+	//needs to be changed to update all objects in the list
 	speed += deltaV;
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
@@ -195,30 +195,31 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	
 	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setAngle(ent.getAngle() + rotationSpeed);
-	double speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
-	double speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
+	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
-	ent.setX(ent.getX() + (int)speedX);
-	//std::cout << "Things work up until here?" << std::endl;
-	if(ent.getX() < 0 
+
+
+	ent.setX(ent.getTrueX() + speedX);
+	if(ent.getTrueX() < 0 
 
 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
-		ent.setX(ent.getX() - (int)speedX);
+		ent.setX(ent.getTrueX() - speedX);
 	}
-	ent.setY(ent.getY() + (int)speedY);
+	ent.setY(ent.getTrueY() + speedY);
 	if(ent.getY() < 0 
 		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
-		ent.setY(ent.getY() - (int)speedY);
+		ent.setY(ent.getTrueY() - speedY);
 	}
 
 	std::cout << ent.getAngle() - 90 << std::endl;
-	std::cout << "x: " << ent.getX()  << std::endl;	
-	std::cout << "y: " << ent.getY()  << std::endl;
+	std::cout << "x: " << ent.getTrueX()  << std::endl;	
+	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speed: " << speed << std::endl;
 	
 }

@@ -1,9 +1,12 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Sprite.h"
+#include <SDL.h>
 using namespace std;
 
-class Star
+class Star : public Sprite
 {
 	private:
 		int radius;
@@ -11,10 +14,13 @@ class Star
 		string type;
 		vector<int> position;
 		string sprite;
-		long mass;
+		int mass;
 		vector<int> size;
 
 	public:
+		Star();
+		Star(SDL_Rect dBox, SDL_Texture* aTex);
+		Star(SDL_Rect dBox, SDL_Texture* aTex, int mass);
 		int getRadius();
 		int getGravity();
 		string getType();
@@ -25,8 +31,8 @@ class Star
 		void setType(string t);
 		void setPosition(vector<int> newPos);
 		void setSprite(string s);
-		long getMass();
-		void setMass(long newMass);
+		int getMass();
+		void setMass(int newMass);
 		vector<int> getSize();
 		void setSize(vector<int> newSize);
 };
