@@ -164,7 +164,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 
 
 
-void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
 	rotationSpeed += rotationRate;
@@ -199,6 +199,8 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
+	ent.setSpeedX(speedX);
+	ent.setSpeedY(speedY);
 
 	ent.setX(ent.getTrueX() + speedX);
 	if(ent.getTrueX() < 0 
