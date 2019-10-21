@@ -27,12 +27,6 @@ const int   ImageSize   = 720;	// generate RGB image [ImageSize x ImageSize]
 
 ////////////////////////////////////////////////////////////////////////////
 
-#if defined( __GNUC__ )
-#	define GCC_PACK(n) __attribute__((packed,aligned(n)))
-#else
-#	define GCC_PACK(n) __declspec(align(n))
-#endif // __GNUC__
-
 
 void mPoissonGenerator( int argc, char** argv )
 {
@@ -41,24 +35,6 @@ void mPoissonGenerator( int argc, char** argv )
 	PoissonGenerator::DefaultPRNG PRNG;
 
 	const auto Points = PoissonGenerator::generatePoissonPoints( NumPoints, PRNG );
-
-	// prepare BGR image
-	size_t DataSize = 3 * ImageSize * ImageSize;
-
-	unsigned char* Img = new unsigned char[ DataSize ];
-
-	memset( Img, 0, DataSize );
-
-	for ( auto i = Points.begin(); i != Points.end(); i++ )
-	{
-		int x = int( i->x * ImageSize );
-		int y = int( i->y * ImageSize );
-
-		int Base = 3 * (x + y * ImageSize);
-		Img[ Base+0 ] = Img[ Base+1 ] = Img[ Base+2 ] = 255;
-	}
-
-	delete[]( Img );
 
 	// dump points to a text file
 	std::ofstream File( "Poisson.txt", std::ios::out );	
