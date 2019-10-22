@@ -16,7 +16,6 @@ class Sprite{
 		Sprite();
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
-		Sprite(NSDL_Circ dCirc, SDL_Texture* aTex);
 
 
 		//Destructors
@@ -27,11 +26,15 @@ class Sprite{
 
 		//Getters and Setters
 		void setX(int x);
-		int getX();
 		void setY(int y);
+		void setX(float x);
+		int getX();
+		void setY(float y);
 		int getY();
-		void setR(int new_r);
-		int getR();
+
+		float getTrueX();
+		float getTrueY();
+
 		void setTexture(SDL_Texture* tex);
 		SDL_Texture* getTexture();
 		void setAngle(double new_angle);
@@ -54,8 +57,8 @@ class Sprite{
 
 	
 
-	private:
-
+	protected:
+		float x,y;
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;

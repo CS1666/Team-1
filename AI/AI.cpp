@@ -7,62 +7,13 @@
 
         void AI::setShipPath(Ship *shipToPath)
         {
-        	/*
-        	//somebody could get rid of this
-        	//get start and end points
-        	vector<int> start = shipToPath->getPosition();
-        	vector<int> destination s= shipToPath->getDestination();
-
-        	int distance = calculateDistance(start, destination);
-
-        	int g = 0;
-
-        	//using built in queue c++ data structure for now
-        	priority_queue <vector<int> > open;
-            priority_queue <vector<int> > closed;
-            set <vector<int> > check_closed;
-            set <vector<int> > check_open;
-
-        	open.push({start[0], start[1], g + distance});
-            check_open.insert({start[0], start[1]});
-
-        	while (open.size() != 0)
-        	{
-
-        		vector<int> s = open.pop();
-
-                if (s == destination)
-                {
-                    return;
-                }
-
-                closed.push(s);
-                check_closed.insert({s[0], s[1]});
-
-                for (int i = -1; i <= 1; i = i + 2)
-                {
-                    for (int j = -1; j <= 1; j = j + 2)
-                    {
-                        if (s[0] + i >=0 && s[1] + j >=0 && s[0] + i < storedMapState.size() && s[0] + j < storedMapState[0].size())
-                        {
-                            if (check_closed.find() == check_closed.end())
-                            {
-                                int gScore = 0;
-                                if (check_closed.find() == check_closed.end())
-                                {
-                                    gscore = 2147483627;
-                                }
-                                
-                                vector<int> neigbor = {s[0]+i, s[1]+j};
-                                updateVertex(s, neighbor);
-                            }
-                        }
-                    }
-                }
-        	}
-        	*/
 
         }
+
+        /*void AI::updateVertex(vector<int> s, vector<int> neighbor)
+        {
+            
+        }*/
 
         int AI::calculateDistance(vector<int> start, vector<int> stop)
         {

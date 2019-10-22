@@ -1,13 +1,14 @@
 #pragma once
-
+#include <SDL.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Sprite.h"
 #include "../AI/Queue.h"
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
-class Ship
+class Ship : public Sprite
 {
     private:
         int hull;
@@ -19,7 +20,7 @@ class Ship
         bool damageTaken;
         int maxVelocity;
         string currKey;
-        long mass;
+        int mass;
 
         //ai
         Queue path;
@@ -29,6 +30,11 @@ class Ship
         bool pathComplete;
 
     public:
+        Ship();
+        Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
+        Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass);
+        ~Ship();
+        
         void setSprite(string newSprite);
         string getSprite();
         void checkPhysics();
@@ -45,7 +51,7 @@ class Ship
         vector<int> getDestination();
         int getMaxVelocity();
         void setDestination(vector<int> newDestination);
-        long getMass();
+        int getMass();
 };
 
 class Hero:Ship{};

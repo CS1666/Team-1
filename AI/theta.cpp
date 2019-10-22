@@ -1,10 +1,11 @@
-  
+   
 #include "theta.h"
 #include "Queue.h"
 #include <vector>
 #include <math.h>
+#include "p_queue.h"
 
-using namespace Pathfinding;
+
 typedef std::vector<int> Point;
 typedef std::queue<Point> Path;
 typedef std::vector<std::vector<bool> > Mesh;
@@ -22,7 +23,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
-    open =  p_queue<Point>();
+    open =  p_queue();
     open.push(start, gScore[start] + heuristic(start, goal));
     
     // Closed is the closed set unsurprisingly
@@ -143,5 +144,3 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
-
-

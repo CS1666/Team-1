@@ -1,6 +1,7 @@
 #include <math.h>
 #include <time.h>
 #include <iostream>
+
 #define ROW_SIZE 20
 #define COL_SIZE 20
 
@@ -15,6 +16,7 @@ class Ellers_Maze
 {
 
 private:
+
 
 	/*Structure for each cell*/
 	struct cell
@@ -467,10 +469,12 @@ private:
 	* Note: The set operations lack a complex structure to minimize performance impact.
 	*       However, unless the size of the maze is obscenely large, 
 	*       there is little actual impact on performance.  I note where performance could be impacted*/
+
 	void create_maze()
 	{
 		
 		using namespace std;
+
 		seed = (unsigned int)time(NULL);	//Save seed
 		srand(seed);
 		int set = 1;						//Initialize set value
@@ -483,6 +487,7 @@ private:
 			mazeCells[0][i].setNum = set;
 			
 			/*If cell is at right edge, add right wall*/
+
 			if (i == (COL_SIZE - 1))
 			{
 				mazeCells[0][i].hasRight = true;
@@ -499,6 +504,7 @@ private:
 			/*Copy for rows after first*/
 			if (i > 0)
 			{
+
 				/*Loop through cells*/
 				for (j = 0; j < COL_SIZE; j++)
 				{
@@ -507,6 +513,7 @@ private:
 					{
 						mazeCells[i][j].hasRight = true;
 					}
+
 
 					
 					if (mazeCells[i-1][j].hasBot) //If above cell has bottom, set current cell to new set
@@ -546,6 +553,7 @@ private:
 			for (j = 1; j < COL_SIZE; j++)
 			{
 				
+
 				int random = rand() % 2; //Random is set to 50%, can be adjusted for weight
 
 				/*If previous cell does not already have right wall*/
@@ -739,6 +747,7 @@ private:
 				}
 			}
 		}
+
 	}
 	/*End of create Eller's Maze*/
 
@@ -752,16 +761,20 @@ public:
 	}
 
 	/*Get if current cell has bottom*/
+
 	bool hasBottom(int row, int col)
 	{
 		return mazeCells[row][col].hasBot;
 	}
 
+
 	/*Get if current cell has right wall*/
+
 	bool hasRight(int row, int col)
 	{
 		return mazeCells[row][col].hasRight;
 	}
+
 
 	/*Get current seed being used*/
 	unsigned int getSeed()
@@ -775,12 +788,14 @@ public:
 	{
 		using namespace std;
 		int i;
+
 		for (i = 0; i < COL_SIZE; i++) //Initialize top edge cells to have top walls
 		{
 			cout << " _";
 		}
 
 		cout << endl;
+
 
 		/*Loop through rows*/
 		int j;
@@ -836,6 +851,7 @@ public:
 
 };
 /*End of Eller's Maze class*/
+
 
 
 //int main()
