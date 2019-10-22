@@ -121,6 +121,10 @@
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<int> > newState)
 		{
+		    /*cout<<"storedmap = "<<endl;
+		    for(auto x:storedMapState)
+			for(auto y:x)
+			    cout<<"y = "<<y<<endl;*/
 		    if(storedMapState==newState)
 			return false;
 		    storedMapState=newState;

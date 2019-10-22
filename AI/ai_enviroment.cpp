@@ -52,7 +52,7 @@ void run_ai_enviro(gpRender gr){
 	//destination is also a vector
 	positions.push_back({10,10});
 
-	vector<int> destination={325,325};
+	vector<int> destination={1050,1050};
 
 
 	//Red giant Initilzation-
@@ -106,12 +106,19 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-		if(ai.checkMapState(positions))
+		if(aiShip.getPosition()!=destination && 
+			ai.checkMapState(positions))
 		{
+		    cout<<"goes into here"<<endl;
 		    ai.createMapState(sector);
-			//I think these were causing errors
-		    aiShip.setPath(ai.calculatePath(aiShip,destination));
-		    aiShip.followPath();
+		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
+		    //make a testing queue of a path
+		    std::queue<vector<int>> test=queue<vector<int>>();
+		    test.push({325,325});
+		    test.push({500,500});
+		    test.push({1050,1050});
+		    aiShip.setPath(test);
+		    aiShip.followPath(playerent);
 		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {

@@ -105,6 +105,8 @@
 			cur_y++;
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
+		    position[0]=cur_x;
+		    position[1]=cur_y;
 		}
 	    }
 	    pathComplete=true;
