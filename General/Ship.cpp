@@ -77,7 +77,7 @@
     }
 
     //ai follows path assigned to it by ai class
-    void Ship::followPath()
+    void Ship::followPath(Sprite& entity)
     {
 	    //note: change the path in Ship.h to whatever is returned.
 	    while(!path.empty())
@@ -99,14 +99,12 @@
 			cur_x--;
 		    else
 			cur_x++;
-		    
-		}
-		while(cur_y != y_coord)
-		{
 		    if(cur_y>y_coord)
 			cur_y--;
 		    else
 			cur_y++;
+		    entity.setX(cur_x);
+		    entity.setY(cur_y);
 		}
 	    }
 	    pathComplete=true;

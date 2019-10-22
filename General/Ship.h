@@ -46,7 +46,7 @@ class Ship : public Sprite
         vector<int> getPosition();
         void setPath(std::queue<vector<int>> thePath);
         //ai follows path assigned to it by ai class
-        void followPath();
+        void followPath(Sprite& entity);
         bool getPathComplete();
         vector<int> getDestination();
         int getMaxVelocity();
