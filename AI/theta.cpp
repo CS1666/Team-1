@@ -1,6 +1,5 @@
    
 #include "theta.h"
-#include "Queue.h"
 #include <vector>
 #include <math.h>
 #include "p_queue.h"
