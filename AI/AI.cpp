@@ -35,7 +35,7 @@
 
     		vector<int> sectorSize = currentSector.getSize();
 
-    		vector<vector<int> > newStoredMapState (sectorSize[0], std::vector<int>(sectorSize[1], 0));
+    		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
             vector<Star> stars = currentSector.getStars();
             
@@ -47,14 +47,14 @@
 
                 for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
                 {
-                    newStoredMapState[x][starPosition[1]] = 1;
-                    newStoredMapState[x][starPosition[1] - starSize[1]] = 1;
+                    newStoredMapState[x][starPosition[1]] = true;
+                    newStoredMapState[x][starPosition[1] - starSize[1]] = true;
                 }
 
                 for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
                 {
-                    newStoredMapState[starPosition[0]][y] = 1;
-                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
+                    newStoredMapState[starPosition[0]][y] = true;
+                    newStoredMapState[starPosition[0] + starSize[0]][y] = true;
                 }
             }
             
@@ -63,7 +63,7 @@
     	}
 
 		//true if different, false if same
-		bool AI::checkMapState(vector<vector<int> > newState)
+		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
 		    if(storedMapState==newState)
 			return false;
