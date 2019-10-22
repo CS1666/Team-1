@@ -1,7 +1,9 @@
-
+#pragma once
 #include "../General/Sprite.h"
 #include "../General/Ship.h"
-#pragma once
+#include "BasicGravity.h"
+
+
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
