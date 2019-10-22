@@ -8,6 +8,7 @@
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
+#include "../General/Ellers_Maze.h"
 #include "demo.h"
 
 
@@ -171,4 +172,7 @@ void run_demo(gpRender gr){
 
 		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
 	}
+	
+	Ellers_Maze test_maze;
+	test_maze.test_output();
 }
