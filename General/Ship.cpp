@@ -3,6 +3,8 @@
 
     Ship::Ship(): Sprite() {};
 
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+
     Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {};
 
     Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {};
@@ -27,6 +29,17 @@
     {
 
     }
+
+    void Ship::setSpeedX(float speed)
+    {
+        speedX = speed;
+    }
+    void Ship::setSpeedY(float speed)
+    {
+        speedY = speed;
+    }
+
+
 
     //integrate BasicMovementFPSlimit.cpp
     void Ship::setPosition(vector<int> newPosition)

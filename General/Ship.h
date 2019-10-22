@@ -22,6 +22,9 @@ class Ship : public Sprite
         string currKey;
         int mass;
 
+        float speedX;
+        float speedY;
+
         //ai
         Queue path;
         vector<int> destination;
@@ -31,6 +34,7 @@ class Ship : public Sprite
 
     public:
         Ship();
+        Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass);
         ~Ship();
@@ -39,12 +43,18 @@ class Ship : public Sprite
         string getSprite();
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
+
+        void setSpeedX(float speed);
+        void setSpeedY(float speed);
         void updateMovement();
         void checkAction(/*stream*/);
         void updateHull(int newHull);
         void setPosition(vector<int> newPosition);
         vector<int> getPosition();
         void setPath(Queue thePath);
+
+
+
         //ai follows path assigned to it by ai class
         void followPath();
         bool getPathComplete();
