@@ -1,61 +1,30 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
-#include <iostream>
-#include <algorithm>
-#include <memory.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
 #include "../Physics/BasicMovementFPSlimit.h"
+#include "../Physics/BasicGravity.h"
 #include "../General/gpRender.h"
-#include "lg_enviroment.h"
-
-
-//#define POISSON_PROGRESS_INDICATOR 1
-//#include "PoissonGenerator.h"
-
+#include "phy_enviroment.h"
 
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
-//Ideal #s can/should be worked out later
-//constexpr int NumPoints = 24;
-//lay out the "zone" in which the objects will spawn, should be < w*h
-//"spawn zone" = ImageSize * ImageSize
-//constexpr int ImageSize  = 2160;  
-
-/*int mPoissonGen( int argc, char** argv)
-{
-
-	PoissonGenerator::DefaultPRNG PRNG;
-
-	const auto Points = PoissonGenerator::generatePoissonPoints( NumPoints, PRNG );
-
-	std::vector<std::pair<float,float>> Coords;
-	for(int k = 0; k < 2; k++)
-    for(int i = -1; i < 2; i += 2)
-        for(int j = -1; j < 2; j+= 2)
-            Coords.push_back(std::make_pair(i * (k+1), j * (((k + 1) % 2) + 1)));
 
 
-	return 0;
-}
-*/
-
-void run_lg_enviro(gpRender gr){
-
-	
+void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite;
-	
+
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = false;
-
+	
+	//gpRender object that is used to render object onto screen
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -66,14 +35,10 @@ void run_lg_enviro(gpRender gr){
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
+	SDL_Rect db2 = {1000,800,1000,1000};
 	Sprite starent(db2, tex2);
 
 	osSprite.push_back(&starent);
-
-	
-		//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-		//SDL_Rect db3 = {};
 
 
 	//Ship Cruiser initilization
@@ -118,6 +83,7 @@ void run_lg_enviro(gpRender gr){
 		}
 	}
 
+
 	SDL_Event e;
 	bool gameon = true;
 	int animation = 0;
@@ -128,6 +94,10 @@ void run_lg_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
+
+		gravity_pull(playerent, starent);
+
+		updatePositionGrav(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -144,8 +114,9 @@ void run_lg_enviro(gpRender gr){
 			}
 		}
 
-
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
+		//Renders all renderable objects onto the screen
 
 		if (animate){
 			if (SDL_GetTicks() - anim_last_time > 150) {
@@ -173,7 +144,7 @@ void run_lg_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-
+		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
 		
@@ -194,6 +165,5 @@ void run_lg_enviro(gpRender gr){
 			fixed = true;
 		}
 		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
-		
 	}
 }

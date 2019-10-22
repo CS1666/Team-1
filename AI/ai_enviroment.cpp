@@ -7,7 +7,7 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
-#include "AI.h"
+//#include "AI.h"
 #include "../General/Ship.h"
 #include "Queue.h"
 #include "../General/Sector.h"
@@ -35,7 +35,7 @@ void run_ai_enviro(gpRender gr){
 	//Ship object init
 	Ship aiShip;
 //testing for queue
-    Queue test=Queue(5);
+   /** Queue test=Queue(5);
     std::cout << test.push(65) << endl; //A
     cout << test.push(66) << endl; //B
     cout<<test.push(67)<<endl; // C
@@ -51,10 +51,10 @@ void run_ai_enviro(gpRender gr){
     cout<<test.getSize()<<endl; //1
     cout<<test.pop()<<endl; //I
     cout<<test.pop()<<endl; //0/blank
-    cout<<test.getSize()<<endl; //0
+    cout<<test.getSize()<<endl; //0**/
 	//AI init
 
-	AI ai;
+	//AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition({10, 10});
@@ -85,6 +85,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect bgtile2[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
+
 
 	Star star;
 
@@ -124,13 +125,13 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-		if(ai.checkMapState(positions))
-		{
-			ai.createMapState(sector);
+		//if(ai.checkMapState(positions))
+		//{
+			//ai.createMapState(sector);
 			//I think these were causing errors
 		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    //aiShip.followPath();
-		}
+		//}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
@@ -145,7 +146,6 @@ void run_ai_enviro(gpRender gr){
 					break;
 			}*/
 		}
-
 
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
