@@ -70,35 +70,54 @@ gpRender::~gpRender(){
 
 
 //Method that renders images onto the window
-void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
+
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
 	
 	SDL_RenderClear(gRenderer);
 
-	//Render 2 Background Layers
+	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
 	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
 
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=20){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=20){
-			//random background galaxy
-			//if(background1[i/20][j/20]->x == 400){
-			//	SDL_Rect campos = {i - camera.x - (i % 200), j - camera.y - (j % 200), 200, 200};
-			//	SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
-			//}
-			//else{
-				SDL_Rect campos = {i - camera.x - (i % 20), j - camera.y - (j % 20), 20, 20};
-				SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
-			//}
-		}
+	if (camera.x - 200 < galaxies[0] && galaxies[0] < camera.x + SCREEN_WIDTH*3 &&
+		camera.y - 200 < galaxies[1] && galaxies[1] < camera.x + SCREEN_WIDTH*3){
+		SDL_Rect galaxy1 = {400, 0, 200, 200};
+		SDL_Rect campos = {(galaxies[0] - camera.x)/3, (galaxies[1] - camera.y)/3, 50, 50};
+		SDL_RenderCopy(gRenderer, bgsheet, &galaxy1, &campos);
 	}
 
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=40){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=40){
+	if (camera.x - 200 < galaxies[2] && galaxies[2] < camera.x + SCREEN_WIDTH*3 &&
+		camera.y - 200 < galaxies[3] && galaxies[3] < camera.x + SCREEN_WIDTH*3){
+		SDL_Rect galaxy2 = {400, 200, 200, 200};
+		SDL_Rect campos = {(galaxies[2] - camera.x)/3, (galaxies[3] - camera.y)/3, 50, 50};
+		SDL_RenderCopy(gRenderer, bgsheet, &galaxy2, &campos);
+	}
+
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH*2; i+=40){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT*2; j+=40){
+			SDL_Rect campos = {(i - camera.x - (i % 40))/2, (j - camera.y - (j % 40))/2, 40, 40};
+			SDL_RenderCopy(gRenderer, bgsheet, background1[i/40][j/40], &campos);
+		}
+	}
+	
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH/2; i+=40){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT/2; j+=40){
 			SDL_Rect campos = {(i - camera.x - (i % 40))*2, (j - camera.y - (j % 40))*2, 40, 40};
 			SDL_RenderCopy(gRenderer, bgsheet, background2[i/40][j/40], &campos);
 		}
 	}
 
+/*
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH*2; i+=20){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT*2; j+=20){
+			SDL_Rect campos = {(i - camera.x - (i % 20))/2, (j - camera.y - (j % 20))/2, 20, 20};
+			SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
+		}
+	}
+	*/
+	
 
+
+	//render gameplay objects
 	for(auto entity : osEntity){
 
 		//To check if entity is player, player must be the first entity added
