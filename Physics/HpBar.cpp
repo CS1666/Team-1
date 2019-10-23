@@ -14,3 +14,8 @@ void RenderHPBar(int x, int y, int w, int h, float Percent, SDL_Color FGColor, S
    SDL_RenderFillRect(Renderer, &fgrect);
    SDL_SetRenderDrawColor(Renderer, old.r, old.g, old.b, old.a);
 }
+
+SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+   SDL_Color col = {r,g,b,a};
+   return col;
+}
