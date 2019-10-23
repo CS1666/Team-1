@@ -9,14 +9,14 @@ class TimeData{
     private:
         //not sure if all of these will get used
         //fps for tracking frames
-        Uint32 fps_cur_time;
-        Uint32 fps_last_time;
+        //static Uint32 fps_cur_time;
+        //static Uint32 fps_last_time;
         //Uint32 frame_count;
         //move tracks movement time (like update position)
-	    Uint32 move_last_time;
+	    static Uint32 move_last_time;
         //anim only needed if ship has animation
-	    Uint32 anim_last_time;
-	    double timestep;
+	    static Uint32 anim_last_time;
+	    static double timestep;
 
     public:
 
@@ -28,23 +28,23 @@ class TimeData{
         ~TimeData();
 
         //Other Methods
-        double getFPS();
-        double getTimeSinceMove();
-        double getTimeSinceAnim();
+        //static double getFPS();
+        static Uint32 getTimeSinceMove();
+        static Uint32 getTimeSinceAnim();
 
         //additional getter/setter for code check
-        Uint32 get_fps_cur_time();
-        Uint32 get_fps_last_time();
+        //static Uint32 get_fps_cur_time();
+        //static Uint32 get_fps_last_time();
         //Uint32 get_frame_count();
-        Uint32 get_move_last_time();
-        Uint32 get_anim_last_time();
-        double get_timestep();
+        static Uint32 get_move_last_time();
+        static Uint32 get_anim_last_time();
+        static double get_timestep();
 
-        void set_fps_cur_time(Uint32 newTime);
-        void set_fps_last_time(Uint32 newTime);
+        //static void set_fps_cur_time(Uint32 newTime);
+        //static void set_fps_last_time(Uint32 newTime);
         //void set_frame_count(Uint32 newCount);
-        void set_move_last_time(Uint32 newTime);
-        void set_anim_last_time(Uint32 newTime);
-        void set_timestep(double newTimestep);
+        static void update_move_last_time();
+        static void update_anim_last_time();
+        static void update_timestep();
         
 };
