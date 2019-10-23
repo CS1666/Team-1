@@ -52,7 +52,7 @@ void run_ai_enviro(gpRender gr){
 	//destination is also a vector
 	positions.push_back({10,10});
 
-	vector<int> destination={1050,1050};
+	vector<int> destination={500,500};
 
 
 	//Red giant Initilzation-
@@ -113,10 +113,10 @@ void run_ai_enviro(gpRender gr){
 		    ai.createMapState(sector);
 		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    //make a testing queue of a path
-		    std::queue<vector<int>> test=queue<vector<int>>();
-		    test.push({325,325});
-		    test.push({500,500});
-		    test.push({1050,1050});
+		    std::queue<pair<int,int>> test=queue<pair<int,int>>();
+		    test.push(pair<int,int>(225,225));
+		    test.push(pair<int,int>(300,300));
+		    test.push(pair<int,int>(500,500));
 		    aiShip.setPath(test);
 		    aiShip.followPath(playerent);
 		}

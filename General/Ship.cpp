@@ -65,7 +65,7 @@
         return destination;
     }
 
-    void Ship::setPath(queue<vector<int>> thePath)
+    void Ship::setPath(queue<pair<int,int>> thePath)
     {
     	path = thePath;
         pathComplete=false;
@@ -80,20 +80,19 @@
     void Ship::followPath(Sprite& entity)
     {
 	    //note: change the path in Ship.h to whatever is returned.
-	    while(!path.empty())
+	    if(!path.empty())
 	    {
 		//note: assumed whatever we're using is some (x,y)
-		vector<int> coords=path.front();
-		path.pop();
-		int x_coord=coords[0];
-		int y_coord=coords[1];
+		pair<int,int> coords=path.front();
+		int x_coord=coords.first;
+		int y_coord=coords.second;
 		int cur_x=position[0];
 		int cur_y=position[1];
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//currently will literally go 1 pixel at a time.
 		//also, need to render the ship in this method or something.
-		while(cur_x != x_coord && cur_y != y_coord)
+		if(cur_x != x_coord || cur_y != y_coord)
 		{
 		    if(cur_x>x_coord)
 			cur_x--;
@@ -108,8 +107,11 @@
 		    position[0]=cur_x;
 		    position[1]=cur_y;
 		}
+		else
+		    path.pop();
 	    }
-	    pathComplete=true;
+	    else
+	        pathComplete=true;
     }
 
     bool Ship::getPathComplete()
