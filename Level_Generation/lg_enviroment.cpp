@@ -83,46 +83,42 @@ void run_lg_enviro(gpRender gr){
 
 	//osSprite.push_back(&emyent);
 
-	SDL_Rect bgtile1[400];
-	SDL_Rect bgtile2[100];
+	srand(time(0));
+	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
-
-	for (int x = 0; x < 20; x++) {
-		for (int y = 0; y < 20; y++) {
-			bgtile1[x + 20*y].x = x * 20;
-			bgtile1[x + 20*y].y = y * 20;
-			bgtile1[x + 20*y].w = 20;
-			bgtile1[x + 20*y].h = 20;
-		}
-	}
+	std::vector<int> bggalaxies(4);
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
-			bgtile2[x + 40*y].x = x * 40;
-			bgtile2[x + 40*y].y = y * 40;
-			bgtile2[x + 40*y].w = 40;
-			bgtile2[x + 40*y].h = 40;
+			bgtile[x + 10*y].x = x * 40;
+			bgtile[x + 10*y].y = y * 40;
+			bgtile[x + 10*y].w = 40;
+			bgtile[x + 10*y].h = 40;
 		}
 	}
-
+	
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
-			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
+			bgzonelayer1[x][y] = &bgtile[rand() % 100];
+			if ((x < ZONE_WIDTH/40) && (y < ZONE_HEIGHT/40)) {
+				bgzonelayer2[x][y] = &bgtile[rand() % 100];
+			}
 		}
 	}
 
-	for (int x = 0; x < ZONE_WIDTH/40; x++) {
-		for (int y = 0; y < ZONE_HEIGHT/40; y++) {
-			bgzonelayer2[x][y] = &bgtile2[rand() % 100];
-		}
-	}
+	//random background galaxies
+	bggalaxies[0] = rand() % (ZONE_WIDTH - 200);
+	bggalaxies[1] = rand() % (ZONE_HEIGHT - 200);
+	
+	bggalaxies[2] = rand() % (ZONE_WIDTH - 200);
+	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
 	SDL_Event e;
 	bool gameon = true;
 	int animation = 0;
 	bool cycle;
-	bool animate;
+	bool animate = false;
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
@@ -193,7 +189,7 @@ void run_lg_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);
+		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		
 	}
 }

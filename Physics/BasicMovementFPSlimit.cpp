@@ -105,6 +105,7 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 			break;
 		case SDLK_x:
 			speed = 0;
+			deltaV = 0;
 		case SDLK_SPACE:
 			//Fire laser
 			break;
