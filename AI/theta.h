@@ -17,7 +17,7 @@
     class Pathfinder
     {
         public:
-            typedef std::vector<int> Point;
+            typedef std::pair<int,int> Point;
             typedef std::queue<Point> Path;
             typedef std::vector<std::vector<bool> > Mesh;
             // Give a 2D vector to represent the collision mesh, and an integer vision radius

@@ -1,43 +1,20 @@
+#pragma once
 #include <math.h>
 #include <time.h>
 #include <iostream>
+#include "Ellers_Maze.h"
 
-#define ROW_SIZE 20
-#define COL_SIZE 20
+
+/*Definitions of Ellers Maze Header*/
 
 /* The maze only looks for right walls, so when drawing the left edge, be sure to add the left walls as necessary, see testoutput for further clarification.
     No start/end openings have been added yet.  These can be added anywhere on any of the edges, fixed or random.
 	The size of the maze is fixed, but can be adjusted if we want to have varying size.
 */
 
-
-
-class Ellers_Maze
-{
-
-private:
-
-
-	/*Structure for each cell*/
-	struct cell
-	{
-		//bool hasTop = false;
-		//bool hasLeft = false;
-		bool hasBot = false;	//If there is a bottom wall	
-		bool hasRight = false;	//If there is a right wall
-		int setNum = 0;			//The set that the cell currently belongs to
-		//int oldSet = 0;
-		bool handled = false;	//Necessary for assessing possible bottom walls
-		bool visited = false;	//Used for recursive backtracking maze algorithm
-
-	};
-
-	struct cell mazeCells[ROW_SIZE][COL_SIZE];	//Maze structure
-	unsigned int seed;							//Seed for reusing mazes or testing
-
 	/*Recursive backtracking maze, implemented as a fallback, but does not look nearly as good as Eller's, not enough randomness*/
 	/*Initial creation function for recursive backtracking maze*/
-	void startCreate()
+	void Ellers_Maze::startCreate()
 	{
 		//srand(time(NULL));
 		/*Randomize start location*/
@@ -48,7 +25,7 @@ private:
 	}
 
 	/*Recursive function for recursive backtracking maze*/
-	void recMaze(int i, int j, int prevDir)
+	void Ellers_Maze::recMaze(int i, int j, int prevDir)
 	{
 		using namespace std;
 		int test = 0;
@@ -469,12 +446,10 @@ private:
 	* Note: The set operations lack a complex structure to minimize performance impact.
 	*       However, unless the size of the maze is obscenely large, 
 	*       there is little actual impact on performance.  I note where performance could be impacted*/
-
-	void create_maze()
+	void Ellers_Maze::create_maze()
 	{
 		
 		using namespace std;
-
 		seed = (unsigned int)time(NULL);	//Save seed
 		srand(seed);
 		int set = 1;						//Initialize set value
@@ -487,7 +462,6 @@ private:
 			mazeCells[0][i].setNum = set;
 			
 			/*If cell is at right edge, add right wall*/
-
 			if (i == (COL_SIZE - 1))
 			{
 				mazeCells[0][i].hasRight = true;
@@ -504,7 +478,6 @@ private:
 			/*Copy for rows after first*/
 			if (i > 0)
 			{
-
 				/*Loop through cells*/
 				for (j = 0; j < COL_SIZE; j++)
 				{
@@ -513,7 +486,6 @@ private:
 					{
 						mazeCells[i][j].hasRight = true;
 					}
-
 
 					
 					if (mazeCells[i-1][j].hasBot) //If above cell has bottom, set current cell to new set
@@ -553,7 +525,6 @@ private:
 			for (j = 1; j < COL_SIZE; j++)
 			{
 				
-
 				int random = rand() % 2; //Random is set to 50%, can be adjusted for weight
 
 				/*If previous cell does not already have right wall*/
@@ -747,55 +718,48 @@ private:
 				}
 			}
 		}
-
 	}
 	/*End of create Eller's Maze*/
 
-public:
+
 
 	/*Default constructor*/
-	Ellers_Maze()
+	Ellers_Maze::Ellers_Maze()
 	{
 		//startCreate();	//Uncomment if you want recursive backtracking algorithm
 		create_maze();		//Comment out, if you want recursive backtracking algorithm
 	}
 
 	/*Get if current cell has bottom*/
-
-	bool hasBottom(int row, int col)
+	bool Ellers_Maze::hasBottom(int row, int col)
 	{
 		return mazeCells[row][col].hasBot;
 	}
-
-
-	/*Get if current cell has right wall*/
-
-	bool hasRight(int row, int col)
+	
+	bool Ellers_Maze::hasRight(int row, int col)
 	{
 		return mazeCells[row][col].hasRight;
 	}
 
-
 	/*Get current seed being used*/
-	unsigned int getSeed()
+	unsigned int Ellers_Maze::getSeed()
 	{
 		return seed;
 	}
 
 	/*Testing output function
 	 *Outputs current maze to console as basic ascii*/
-	void test_output()
+	void Ellers_Maze::test_output()
 	{
 		using namespace std;
+		cout << endl;
 		int i;
-
 		for (i = 0; i < COL_SIZE; i++) //Initialize top edge cells to have top walls
 		{
-			cout << " _";
+			cout << " __";
 		}
 
 		cout << endl;
-
 
 		/*Loop through rows*/
 		int j;
@@ -811,11 +775,11 @@ public:
 
 				if (hasBottom(i, j))	//If cell has bottom wall
 				{
-					cout << "_";
+					cout << "__";
 				}
 				else
 				{
-					cout << " ";
+					cout << "  ";
 				}
 
 				if (hasRight(i, j))		//If cell has right wall
@@ -831,7 +795,7 @@ public:
 		   cout << endl;
 		}
 
-		cout << "seed: " << seed << endl;	//Output seed
+		cout << "Seed: " << getSeed() << endl;	//Output seed
 
 		/*Testing for set evaluation */
 		/*for (i = 0; i < ROW_SIZE; i++)
@@ -849,15 +813,14 @@ public:
 	}
 	/*End of test output*/
 
-};
-/*End of Eller's Maze class*/
+
 
 
 
 //int main()
 //{
+//
 //	Ellers_Maze a;
 //	a.test_output();
 //	return 0;
-//
 //}
