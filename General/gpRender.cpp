@@ -106,17 +106,6 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 		}
 	}
 
-/*
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH*2; i+=20){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT*2; j+=20){
-			SDL_Rect campos = {(i - camera.x - (i % 20))/2, (j - camera.y - (j % 20))/2, 20, 20};
-			SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
-		}
-	}
-	*/
-	
-
-
 	//render gameplay objects
 	for(auto entity : osEntity){
 
