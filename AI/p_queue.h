@@ -1,11 +1,14 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 
 // Priority queue with random access
 
-typedef std::vector<int> Point;
+typedef std::pair<int,int> Point;
+
+
 
 class p_queue
 {
@@ -16,9 +19,10 @@ class p_queue
         Point& pop();
         bool empty();
         bool contains(Point& key);
-        
-        void remove(const Point& key);
+        bool compPoints(Point& a, Point& b);
+        void remove(Point& key);
+        std::vector<std::pair<Point,int>>::iterator find(Point& key);
 
     private:
         std::vector<std::pair<Point, int> > container;
-    };
+};

@@ -1,4 +1,6 @@
 #include "p_queue.h"
+#include <iterator>
+
 
 struct lessPriority
 {
@@ -46,15 +48,37 @@ bool p_queue::empty()
 
 bool p_queue::contains(Point& key)
 {
-    //return std::find(container.begin(), container.end(), key) != container.end();
-    return false;
+    auto pqiter = find(key);
+    return compPoints(pqiter->first, key);
+   
 }
 
 
-void p_queue::remove(const Point& key)
-{
-    //auto found = std::find(container.begin(), container.end(), key);
-    //container.erase(found);
+void p_queue::remove(Point& key)
+{   auto pqiter = find(key);
+    if(compPoints(pqiter->first, key)){
+        container.erase(find(key));
+    }
+    
+}
+
+bool p_queue::compPoints(Point& a, Point& b){
+    return a.first == b.first && a.second == b.second;
+}
+
+std::vector<std::pair<Point,int>>::iterator p_queue::find(Point& key){
+
+   auto pq_iter = container.begin();
+   do{
+
+        if ((pq_iter->first).first == key.first && (pq_iter->first).second == key.second){
+            break;
+        }
+
+    }
+    while(pq_iter != container.end());
+
+    return pq_iter;
 }
 
 
