@@ -1,14 +1,16 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
+#include "../General/Ship.h"
+#include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
+#include "../General/Ellers_Maze.h"
 #include "demo.h"
-
-
 
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
@@ -29,14 +31,14 @@ void run_demo(gpRender gr){
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Sprite playerent(db, tex, 0);
+	Ship playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
 	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
-	Sprite starent(db2, tex2);
+	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
 
@@ -47,54 +49,42 @@ void run_demo(gpRender gr){
 	Sprite emyent(db3, tex3);
 	*/
 
-	SDL_Rect bgtile1[400];
-	SDL_Rect bgtile2[100];
+	srand(time(0));
+	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
-
-	for (int x = 0; x < 20; x++) {
-		for (int y = 0; y < 20; y++) {
-			bgtile1[x + 20*y].x = x * 20;
-			bgtile1[x + 20*y].y = y * 20;
-			bgtile1[x + 20*y].w = 20;
-			bgtile1[x + 20*y].h = 20;
-		}
-	}
+	std::vector<int> bggalaxies(4);
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
-			bgtile2[x + 40*y].x = x * 40;
-			bgtile2[x + 40*y].y = y * 40;
-			bgtile2[x + 40*y].w = 40;
-			bgtile2[x + 40*y].h = 40;
+			bgtile[x + 10*y].x = x * 40;
+			bgtile[x + 10*y].y = y * 40;
+			bgtile[x + 10*y].w = 40;
+			bgtile[x + 10*y].h = 40;
 		}
 	}
-
+	
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
-			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
-
+			bgzonelayer1[x][y] = &bgtile[rand() % 100];
+			if ((x < ZONE_WIDTH/40) && (y < ZONE_HEIGHT/40)) {
+				bgzonelayer2[x][y] = &bgtile[rand() % 100];
+			}
 		}
 	}
 
-	//random background galaxy
-	//SDL_Rect galaxy1 = {400, 0, 200, 200};
-	//SDL_Rect galaxy2 = {400, 200, 200, 200};
-
-	//bgzonelayer1[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy1;
-	//bgzonelayer2[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy2;
-
-	for (int x = 0; x < ZONE_WIDTH/40; x++) {
-		for (int y = 0; y < ZONE_HEIGHT/40; y++) {
-			bgzonelayer2[x][y] = &bgtile2[rand() % 100];
-		}
-	}
+	//random background galaxies
+	bggalaxies[0] = rand() % (ZONE_WIDTH - 200);
+	bggalaxies[1] = rand() % (ZONE_HEIGHT - 200);
+	
+	bggalaxies[2] = rand() % (ZONE_WIDTH - 200);
+	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
 	SDL_Event e;
 	bool gameon = true;
 	int animation = 0;
 	bool cycle;
-	bool animate;
+	bool animate = false;
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
@@ -120,8 +110,8 @@ void run_demo(gpRender gr){
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		if (animate){
-			if (SDL_GetTicks() - anim_last_time > 150) {
-				if (animation == 0){
+			if (SDL_GetTicks() - anim_last_time > 100) {
+				if (animation <= 1){
 					cycle = true;
 				}
 				else if(animation == 3){
@@ -167,6 +157,9 @@ void run_demo(gpRender gr){
 			fixed = true;
 		}
 
-		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
+		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
+	
+	Ellers_Maze test_maze;
+	test_maze.test_output();
 }

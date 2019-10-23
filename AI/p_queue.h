@@ -1,20 +1,28 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
-using namespace std;
 
 // Priority queue with random access
-template <class T>
+
+typedef std::pair<int,int> Point;
+
+
+
 class p_queue
 {
     public:
-    p_queue(): container{new vector<pair<T,int> >} {}
-    void push(const T& x, int p);
-    T& top();
-    T& pop();
-    bool contains(const T& key);
-    void remove(const T& key);
+        p_queue() : container(std::vector<std::pair<Point,int>>()) {}
+        void push(Point& x, int p);
+        Point& top();
+        Point& pop();
+        bool empty();
+        bool contains(Point& key);
+        bool compPoints(Point& a, Point& b);
+        void remove(Point& key);
+        std::vector<std::pair<Point,int>>::iterator find(Point& key);
+
     private:
-    vector<pair<T, int>> container;
+        std::vector<std::pair<Point, int> > container;
 };

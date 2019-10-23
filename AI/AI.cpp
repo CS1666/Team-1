@@ -7,68 +7,13 @@
 
         void AI::setShipPath(Ship *shipToPath)
         {
-        	//somebody could get rid of this
-        	//get start and end points
-        	vector<int> start = shipToPath->getPosition();
-        	vector<int> destination = shipToPath->getDestination();
-
-        	int distance = calculateDistance(start, destination);
-
-        	int g = 0;
-
-        	//using built in queue c++ data structure for now
-        	priority_queue <vector<int> > open;
-            priority_queue <vector<int> > closed;
-            set <vector<int> > check_closed;
-            set <vector<int> > check_open;
-
-        	open.push({start[0], start[1], g + distance});
-            check_open.insert({start[0], start[1]});
-
-        	while (open.size() != 0)
-        	{
-
-        		vector<int> s = open.pop();
-
-                if (s == destination)
-                {
-                    return;
-                }
-
-                closed.push(s);
-                check_closed.insert({s[0], s[1]});
-
-                for (int i = -1; i <= 1; i = i + 2)
-                {
-                    for (int j = -1; j <= 1; j = j + 2)
-                    {
-                        if (s[0] + i >=0 && s[1] + j >=0 && s[0] + i < storedMapState.size() && s[0] + j < storedMapState[0].size())
-                        {
-                            if (check_closed.find() == check_closed.end())
-                            {
-                                int gScore = 0;
-                                if (check_closed.find() == check_closed.end())
-                                {
-                                    gscore = 2147483627;
-                                }
-                                
-                                vector<int> neigbor = {s[0]+i, s[1]+j};
-                                updateVertex(s, neighbor);
-                            }
-                        }
-                    }
-                }
-
-
-        		
-        	}
 
         }
 
-        void AI::updateVertex(vector<int> s, vector<int> neighbor)
+        /*void AI::updateVertex(vector<int> s, vector<int> neighbor)
         {
             
-        }
+        }*/
 
         int AI::calculateDistance(vector<int> start, vector<int> stop)
         {
@@ -90,7 +35,7 @@
 
     		vector<int> sectorSize = currentSector.getSize();
 
-    		vector<vector<int> > newStoredMapState (sectorSize[0], std::vector<int>(sectorSize[1], 0));
+    		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
             vector<Star> stars = currentSector.getStars();
             
@@ -102,9 +47,12 @@
 
                 for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
                 {
+
                     newStoredMapState[x][starPosition[1]] = 1;
-                    newStoredMapState[x][starPosition[1] - starSize[1]] = 1;
+
+                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
                 }
+
 
                 for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
                 {
@@ -118,18 +66,22 @@
     	}
 
 		//true if different, false if same
-		bool AI::checkMapState(vector<vector<int> > newState)
+		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
+		    /*cout<<"storedmap = "<<endl;
+		    for(auto x:storedMapState)
+			for(auto y:x)
+			    cout<<"y = "<<y<<endl;*/
 		    if(storedMapState==newState)
 			return false;
 		    storedMapState=newState;
-		    return false;
+		    return true;
 		}
 		//calculate the path for a ship and destination
-		Queue AI::calculatePath(Ship theShip, vector<int> destination)
+		queue<vector<int>> AI::calculatePath(Ship theShip, vector<int> destination)
 		{
 		    vector<int> curPos=theShip.getPosition();
-		    Queue path=Queue(10);
+		    queue<vector<int>> path=queue<vector<int>>();
 		    //insert pathfinding algorithm here to get actions 
 
 		    return path;
