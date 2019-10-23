@@ -94,7 +94,7 @@ void run_phy_enviro(gpRender gr){
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		//render hp bar based on current health percentage
-		RenderHPBar(5, 5, 100, 5, playerent.getHp()/100, color(255, 0, 0), color(255, 255, 255));
+		RenderHPBar(gr.getRender(), 5, 5, 100, 5, playerent.getHp()/100, color(255, 0, 0), color(255, 255, 255));
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
