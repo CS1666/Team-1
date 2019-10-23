@@ -87,13 +87,12 @@ void run_demo(gpRender gr){
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
-	//Uint32 anim_last_time = SDL_GetTicks();
-	TimeData time;
 
 	//Game Loop
 	while(gameon)
 	{
-		//gr.setFrameStart(SDL_GetTicks());
+		gr.setFrameStart(SDL_GetTicks());
+		TimeData::update_timestep();
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -111,9 +110,10 @@ void run_demo(gpRender gr){
 		}
 		
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		TimeData::update_move_last_time();
 
 		if (animate){
-			if (time.getTimeSinceAnim() > 100) {
+			if (TimeData::getTimeSinceAnim() > 100) {
 				if (animation <= 1){
 					cycle = true;
 				}
@@ -128,7 +128,7 @@ void run_demo(gpRender gr){
 					animation--;
 				}
 				
-				time.set_anim_last_time(SDL_GetTicks());
+				TimeData::update_anim_last_time();
 				playerent.setF(animation);
 			}
 		}
