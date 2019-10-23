@@ -21,6 +21,7 @@ class p_queue
         bool contains(Point& key);
         bool compPoints(Point& a, Point& b);
         void remove(Point& key);
+        int getSize();
         std::vector<std::pair<Point,int>>::iterator find(Point& key);
 
     private:

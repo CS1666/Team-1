@@ -1,4 +1,5 @@
 #include "AI.h"
+
   
         void AI::setShips(vector<Ship> newShips)
         {
@@ -15,10 +16,10 @@
             
         }*/
 
-        int AI::calculateDistance(vector<int> start, vector<int> stop)
+        int AI::calculateDistance(pair<int,int> start, pair<int,int> stop)
         {
-        	int x = stop[0] - start[0];
-        	int y = stop[1] - start[1];
+        	int x = stop.first - start.first;
+        	int y = stop.second - start.second;
 
         	int z = sqrt(x*x + y*y);
 
@@ -30,7 +31,7 @@
 
     	}
 
-    	void AI::createMapState(Sector currentSector)
+    	bool AI::createMapState(Sector currentSector)
     	{
 
     		vector<int> sectorSize = currentSector.getSize();
@@ -61,28 +62,32 @@
                 }
             }
             
-            AI::storedMapState = newStoredMapState;
+            if(checkMapState(newStoredMapState)){
+                storedMapState=newStoredMapState;
+                return true;
+            }
+            return false;
 
     	}
+
+        vector<vector<bool>> AI::getMapState(){
+            return storedMapState;
+        }
 
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
-		    /*cout<<"storedmap = "<<endl;
-		    for(auto x:storedMapState)
-			for(auto y:x)
-			    cout<<"y = "<<y<<endl;*/
-		    if(storedMapState==newState)
-			return false;
-		    storedMapState=newState;
+		    if(storedMapState==newState){
+                return false;
+            }
+			     
+
 		    return true;
 		}
 		//calculate the path for a ship and destination
-		queue<vector<int>> AI::calculatePath(Ship theShip, vector<int> destination)
+		queue<pair<int,int>>* AI::calculatePath(Ship theShip, pair<int,int> destination, Pathfinder path )
 		{
-		    vector<int> curPos=theShip.getPosition();
-		    queue<vector<int>> path=queue<vector<int>>();
-		    //insert pathfinding algorithm here to get actions 
-
-		    return path;
+		    pair<int,int> curPos=theShip.getPosition();
+		
+		    return path.pathfind(theShip.getPosition(), theShip.getDestination());
 		}

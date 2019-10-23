@@ -10,6 +10,7 @@
 #include "AI.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
+#include "theta.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -38,8 +39,8 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
-	aiShip.setPosition({10, 10});
-	aiShip.setDestination({600, 325});
+	aiShip.setPosition(pair<int,int>(10,10));
+	aiShip.setDestination(pair<int,int>(600, 325));
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
@@ -52,7 +53,7 @@ void run_ai_enviro(gpRender gr){
 	//destination is also a vector
 	positions.push_back({10,10});
 
-	vector<int> destination={500,500};
+	pair<int,int> destination(500,500);
 
 
 	//Red giant Initilzation-
@@ -106,75 +107,46 @@ void run_ai_enviro(gpRender gr){
 
 	SDL_Event e;
 	bool gameon = true;
-	//int animation = 0;
-	//bool cycle;
-	//bool animate;
-	//Uint32 anim_last_time = SDL_GetTicks();
+	
 
-	 std::queue<pair<int,int>> test=queue<pair<int,int>>();
- 	 test.push(pair<int,int>(225,225));
-	 test.push(pair<int,int>(300,300));
-	 test.push(pair<int,int>(500,500));
+	//std::queue<pair<int,int>> test=queue<pair<int,int>>();
+ 	//test.push(pair<int,int>(225,225));
+	//test.push(pair<int,int>(300,300));
+	//test.push(pair<int,int>(500,500));
+	ai.createMapState(sector);
+	vector<vector<bool> > mesh = ai.getMapState();
+	Pathfinder path(mesh, 5);
+	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip,destination, path);
 
+	if((!pathq->empty())){
+		aiShip.setPath(pathq);
+	
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		//position needs to be in booleans?
-		if(aiShip.getPosition()!=destination) //&& ai.checkMapState(positions))
+		if(aiShip.getPosition()!=destination)
 		{
-		    cout<<"goes into here"<<endl;
-		    ai.createMapState(sector);
-		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
+			ai.createMapState(sector);
+		   
+		    
 		    //make a testing queue of a path
 		   
-		    aiShip.setPath(&test);
+		    
 		    aiShip.followPath(playerent);
 		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
-			/*switch(e.key.keysym.sym) {
-				case SDLK_w:
-					if(e.type == SDL_KEYDOWN){
-						animate = true;
-					}
-					else if (e.type == SDL_KEYUP){
-						animate = false;
-					}
-					break;
-			}*/
+			
 		}
 
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
-		/*if (animate){
-			if (SDL_GetTicks() - anim_last_time > 150) {
-				if (animation == 0){
-					cycle = true;
-				}
-				else if(animation == 3){
-					cycle = false;
-				}
-				
-				if (cycle){
-					animation++;
-				}
-				else{
-					animation--;
-				}
-				
-				anim_last_time = SDL_GetTicks();
-				playerent.setF(animation);
-			}
-		}
-		else{
-			animation = 0;
-			playerent.setF(animation);
-		}*/
-		
-
-		//Renders all renderable objects onto the screen
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		}
 	}
+
+	
 }

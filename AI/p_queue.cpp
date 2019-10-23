@@ -1,5 +1,6 @@
 #include "p_queue.h"
 #include <iterator>
+#include <iostream>
 
 
 struct lessPriority
@@ -48,6 +49,9 @@ bool p_queue::empty()
 
 bool p_queue::contains(Point& key)
 {
+    if(container.empty()){
+        return false;
+    }
     auto pqiter = find(key);
     return compPoints(pqiter->first, key);
    
@@ -55,11 +59,25 @@ bool p_queue::contains(Point& key)
 
 
 void p_queue::remove(Point& key)
-{   auto pqiter = find(key);
-    if(compPoints(pqiter->first, key)){
-        container.erase(find(key));
+{   
+      if(!container.empty()){
+       
+    
+        auto pqiter = find(key);
+
+    
+        if(compPoints(pqiter->first, key)){
+            //std::cout << "Removing points" <<  std::endl;
+            container.erase(find(key));
+        
+        }
     }
     
+    
+}
+
+int p_queue::getSize(){
+    return container.size();
 }
 
 bool p_queue::compPoints(Point& a, Point& b){
@@ -67,16 +85,20 @@ bool p_queue::compPoints(Point& a, Point& b){
 }
 
 std::vector<std::pair<Point,int>>::iterator p_queue::find(Point& key){
-
+   int i = 0;
    auto pq_iter = container.begin();
-   do{
-
-        if ((pq_iter->first).first == key.first && (pq_iter->first).second == key.second){
-            break;
+   //std::cout << "sIZE " << container.size() << std::endl;
+  for (auto iter = container.begin(); iter != std::prev(container.end()); ++iter) {
+        if (compPoints((pq_iter->first), key)){
+             return pq_iter;
         }
 
+        advance(pq_iter, 1);
+       // std::cout << "i " << i << std::endl;
+        i++;
+    
     }
-    while(pq_iter != container.end());
+
 
     return pq_iter;
 }
