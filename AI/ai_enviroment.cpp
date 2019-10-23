@@ -111,6 +111,11 @@ void run_ai_enviro(gpRender gr){
 	//bool animate;
 	//Uint32 anim_last_time = SDL_GetTicks();
 
+	 std::queue<pair<int,int>> test=queue<pair<int,int>>();
+ 	 test.push(pair<int,int>(225,225));
+	 test.push(pair<int,int>(300,300));
+	 test.push(pair<int,int>(500,500));
+
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
@@ -121,11 +126,8 @@ void run_ai_enviro(gpRender gr){
 		    ai.createMapState(sector);
 		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
 		    //make a testing queue of a path
-		    std::queue<pair<int,int>> test=queue<pair<int,int>>();
-		    test.push(pair<int,int>(225,225));
-		    test.push(pair<int,int>(300,300));
-		    test.push(pair<int,int>(500,500));
-		    aiShip.setPath(test);
+		   
+		    aiShip.setPath(&test);
 		    aiShip.followPath(playerent);
 		}
 		//Handles all incoming Key events
