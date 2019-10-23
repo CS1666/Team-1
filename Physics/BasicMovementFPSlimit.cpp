@@ -1,11 +1,15 @@
 #include "BasicMovementFPSlimit.h"
+#include "TimeData.h"
 
 #define PI 3.14159265
 
+constexpr double ACCEL = 3600.0;
+constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
 constexpr float MAX_DELTAV = 2;
 constexpr float MAX_ROTATIONSPEED = 6;
 constexpr float MAX_ROTATIONRATE = 2;
+
 /*
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
@@ -82,26 +86,26 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			deltaV++;
+			deltaV += (ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			rotationRate -= 2.0;
+			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_s:
 		
 			//ent.setVY(ent.getVY() + MAX_SPEED);
 			
-			deltaV--;
+			deltaV -= (ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			rotationRate += 2.0;
+			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
 			break;
 		case SDLK_x:
 			speed = 0;
