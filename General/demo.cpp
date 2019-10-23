@@ -9,15 +9,12 @@
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
+#include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
 #include "../General/Ellers_Maze.h"
 #include "demo.h"
 
-constexpr int PLAYER_WIDTH = 52;
-constexpr int PLAYER_HEIGHT = 60;
-constexpr int ZONE_WIDTH = 3840; 
-constexpr int ZONE_HEIGHT = 2160;
- std::vector<std::pair<int, int>> randNum(){
+std::vector<std::pair<int, int>> randNum(){
 
 	std::vector<int> coorX;
 	std::vector<int> coorY;
@@ -43,6 +40,11 @@ constexpr int ZONE_HEIGHT = 2160;
 
 	 return coords;
 }
+constexpr int PLAYER_WIDTH = 52;
+constexpr int PLAYER_HEIGHT = 60;
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
+
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
@@ -55,7 +57,7 @@ void run_demo(gpRender gr){
 	bool fixed = false;
 
 	std::vector <std::pair<int, int>> randCoords = randNum();
-	
+
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -69,6 +71,8 @@ void run_demo(gpRender gr){
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
+
+		osSprite.push_back(&starent);
 SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Sprite planet1ent(db3, tex3);
@@ -171,12 +175,12 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
-	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
 	while(gameon)
 	{
 		gr.setFrameStart(SDL_GetTicks());
+		TimeData::update_timestep();
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -194,9 +198,10 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 		}
 		
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		TimeData::update_move_last_time();
 
 		if (animate){
-			if (SDL_GetTicks() - anim_last_time > 100) {
+			if (TimeData::getTimeSinceAnim() > 100) {
 				if (animation <= 1){
 					cycle = true;
 				}
@@ -211,7 +216,7 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 					animation--;
 				}
 				
-				anim_last_time = SDL_GetTicks();
+				TimeData::update_anim_last_time();
 				playerent.setF(animation);
 			}
 		}
