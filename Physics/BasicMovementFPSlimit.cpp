@@ -1,3 +1,7 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <SDL.h>
 #include "BasicMovementFPSlimit.h"
 
 #define PI 3.14159265
@@ -67,7 +71,7 @@ void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 				//}
 				rotationRate = 0;
 				
-
+				
 				break;
 		}
 	
@@ -103,8 +107,7 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += 2.0;
 			break;
-		case SDLK_x:
-			speed = 0;
+		
 		case SDLK_SPACE:
 			//Fire laser
 			break;
@@ -161,7 +164,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 
 
 
-void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
 	rotationSpeed += rotationRate;
@@ -196,11 +199,6 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
-	std::vector<float> gravPulls = calculateGravityPull(ent, *osSprite[1]);
-	speedX = speedX+gravPulls[0];
-	speedY = speedY+gravPulls[1];
-	ent.setSpeedX(speedX);
-	ent.setSpeedY(speedY);
 
 	ent.setX(ent.getTrueX() + speedX);
 	if(ent.getTrueX() < 0 
@@ -222,11 +220,8 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 	std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
-	std::cout << "speedX: " << speedX << std::endl;
-	std::cout << "speedY: " << speedY << std::endl;
-	std::cout << "Grav x: " << gravPulls[0] << std::endl;
-	std::cout << "Grav y: " << gravPulls[1] << std::endl;
-
+	std::cout << "speed: " << speed << std::endl;
+	
 }
 
 

@@ -8,8 +8,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
-#include "../General/Ship.h"
-#include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "lg_enviroment.h"
@@ -62,14 +60,14 @@ void run_lg_enviro(gpRender gr){
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Ship playerent(db, tex, 0);
+	Sprite playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
-	Star starent(db2, tex2);
+	Sprite starent(db2, tex2);
 
 	osSprite.push_back(&starent);
 
