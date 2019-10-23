@@ -5,39 +5,22 @@
             __ships = newShips;
         }
 
-        void AI::setShipPath(Ship shipToPath)
+        void AI::setShipPath(Ship *shipToPath)
         {
-        	//somebody could get rid of this
-        	//get start and end points
-        	vector<int> start = shipToPath.getPosition();
-        	vector<int> destination = shipToPath.getDestination();
-
-        	double distance = calculateDistance(start, destination);
-
-        	double g = 0;
-
-        	//using built in queue c++ data structure for now
-        	std::queue <vector<int> > open;
-
-        	open.push({start[0], start[1], static_cast<int>(g + distance)});
-
-        	while (open.size() != 0)
-        	{
-
-        		//vector<int> s = open.pop();
-
-
-        		
-        	}
 
         }
 
-        double AI::calculateDistance(vector<int> start, vector<int> stop)
+        /*void AI::updateVertex(vector<int> s, vector<int> neighbor)
         {
-        	double x = stop[0] - start[0];
-        	double y = stop[1] - start[1];
+            
+        }*/
 
-        	double z = sqrt(x*x + y*y);
+        int AI::calculateDistance(vector<int> start, vector<int> stop)
+        {
+        	int x = stop[0] - start[0];
+        	int y = stop[1] - start[1];
+
+        	int z = sqrt(x*x + y*y);
 
         	return z;
         }
@@ -52,7 +35,7 @@
 
     		vector<int> sectorSize = currentSector.getSize();
 
-    		vector<vector<int> > newStoredMapState (sectorSize[0], std::vector<int>(sectorSize[1], 0));
+    		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
             vector<Star> stars = currentSector.getStars();
             
@@ -64,9 +47,12 @@
 
                 for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
                 {
+
                     newStoredMapState[x][starPosition[1]] = 1;
-                    newStoredMapState[x][starPosition[1] - starSize[1]] = 1;
+
+                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
                 }
+
 
                 for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
                 {
@@ -80,18 +66,22 @@
     	}
 
 		//true if different, false if same
-		bool AI::checkMapState(vector<vector<int> > newState)
+		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
+		    /*cout<<"storedmap = "<<endl;
+		    for(auto x:storedMapState)
+			for(auto y:x)
+			    cout<<"y = "<<y<<endl;*/
 		    if(storedMapState==newState)
 			return false;
 		    storedMapState=newState;
-		    return false;
+		    return true;
 		}
 		//calculate the path for a ship and destination
-		Queue AI::calculatePath(Ship theShip, vector<int> destination)
+		queue<vector<int>> AI::calculatePath(Ship theShip, vector<int> destination)
 		{
 		    vector<int> curPos=theShip.getPosition();
-		    Queue path=Queue(10);
+		    queue<vector<int>> path=queue<vector<int>>();
 		    //insert pathfinding algorithm here to get actions 
 
 		    return path;
