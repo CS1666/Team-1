@@ -7,9 +7,8 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
-//#include "AI.h"
+#include "AI.h"
 #include "../General/Ship.h"
-#include "Queue.h"
 #include "../General/Sector.h"
 using namespace std;
 
@@ -34,27 +33,9 @@ void run_ai_enviro(gpRender gr){
 
 	//Ship object init
 	Ship aiShip;
-//testing for queue
-   /** Queue test=Queue(5);
-    std::cout << test.push(65) << endl; //A
-    cout << test.push(66) << endl; //B
-    cout<<test.push(67)<<endl; // C
-    cout<<test.push(69)<<endl; // E
-    cout<<test.push(73)<<endl; // I
-    cout<<test.push(44)<<endl; //idk but wont be added
-    cout <<test.getSize() <<endl; //5
-    cout << test.pop() <<endl; //A
-    cout<<test.getSize()<<endl; //4
-    cout<<test.pop()<<endl; // B
-    cout<<test.pop()<<endl; // C
-    cout<<test.pop()<<endl; // E
-    cout<<test.getSize()<<endl; //1
-    cout<<test.pop()<<endl; //I
-    cout<<test.pop()<<endl; //0/blank
-    cout<<test.getSize()<<endl; //0**/
 	//AI init
 
-	//AI ai;
+	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition({10, 10});
@@ -71,7 +52,7 @@ void run_ai_enviro(gpRender gr){
 	//destination is also a vector
 	positions.push_back({10,10});
 
-	vector<int> destination={325,325};
+	vector<int> destination={500,500};
 
 
 	//Red giant Initilzation-
@@ -125,13 +106,20 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-		//if(ai.checkMapState(positions))
-		//{
-			//ai.createMapState(sector);
-			//I think these were causing errors
+		if(aiShip.getPosition()!=destination && 
+			ai.checkMapState(positions))
+		{
+		    cout<<"goes into here"<<endl;
+		    ai.createMapState(sector);
 		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
-		    //aiShip.followPath();
-		//}
+		    //make a testing queue of a path
+		    std::queue<pair<int,int>> test=queue<pair<int,int>>();
+		    test.push(pair<int,int>(225,225));
+		    test.push(pair<int,int>(300,300));
+		    test.push(pair<int,int>(500,500));
+		    aiShip.setPath(test);
+		    aiShip.followPath(playerent);
+		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	

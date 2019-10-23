@@ -6,7 +6,6 @@
 #include <queue>
 #include <set>
 #include <algorithm>
-#include "./Queue.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
 #include "./theta.h"
@@ -28,7 +27,7 @@ class AI
         void setShipPath(Ship *shipToPath);
         void lineOfSight();
         void createMapState(Sector currentSector);
-        Queue calculatePath(Ship theShip, vector<int> destination);
+        std::queue<vector<int>> calculatePath(Ship theShip, vector<int> destination);
         int calculateDistance(vector<int> start, vector<int> stop);
 	
 };
