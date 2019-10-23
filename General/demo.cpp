@@ -8,9 +8,11 @@
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
+#include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
 #include "../General/Ellers_Maze.h"
 #include "demo.h"
+
 
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
@@ -85,12 +87,13 @@ void run_demo(gpRender gr){
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
-	Uint32 anim_last_time = SDL_GetTicks();
+	//Uint32 anim_last_time = SDL_GetTicks();
+	TimeData time;
 
 	//Game Loop
 	while(gameon)
 	{
-		gr.setFrameStart(SDL_GetTicks());
+		//gr.setFrameStart(SDL_GetTicks());
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -110,7 +113,7 @@ void run_demo(gpRender gr){
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		if (animate){
-			if (SDL_GetTicks() - anim_last_time > 100) {
+			if (time.getTimeSinceAnim() > 100) {
 				if (animation <= 1){
 					cycle = true;
 				}
@@ -125,7 +128,7 @@ void run_demo(gpRender gr){
 					animation--;
 				}
 				
-				anim_last_time = SDL_GetTicks();
+				time.set_anim_last_time(SDL_GetTicks());
 				playerent.setF(animation);
 			}
 		}
