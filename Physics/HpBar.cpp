@@ -1,6 +1,6 @@
 #include "HpBar.h"
 
-void RenderHPBar(int x, int y, int w, int h, float Percent, SDL_Color FGColor, SDL_Color BGColor) {
+void RenderHPBar(SDL_Renderer Renderer, int x, int y, int w, int h, float Percent, SDL_Color FGColor, SDL_Color BGColor) {
    Percent = Percent > 1.f ? 1.f : Percent < 0.f ? 0.f : Percent;
    SDL_Color old;
    SDL_GetRenderDrawColor(Renderer, &old.r, &old.g, &old.g, &old.a);
