@@ -5,7 +5,7 @@
 #include "p_queue.h"
 
 
-typedef std::vector<int> Point;
+typedef std::pair<int,int> Point;
 typedef std::queue<Point> Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
@@ -69,7 +69,7 @@ int Pathfinder::heuristic(Point p1, Point p2)
 // Euclidean Distance
 int Pathfinder::distance(Point p1, Point p2)
 {
-    return std::floor(std::sqrt(std::pow(std::abs(p1[0] - p2[0]), 2) + std::pow(std::abs(p1[1] - p2[1]), 2)));
+    return std::floor(std::sqrt(std::pow(std::abs(p1.first - p2.first), 2) + std::pow(std::abs(p1.second - p2.second), 2)));
 }
 
 bool Pathfinder::line_of_sight(Point p1, Point p2)
@@ -81,13 +81,13 @@ bool Pathfinder::line_of_sight(Point p1, Point p2)
 // Right now this is a really naive implementation that doesn't account for the ship's collision box
 std::vector<Point> Pathfinder::neighborhood(Point s)
 {
-    std::vector<Point> neighborhood{Point{s[0]-1,s[1]-1}, Point{s[0], s[1]-1}, Point{s[0]+1, s[1]-1},
-                                    Point{s[0]-1, s[1]},                        Point{s[0]+1, s[1]},
-                                    Point{s[0]-1, s[1]+1}, Point{s[0], s[1]+1}, Point{s[0]+1, s[1]+1}};
+    std::vector<Point> neighborhood{Point{s.first-1,s.second-1}, Point{s.first, s.second-1}, Point{s.first+1, s.second-1},
+                                    Point{s.first-1, s.second},                        Point{s.first+1, s.second},
+                                    Point{s.first-1, s.second+1}, Point{s.first, s.second+1}, Point{s.first+1, s.second+1}};
     std::vector<Point> result = std::vector<Point>();                           
     for(auto itr : neighborhood)
     {
-        if (!mesh[itr[0]][itr[1]])
+        if (!mesh[itr.first][itr.second])
         {
             result.push_back(itr);
         }
