@@ -19,11 +19,11 @@ class AI
 {
     private:
         vector<Ship> __ships;
-        vector<vector<int> > storedMapState; //probably needs to be changed
+        vector<vector<bool> > storedMapState; //probably needs to be changed
 
     public:
         void setShips(vector<Ship> newShips);
-		bool checkMapState(vector<vector<int> > newState); //change mapstate
+		bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(Ship *shipToPath);
         void lineOfSight();
         void createMapState(Sector currentSector);
