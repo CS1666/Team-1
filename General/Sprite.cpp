@@ -3,13 +3,12 @@
 
 	
 	//------------------------------------Constructors-----------------------------------------------
-	Sprite::Sprite(): drawBox{0,0,0,0},  drawCirc{}, assetTex{nullptr} {};
+	Sprite::Sprite(): drawBox{0,0,0,0},  drawCirc{}, assetTex{nullptr}, x{0}, y{0}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{-1} {};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} {};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(NSDL_Circ dCirc, SDL_Texture* aTex):drawBox{0,0,0,0}, drawCirc{dCirc}, assetTex{aTex} {};
 
 
 	//------------------------------------Destructor--------------------------------------------------
@@ -19,25 +18,41 @@
 	}
 
 	//------------------------------Getters and Setters------------------------------------------------
-	void Sprite::setX(int x){
-			drawBox.x = x;
+	//depricated 
+	void Sprite::setX(int x)
+	{
+		Sprite::x = (float)x;
+		drawBox.x = (int)Sprite::x;
+	}
+	void Sprite::setY(int y)
+	{
+		Sprite::y = (float)y;
+		drawBox.y = (int)Sprite::y;
+	}
+
+
+	void Sprite::setX(float x){
+		Sprite::x = x;
+		drawBox.x = (int)Sprite::x;
 	}
 	int Sprite::getX(){
 			return drawBox.x;
 	}
-	void Sprite::setY(int y){
-		drawBox.y = y;
+	void Sprite::setY(float y){
+		Sprite::y = y;
+		drawBox.y = (int)Sprite::y;
 	}
 	int Sprite::getY(){
 		return drawBox.y;
 	}
 	
-
-	void Sprite::setR(int new_r){
-		drawCirc.setR(new_r) ;
+	float Sprite::getTrueX()
+	{
+		return Sprite::x;
 	}
-	int Sprite::getR(){
-		return drawCirc.getR();
+	float Sprite::getTrueY()
+	{
+		return Sprite::y;
 	}
 	void Sprite::setTexture(SDL_Texture* tex){
 		assetTex = tex;
