@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
-#include "../AI/Queue.h"
+#include <queue>
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
@@ -26,7 +26,7 @@ class Ship : public Sprite
         float speedY;
 
         //ai
-        Queue path;
+        std::queue<pair<int,int>> path;
         vector<int> destination;
         bool isUser;
         bool isAlly;
@@ -52,11 +52,8 @@ class Ship : public Sprite
         void setPosition(vector<int> newPosition);
         vector<int> getPosition();
         void setPath(Queue thePath);
-
-
-
         //ai follows path assigned to it by ai class
-        void followPath();
+        void followPath(Sprite& entity);
         bool getPathComplete();
         vector<int> getDestination();
         int getMaxVelocity();
