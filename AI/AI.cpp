@@ -121,16 +121,20 @@
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<int> > newState)
 		{
+		    /*cout<<"storedmap = "<<endl;
+		    for(auto x:storedMapState)
+			for(auto y:x)
+			    cout<<"y = "<<y<<endl;*/
 		    if(storedMapState==newState)
 			return false;
 		    storedMapState=newState;
-		    return false;
+		    return true;
 		}
 		//calculate the path for a ship and destination
-		Queue AI::calculatePath(Ship theShip, vector<int> destination)
+		queue<vector<int>> AI::calculatePath(Ship theShip, vector<int> destination)
 		{
 		    vector<int> curPos=theShip.getPosition();
-		    Queue path=Queue(10);
+		    queue<vector<int>> path=queue<vector<int>>();
 		    //insert pathfinding algorithm here to get actions 
 
 		    return path;
