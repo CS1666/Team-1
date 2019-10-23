@@ -4,9 +4,13 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
+#include "../General/Ship.h"
+#include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
+#include "../General/Ellers_Maze.h"
 #include "demo.h"
+
 
 
 constexpr int PLAYER_WIDTH = 52;
@@ -22,19 +26,20 @@ void run_demo(gpRender gr){
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+
 	bool fixed = false;
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Sprite playerent(db, tex, 0);
+	Ship playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
 	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
-	Sprite starent(db2, tex2);
+	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
 
@@ -71,15 +76,16 @@ void run_demo(gpRender gr){
 	for (int x = 0; x < ZONE_WIDTH/20; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/20; y++) {
 			bgzonelayer1[x][y] = &bgtile1[rand() % 400];
+
 		}
 	}
 
 	//random background galaxy
-	//SDL_Rect galaxy1 = {400, 0, 200, 200};
-	//SDL_Rect galaxy2 = {400, 200, 200, 200};
+	SDL_Rect galaxy1 = {400, 0, 200, 200};
+	SDL_Rect galaxy2 = {400, 200, 200, 200};
 
-	//bgzonelayer1[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy1;
-	//bgzonelayer2[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy2;
+	bgzonelayer1[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy1;
+	bgzonelayer2[rand() % (ZONE_WIDTH/20 - 200)][rand() % (ZONE_HEIGHT/20 - 200)] = &galaxy2;
 
 	for (int x = 0; x < ZONE_WIDTH/40; x++) {
 		for (int y = 0; y < ZONE_HEIGHT/40; y++) {
@@ -95,7 +101,8 @@ void run_demo(gpRender gr){
 	Uint32 anim_last_time = SDL_GetTicks();
 
 	//Game Loop
-	while(gameon) {
+	while(gameon)
+	{
 		gr.setFrameStart(SDL_GetTicks());
 
 		//Handles all incoming Key events
@@ -140,7 +147,6 @@ void run_demo(gpRender gr){
 			playerent.setF(animation);
 		}
 
-
 		//Renders all renderable objects onto the screen
 
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
@@ -165,6 +171,8 @@ void run_demo(gpRender gr){
 		}
 
 		gr.renderOnScreenEntity(osSprite, bgzonelayer1, bgzonelayer2, camera, fixed);		
-
 	}
+	
+	Ellers_Maze test_maze;
+	test_maze.test_output();
 }

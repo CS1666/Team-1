@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
+#include "../General/Ship.h"
+#include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../General/gpRender.h"
 #include "phy_enviroment.h"
@@ -24,12 +26,11 @@ void run_phy_enviro(gpRender gr){
 	bool fixed = false;
 	
 	//gpRender object that is used to render object onto screen
-	
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Sprite playerent(db, tex, 0);
+	Ship playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
 
@@ -140,7 +141,6 @@ void run_phy_enviro(gpRender gr){
 		}
 
 		//Renders all renderable objects onto the screen
-
 		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
 		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
