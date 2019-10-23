@@ -106,8 +106,8 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-		if(aiShip.getPosition()!=destination && 
-			ai.checkMapState(positions))
+		//position needs to be in booleans?
+		if(aiShip.getPosition()!=destination) //&& ai.checkMapState(positions))
 		{
 		    cout<<"goes into here"<<endl;
 		    ai.createMapState(sector);
