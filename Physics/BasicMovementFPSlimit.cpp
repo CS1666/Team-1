@@ -1,11 +1,15 @@
 #include "BasicMovementFPSlimit.h"
+#include "TimeData.h"
 
 #define PI 3.14159265
 
+constexpr double ACCEL = 3600.0;
+constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
 constexpr float MAX_DELTAV = 2;
 constexpr float MAX_ROTATIONSPEED = 6;
 constexpr float MAX_ROTATIONRATE = 2;
+
 /*
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
@@ -82,26 +86,26 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_w:
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
-			deltaV++;
+			deltaV += (ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
-			rotationRate -= 2.0;
+			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_s:
 		
 			//ent.setVY(ent.getVY() + MAX_SPEED);
 			
-			deltaV--;
+			deltaV -= (ACCEL * TimeData::get_timestep());
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
-			rotationRate += 2.0;
+			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
 			break;
 		case SDLK_x:
 			speed = 0;
@@ -151,9 +155,9 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 0;  i < osSprite.size(); i++){
+	for(int i = 1;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
-		isCollision = check_collision(a, osSprite.at(i)->getDrawBox());
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;
 	}

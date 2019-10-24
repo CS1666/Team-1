@@ -1,14 +1,18 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
-#include "../Physics/HpBar.h"
+#include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
+#include "../General/Ellers_Maze.h"
+#include "../General/planet.h"
 #include "phy_enviroment.h"
 
 constexpr int PLAYER_WIDTH = 52;
@@ -16,7 +20,32 @@ constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
+std::vector<std::pair<int, int>> randNumP(){
 
+	std::vector<int> coorX;
+	std::vector<int> coorY;
+	std::vector<std::pair<int, int>> coords;
+
+	srand(time(0));
+	
+	for(int i = 0; i<10; i++){
+		coorX.push_back((rand()%100));
+	}
+	
+	for(int i = 0; i<10; i++){
+		coorY.push_back((rand()%200));
+	}
+
+	coords.reserve(10);
+	std::transform(coorX.begin(), coorX.end(), coorY.begin(), std::back_inserter(coords), 
+		[](int a, int b){return std::make_pair(a, b);});
+
+	for(int k = 0; k<10; k++){
+	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
+	}
+
+	 return coords;
+}
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 
@@ -27,7 +56,6 @@ void run_phy_enviro(gpRender gr){
 	bool fixed = false;
 	
 	//gpRender object that is used to render object onto screen
-
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -35,15 +63,21 @@ void run_phy_enviro(gpRender gr){
 	playerent.setHp(100);
 	osSprite.push_back(&playerent);
 
-
+	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
-	Sprite starent(db2, tex2);
+	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
 
+	std::vector <std::pair<int, int>> randCoords = randNumP();
 
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
+	Planet planet1ent(db3, tex3);
+	//planet1ent.initVelocity(starent);
+	osSprite.push_back(&planet1ent);
 	//Ship Cruiser initilization
 	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	//SDL_Rect db3 = {400,300,225,300};
@@ -93,8 +127,8 @@ void run_phy_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
-		//render hp bar based on current health percentage
-		RenderHPBar(gr.getRender(), 5, 5, 100, 5, playerent.getHp()/100, color(255, 0, 0), color(255, 255, 255));
+		TimeData::update_timestep();
+
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
@@ -110,13 +144,14 @@ void run_phy_enviro(gpRender gr){
 			}
 		}
 
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
-		//Renders all renderable objects onto the screen
+		planet1ent.updatePosition();
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		TimeData::update_move_last_time();
 
 		if (animate){
-			if (SDL_GetTicks() - anim_last_time > 150) {
-				if (animation == 0){
+			if (TimeData::getTimeSinceAnim() > 100) {
+				if (animation <= 1){
 					cycle = true;
 				}
 				else if(animation == 3){
@@ -130,7 +165,7 @@ void run_phy_enviro(gpRender gr){
 					animation--;
 				}
 				
-				anim_last_time = SDL_GetTicks();
+				TimeData::update_anim_last_time();
 				playerent.setF(animation);
 			}
 		}
@@ -138,7 +173,6 @@ void run_phy_enviro(gpRender gr){
 			animation = 0;
 			playerent.setF(animation);
 		}
-
 		//Renders all renderable objects onto the screen
 		
 		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;

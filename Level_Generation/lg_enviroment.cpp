@@ -1,10 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
-#include <iostream>
 #include <algorithm>
-#include <memory.h>
+#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
@@ -12,50 +10,51 @@
 #include "../General/gpRender.h"
 #include "lg_enviroment.h"
 
-
-//#define POISSON_PROGRESS_INDICATOR 1
-//#include "PoissonGenerator.h"
-
-
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
-//Ideal #s can/should be worked out later
-//constexpr int NumPoints = 24;
-//lay out the "zone" in which the objects will spawn, should be < w*h
-//"spawn zone" = ImageSize * ImageSize
-//constexpr int ImageSize  = 2160;  
 
-/*int mPoissonGen( int argc, char** argv)
-{
+ std::vector<std::pair<int, int>> randNumVector(){
 
-	PoissonGenerator::DefaultPRNG PRNG;
+	std::vector<int> coorX;
+	std::vector<int> coorY;
+	std::vector<std::pair<int, int>> coords;
 
-	const auto Points = PoissonGenerator::generatePoissonPoints( NumPoints, PRNG );
+	srand(time(0));
+	
+	for(int i = 0; i<10; i++){
+		coorX.push_back((rand()%100));
+	}
+	
+	for(int i = 0; i<10; i++){
+		coorY.push_back((rand()%200));
+	}
 
-	std::vector<std::pair<float,float>> Coords;
-	for(int k = 0; k < 2; k++)
-    for(int i = -1; i < 2; i += 2)
-        for(int j = -1; j < 2; j+= 2)
-            Coords.push_back(std::make_pair(i * (k+1), j * (((k + 1) % 2) + 1)));
+	coords.reserve(10);
+	std::transform(coorX.begin(), coorX.end(), coorY.begin(), std::back_inserter(coords), 
+		[](int a, int b){return std::make_pair(a, b);});
 
+	for(int k = 0; k<10; k++){
+	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
+	}
 
-	return 0;
+	 return coords;
 }
-*/
 
 void run_lg_enviro(gpRender gr){
 
-	
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite;
 	
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-	bool fixed = false;
-
+	bool fixed = true;
+	
+	//randNumVector();
+	std::vector <std::pair<int, int>> randCoords = randNumVector();
+	
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -70,12 +69,66 @@ void run_lg_enviro(gpRender gr){
 	Sprite starent(db2, tex2);
 
 	osSprite.push_back(&starent);
-
 	
-		//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-		//SDL_Rect db3 = {};
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
+	Sprite planet1ent(db3, tex3);
 
+	osSprite.push_back(&planet1ent);
 
+	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Rect db4 = {randCoords[1].first,randCoords[1].second+ 400,200,200};
+	Sprite planet2ent(db4, tex4);
+
+	osSprite.push_back(&planet2ent);
+
+	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Rect db5 = {randCoords[2].first +400,randCoords[2].second+ 700,200,200};
+	Sprite planet3ent(db5, tex5);
+
+	osSprite.push_back(&planet3ent);
+
+	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Rect db6 = {randCoords[3].first +1200,randCoords[3].second+ 600,200,200};
+	Sprite planet4ent(db6, tex6);
+
+	osSprite.push_back(&planet4ent);
+
+	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
+	Sprite planet5ent(db7, tex7);
+
+	osSprite.push_back(&planet5ent);
+
+	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
+	Sprite planet6ent(db8, tex8);
+
+	osSprite.push_back(&planet6ent);
+
+	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,200,200};
+	Sprite asteroid1ent(db9, tex9);
+
+	osSprite.push_back(&asteroid1ent);	
+
+	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,200,200};
+	Sprite asteroid2ent(db10, tex10);
+
+	osSprite.push_back(&asteroid2ent);
+
+	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,200,200};
+	Sprite asteroid3ent(db11, tex11);
+
+	osSprite.push_back(&asteroid3ent);
+
+	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,200,200};
+	Sprite asteroid4ent(db12, tex12);
+
+	osSprite.push_back(&asteroid4ent);
 	//Ship Cruiser initilization
 	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	//SDL_Rect db3 = {400,300,225,300};

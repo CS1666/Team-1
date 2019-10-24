@@ -27,7 +27,7 @@ class Ship : public Sprite
         int hp;
 
         //ai
-        std::queue<pair<int,int>> path;
+        std::queue<pair<int,int>>* path;
         vector<int> destination;
         bool isUser;
         bool isAlly;
@@ -52,7 +52,7 @@ class Ship : public Sprite
         void updateHull(int newHull);
         void setPosition(vector<int> newPosition);
         vector<int> getPosition();
-        void setPath(queue<pair<int, int>> thePath);
+        void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
         bool getPathComplete();
