@@ -236,17 +236,8 @@ void gpRender::renderOnScreenEntity2(std::vector<Sprite*> osEntity, std::vector<
 	//SDL_Rect hpBox = {0, 0, hp.getW(), hp.getH()};
 	//SDL_RenderCopy(gRenderer, hp.getTexture(), &hpBox, &hppos);
 
-	if (!fixed){
-		SDL_Point center;
-		center.x = hp.getW()/2;
-		center.y = hp.getH()/2;
-		//SDL_Rect camcenter = {SCREEN_WIDTH/2 - hp.getW()/2, SCREEN_HEIGHT/2 - hp.getH()/2, hp.getW()*(int)hp.getPercentage()/100, hp.getH()};
-		SDL_Rect camcenter = {hp.getW(), hp.getH(), hp.getW()*(int)hp.getPercentage()/100, hp.getH()};
-		SDL_RenderCopy(gRenderer, hp.getTexture(), nullptr, &camcenter);
-	}
-
-		//check if entity within range of camera
-	else if ((camera.x - hp.getW() < hp.getX()) && (hp.getX() < camera.x + SCREEN_WIDTH + hp.getW()) && 
+	
+	if ((camera.x - hp.getW() < hp.getX()) && (hp.getX() < camera.x + SCREEN_WIDTH + hp.getW()) && 
 		(camera.y - hp.getH() < hp.getY()) && (hp.getY() < camera.y + SCREEN_HEIGHT + hp.getH())){
 			
 		//SDL_Rect campos = {hp.getX() + camera.x, hp.getY() + camera.y, hp.getW()*(int)hp.getPercentage()/100, hp.getH()};
