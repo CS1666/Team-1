@@ -47,14 +47,17 @@
 
                 for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
                 {
-                    newStoredMapState[x][starPosition[1]] = true;
-                    newStoredMapState[x][starPosition[1] - starSize[1]] = true;
+
+                    newStoredMapState[x][starPosition[1]] = 1;
+
+                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
                 }
+
 
                 for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
                 {
-                    newStoredMapState[starPosition[0]][y] = true;
-                    newStoredMapState[starPosition[0] + starSize[0]][y] = true;
+                    newStoredMapState[starPosition[0]][y] = 1;
+                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
                 }
             }
             
