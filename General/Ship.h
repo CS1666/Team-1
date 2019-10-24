@@ -24,6 +24,7 @@ class Ship : public Sprite
 
         float speedX;
         float speedY;
+        int hp;
 
         //ai
         std::queue<pair<int,int>>* path;
@@ -59,6 +60,8 @@ class Ship : public Sprite
         int getMaxVelocity();
         void setDestination(vector<int> newDestination);
         int getMass();
+        void setHP(int newHP);
+        int getHP();
 };
 
 class Hero:Ship{};
