@@ -13,7 +13,8 @@ typedef std::pair<int,int> Point;
 class p_queue
 {
     public:
-        p_queue() : container(std::vector<std::pair<Point,int>>()) {}
+        p_queue();
+        p_queue& operator=(p_queue& a);
         void push(Point& x, int p);
         Point& top();
         Point& pop();
@@ -23,7 +24,8 @@ class p_queue
         void remove(Point& key);
         int getSize();
         std::vector<std::pair<Point,int>>::iterator find(Point& key);
+        std::vector<std::pair<Point,int>>* getContainer();
 
     private:
-        std::vector<std::pair<Point, int> > container;
+        std::vector<std::pair<Point, int>>* container;
 };
