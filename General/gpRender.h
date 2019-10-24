@@ -57,5 +57,6 @@ class gpRender{
 		int SCREEN_HEIGHT = 720;
 		int FPS = 60;
 		int frameDelay = 1000/ FPS;
+		SDL_Texture* bgsheet;
 		
 };

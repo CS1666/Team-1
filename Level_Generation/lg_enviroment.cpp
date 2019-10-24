@@ -50,7 +50,7 @@ void run_lg_enviro(gpRender gr){
 	
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-	bool fixed = false;
+	bool fixed = true;
 	
 	//randNumVector();
 	std::vector <std::pair<int, int>> randCoords = randNumVector();

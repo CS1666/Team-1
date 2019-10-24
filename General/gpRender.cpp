@@ -11,6 +11,8 @@ gpRender::gpRender() {};
 gpRender::gpRender(const char* win_name){
 	// Flag what subsystems to initialize
 	// For now, just video
+	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -49,6 +51,7 @@ gpRender::gpRender(const char* win_name){
 		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
 		isInit =  false;
 	}
+	bgsheet = loadImage("Assets/Objects/backgroundss.png");
 };
 
 //--------------------------------Destructors---------------------------------------------------
@@ -75,8 +78,7 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 	
 	SDL_RenderClear(gRenderer);
 
-	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
-	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
+	
 
 	if (camera.x - 200 < galaxies[0] && galaxies[0] < camera.x + SCREEN_WIDTH*3 &&
 		camera.y - 200 < galaxies[1] && galaxies[1] < camera.x + SCREEN_WIDTH*3){

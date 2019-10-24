@@ -155,9 +155,9 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 0;  i < osSprite.size(); i++){
+	for(int i = 1;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
-		isCollision = check_collision(a, osSprite.at(i)->getDrawBox());
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;
 	}
