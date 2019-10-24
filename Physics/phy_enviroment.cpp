@@ -20,7 +20,7 @@ constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
-std::vector<std::pair<int, int>> randNum(){
+std::vector<std::pair<int, int>> randNumP(){
 
 	std::vector<int> coorX;
 	std::vector<int> coorY;
@@ -64,7 +64,7 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
-	std::vector <std::pair<int, int>> randCoords = randNum();
+	std::vector <std::pair<int, int>> randCoords = randNumP();
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Planet planet1ent(db3, tex3);
@@ -121,8 +121,8 @@ void run_phy_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 
 		//Handles all incoming Key events
-		/*while(SDL_PollEvent(&e)) {
-			gameon = handleKeyEvents(e, playerent);	
+		while(SDL_PollEvent(&e)) {
+			gameon = handleKeyEvents(e, starent);	
 			switch(e.key.keysym.sym) {
 				case SDLK_w:
 					if(e.type == SDL_KEYDOWN){
@@ -133,7 +133,7 @@ void run_phy_enviro(gpRender gr){
 					}
 					break;
 			}
-		}*/
+		}
 
 
 		//Renders all renderable objects onto the screen
