@@ -72,8 +72,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&starent);
 
-		osSprite.push_back(&starent);
-SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Sprite planet1ent(db3, tex3);
 

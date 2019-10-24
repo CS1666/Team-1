@@ -14,7 +14,7 @@ public:
 	Planet(SDL_Rect dBox, SDL_Texture* aTex);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun);
-	void initVelocity(Star sun);
+	void initVelocity(Star& sun);
 	int getRadius();
 	tuple<float, float> getCenterPosition();
 	string getSprite();
@@ -25,7 +25,7 @@ public:
 	void setMass(int newMass);
 	void updatePosition();
 	//for now only calculate the gravity contribution from the sun
-	std::vector<float> calulateGravity(Star sun);
+	std::vector<float> calulateGravity(Star& sun);
 
 private:
 	int radius;
@@ -36,6 +36,7 @@ private:
 	float vx;
 	float vy;
 	string sprite;
+	Star sun;
 	int mass;
 	float planetX = 0;
 	float planetY = 0;

@@ -56,20 +56,27 @@ void run_phy_enviro(gpRender gr){
 	bool fixed = false;
 	
 	//gpRender object that is used to render object onto screen
+	//Player Entity Initilizaiton
+	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
+	Ship playerent(db, tex, 0);
+	osSprite.push_back(&playerent);
 
-
+	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
+
 	std::vector <std::pair<int, int>> randCoords = randNumP();
+
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Planet planet1ent(db3, tex3);
-	planet1ent.initVelocity(starent);
-
+	//planet1ent.initVelocity(starent);
+	osSprite.push_back(&planet1ent);
 	//Ship Cruiser initilization
 	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	//SDL_Rect db3 = {400,300,225,300};
@@ -119,10 +126,11 @@ void run_phy_enviro(gpRender gr){
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
+		TimeData::update_timestep();
 
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			gameon = handleKeyEvents(e, starent);	
+			gameon = handleKeyEvents(e, playerent);	
 			switch(e.key.keysym.sym) {
 				case SDLK_w:
 					if(e.type == SDL_KEYDOWN){
@@ -136,10 +144,38 @@ void run_phy_enviro(gpRender gr){
 		}
 
 
+		planet1ent.updatePosition();
+		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		TimeData::update_move_last_time();
+
+		if (animate){
+			if (TimeData::getTimeSinceAnim() > 100) {
+				if (animation <= 1){
+					cycle = true;
+				}
+				else if(animation == 3){
+					cycle = false;
+				}
+				
+				if (cycle){
+					animation++;
+				}
+				else{
+					animation--;
+				}
+				
+				TimeData::update_anim_last_time();
+				playerent.setF(animation);
+			}
+		}
+		else{
+			animation = 0;
+			playerent.setF(animation);
+		}
 		//Renders all renderable objects onto the screen
 		
-		camera.x = starent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
-		camera.y = starent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
+		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
+		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
 		
 		if (camera.x < 0){
 			camera.x = 0;
