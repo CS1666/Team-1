@@ -4,33 +4,43 @@
 #include <tuple>
 #include "Sprite.h"
 #include "Star.h"
+#include <cmath>
+#include "../Physics/TimeData.h"
+
 class Planet : public Sprite
 {
 public:
 	Planet();
 	Planet(SDL_Rect dBox, SDL_Texture* aTex);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass);
+	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun);
+	void initVelocity(Star sun);
 	int getRadius();
-	int getVelocity();
-	float getDirection();
-	int getGravity();
-	tuple<float, float> getPosition();
+	tuple<float, float> getCenterPosition();
 	string getSprite();
 	void setRadius(int r);
 	void setVelocity(int v);
-	void setDirection(float d);
-	void setGravity(int g);
-	void setPosition(tuple<int, int> newPos);
 	void setSprite(string s);
 	int getMass();
 	void setMass(int newMass);
-	void updatePosition(Star sun);
+	void updatePosition();
+	//for now only calculate the gravity contribution from the sun
+	std::vector<float> calulateGravity(Star sun);
+
 private:
 	int radius;
 	int velocity;
 	float direction;
-	int gravity;
-	tuple<float, float> position;
+	float fx;
+	float fy;
+	float vx;
+	float vy;
 	string sprite;
 	int mass;
+	float planetX = 0;
+	float planetY = 0;
+	float bodyX = 0;
+	float bodyY = 0;
+	float pointAngle;
+	float pointSlope;
 };
