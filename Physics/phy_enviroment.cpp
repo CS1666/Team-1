@@ -84,6 +84,10 @@ void run_phy_enviro(gpRender gr){
 	//Sprite emyent(db3, tex3);
 
 	//osSprite.push_back(&emyent);
+	
+	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/hp_bar.png");
+	SDL_Rect hp = {10,10,300,20};
+	HpBar hpent(hp, tex4, playerent.getHp());
 
 	srand(time(0));
 	SDL_Rect bgtile[100];
@@ -128,7 +132,7 @@ void run_phy_enviro(gpRender gr){
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
-
+		
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
@@ -194,6 +198,6 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		gr.renderOnScreenEntity2(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, hpent, fixed);
 	}
 }
