@@ -1,88 +1,81 @@
 #include <iostream>
 #include <string>
 #include <tuple>
+#include "planet.h"
 using namespace std;
 
-class Planet
+Planet::Planet(): Sprite() {};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {};
+
+
+int Planet::getRadius()
 {
-	private:
-		int radius;
-		int velocity;
-		float direction;
-		int gravity;
-		tuple<int, int> position;
-		string sprite;
-		long mass;
+	return radius;
+}
 
-		public:
-			int getRadius()
-			{
-				return radius;
-			}
+int Planet::getVelocity()
+{
+	return velocity;
+}
 
-			int getVelocity()
-			{
-				return velocity;
-			}
+float Planet::getDirection()
+{
+	return direction;
+}
 
-			float getDirection()
-			{
-				return direction;
-			}
+int Planet::getGravity()
+{
+	return gravity;
+}
 
-			int getGravity()
-			{
-				return gravity;
-			}
+tuple<float, float> Planet::getPosition()
+{
+	return position;
+}
 
-			tuple<int, int> getPosition()
-			{
-				return position;
-			}
+string Planet::getSprite()
+{
+	return sprite;
+}
 
-			string getSprite()
-			{
-				return sprite;
-			}
+void Planet::setRadius(int r)
+{
+	radius = r;
+}
 
-			void setRadius(int r)
-			{
-				radius = r;
-			}
+void Planet::setVelocity(int v)
+{
+	velocity = v;
+}
 
-			void setVelocity(int v)
-			{
-				velocity = v;
-			}
+void Planet::setDirection(float d)
+{
+	direction = d;
+}
 
-			void setDirection(float d)
-			{
-				direction = d;
-			}
+void Planet::setGravity(int g)
+{
+	gravity = g;
+}
 
-			void setGravity(int g)
-			{
-				gravity = g;
-			}
+void Planet::setPosition(tuple<int, int> newPos)
+{
+	position = newPos;
+}
 
-			void setPosition(tuple<int, int> newPos)
-			{
-				position = newPos;
-			}
+void Planet::setSprite(string s)
+{
+	sprite = s;
+}
 
-			void setSprite(string s)
-			{
-				sprite = s;
-			}
-	
-			long getMass()
-			{
-				return mass;	
-			}
-	
-			void setMass(long newMass)
-			{
-				mass = newMass;	
-			}
+int Planet::getMass()
+{
+	return mass;	
+}
 
-};
+void Planet::setMass(int newMass)
+{
+	mass = newMass;	
+}
+
