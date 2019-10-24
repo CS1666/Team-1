@@ -86,7 +86,7 @@
 		    return true;
 		}
 		//calculate the path for a ship and destination
-		queue<pair<int,int>>* AI::calculatePath(Ship theShip, pair<int,int> destination, Pathfinder path )
+		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());

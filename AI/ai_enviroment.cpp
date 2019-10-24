@@ -40,7 +40,7 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition(pair<int,int>(10,10));
-	aiShip.setDestination(pair<int,int>(319, 715));
+	aiShip.setDestination(pair<int,int>(1200, 600));
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
@@ -53,7 +53,7 @@ void run_ai_enviro(gpRender gr){
 	//destination is also a vector
 	positions.push_back({10,10});
 
-	pair<int,int> destination(500,500);
+	
 
 
 	//Red giant Initilzation-
@@ -115,8 +115,8 @@ void run_ai_enviro(gpRender gr){
 	//test.push(pair<int,int>(500,500));
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
-	Pathfinder path(mesh, 7);
-	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip,destination, path);
+	Pathfinder path(mesh, 5);
+	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip, path);
 
 	if((!pathq->empty())){
 		aiShip.setPath(pathq);
@@ -125,7 +125,7 @@ void run_ai_enviro(gpRender gr){
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		//position needs to be in booleans?
-		if(aiShip.getPosition()!=destination)
+		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
 			ai.createMapState(sector);
 		   

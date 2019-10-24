@@ -24,14 +24,14 @@
             Pathfinder(Mesh  &m, int v): visionRange(v), mesh(m) {}
             Path pathfind(Point start, Point goal);
             void update_mesh(Mesh &m);
-            
+
     
         private:
             int visionRange;
             Mesh &mesh;
             std::map<Point, int> gScore;
             std::map<Point, Point> parent;
-            p_queue open;
+            p_queue* open;
             std::set<Point> closed;
             int heuristic(Point p1, Point p2);
             int distance(Point p1, Point p2);

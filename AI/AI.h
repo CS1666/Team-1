@@ -28,7 +28,7 @@ class AI
         vector<vector<bool>> getMapState();
         void lineOfSight();
         bool createMapState(Sector currentSector);
-        queue<pair<int,int>>* calculatePath(Ship theShip, pair<int,int> destination, Pathfinder Path);
+        queue<pair<int,int>>* calculatePath(Ship theShip, Pathfinder Path);
         int calculateDistance(pair<int,int> start, pair<int,int>stop);
 	
 };
