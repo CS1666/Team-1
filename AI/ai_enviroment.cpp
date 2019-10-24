@@ -40,7 +40,7 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition(pair<int,int>(10,10));
-	aiShip.setDestination(pair<int,int>(600, 325));
+	aiShip.setDestination(pair<int,int>(319, 715));
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};

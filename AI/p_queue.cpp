@@ -7,7 +7,7 @@ struct lessPriority
 {
     const bool &operator()(const std::pair<Point, int> &p1, const std::pair<Point, int> &p2)
     {
-        return p1.second < p2.second;
+        return p1.second > p2.second;
     }
 };
 
