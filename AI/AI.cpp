@@ -1,5 +1,6 @@
 #include "AI.h"
 
+
   
         void AI::setShips(vector<Ship> newShips)
         {
@@ -88,6 +89,14 @@
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, pair<int,int> destination, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
-		
-		    return path.pathfind(theShip.getPosition(), theShip.getDestination());
+		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
+            //queue<pair<int,int>> tmp_queue = *pth;
+
+            //while(!tmp_queue.empty()){
+
+                //std::cout << "X point: " << tmp_queue.front().first << "Y point: " << tmp_queue.front().second << endl;
+                //tmp_queue.pop();
+            //}
+
+		    return pth;
 		}

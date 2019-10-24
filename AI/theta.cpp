@@ -210,8 +210,8 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    //std::cout << "reconstructing " << std::endl;
-    std::queue<Point>* total_path;
+    //std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {
         total_path->push(s);
@@ -224,3 +224,5 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
+
+

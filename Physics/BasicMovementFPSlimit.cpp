@@ -218,11 +218,11 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	std::cout << ent.getAngle() - 90 << std::endl;
+	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speedX: " << speedX << std::endl;
-	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
@@ -283,13 +283,13 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	std::cout << ent.getAngle() - 90 << std::endl;
+	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speedX: " << speedX << std::endl;
 	std::cout << "speedY: " << speedY << std::endl;
 	std::cout << "Grav x: " << gravPulls[0] << std::endl;
-	std::cout << "Grav y: " << gravPulls[1] << std::endl;
+	std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
 
 }
 

@@ -24,6 +24,7 @@
             Pathfinder(Mesh  &m, int v): visionRange(v), mesh(m) {}
             Path pathfind(Point start, Point goal);
             void update_mesh(Mesh &m);
+            
     
         private:
             int visionRange;

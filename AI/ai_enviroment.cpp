@@ -115,7 +115,7 @@ void run_ai_enviro(gpRender gr){
 	//test.push(pair<int,int>(500,500));
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
-	Pathfinder path(mesh, 5);
+	Pathfinder path(mesh, 7);
 	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip,destination, path);
 
 	if((!pathq->empty())){
