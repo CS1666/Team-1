@@ -60,8 +60,8 @@ class Ship : public Sprite
         int getMaxVelocity();
         void setDestination(vector<int> newDestination);
         int getMass();
-        void setHP(int newHP);
-        int getHP();
+        void setHp(int newHp);
+        int getHp();
 };
 
 class Hero:Ship{};
