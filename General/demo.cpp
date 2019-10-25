@@ -181,10 +181,38 @@ void run_demo(gpRender gr){
 	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
 	SDL_Event e;
-	bool gameon = true;
+	bool gameon = false;
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
+	int titleFrame = 0;
+	// title screen
+	SDL_Texture* titletex = gr.loadImage("Assets/Objects/title1.png");
+	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
+	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	SDL_Event s;
+	while(!gameon){
+		if(titleFrame == 0){
+			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
+			titleFrame++;
+		}else{
+			SDL_RenderCopy(gr.getRender(), titletex2, nullptr, &title);
+			titleFrame--;
+		}
+		SDL_RenderPresent(gr.getRender());
+		SDL_Delay(300);
+		// start game when enter key is pressed
+		while(SDL_PollEvent(&s)){	
+			switch(s.key.keysym.sym){ 
+				case SDLK_RETURN:
+					if(s.type == SDL_KEYDOWN){
+						SDL_RenderClear(gr.getRender());
+						gameon = true;
+					}
+			}	
+			
+		}
+	}
 
 	//Game Loop
 	while(gameon)
