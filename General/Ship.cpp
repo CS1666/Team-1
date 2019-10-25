@@ -78,7 +78,7 @@
         return destination;
     }
 
-    void Ship::setPath(queue<pair<int,int>> thePath)
+    void Ship::setPath(queue<pair<int,int>>* thePath)
     {
     	path = thePath;
         pathComplete=false;
@@ -89,14 +89,24 @@
         return maxVelocity;
     }
 
+    int Ship::getHp()
+    {
+	return hp;    
+    }
+
+    void Ship::setHp(int newHp)
+    {
+	hp = newHp;    
+    }
+
     //ai follows path assigned to it by ai class
     void Ship::followPath(Sprite& entity)
     {
 	    //note: change the path in Ship.h to whatever is returned.
-	    if(!path.empty())
+	    if(!path->empty())
 	    {
 		//note: assumed whatever we're using is some (x,y)
-		pair<int,int> coords=path.front();
+		pair<int,int> coords=path->front();
 		int x_coord=coords.first;
 		int y_coord=coords.second;
 		int cur_x=position[0];
@@ -121,7 +131,7 @@
 		    position[1]=cur_y;
 		}
 		else
-		    path.pop();
+		    path->pop();
 	    }
 	    else
 	        pathComplete=true;
