@@ -3,10 +3,10 @@
 
 #define PI 3.14159265
 
-constexpr double ACCEL = 3600.0;
+constexpr double ACCEL = 60.0;
 constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
-constexpr float MAX_DELTAV = 2;
+constexpr float MAX_DELTAV = 1;
 constexpr float MAX_ROTATIONSPEED = 6;
 constexpr float MAX_ROTATIONRATE = 2;
 
@@ -168,6 +168,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
+	speed *= TimeData::get_timestep();
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
 	{

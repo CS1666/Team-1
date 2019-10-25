@@ -61,7 +61,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
-	playerent.setHp(100);
+	//playerent.setHp(100);
 	osSprite.push_back(&playerent);
 	osSprite2.push_back(&playerent);
 
@@ -75,9 +75,9 @@ void run_phy_enviro(gpRender gr){
 	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
+	SDL_Rect db3 = {1600,400,200,200};
 	Planet planet1ent(db3, tex3);
-	//planet1ent.initVelocity(starent);
+	planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
 	//Ship Cruiser initilization
