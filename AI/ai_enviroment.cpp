@@ -40,7 +40,7 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition(pair<int,int>(10,10));
-	aiShip.setDestination(pair<int,int>(1010, 620));
+	aiShip.setDestination(pair<int,int>(100, 200));
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
@@ -115,7 +115,7 @@ void run_ai_enviro(gpRender gr){
 	//test.push(pair<int,int>(500,500));
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
-	Pathfinder path(mesh, 5);
+	Pathfinder path(mesh, 10);
 	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip, path);
 
 	if((!pathq->empty())){

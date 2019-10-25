@@ -31,21 +31,34 @@ bool p_queue::lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2)
 }
 
 void p_queue::push_up_heap(int index){
-    std::pair<Point, int> child = container->at(index);
-    std::pair<Point, int> parent = container->at(getParent(index));
-    while(!lessPriority(child,parent)){
+    //std::cout << "Push up heap" <<std::endl;
 
-        swap_nodes(index, getParent(index));
-        index = getParent(index);
-        child = container->at(index);
+    if(index != 0){
+        //std::cout << "A" <<std::endl;
+        std::pair<Point, int> child = container->at(index);
 
-        //Stop if at top of heap
-        if(index == 0){
-            break;
+        //std::cout << "B" <<std::endl;
+        std::pair<Point, int> parent = container->at(getParent(index));
+        while(!lessPriority(child,parent)){
+            //std::cout << "C" <<std::endl;
+            swap_nodes(index, getParent(index));
+
+            //std::cout << "D" <<std::endl;
+            index = getParent(index);
+            //std::cout << "E" <<std::endl;
+            child = container->at(index);
+
+            //Stop if at top of heap
+            if(index == 0){
+                break;
+            }
+            //std::cout << "F" <<std::endl;
+            parent = container->at(getParent(index));
+            //std::cout << "G" <<std::endl;
+
         }
-        parent = container->at(getParent(index));
-
     }
+    
 }
 
 void p_queue::push_down_heap(int index){
@@ -113,19 +126,20 @@ void p_queue::push_down_heap(int index){
 
 void p_queue::swap_nodes(int a, int b){
 
-    //swap points in priority queue
-    std::pair<Point,int> temp = container->begin()[a];
-    container[a] = container[b];
-    container->at(b) = temp;
-
+    swap(container->at(a),container->at(b) );
+    
     //swap points in inderection
+
+    //std::cout << "L" <<std::endl;
     indirection->at(container->begin()[a].first) = b;
+    //std::cout << "M" <<std::endl;
     indirection->at(container->begin()[b].first) = a;
+    //std::cout << "N" <<std::endl;
 
 }
 void p_queue::insert(Point& x, int p)
 {   
-
+    //std::cout << "Inserting point" <<std::endl;
     auto elem = std::pair<Point, int>(x,p);
 
     //Addes element to bottom of heap and adds to indirection
@@ -151,10 +165,14 @@ Point& p_queue::pop()
       //pop off last element from heap
       //push down from root element to heapify heap
     }
+
+    return result.first;
 }
 
 void p_queue::ndelete(Point& P){
+
     if(contains(P)){
+        //std::cout << "Deleting point" << std::endl;
         int index = indirection->at(P);
         swap_nodes(index, container->size() - 1);
         pop();
