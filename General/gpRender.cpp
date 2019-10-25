@@ -121,6 +121,15 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
+		// checks if it's the hp bar
+		else if (entity == osEntity.at(osEntity.size()-1)){
+			SDL_Point center;
+			SDL_Rect campos = {entity->getX() + camera.x, entity->getY() + camera.y, entity->getW(), entity->getH()};
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
+		}
 
 		//check if entity within range of camera
 		else if ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
@@ -145,6 +154,8 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			}
 		}
 	}
+	
+	
 	SDL_RenderPresent(gRenderer);
 
 	//If you are using new functionality
