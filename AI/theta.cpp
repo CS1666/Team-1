@@ -16,7 +16,7 @@ constexpr int ZONE_HEIGHT = 720;
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
 {
-    //std::cout << "Path finding" << std::endl;
+    ////std::cout << "Path finding" << std::endl;
     // gScore is our cost map for each point
     gScore = std::map<Point, int>();
     gScore.insert(std::pair<Point, int>(start, 0));
@@ -27,13 +27,13 @@ Path Pathfinder::pathfind(Point start, Point goal)
     
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
-    //std::cout << "Before p_queue" << std::endl;
+    ////std::cout << "Before p_queue" << std::endl;
     open =  new p_queue();
-    //std::cout << "After p_queue" << std::endl;
+    ////std::cout << "After p_queue" << std::endl;
 
-    //std::cout << "Before insert" << std::endl;
+    ////std::cout << "Before insert" << std::endl;
     open->insert(start, 0);
-    //std::cout << "After insert" << std::endl;
+    ////std::cout << "After insert" << std::endl;
 
     
     // Closed is the closed set unsurprisingly
@@ -46,55 +46,55 @@ Path Pathfinder::pathfind(Point start, Point goal)
     {
         
         // Get the point with the LOWEST expected cost
-        //std::cout << "Before pop" << std::endl;
+        ////std::cout << "Before pop" << std::endl;
         Point s = open->pop();
-        std::cout << "After pop" << std::endl;
-        std::cout << "x: " << s.first << "y: " << s.second << std::endl;
+        //std::cout << "After pop" << std::endl;
+        //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
         if (s == goal)
         {   
-            //std::cout << "reconstructing" << std::endl;
+            ////std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
         }
 
-        std::cout << "size 2 " << open->getSize() << std::endl;
+        //std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
-        std::cout << "size:  " << open->getSize() << std::endl;
+        //std::cout << "size:  " << open->getSize() << std::endl;
 
         std::vector<Point> npath = neighborhood(s);
         for (std::pair<int,int> neighbor : npath)
         {
             
-            std::cout << "Stuck a " << i << std::endl;
+            //std::cout << "Stuck a " << i << std::endl;
             i = i + 1;
             auto inClosed = closed.find(neighbor);
-            std::cout << "Stuck c" << i << std::endl;
+            //std::cout << "Stuck c" << i << std::endl;
 
 
             if (inClosed == closed.end())
             {   
 
                 
-                std::cout << "Stuck d" << i << std::endl;
+                //std::cout << "Stuck d" << i << std::endl;
 
                 if (!open->contains(neighbor))
                 {
-                    std::cout << "Stuck b " << i + 20 << std::endl;
+                    //std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
                     gScore.insert(std::pair<Point, int>(neighbor, std::numeric_limits<int>::max()));
                     parent.insert(std::pair<Point, Point>(neighbor, Point{0,0}));
                 }
-                std::cout << "UP V " << i + 20 << std::endl;
+                //std::cout << "UP V " << i + 20 << std::endl;
                 update_vertex(s, neighbor, goal);
-                 if(neighbor.first == 100 and neighbor.second == 200){
-                    open->print_pque();
-                }
+                 //if(neighbor.first == 100 and neighbor.second == 200){
+                    //open->print_pque();
+                //}
     
-                std::cout << "Done up V " << i + 20 << std::endl;
+                //std::cout << "Done up V " << i + 20 << std::endl;
             }
         }
     }
-    //std::cout << "Stuck 4" << std::endl;
+    ////std::cout << "Stuck 4" << std::endl;
     return Path();
 }
 
@@ -124,7 +124,7 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
 {
     
     std::vector<Point> result = defineNeighbors(s);
-    ////std::cout << "Bf iter "  << std::endl;                    
+    //////std::cout << "Bf iter "  << std::endl;                    
     for(auto itr : result)
     {   
         
@@ -135,7 +135,7 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
             
             result.push_back(itr);
         }
-        ////std::cout << "Lff iter"  << std::endl;
+        //////std::cout << "Lff iter"  << std::endl;
     }
     return result;
 }
@@ -238,7 +238,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    ////std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    //////std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
     std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {
