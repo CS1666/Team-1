@@ -2,14 +2,20 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <map>
+#include <unordered_map>
 
 
 // Priority queue with random access
 
 typedef std::pair<int,int> Point;
 
-
+struct pair_hash
+{
+    std::size_t operator() (const std::pair<int, int> & pair) const
+    {
+        return std::hash<int>()(pair.first)^std::hash<int>()(pair.second);
+    }
+};
 
 class p_queue
 {
@@ -32,8 +38,9 @@ class p_queue
         int getLeftNode(int currpos);
         int getRightNode(int currpos);
         int getParent(int currpos);
+        void print_pque();
 
     private:
         std::vector<std::pair<Point, int>>* container;
-        std::map<Point, int>* indirection;
+        std::unordered_map<Point, int, pair_hash>* indirection;
 };

@@ -90,13 +90,6 @@
 		{
 		    pair<int,int> curPos=theShip.getPosition();
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
-            //queue<pair<int,int>> tmp_queue = *pth;
-
-            //while(!tmp_queue.empty()){
-
-                //std::cout << "X point: " << tmp_queue.front().first << "Y point: " << tmp_queue.front().second << endl;
-                //tmp_queue.pop();
-            //}
-
+            
 		    return pth;
 		}

@@ -40,7 +40,7 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
 	aiShip.setPosition(pair<int,int>(10,10));
-	aiShip.setDestination(pair<int,int>(100, 200));
+	aiShip.setDestination(pair<int,int>(1010, 600));
 
 	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
 	//SDL_Rect db = {50,325,75,75};
@@ -111,10 +111,7 @@ void run_ai_enviro(gpRender gr){
 	bool gameon = true;
 	
 
-	//std::queue<pair<int,int>> test=queue<pair<int,int>>();
- 	//test.push(pair<int,int>(225,225));
-	//test.push(pair<int,int>(300,300));
-	//test.push(pair<int,int>(500,500));
+
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
 	Pathfinder path(mesh, 10);
@@ -136,6 +133,17 @@ void run_ai_enviro(gpRender gr){
 		   
 		    
 		    aiShip.followPath(playerent);
+
+		}
+		else{
+			;
+		    
+		    aiShip.setDestination(pair<int,int>(10, 60));
+
+		    pathq = ai.calculatePath(aiShip, path);
+		
+		    aiShip.setPath(pathq);
+		   
 		}
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -144,7 +152,6 @@ void run_ai_enviro(gpRender gr){
 		}
 
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}

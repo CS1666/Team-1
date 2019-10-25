@@ -48,43 +48,49 @@ Path Pathfinder::pathfind(Point start, Point goal)
         // Get the point with the LOWEST expected cost
         //std::cout << "Before pop" << std::endl;
         Point s = open->pop();
-        //std::cout << "After pop" << std::endl;
-        //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
+        std::cout << "After pop" << std::endl;
+        std::cout << "x: " << s.first << "y: " << s.second << std::endl;
         if (s == goal)
         {   
             //std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
         }
 
-        //std::cout << "size 2 " << open->getSize() << std::endl;
+        std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
-       std::cout << "size:  " << open->getSize() << std::endl;
+        std::cout << "size:  " << open->getSize() << std::endl;
 
         std::vector<Point> npath = neighborhood(s);
-        for (auto neighbor : npath)
+        for (std::pair<int,int> neighbor : npath)
         {
-            //std::cout << "Stuck a " << i << std::endl;
+            
+            std::cout << "Stuck a " << i << std::endl;
             i = i + 1;
             auto inClosed = closed.find(neighbor);
-            //std::cout << "Stuck c" << i << std::endl;
+            std::cout << "Stuck c" << i << std::endl;
 
 
             if (inClosed == closed.end())
             {   
+
                 
-                //std::cout << "Stuck d" << i << std::endl;
+                std::cout << "Stuck d" << i << std::endl;
 
                 if (!open->contains(neighbor))
                 {
-                    //std::cout << "Stuck b " << i + 20 << std::endl;
+                    std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
                     gScore.insert(std::pair<Point, int>(neighbor, std::numeric_limits<int>::max()));
                     parent.insert(std::pair<Point, Point>(neighbor, Point{0,0}));
                 }
-                //std::cout << "UP V " << i + 20 << std::endl;
+                std::cout << "UP V " << i + 20 << std::endl;
                 update_vertex(s, neighbor, goal);
-                //std::cout << "Done up V " << i + 20 << std::endl;
+                 if(neighbor.first == 100 and neighbor.second == 200){
+                    open->print_pque();
+                }
+    
+                std::cout << "Done up V " << i + 20 << std::endl;
             }
         }
     }
@@ -120,13 +126,13 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     std::vector<Point> result = defineNeighbors(s);
     ////std::cout << "Bf iter "  << std::endl;                    
     for(auto itr : result)
-    {
-        ////std::cout << "iter.first" << itr.first << std::endl;
-        ////std::cout << "itr.second" << itr.second << std::endl;
+    {   
+        
+        
 
         if (!mesh[itr.first][itr.second])
         {
-            ////std::cout << "push back"  << std::endl;
+            
             result.push_back(itr);
         }
         ////std::cout << "Lff iter"  << std::endl;
@@ -187,30 +193,45 @@ bool Pathfinder::isOutofBound(Point s, int xdif, int ydif){
 
 // Main difference between A* and Theta*. This checks for euclidean distance instead of just adjacency
 void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
-{
-    if (line_of_sight(s, neighbor))
-    {
-        if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
-        {
-            gScore[neighbor] = gScore[parent[s]] + distance(parent[s], neighbor);
-            parent[neighbor] = parent[s];
-          
-            open->ndelete(neighbor);
-            
-            open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
-        }
-    } 
-    else
-    {
-        if (gScore[s] + distance(s, neighbor) < gScore[neighbor])
-        {
-            gScore[neighbor] = gScore[s] + distance(s, neighbor);
-            parent[neighbor] = s;
-           
-            open->ndelete(neighbor);
-            open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
-        }
+{       
+    if(neighbor == goal){
+
+        open->ndelete(neighbor);
+               
+        open->insert(neighbor, 0);
     }
+
+    else{
+  
+        if (line_of_sight(s, neighbor))
+        {
+            if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
+            {
+                gScore[neighbor] = gScore[parent[s]] + distance(parent[s], neighbor);
+                parent[neighbor] = parent[s];
+              
+                open->ndelete(neighbor);
+               
+                open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
+            }
+        } 
+        else
+        {
+            if (gScore[s] + distance(s, neighbor) < gScore[neighbor])
+            {
+                gScore[neighbor] = gScore[s] + distance(s, neighbor);
+                parent[neighbor] = s;
+               
+                open->ndelete(neighbor);
+                
+                open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
+            }
+        }
+
+    }
+
+    
+   
 }
 
 
