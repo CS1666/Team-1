@@ -89,12 +89,12 @@
         return maxVelocity;
     }
 
-    int Ship::getHP()
+    int Ship::getHp()
     {
 	return hp;    
     }
 
-    void Ship::setHP(int newHp)
+    void Ship::setHp(int newHp)
     {
 	hp = newHp;    
     }
