@@ -50,6 +50,7 @@ void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite;
+	std::vector<Sprite*> osSprite2;
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -62,15 +63,15 @@ void run_phy_enviro(gpRender gr){
 	Ship playerent(db, tex, 0);
 	//playerent.setHp(100);
 	osSprite.push_back(&playerent);
+	osSprite2.push_back(&playerent);
 
-	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
-
+	osSprite2.push_back(&starent);
 	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
@@ -78,13 +79,19 @@ void run_phy_enviro(gpRender gr){
 	Planet planet1ent(db3, tex3);
 	planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
+	osSprite2.push_back(&planet1ent);
 	//Ship Cruiser initilization
 	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	//SDL_Rect db3 = {400,300,225,300};
 	//Sprite emyent(db3, tex3);
 
 	//osSprite.push_back(&emyent);
-
+	
+	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
+	SDL_Rect hp = {10,10,300,20};
+	HpBar hpent(hp, texhp, playerent.getHp());
+	osSprite2.push_back(&hpent);
+	
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -128,7 +135,7 @@ void run_phy_enviro(gpRender gr){
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
-
+		
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
@@ -194,6 +201,6 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
 }
