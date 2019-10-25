@@ -90,6 +90,16 @@
         return maxVelocity;
     }
 
+    int Ship::getHp()
+    {
+	return hp;    
+    }
+
+    void Ship::setHp(int newHp)
+    {
+	hp = newHp;    
+    }
+
     //ai follows path assigned to it by ai class
     void Ship::followPath(Sprite& entity)
     {

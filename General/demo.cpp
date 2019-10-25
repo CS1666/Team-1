@@ -48,7 +48,8 @@ constexpr int ZONE_HEIGHT = 2160;
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite;
+	std::vector<Sprite*> osSprite; // vector for collision checker
+	std::vector<Sprite*> osSprite2; // 2nd vector for rendering (will contain objects that ignore collision)
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -63,7 +64,7 @@ void run_demo(gpRender gr){
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
-
+	
 	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
@@ -72,8 +73,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&starent);
 
-		osSprite.push_back(&starent);
-SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Sprite planet1ent(db3, tex3);
 
@@ -132,6 +132,16 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	Sprite asteroid4ent(db12, tex12);
 
 	osSprite.push_back(&asteroid4ent);
+
+
+	for(auto sprite : osSprite){
+		osSprite2.push_back(sprite);
+	}
+
+	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
+	SDL_Rect hp = {10,10,300,20};
+	HpBar hpent(hp, texhp, playerent.getHp());
+	osSprite2.push_back(&hpent);
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -248,7 +258,7 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 			fixed = true;
 		}
 
-		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
 	
 	Ellers_Maze test_maze;
