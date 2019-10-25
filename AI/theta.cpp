@@ -59,7 +59,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         //std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
-       //std::cout << "size:  " << open->getSize() << std::endl;
+       std::cout << "size:  " << open->getSize() << std::endl;
 
         std::vector<Point> npath = neighborhood(s);
         for (auto neighbor : npath)

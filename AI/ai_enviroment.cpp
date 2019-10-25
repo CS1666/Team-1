@@ -47,6 +47,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	Sprite playerent(db, tex);
+	Sprite hpent(db, tex);
 	osSprite.push_back(&playerent);
 
 	//positions = gameState, only track the ship for now
@@ -62,6 +63,7 @@ void run_ai_enviro(gpRender gr){
 	Sprite starent(db2, tex2);
 
 	osSprite.push_back(&starent);
+	osSprite.push_back(&hpent);
 
 	srand(time(0));
 	SDL_Rect bgtile[100];
