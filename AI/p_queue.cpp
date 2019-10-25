@@ -1,40 +1,167 @@
 #include "p_queue.h"
 #include <iostream>
-
-
-struct lessPriority
-{
-    const bool &operator()(const std::pair<Point, int> &p1, const std::pair<Point, int> &p2)
-    {
-        return p1.second > p2.second;
-    }
-};
+#include <ctime>
+#include <stdexcept>
 
 p_queue::p_queue(){
-    container = new std::vector<std::pair<Point,int>>;
+    container = new std::vector<std::pair<Point,int>>();
+    indirection = new std::map<Point, int>;
 }
 
 p_queue& p_queue::operator=(p_queue& a){
 
-    std::vector<std::pair<Point,int>>* npq = new std::vector<std::pair<Point,int>>();
-    while(!a.getContainer()->empty()){
-        npq->push_back(a.getContainer()->back());
-        a.getContainer()->pop_back();
-    }
+    std::vector<std::pair<Point,int>>* npq = new std::vector<std::pair<Point,int>>;
+    std::map<Point, int>* nin = new std::map<Point, int>;
 
-    delete a.getContainer();
+    npq = a.container;
+
+    delete a.container;
     a.container = npq;
+
+    nin = a.indirection;
+
+    delete a.indirection;
+    a.indirection = nin;
+
     return *this;
 }
-
-
-void p_queue::push(Point& x, int p)
+bool p_queue::lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2)
 {
-    auto elem = std::pair<Point, int>(x,p);
-    container->push_back(elem);
-    std::push_heap(container->begin(), container->end(), lessPriority());
+    return p1.second > p2.second;
 }
 
+void p_queue::push_up_heap(int index){
+    std::pair<Point, int> child = container->at(index);
+    std::pair<Point, int> parent = container->at(getParent(index));
+    while(!lessPriority(child,parent)){
+
+        swap_nodes(index, getParent(index));
+        index = getParent(index);
+        child = container->at(index);
+
+        //Stop if at top of heap
+        if(index == 0){
+            break;
+        }
+        parent = container->at(getParent(index));
+
+    }
+}
+
+void p_queue::push_down_heap(int index){
+    
+    int currindex = index;
+    int rindex = getRightNode(currindex);
+    int lindex = getRightNode(currindex);
+    std::pair<Point, int> parent;
+    std::pair<Point, int> lchild;
+    std::pair<Point, int> rchild;
+
+    parent = container->at(index);
+
+    //Checks to make sure both left and right child exist before assigning them
+    //To respective var
+    //If they do not exist assign point, int pair where
+    //Point = (-1,-1)
+    //int = infinity
+    if(lindex < container->size()){
+        lchild = container->at(getLeftNode(index));
+    }
+    else{
+        lchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
+    }
+
+    if(rindex < container->size()){
+        rchild = container->at(getRightNode(index));
+    }
+    else{
+        rchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
+    }
+     
+     
+    while(lessPriority(parent, lchild) || lessPriority(parent, rchild) ){
+
+        //Go right
+        if(lessPriority(lchild, rchild)){
+            swap_nodes(index, getRightNode(index));
+            index = getRightNode(index);
+        }
+        //Go left
+        else{
+            swap_nodes(index, getLeftNode(index));
+            index = getLeftNode(index);
+        }
+        
+      
+        parent = container->at(index);
+        
+        if(lindex < container->size()){
+            lchild = container->at(getLeftNode(index));
+        }
+        else{
+            lchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
+        }
+
+        if(rindex < container->size()){
+            rchild = container->at(getRightNode(index));
+        }
+        else{
+            rchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
+        }
+    }
+}
+
+void p_queue::swap_nodes(int a, int b){
+
+    //swap points in priority queue
+    std::pair<Point,int> temp = container->begin()[a];
+    container[a] = container[b];
+    container->at(b) = temp;
+
+    //swap points in inderection
+    indirection->at(container->begin()[a].first) = b;
+    indirection->at(container->begin()[b].first) = a;
+
+}
+void p_queue::insert(Point& x, int p)
+{   
+
+    auto elem = std::pair<Point, int>(x,p);
+
+    //Addes element to bottom of heap and adds to indirection
+    container->push_back(elem);
+    indirection->insert(std::pair<Point,int>(elem.first, (container->size() - 1)));
+
+    //Begins heapify process
+    push_up_heap(container->size() - 1); 
+  
+}
+
+Point& p_queue::pop()
+{
+    std::pair<Point, int> result;
+    if (!container->empty())
+    {
+      swap_nodes(0, container->size() - 1);
+      result = container->at(container->size() - 1);
+      container->pop_back();
+      indirection->erase(result.first);
+
+
+      //pop off last element from heap
+      //push down from root element to heapify heap
+    }
+}
+
+void p_queue::ndelete(Point& P){
+    if(contains(P)){
+        int index = indirection->at(P);
+        swap_nodes(index, container->size() - 1);
+        pop();
+        push_down_heap(index);
+    }
+    
+}
 
 Point& p_queue::top()
 {
@@ -43,19 +170,6 @@ Point& p_queue::top()
         return container->begin()->first;
     }
 }
-
-
-Point& p_queue::pop()
-{
-    if (!container->empty())
-    {
-        std::pop_heap(container->begin(), container->end(), lessPriority());
-        auto result = container->back();
-        container->pop_back();
-        return result.first;
-    }
-}
-
 
 bool p_queue::empty()
 {
@@ -68,56 +182,38 @@ bool p_queue::contains(Point& key)
     if(container->empty()){
         return false;
     }
-    auto pqiter = find(key);
-    return compPoints(pqiter->first, key);
+    try{
+        auto pqiter = indirection->at(key);
+    }catch(std::out_of_range& ex){
+        return false;
+    }
+    
+    return true;
    
 }
 
 std::vector<std::pair<Point,int>>* p_queue::getContainer(){
     return container;
 }
-void p_queue::remove(Point& key)
-{   
-      if(!container->empty()){
-       
-    
-        auto pqiter = find(key);
 
-    
-        if(compPoints(pqiter->first, key)){
-            //std::cout << "Removing points" <<  std::endl;
-            container->erase(find(key));
-        
-        }
-    }
-    
-    
-}
 
 int p_queue::getSize(){
     return container->size();
 }
 
-bool p_queue::compPoints(Point& a, Point& b){
-    return a.first == b.first && a.second == b.second;
+
+int p_queue::getLeftNode(int currpos){
+    return 2*currpos + 1 ;
 }
 
-std::vector<std::pair<Point,int>>::iterator p_queue::find(Point& key){
-   int i = 0;
-   auto pq_iter = container->begin();
-   
-  for (auto iter = container->begin(); iter != std::prev(container->end()); ++iter) {
-        if (compPoints((pq_iter->first), key)){
-             return pq_iter;
-        }
-
-        advance(pq_iter, 1);
-        i++;
-    
-    }
-
-
-    return pq_iter;
+int p_queue::getRightNode(int currpos){
+    return 2*currpos + 2;
 }
+
+int p_queue::getParent(int currpos){
+    return (currpos - 1)/2;
+}
+
+
 
 

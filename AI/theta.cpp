@@ -27,7 +27,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     open =  new p_queue();
-    open->push(start, 0);
+    open->insert(start, 0);
     
     // Closed is the closed set unsurprisingly
     closed = std::set<Point>();
@@ -41,7 +41,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         // Get the point with the LOWEST expected cost
         
         Point s = open->pop();
-        std::cout << "x: " << s.first << "y: " << s.second << std::endl;
+        //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
         if (s == goal)
         {   
             //std::cout << "reconstructing" << std::endl;
@@ -51,7 +51,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         //std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
-        //std::cout << "size 2 " << open->getSize() << std::endl;
+       //std::cout << "size:  " << open->getSize() << std::endl;
 
         std::vector<Point> npath = neighborhood(s);
         for (auto neighbor : npath)
@@ -60,6 +60,8 @@ Path Pathfinder::pathfind(Point start, Point goal)
             i = i + 1;
             auto inClosed = closed.find(neighbor);
             //std::cout << "Stuck c" << i << std::endl;
+
+
             if (inClosed == closed.end())
             {   
                 
@@ -186,9 +188,9 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
             parent[neighbor] = parent[s];
             if (open->contains(neighbor))
             {
-                open->remove(neighbor);
+                open->ndelete(neighbor);
             }
-            open->push(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
+            open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
         }
     } 
     else
@@ -199,9 +201,9 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
             parent[neighbor] = s;
             if (open->contains(neighbor))
             {
-                open->remove(neighbor);
+                open->ndelete(neighbor);
             }
-            open->push(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
+            open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
         }
     }
 }
@@ -210,7 +212,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    //std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
     std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {
