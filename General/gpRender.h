@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <string>
 #include "Sprite.h"
+#include "../General/HpBar.h"
 
 #pragma once
 
@@ -23,7 +24,7 @@ class gpRender{
 		//Renders passend in entities on screen
 
 
-		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
+		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
 
 		//Renders background on screen (camera?)
 		//void renderBackground(std::);
@@ -57,5 +58,6 @@ class gpRender{
 		int SCREEN_HEIGHT = 720;
 		int FPS = 60;
 		int frameDelay = 1000/ FPS;
+		SDL_Texture* bgsheet;
 		
 };

@@ -11,6 +11,8 @@ gpRender::gpRender() {};
 gpRender::gpRender(const char* win_name){
 	// Flag what subsystems to initialize
 	// For now, just video
+	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -49,6 +51,7 @@ gpRender::gpRender(const char* win_name){
 		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
 		isInit =  false;
 	}
+	bgsheet = loadImage("Assets/Objects/backgroundss.png");
 };
 
 //--------------------------------Destructors---------------------------------------------------
@@ -71,36 +74,41 @@ gpRender::~gpRender(){
 
 //Method that renders images onto the window
 
-void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
+void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed){
 	
 	SDL_RenderClear(gRenderer);
 
-	//Render 2 Background Layers
-	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
+	
 
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=20){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=20){
-			//random background galaxy
-			//if(background1[i/20][j/20]->x == 400){
-			//	SDL_Rect campos = {i - camera.x - (i % 200), j - camera.y - (j % 200), 200, 200};
-			//	SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
-			//}
-			//else{
-				SDL_Rect campos = {i - camera.x - (i % 20), j - camera.y - (j % 20), 20, 20};
-				SDL_RenderCopy(gRenderer, bgsheet, background1[i/20][j/20], &campos);
-			//}
+	if (camera.x - 200 < galaxies[0] && galaxies[0] < camera.x + SCREEN_WIDTH*3 &&
+		camera.y - 200 < galaxies[1] && galaxies[1] < camera.x + SCREEN_WIDTH*3){
+		SDL_Rect galaxy1 = {400, 0, 200, 200};
+		SDL_Rect campos = {(galaxies[0] - camera.x)/3, (galaxies[1] - camera.y)/3, 50, 50};
+		SDL_RenderCopy(gRenderer, bgsheet, &galaxy1, &campos);
+	}
+
+	if (camera.x - 200 < galaxies[2] && galaxies[2] < camera.x + SCREEN_WIDTH*3 &&
+		camera.y - 200 < galaxies[3] && galaxies[3] < camera.x + SCREEN_WIDTH*3){
+		SDL_Rect galaxy2 = {400, 200, 200, 200};
+		SDL_Rect campos = {(galaxies[2] - camera.x)/3, (galaxies[3] - camera.y)/3, 50, 50};
+		SDL_RenderCopy(gRenderer, bgsheet, &galaxy2, &campos);
+	}
+
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH*2; i+=40){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT*2; j+=40){
+			SDL_Rect campos = {(i - camera.x - (i % 40))/2, (j - camera.y - (j % 40))/2, 40, 40};
+			SDL_RenderCopy(gRenderer, bgsheet, background1[i/40][j/40], &campos);
 		}
 	}
 	
-	for(int i = camera.x; i < camera.x + SCREEN_WIDTH; i+=40){
-		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT; j+=40){
+	for(int i = camera.x; i < camera.x + SCREEN_WIDTH/2; i+=40){
+		for (int j = camera.y; j < camera.y + SCREEN_HEIGHT/2; j+=40){
 			SDL_Rect campos = {(i - camera.x - (i % 40))*2, (j - camera.y - (j % 40))*2, 40, 40};
 			SDL_RenderCopy(gRenderer, bgsheet, background2[i/40][j/40], &campos);
 		}
 	}
 
-	SDL_RenderClear(gRenderer);
-
+	//render gameplay objects
 	for(auto entity : osEntity){
 
 		//To check if entity is player, player must be the first entity added
@@ -112,6 +120,23 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<s
 			SDL_Rect camcenter = {SCREEN_WIDTH/2 - entity->getW()/2, SCREEN_HEIGHT/2 - entity->getH()/2, entity->getW(), entity->getH()};
 			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
+		}
+		// checks if it's the hp bar
+		else if (entity == osEntity.at(osEntity.size()-1)){
+			SDL_Point center;
+			int hpX = osEntity.at(0)->getX() - SCREEN_WIDTH*5;
+			int hpY = osEntity.at(0)->getY() - SCREEN_HEIGHT*5;
+			if(hpX < 10)
+				hpX = 10;
+			if(hpY < 10)
+				hpY = 10;
+			entity->setX(hpX);
+			entity->setY(hpY);
+			SDL_Rect campos = {entity->getX(), entity->getY(), entity->getW(), entity->getH()};
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
 
 		//check if entity within range of camera
@@ -137,6 +162,8 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<s
 			}
 		}
 	}
+	
+	
 	SDL_RenderPresent(gRenderer);
 
 	//If you are using new functionality

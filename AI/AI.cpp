@@ -1,4 +1,6 @@
 #include "AI.h"
+
+
   
         void AI::setShips(vector<Ship> newShips)
         {
@@ -15,10 +17,10 @@
             
         }*/
 
-        int AI::calculateDistance(vector<int> start, vector<int> stop)
+        int AI::calculateDistance(pair<int,int> start, pair<int,int> stop)
         {
-        	int x = stop[0] - start[0];
-        	int y = stop[1] - start[1];
+        	int x = stop.first - start.first;
+        	int y = stop.second - start.second;
 
         	int z = sqrt(x*x + y*y);
 
@@ -30,7 +32,7 @@
 
     	}
 
-    	void AI::createMapState(Sector currentSector)
+    	bool AI::createMapState(Sector currentSector)
     	{
 
     		vector<int> sectorSize = currentSector.getSize();
@@ -47,39 +49,47 @@
 
                 for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
                 {
-                    newStoredMapState[x][starPosition[1]] = true;
-                    newStoredMapState[x][starPosition[1] - starSize[1]] = true;
+
+                    newStoredMapState[x][starPosition[1]] = 1;
+
+                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
                 }
+
 
                 for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
                 {
-                    newStoredMapState[starPosition[0]][y] = true;
-                    newStoredMapState[starPosition[0] + starSize[0]][y] = true;
+                    newStoredMapState[starPosition[0]][y] = 1;
+                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
                 }
             }
             
-            AI::storedMapState = newStoredMapState;
+            if(checkMapState(newStoredMapState)){
+                storedMapState=newStoredMapState;
+                return true;
+            }
+            return false;
 
     	}
+
+        vector<vector<bool>> AI::getMapState(){
+            return storedMapState;
+        }
 
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
-		    /*cout<<"storedmap = "<<endl;
-		    for(auto x:storedMapState)
-			for(auto y:x)
-			    cout<<"y = "<<y<<endl;*/
-		    if(storedMapState==newState)
-			return false;
-		    storedMapState=newState;
+		    if(storedMapState==newState){
+                return false;
+            }
+			     
+
 		    return true;
 		}
 		//calculate the path for a ship and destination
-		queue<vector<int>> AI::calculatePath(Ship theShip, vector<int> destination)
+		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
-		    vector<int> curPos=theShip.getPosition();
-		    queue<vector<int>> path=queue<vector<int>>();
-		    //insert pathfinding algorithm here to get actions 
-
-		    return path;
+		    pair<int,int> curPos=theShip.getPosition();
+		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
+            
+		    return pth;
 		}
