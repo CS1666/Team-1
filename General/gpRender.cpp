@@ -124,7 +124,15 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 		// checks if it's the hp bar
 		else if (entity == osEntity.at(osEntity.size()-1)){
 			SDL_Point center;
-			SDL_Rect campos = {entity->getX() + camera.x, entity->getY() + camera.y, entity->getW(), entity->getH()};
+			int hpX = osEntity.at(0)->getX() - SCREEN_WIDTH;
+			int hpY = osEntity.at(0)->getY() - SCREEN_HEIGHT;
+			if(hpX < 10)
+				hpX = 10;
+			if(hpY < 10)
+				hpY = 10;
+			entity->setX(hpX);
+			entity->setY(hpY);
+			SDL_Rect campos = {entity->getX(), entity->getY(), entity->getW(), entity->getH()};
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
 			
