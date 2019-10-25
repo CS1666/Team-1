@@ -48,9 +48,11 @@ std::vector<std::pair<int, int>> randNumP(){
 }
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
-
 	std::vector<Sprite*> osSprite;
 	std::vector<Sprite*> osSprite2;
+
+	bool gameon = false;
+	int titleFrame = 0;
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -125,11 +127,37 @@ void run_phy_enviro(gpRender gr){
 
 
 	SDL_Event e;
-	bool gameon = true;
+	
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
 	Uint32 anim_last_time = SDL_GetTicks();
+
+	SDL_Texture* titletex = gr.loadImage("Assets/Objects/title1.png");
+	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
+	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	SDL_Event s;
+	while(!gameon){
+		if(titleFrame == 0){
+			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
+			titleFrame++;
+		}else{
+			SDL_RenderCopy(gr.getRender(), titletex2, nullptr, &title);
+			titleFrame--;
+		}
+		SDL_RenderPresent(gr.getRender());
+		SDL_Delay(300);
+		while(SDL_PollEvent(&s)){	
+			switch(s.key.keysym.sym) {
+				case SDLK_RETURN:
+					if(s.type == SDL_KEYDOWN){
+						SDL_RenderClear(gr.getRender());
+						gameon = true;
+					}
+			}	
+			
+		}
+	}
 
 	//Game Loop
 	while(gameon) {
