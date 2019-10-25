@@ -25,9 +25,12 @@ void Planet::initVelocity(Star& star)
 	}
 	angle += 1.57079632679;
 	//float vel = std::sqrt(1000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
-	float vel = 5;
+	float vel = 100;
 	vx = vel*cos(angle);
 	vy = vel*sin(angle);
+	std::cout << angle * 180 / 3.1415926 << std::endl;
+	std::cout << vx << std::endl;
+	std::cout << vy << std::endl;
 }
 
 int Planet::getRadius()
@@ -79,12 +82,10 @@ void Planet::updatePosition()
 	std::cout << "fy : " << fy << std::endl;
 	std::cout << "vx : " << vx << std::endl;
 	std::cout << "vy : " << vy << std::endl;
-	vx += fx;
-	vy += fy;
-	this->setX(this->getTrueX() + vx);
-	this->setY(this->getTrueY() + vy);
-	std::cout << "vx : " << vx << std::endl;
-	std::cout << "vy : " << vy << std::endl;
+	vx += fx*TimeData::get_timestep();
+	vy += fy*TimeData::get_timestep();
+	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
+	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
 	std::cout << "planet X: " << this->getTrueX() << std::endl;
 	std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
@@ -95,13 +96,15 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 	planetY = getTrueY() + getH()/2.0;
 	bodyX = sun.getTrueX() + sun.getW()/2.0;
 	bodyY = sun.getTrueY() + sun.getH()/2.0;
-	//make fix 	pointSlope = (bodyY - planetY)/(bodyX - planetX);
+	pointSlope = (bodyY - planetY)/(bodyX - planetX);
 	pointAngle = atan(pointSlope);
 	if(planetX > bodyX)
 	{
 		pointAngle += 3.1415926;
 	}
-	float grav = 0;//100000/((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
+	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
+	float grav = 10000.0/600; //std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
+	//grav *= TimeData::get_timestep()*TimeData::get_timestep();
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);
 	return {gravX, gravY};

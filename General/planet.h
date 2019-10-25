@@ -35,6 +35,7 @@ private:
 	float fy;
 	float vx;
 	float vy;
+	//float totalGrav;
 	string sprite;
 	Star sun;
 	int mass;
