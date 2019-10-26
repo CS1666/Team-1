@@ -1,6 +1,7 @@
 
 #include "Ship.h"
 #include <SDL.h> //temp
+#include <iostream>
     Ship::Ship(): Sprite() {};
 
     Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
@@ -42,7 +43,7 @@
 
 
     //integrate BasicMovementFPSlimit.cpp
-    void Ship::setPosition(vector<int> newPosition)
+    void Ship::setPosition(pair<int,int> newPosition)
     {
         position = newPosition;
     }
@@ -63,17 +64,17 @@
         hull = newHull;
     }
     
-    vector<int> Ship::getPosition()
+    pair<int,int> Ship::getPosition()
     {
         return position;
     }
 
-    void Ship::setDestination(vector<int> newDestination)
+    void Ship::setDestination(pair<int,int> newDestination)
     {
         destination = newDestination;
     }
 
-    vector<int> Ship::getDestination()
+    pair<int,int> Ship::getDestination()
     {
         return destination;
     }
@@ -109,8 +110,10 @@
 		pair<int,int> coords=path->front();
 		int x_coord=coords.first;
 		int y_coord=coords.second;
-		int cur_x=position[0];
-		int cur_y=position[1];
+		int cur_x=position.first;
+		int cur_y=position.second;
+
+        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//currently will literally go 1 pixel at a time.
@@ -127,8 +130,8 @@
 			cur_y++;
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
-		    position[0]=cur_x;
-		    position[1]=cur_y;
+		    position.first=cur_x;
+		    position.second=cur_y;
 		}
 		else
 		    path->pop();

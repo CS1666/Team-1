@@ -13,7 +13,7 @@ class Ship : public Sprite
     private:
         int hull;
         string sprite;
-        vector<int> position;
+        pair<int,int> position;
         int velocity;
         float rotation;
         int weaponType;
@@ -28,7 +28,7 @@ class Ship : public Sprite
 
         //ai
         std::queue<pair<int,int>>* path;
-        vector<int> destination;
+        pair<int,int> destination;
         bool isUser;
         bool isAlly;
         bool pathComplete;
@@ -50,15 +50,15 @@ class Ship : public Sprite
         void updateMovement();
         void checkAction(/*stream*/);
         void updateHull(int newHull);
-        void setPosition(vector<int> newPosition);
-        vector<int> getPosition();
+        void setPosition(pair<int,int> newPosition);
+        pair<int,int> getPosition();
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
         bool getPathComplete();
-        vector<int> getDestination();
+        pair<int,int> getDestination();
         int getMaxVelocity();
-        void setDestination(vector<int> newDestination);
+        void setDestination(pair<int,int> newDestination);
         int getMass();
         void setHp(int newHp);
         int getHp();
