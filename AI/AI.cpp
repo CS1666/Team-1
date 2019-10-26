@@ -89,7 +89,8 @@
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
+		    cout<<curPos.first<<endl;
+		    cout<<curPos.second<<endl;
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
-            
 		    return pth;
 		}

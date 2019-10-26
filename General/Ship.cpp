@@ -112,7 +112,7 @@
 		int y_coord=coords.second;
 		int cur_x=position.first;
 		int cur_y=position.second;
-
+	cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
         std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
@@ -122,11 +122,11 @@
 		{
 		    if(cur_x>x_coord)
 			cur_x--;
-		    else
+		    else if(cur_x<x_coord)
 			cur_x++;
 		    if(cur_y>y_coord)
 			cur_y--;
-		    else
+		    else if(cur_y<y_coord)
 			cur_y++;
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
@@ -138,6 +138,7 @@
 	    }
 	    else
 	        pathComplete=true;
+	    cout<<pathComplete<<endl;
     }
 
     bool Ship::getPathComplete()
