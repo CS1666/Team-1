@@ -63,6 +63,7 @@ class Sprite{
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
+		int renderOrder;
 
 		//Velocity variables
 		//Probably should be moved to some physic related object
