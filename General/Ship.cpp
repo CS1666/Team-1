@@ -4,11 +4,11 @@
 #include <iostream>
     Ship::Ship(): Sprite() {};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
     Ship::~Ship()
     {
@@ -90,14 +90,24 @@
         return maxVelocity;
     }
 
-    int Ship::getHp()
+    int Ship::getCurrHp()
     {
-	return hp;    
+       return currHp;    
     }
 
-    void Ship::setHp(int newHp)
+    void Ship::setCurrHp(int newCurrHp)
     {
-	hp = newHp;    
+       currHp = newCurrHp;    
+    }
+
+    int Ship::getMaxHp()
+    {
+	   return maxHp;    
+    }
+
+    void Ship::setMaxHp(int newMaxHp)
+    {
+	   maxHp = newMaxHp;    
     }
 
     //ai follows path assigned to it by ai class
