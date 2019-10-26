@@ -48,9 +48,11 @@ std::vector<std::pair<int, int>> randNumP(){
 }
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
-
 	std::vector<Sprite*> osSprite;
 	std::vector<Sprite*> osSprite2;
+
+	bool gameon = false;
+	int titleFrame = 0;
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -61,7 +63,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
-	//playerent.setHp(100);
+	playerent.setHp(100);
 	osSprite.push_back(&playerent);
 	osSprite2.push_back(&playerent);
 
@@ -75,9 +77,9 @@ void run_phy_enviro(gpRender gr){
 	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-	SDL_Rect db3 = {1600,400,200,200};
+	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Planet planet1ent(db3, tex3);
-	planet1ent.initVelocity(starent);
+	//planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
 	//Ship Cruiser initilization
@@ -125,11 +127,37 @@ void run_phy_enviro(gpRender gr){
 
 
 	SDL_Event e;
-	bool gameon = true;
+	
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
 	Uint32 anim_last_time = SDL_GetTicks();
+
+	SDL_Texture* titletex = gr.loadImage("Assets/Objects/title1.png");
+	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
+	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	SDL_Event s;
+	while(!gameon){
+		if(titleFrame == 0){
+			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
+			titleFrame++;
+		}else{
+			SDL_RenderCopy(gr.getRender(), titletex2, nullptr, &title);
+			titleFrame--;
+		}
+		SDL_RenderPresent(gr.getRender());
+		SDL_Delay(300);
+		while(SDL_PollEvent(&s)){	
+			switch(s.key.keysym.sym) {
+				case SDLK_RETURN:
+					if(s.type == SDL_KEYDOWN){
+						SDL_RenderClear(gr.getRender());
+						gameon = true;
+					}
+			}	
+			
+		}
+	}
 
 	//Game Loop
 	while(gameon) {
