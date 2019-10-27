@@ -131,8 +131,6 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     for(auto itr : result)
     {   
         
-        
-
         if (!mesh[itr.first][itr.second])
         {
             

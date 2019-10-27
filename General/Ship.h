@@ -20,7 +20,9 @@ class Ship : public Sprite
         bool damageTaken;
         int maxVelocity;
         string currKey;
+
         int mass;
+        pair<int, int> size;
 
         float speedX;
         float speedY;
@@ -53,6 +55,10 @@ class Ship : public Sprite
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
+
+        void setSize(pair<int,int> newSize);
+        pair<int,int> getSize();
+
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
