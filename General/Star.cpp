@@ -1,8 +1,8 @@
 #include "Star.h"
-Star::Star(): Sprite() {};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+Star::Star(): Sprite(), type{2} {};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex), type{2}  {};
 
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass}, type{2}  {};
 
 int Star::getRadius()
 {

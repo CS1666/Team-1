@@ -62,7 +62,7 @@ class Ship : public Sprite
         int getMass();
         void setHp(int newHp);
         int getHp();
-};
+}; 
 
 class Hero:Ship{};
 

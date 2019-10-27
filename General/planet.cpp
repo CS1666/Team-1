@@ -28,9 +28,6 @@ void Planet::initVelocity(Star& star)
 	float vel = 100;
 	vx = vel*cos(angle);
 	vy = vel*sin(angle);
-	std::cout << angle * 180 / 3.1415926 << std::endl;
-	std::cout << vx << std::endl;
-	std::cout << vy << std::endl;
 }
 
 int Planet::getRadius()

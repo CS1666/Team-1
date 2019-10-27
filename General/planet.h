@@ -26,7 +26,6 @@ public:
 	void updatePosition();
 	//for now only calculate the gravity contribution from the sun
 	std::vector<float> calulateGravity(Star& sun);
-
 private:
 	int radius;
 	int velocity;

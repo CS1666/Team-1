@@ -7,7 +7,6 @@
 #pragma once
 
 
-
 class Sprite{
 
 	public:
@@ -54,16 +53,16 @@ class Sprite{
 		//Methods that deal with Circle drawn entities
 		NSDL_Circ* getDrawCirc();
 		bool isCircEnt(); 
-
-	
-
+		bool isShip();
+		bool isCelestialBody();
+		bool isUI();
 	protected:
 		float x,y;
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
-
+		int type = 0;
 		//Velocity variables
 		//Probably should be moved to some physic related object
 		float angle = 0.0;

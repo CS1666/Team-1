@@ -39,8 +39,6 @@
         speedY = speed;
     }
 
-
-
     //integrate BasicMovementFPSlimit.cpp
     void Ship::setPosition(vector<int> newPosition)
     {
