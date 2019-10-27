@@ -126,14 +126,13 @@ void run_ai_enviro(gpRender gr){
 		//position needs to be in booleans?
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
-			ai.createMapState(sector);
-		   
-		    
-		    //make a testing queue of a path
-		   
-		    
+		    ai.createMapState(sector);
 		    aiShip.followPath(playerent);
-
+		    if(aiShip.getPathComplete())
+		    {
+			pathq = ai.calculatePath(aiShip,path);
+			aiShip.setPath(pathq);
+		    }
 		}
 		else{
 			;
