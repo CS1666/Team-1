@@ -7,9 +7,9 @@ using namespace std;
 
 
 Planet::Planet(): Sprite() {};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun): Sprite(dBox, aTex), mass{mass} {initVelocity(sun);};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {renderOrder = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun): Sprite(dBox, aTex), mass{mass} {initVelocity(sun); renderOrder = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;

@@ -43,7 +43,8 @@ class Sprite{
 		void setF(int anim);
 		int getF();
 
-	
+		int getRenderOrder();
+		void setRenderOrder(int new_order);
 
 		
 		//Methods that deal with Rectangle drawn entities
@@ -57,12 +58,14 @@ class Sprite{
 		bool isCelestialBody();
 		bool isUI();
 	protected:
-		float x,y;
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
 		int type = 0;
+		float x,y;
+		int renderOrder;
+
 		//Velocity variables
 		//Probably should be moved to some physic related object
 		float angle = 0.0;
