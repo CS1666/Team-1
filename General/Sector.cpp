@@ -34,5 +34,13 @@ vector<vector<int> > Sector::getState()
 
 	}
 
+	for (Ship ship : __ships)
+	{
+		pair<int, int> size = ship.getSize();
+		pair<int, int> position = ship.getPosition();
+
+		currentState.push_back({position.first, position.second, size.first, size.second});
+	}
+
 	return currentState;
 }

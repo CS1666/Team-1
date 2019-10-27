@@ -100,6 +100,16 @@
 	hp = newHp;    
     }
 
+    pair<int, int> Ship::getSize()
+    {
+        return size;
+    }
+
+    void Ship::setSize(pair<int, int> newSize)
+    {
+        size = newSize;
+    }
+
     //ai follows path assigned to it by ai class
     void Ship::followPath(Sprite& entity)
     {

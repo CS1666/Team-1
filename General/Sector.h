@@ -13,7 +13,7 @@ class Sector
 	private:
 
 		vector<Star> __stars;
-		vextor<Ship> __ships;
+		vector<Ship> __ships;
 		vector<int> __size;
 
 	public:
