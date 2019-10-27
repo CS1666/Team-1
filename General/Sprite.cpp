@@ -78,6 +78,12 @@
 	int Sprite::getF(){
 		return animFrame;
 	}
+	void Sprite::setRenderOrder(int new_order){
+		renderOrder = new_order;
+	}
+	int Sprite::getRenderOrder(){
+		return renderOrder;
+	}
 	
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
