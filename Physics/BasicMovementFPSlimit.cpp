@@ -3,10 +3,10 @@
 
 #define PI 3.14159265
 
-constexpr double ACCEL = 3600.0;
+constexpr double ACCEL = 60.0;
 constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
-constexpr float MAX_DELTAV = 2;
+constexpr float MAX_DELTAV = 1;
 constexpr float MAX_ROTATIONSPEED = 6;
 constexpr float MAX_ROTATIONRATE = 2;
 
@@ -155,9 +155,9 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 0;  i < osSprite.size(); i++){
+	for(int i = 1;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
-		isCollision = check_collision(a, osSprite.at(i)->getDrawBox());
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;
 	}
@@ -168,6 +168,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
+	speed *= TimeData::get_timestep();
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
 	{
@@ -218,11 +219,11 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	std::cout << ent.getAngle() - 90 << std::endl;
+	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speedX: " << speedX << std::endl;
-	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
@@ -283,13 +284,13 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	std::cout << ent.getAngle() - 90 << std::endl;
+	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speedX: " << speedX << std::endl;
 	std::cout << "speedY: " << speedY << std::endl;
 	std::cout << "Grav x: " << gravPulls[0] << std::endl;
-	std::cout << "Grav y: " << gravPulls[1] << std::endl;
+	std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
 
 }
 
