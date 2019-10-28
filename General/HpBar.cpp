@@ -17,5 +17,9 @@
 		return percentage;
 	}
 	
+	void HpBar::changeBar(Ship player){
+		w = player.getCurrHp/player.getMaxHp * w; 	
+	}
+	
 
 
