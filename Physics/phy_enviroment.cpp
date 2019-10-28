@@ -8,6 +8,7 @@
 #include "../General/Sprite.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
+#include "../General/SpaceStation.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
@@ -81,6 +82,15 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Planet planet1ent(db3, tex3);
+
+	//Space Station Initialization-
+	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/Asteroid.png"); //placeholder img
+	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SpaceStation ss_ent(db4, tex_ss);
+	osSprite.push_back(&ss_ent);
+	osSprite2.push_back(&ss_ent);
+	
+
 	//planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
