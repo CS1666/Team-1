@@ -21,7 +21,8 @@ class HpBar : public Sprite
         
         void setPercentage(float Percentage);
         float getPercentage();
-	void changeBar(Ship player);
+	void changeBar(Ship &player);
+	int getOgW();
 
 };
 
