@@ -80,8 +80,8 @@ void run_phy_enviro(gpRender gr){
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
-	Planet planet1ent(db3, tex3);
-	planet1ent.initVelocity(starent);
+	Planet planet1ent(db3, tex3,1, starent, 100);
+	//planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
 	//Ship Cruiser initilization
