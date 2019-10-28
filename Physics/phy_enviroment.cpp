@@ -79,9 +79,9 @@ void run_phy_enviro(gpRender gr){
 	osSprite2.push_back(&starent);
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
+	SDL_Rect db3 = {1600,400,200,200};
 	Planet planet1ent(db3, tex3);
-	//planet1ent.initVelocity(starent);
+	planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
 	//Ship Cruiser initilization
