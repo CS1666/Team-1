@@ -28,7 +28,7 @@ float direction;
 
 
 //General wrapper function to handle Key evenets
-bool handleKeyEvents(SDL_Event e, Sprite &ent){
+bool handleKeyEvents(SDL_Event e, Ship &ent){
 	if (e.type == SDL_QUIT) {
 		return  false;
 	}
@@ -79,7 +79,7 @@ void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 }
 
 //Handles down Key Events
-void handleKeyDownEvent(SDL_Event e, Sprite &ent){
+void handleKeyDownEvent(SDL_Event e, Ship &ent){
 	direction = (ent.getAngle() - 90.0)*PI/180;	
 
 	switch(e.key.keysym.sym) {
@@ -110,6 +110,10 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_x:
 			speed = 0;
 			deltaV = 0;
+		case SDLK_f:
+			ent.setCurrHp(ent.getCurrHp() - 10);
+		case SDLK_g:
+			ent.setCurrHp(ent.getCurrHp() + 10);
 		case SDLK_SPACE:
 			//Fire laser
 			break;
