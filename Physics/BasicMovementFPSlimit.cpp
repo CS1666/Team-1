@@ -44,7 +44,7 @@ bool handleKeyEvents(SDL_Event e, Ship &ent){
 }
 
 //Handles Up Key Events
-void handleKeyUpEvent(SDL_Event e, Sprite &ent){
+void handleKeyUpEvent(SDL_Event e, Ship &ent){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
 				//std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
@@ -73,6 +73,7 @@ void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 				
 
 				break;
+				
 		}
 	
 	}
@@ -110,10 +111,16 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 		case SDLK_x:
 			speed = 0;
 			deltaV = 0;
-		case SDLK_f:
-			ent.setCurrHp(ent.getCurrHp() - 10);
+		
 		case SDLK_g:
-			ent.setCurrHp(ent.getCurrHp() + 10);
+			if(ent.getCurrHp() != ent.getMaxHp())	
+				ent.setCurrHp(ent.getCurrHp() + 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
+		case SDLK_f:
+			ent.setCurrHp(ent.getCurrHp() - 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
 		case SDLK_SPACE:
 			//Fire laser
 			break;
