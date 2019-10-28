@@ -11,7 +11,7 @@ using namespace std;
 class HpBar : public Sprite 
 {
     private:
-        
+        int ogW;
 	float percentage;
 
     public:
