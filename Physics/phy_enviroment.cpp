@@ -76,8 +76,8 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
+
 	osSprite2.push_back(&starent);
-	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
@@ -193,7 +193,7 @@ void run_phy_enviro(gpRender gr){
 
 
 		planet1ent.updatePosition();
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 
 		if (animate){
