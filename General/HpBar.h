@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
-#include "Ship.g"
+#include "Ship.h"
 
 using namespace std;
 
