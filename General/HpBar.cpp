@@ -18,7 +18,7 @@
 	}
 	
 	void HpBar::changeBar(Ship player){
-		w = player.getCurrHp()/player.getMaxHp() * w; 	
+		w = player.getCurrHp()/player.getMaxHp() * ogW; 	
 	}
 	
 
