@@ -181,7 +181,7 @@ void run_phy_enviro(gpRender gr){
 			}
 		}
 
-
+		hpent.changeBar(playerent);
 		planet1ent.updatePosition();
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
