@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
+#include "Ship.g"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ class HpBar : public Sprite
         
         void setPercentage(float Percentage);
         float getPercentage();
+	void changeBar(Ship player);
 
 };
 
