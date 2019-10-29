@@ -46,7 +46,7 @@ void run_ai_enviro(gpRender gr){
 	//SDL_Rect db = {50,325,75,75};
 	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	Ship playerent(db, tex);
+	Sprite playerent(db, tex);
 	Sprite hpent(db, tex);
 	osSprite.push_back(&playerent);
 
