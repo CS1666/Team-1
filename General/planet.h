@@ -13,7 +13,7 @@ public:
 	Planet();
 	Planet(SDL_Rect dBox, SDL_Texture* aTex);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass);
-	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun);
+	Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star& sun, float vel);
 	void initVelocity(Star& sun);
 	int getRadius();
 	tuple<float, float> getCenterPosition();
@@ -35,6 +35,7 @@ private:
 	float fy;
 	float vx;
 	float vy;
+	float orbitalVel = 0;
 	//float totalGrav;
 	string sprite;
 	Star sun;

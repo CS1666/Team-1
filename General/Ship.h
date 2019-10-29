@@ -20,11 +20,14 @@ class Ship : public Sprite
         bool damageTaken;
         int maxVelocity;
         string currKey;
+
         int mass;
+        pair<int, int> size;
 
         float speedX;
         float speedY;
-        int hp;
+        int currHp;
+        int maxHp;
 
         //ai
         std::queue<pair<int,int>>* path;
@@ -52,6 +55,10 @@ class Ship : public Sprite
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
+
+        void setSize(pair<int,int> newSize);
+        pair<int,int> getSize();
+
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
@@ -60,8 +67,10 @@ class Ship : public Sprite
         int getMaxVelocity();
         void setDestination(pair<int,int> newDestination);
         int getMass();
-        void setHp(int newHp);
-        int getHp();
+        void setCurrHp(int newCurrHp);
+        int getCurrHp();
+        void setMaxHp(int newMaxHp);
+        int getMaxHp();
 };
 
 class Hero:Ship{};

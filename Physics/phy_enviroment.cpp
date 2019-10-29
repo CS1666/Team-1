@@ -8,6 +8,7 @@
 #include "../General/Sprite.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
+#include "../General/SpaceStation.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
@@ -63,7 +64,9 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
-	playerent.setHp(100);
+	playerent.setCurrHp(100);
+	playerent.setMaxHp(100);
+	playerent.setRenderOrder(0);
 	osSprite.push_back(&playerent);
 	osSprite2.push_back(&playerent);
 
@@ -73,12 +76,20 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
+
 	osSprite2.push_back(&starent);
-	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
-	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
-	Planet planet1ent(db3, tex3);
+	SDL_Rect db3 = {1600,400,200,200};
+	Planet planet1ent(db3, tex3,1, starent, 100);
+
+	//Space Station Initialization-
+	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/Asteroid.png"); //placeholder img
+	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SpaceStation ss_ent(db4, tex_ss);
+	osSprite.push_back(&ss_ent);
+	osSprite2.push_back(&ss_ent);
+	
 	//planet1ent.initVelocity(starent);
 	osSprite.push_back(&planet1ent);
 	osSprite2.push_back(&planet1ent);
@@ -91,7 +102,7 @@ void run_phy_enviro(gpRender gr){
 	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
-	HpBar hpent(hp, texhp, playerent.getHp());
+	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite2.push_back(&hpent);
 	
 	srand(time(0));
@@ -167,6 +178,7 @@ void run_phy_enviro(gpRender gr){
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
+			
 			switch(e.key.keysym.sym) {
 				case SDLK_w:
 					if(e.type == SDL_KEYDOWN){
@@ -178,10 +190,11 @@ void run_phy_enviro(gpRender gr){
 					break;
 			}
 		}
-
-
+		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
+		hpent.changeBar(playerent);
+		std::cout << hpent.getW() << endl;
 		planet1ent.updatePosition();
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 
 		if (animate){

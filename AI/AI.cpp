@@ -34,36 +34,32 @@
 
     	bool AI::createMapState(Sector currentSector)
     	{
-
     		vector<int> sectorSize = currentSector.getSize();
+
+			vector<vector<int> > currentState = currentSector.getState();
 
     		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
-            vector<Star> stars = currentSector.getStars();
-            
-            for (Star star : stars)
+            for (vector<int> object : currentState)
             {
-                vector<int> starSize = star.getSize();
 
-                vector<int> starPosition = star.getPosition();
-
-                for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
+                for (int x = object[0]; x < object[0] + object[2]; x++)
                 {
 
-                    newStoredMapState[x][starPosition[1]] = 1;
+                    newStoredMapState[x][object[1]] = 0;
 
-                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
+                    newStoredMapState[x][object[1] + object[3]] = 0;
                 }
 
-
-                for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
+                for (int y = object[1]; y < object[0] - object[2]; y--)
                 {
-                    newStoredMapState[starPosition[0]][y] = 1;
-                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
+                    newStoredMapState[object[0]][y] = 0;
+                    newStoredMapState[object[0] + object[2]][y] = 0;
                 }
             }
             
-            if(checkMapState(newStoredMapState)){
+            if(checkMapState(newStoredMapState))
+            {
                 storedMapState=newStoredMapState;
                 return true;
             }
@@ -89,7 +85,8 @@
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
+		    cout<<curPos.first<<endl;
+		    cout<<curPos.second<<endl;
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
-            
 		    return pth;
 		}

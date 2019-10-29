@@ -43,13 +43,42 @@ std::vector<float> calculateGravityPull(Sprite &playerent, Sprite &bodyent){
 	pointAngle = atan(pointSlope);
 	if(playerX > bodyX)
 	{
-		pointAngle += 3.1415926;
+		pointAngle += PI;
 	}
-	std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
+	std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
 	float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
 	std::cout << "grav: " << grav << std::endl;
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);
+	return {gravX, gravY};
+}
+
+std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*> &osSprite){
+	playerX = playerent.getTrueX() + playerent.getW()/2.0;
+	playerY = playerent.getTrueY() + playerent.getH()/2.0;
+	float gravX = 0.0;
+	float gravY = 0.0;
+	for(auto bodyent : osSprite)
+	{	
+		bodyX = bodyent->getTrueX() + bodyent->getW()/2.0;
+		bodyY = bodyent->getTrueY() + bodyent->getH()/2.0;
+		if(!(bodyX == playerX && bodyY == playerY ))
+		{
+			//make fix this
+			pointSlope = (bodyY - playerY)/(bodyX - playerX);
+			pointAngle = atan(pointSlope);
+			if(playerX > bodyX)
+			{
+				pointAngle += 3.1415926;
+			}
+			std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
+			float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
+			std::cout << "grav: " << grav << std::endl;
+			gravX += grav*cos(pointAngle);
+			gravY += grav*sin(pointAngle);
+		}
+	}
+	 
 	return {gravX, gravY};
 }
 

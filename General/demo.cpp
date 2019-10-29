@@ -63,6 +63,9 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
+	playerent.setRenderOrder(0);
+	playerent.setCurrHp(100);
+	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
 	
 	
@@ -140,7 +143,7 @@ void run_demo(gpRender gr){
 
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
-	HpBar hpent(hp, texhp, playerent.getHp());
+	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite2.push_back(&hpent);
 	/*
 	//Ship Cruiser initilization
@@ -234,7 +237,8 @@ void run_demo(gpRender gr){
 					break;
 			}
 		}
-		
+		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
+		hpent.changeBar(playerent);
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 
