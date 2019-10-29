@@ -2,13 +2,14 @@
 #include "Ship.h"
 #include <SDL.h> //temp
 #include <iostream>
+#include <math.h>
     Ship::Ship(): Sprite() {};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
     Ship::~Ship()
     {
@@ -39,8 +40,6 @@
     {
         speedY = speed;
     }
-
-
 
     //integrate BasicMovementFPSlimit.cpp
     void Ship::setPosition(pair<int,int> newPosition)
@@ -90,14 +89,34 @@
         return maxVelocity;
     }
 
-    int Ship::getHp()
+    int Ship::getCurrHp()
     {
-	return hp;    
+       return currHp;    
     }
 
-    void Ship::setHp(int newHp)
+    void Ship::setCurrHp(int newCurrHp)
     {
-	hp = newHp;    
+       currHp = newCurrHp;    
+    }
+
+    int Ship::getMaxHp()
+    {
+	   return maxHp;    
+    }
+
+    void Ship::setMaxHp(int newMaxHp)
+    {
+	   maxHp = newMaxHp;    
+    }
+
+    pair<int, int> Ship::getSize()
+    {
+        return size;
+    }
+
+    void Ship::setSize(pair<int, int> newSize)
+    {
+        size = newSize;
     }
 
     //ai follows path assigned to it by ai class
@@ -112,7 +131,12 @@
 		int y_coord=coords.second;
 		int cur_x=position.first;
 		int cur_y=position.second;
-
+		//get angle of destination
+		double newAngle= atan((double)-y_coord/(double)x_coord);
+		cout<<"new angle: "<<newAngle*180/3.14<<endl;
+		double angle=entity.getAngle();
+		entity.setAngle(newAngle*180/3.14+180);
+	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
         std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
@@ -122,11 +146,11 @@
 		{
 		    if(cur_x>x_coord)
 			cur_x--;
-		    else
+		    else if(cur_x<x_coord)
 			cur_x++;
 		    if(cur_y>y_coord)
 			cur_y--;
-		    else
+		    else if(cur_y<y_coord)
 			cur_y++;
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
@@ -138,6 +162,7 @@
 	    }
 	    else
 	        pathComplete=true;
+	    cout<<pathComplete<<endl;
     }
 
     bool Ship::getPathComplete()

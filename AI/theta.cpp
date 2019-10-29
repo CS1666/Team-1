@@ -10,6 +10,7 @@ typedef std::pair<int,int> Point;
 typedef std::queue<Point>* Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
+constexpr int MAX_DEPTH=10; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
@@ -20,11 +21,13 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // gScore is our cost map for each point
     gScore = std::map<Point, int>();
     gScore.insert(std::pair<Point, int>(start, 0));
-    
+    std::cout<<start.first<<std::endl;
+    std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
     parent = std::map<Point, Point>();
     parent.insert(std::pair<Point, Point>(start, start));
-    
+    std::cout<<parent[start].first<<std::endl;
+    std::cout<<parent[start].second<<std::endl;
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     ////std::cout << "Before p_queue" << std::endl;
@@ -40,7 +43,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     closed = std::set<Point>();
 
     int i = 0;
-    
+    int counter=0;
     // This is basically A*
     while (!open->empty())
     {
@@ -50,7 +53,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         Point s = open->pop();
         //std::cout << "After pop" << std::endl;
         //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
-        if (s == goal)
+        if (s == goal||counter++==MAX_DEPTH)
         {   
             ////std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
@@ -82,7 +85,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
                     //std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
                     gScore.insert(std::pair<Point, int>(neighbor, std::numeric_limits<int>::max()));
-                    parent.insert(std::pair<Point, Point>(neighbor, Point{0,0}));
+                    parent.insert(std::pair<Point, Point>(neighbor, start));
                 }
                 //std::cout << "UP V " << i + 20 << std::endl;
                 update_vertex(s, neighbor, goal);
@@ -128,8 +131,6 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     for(auto itr : result)
     {   
         
-        
-
         if (!mesh[itr.first][itr.second])
         {
             
@@ -238,7 +239,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    //////std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
     std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {
