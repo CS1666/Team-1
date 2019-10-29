@@ -133,11 +133,11 @@
 		int cur_y=position.second;
 		//get angle of destination
 		double newAngle= atan((double)-y_coord/(double)x_coord);
-		//cout<<"new angle: "<<newAngle*180/3.14<<endl;
+		cout<<"new angle: "<<newAngle*180/3.14<<endl;
 		double angle=entity.getAngle();
 		entity.setAngle(newAngle*180/3.14+180);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-        //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//currently will literally go 1 pixel at a time.
@@ -162,7 +162,7 @@
 	    }
 	    else
 	        pathComplete=true;
-	    //cout<<pathComplete<<endl;
+	    cout<<pathComplete<<endl;
     }
 
     bool Ship::getPathComplete()

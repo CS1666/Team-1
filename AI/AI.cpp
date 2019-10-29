@@ -46,22 +46,23 @@
                 for (int x = object[0]; x < object[0] + object[2]; x++)
                 {
 
-                    for (int y = object[1]; y < object[1] + object[3]; y++)
-                        {
-                            newStoredMapState[x][y] = 1;
-                        }
+                    newStoredMapState[x][object[1]] = 0;
+
+                    newStoredMapState[x][object[1] + object[3]] = 0;
                 }
 
+                for (int y = object[1]; y < object[0] - object[2]; y--)
+                {
+                    newStoredMapState[object[0]][y] = 0;
+                    newStoredMapState[object[0] + object[2]][y] = 0;
+                }
             }
             
             if(checkMapState(newStoredMapState))
             {
-                std::cout << "New Map State" << std::endl;
                 storedMapState=newStoredMapState;
                 return true;
             }
-
-            //std::cout << "Same Map State" << std::endl;
             return false;
 
     	}
@@ -73,27 +74,19 @@
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
-            if(storedMapState.empty()){
-                return true;
+		    if(storedMapState==newState){
+                return false;
             }
-            for(int x = 0; x < newState.size(); x++){
-                for(int y = 0; y <newState[x].size(); y++){
-                    //std::cout << "x: " << x << " y: " << y << std::endl;
-                    if(newState[x][y] != storedMapState[x][y]){
-                        return true;
-                    }
-                }
-            }
-		 
+			     
 
-		    return false;
+		    return true;
 		}
 		//calculate the path for a ship and destination
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
-		    //cout<<curPos.first<<endl;
-		    //cout<<curPos.second<<endl;
+		    cout<<curPos.first<<endl;
+		    cout<<curPos.second<<endl;
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
 		    return pth;
 		}

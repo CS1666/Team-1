@@ -31,9 +31,9 @@ bool p_queue::lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2)
 }
 
 void p_queue::print_pque(){
-    //for(int i = 0; i < container->size(); i++){
+    for(int i = 0; i < container->size(); i++){
         //std::cout << "index " << i << ": X: " << container->at(i).first.first << " Y: " << container->at(i).first.second << " prio: " << container->at(i).second <<  std::endl;
-    //}
+    }
 
     //std::cout << "\n" << std::endl;
 }

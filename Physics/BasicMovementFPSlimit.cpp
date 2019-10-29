@@ -47,7 +47,7 @@ bool handleKeyEvents(SDL_Event e, Ship &ent){
 void handleKeyUpEvent(SDL_Event e, Ship &ent){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
-				////std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
+				//std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
 				//if(ent.getVY() != 0){
 
 					//ent.setVY(ent.getVY() + MAX_SPEED);
@@ -165,12 +165,12 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 
 bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
-	////std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
 		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
-		////std::cout << "Is last command Illegal?" << std::endl;
-		////std::cout << "Checked collisions: " << i << std::endl;
+		//std::cout << "Is last command Illegal?" << std::endl;
+		//std::cout << "Checked collisions: " << i << std::endl;
 	}
 	return isCollision;
 }
@@ -206,7 +206,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
 	
-	////std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setAngle(ent.getAngle() + rotationSpeed);
 	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
 	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
@@ -231,10 +231,10 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	}
 
 	/**std::cout << ent.getAngle() - 90 << std::endl;
-	//std::cout << "x: " << ent.getTrueX()  << std::endl;	
-	//std::cout << "y: " << ent.getTrueY()  << std::endl;
-	//std::cout << "speedX: " << speedX << std::endl;
-	//std::cout << "speedY: " << speedY << std::endl;**/
+	std::cout << "x: " << ent.getTrueX()  << std::endl;	
+	std::cout << "y: " << ent.getTrueY()  << std::endl;
+	std::cout << "speedX: " << speedX << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
@@ -266,7 +266,7 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
 	
-	////std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setAngle(ent.getAngle() + rotationSpeed);
 	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
 	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
@@ -296,12 +296,12 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 	}
 
 	/**std::cout << ent.getAngle() - 90 << std::endl;
-	//std::cout << "x: " << ent.getTrueX()  << std::endl;	
-	//std::cout << "y: " << ent.getTrueY()  << std::endl;
-	//std::cout << "speedX: " << speedX << std::endl;
-	//std::cout << "speedY: " << speedY << std::endl;
-	//std::cout << "Grav x: " << gravPulls[0] << std::endl;
-	//std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
+	std::cout << "x: " << ent.getTrueX()  << std::endl;	
+	std::cout << "y: " << ent.getTrueY()  << std::endl;
+	std::cout << "speedX: " << speedX << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "Grav x: " << gravPulls[0] << std::endl;
+	std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
 
 }
 
@@ -335,7 +335,7 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
 	
-	////std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
 	ent.setAngle(ent.getAngle() + rotationSpeed);
 	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
 	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
@@ -364,12 +364,12 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	////std::cout << ent.getAngle() - 90 << std::endl;
-	////std::cout << "x: " << ent.getTrueX()  << std::endl;	
-	////std::cout << "y: " << ent.getTrueY()  << std::endl;
-	////std::cout << "speedX: " << speedX << std::endl;
-	////std::cout << "speedY: " << speedY << std::endl;
-	////std::cout << "Grav x: " << gravPulls[0] << std::endl;
-	////std::cout << "Grav y: " << gravPulls[1] << std::endl;
+	std::cout << ent.getAngle() - 90 << std::endl;
+	std::cout << "x: " << ent.getTrueX()  << std::endl;	
+	std::cout << "y: " << ent.getTrueY()  << std::endl;
+	std::cout << "speedX: " << speedX << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "Grav x: " << gravPulls[0] << std::endl;
+	std::cout << "Grav y: " << gravPulls[1] << std::endl;
 
 }

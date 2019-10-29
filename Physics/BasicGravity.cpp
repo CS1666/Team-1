@@ -45,9 +45,9 @@ std::vector<float> calculateGravityPull(Sprite &playerent, Sprite &bodyent){
 	{
 		pointAngle += PI;
 	}
-	//std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
+	std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
 	float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
-	//std::cout << "grav: " << grav << std::endl;
+	std::cout << "grav: " << grav << std::endl;
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);
 	return {gravX, gravY};
@@ -71,9 +71,9 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 			{
 				pointAngle += 3.1415926;
 			}
-			//std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
+			std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
 			float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
-			//std::cout << "grav: " << grav << std::endl;
+			std::cout << "grav: " << grav << std::endl;
 			gravX += grav*cos(pointAngle);
 			gravY += grav*sin(pointAngle);
 		}
@@ -128,10 +128,10 @@ void gravity_pull(Sprite &playerent, Sprite &bodyent){
 		deltaY = -MAX_DELTAV;
 	}
 	//std::cout << "GForce: " << gravForce << std::endl;
-	//std::cout << "deltaX: " << deltaX << std::endl;
-	//std::cout << "deltaY: " << deltaY << std::endl;
-	//std::cout << "distance: " << pointDistance << std::endl;
-	//std::cout << "angle: " << pointAngle << std::endl;
+	std::cout << "deltaX: " << deltaX << std::endl;
+	std::cout << "deltaY: " << deltaY << std::endl;
+	std::cout << "distance: " << pointDistance << std::endl;
+	std::cout << "angle: " << pointAngle << std::endl;
 	
 }
 
@@ -177,10 +177,10 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 		ent.setY(ent.getY() - (int)speedY);
 	}
 
-	//std::cout << "x: " << ent.getX()  << std::endl;	
-	//std::cout << "y: " << ent.getY()  << std::endl;
-	//std::cout << "x speed: " << speedX  << std::endl;	
-	//std::cout << "y speed: " << speedY  << std::endl;
+	std::cout << "x: " << ent.getX()  << std::endl;	
+	std::cout << "y: " << ent.getY()  << std::endl;
+	std::cout << "x speed: " << speedX  << std::endl;	
+	std::cout << "y speed: " << speedY  << std::endl;
 
 	
 }
