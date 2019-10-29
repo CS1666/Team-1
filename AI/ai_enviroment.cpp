@@ -18,6 +18,10 @@ constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
+
+vector<Sprite*> initilizeSprites(){
+
+}
 void run_ai_enviro(gpRender gr){
 
 
@@ -33,38 +37,65 @@ void run_ai_enviro(gpRender gr){
 	//gpRender object that is used to render object onto screen
 
 	//Ship object init
+
+
+	//----------------------Player Ship initilization--------------------//
+	Ship playerShip;
+
+	playerShip.setSprite("Assets/Objects/ship_capital_ally.png");
+	playerShip.setPosition(pair<int,int>(50,50));
+	
+
+	SDL_Texture* ptex = gr.loadImage(playerShip.getSprite());
+	
+	SDL_Rect pdb = {50,50,PLAYER_WIDTH,PLAYER_HEIGHT};
+
+	
+	Sprite playerent(pdb, ptex);
+	osSprite.push_back(&playerent);
+	
+	//--------------------------End-----------------------------------//
+
+	//----------------------AI Ship initilization--------------------//
 	Ship aiShip;
 	//AI init
 
 	AI ai;
 
-	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
-	aiShip.setPosition(pair<int,int>(10,10));
+	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
+	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(pair<int,int>(1010, 600));
 
-	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
-	//SDL_Rect db = {50,325,75,75};
-	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
+	
+	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	Ship playerent(db, tex);
-	Sprite hpent(db, tex);
-	osSprite.push_back(&playerent);
-
-	//positions = gameState, only track the ship for now
-	//destination is also a vector
-	positions.push_back({10,10});
-
+	Sprite aient(db1, tex1);
+	osSprite.push_back(&aient);
 	
 
+	//--------------------------End-----------------------------------//
 
-	//Red giant Initilzation-
+	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {500,200,300,300};
 	Sprite starent(db2, tex2);
 
-	osSprite.push_back(&starent);
-	osSprite.push_back(&hpent);
+	Star star;
 
+	star.setSize({300, 300});
+	star.setPosition({500, 200});
+
+	Sector sector;
+
+	sector.setSize({1280, 720});
+	sector.setStars({star});
+	osSprite.push_back(&starent);
+	//----------------------------------------------------------------------
+
+
+
+//------------------------------------Rendering Background--------------------------------------//
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -96,16 +127,10 @@ void run_ai_enviro(gpRender gr){
 	bggalaxies[2] = rand() % (ZONE_WIDTH - 200);
 	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
+	//------------------------------------Rendering Background--------------------------------------//
 
-	Star star;
 
-	star.setSize({300, 300});
-	star.setPosition({500, 200});
-
-	Sector sector;
-
-	sector.setSize({1280, 720});
-	sector.setStars({star});
+	
 
 	SDL_Event e;
 	bool gameon = true;
@@ -126,16 +151,14 @@ void run_ai_enviro(gpRender gr){
 		//position needs to be in booleans?
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
-		    ai.createMapState(sector);
-		    aiShip.followPath(playerent);
+		    aiShip.followPath(aient);
 		    if(aiShip.getPathComplete())
 		    {
-			pathq = ai.calculatePath(aiShip,path);
-			aiShip.setPath(pathq);
+				pathq = ai.calculatePath(aiShip,path);
+				aiShip.setPath(pathq);
 		    }
 		}
 		else{
-			;
 		    
 		    aiShip.setDestination(pair<int,int>(10, 60));
 
@@ -144,13 +167,15 @@ void run_ai_enviro(gpRender gr){
 		    aiShip.setPath(pathq);
 		   
 		}
+
+		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			gameon = handleKeyEvents(e, playerent);	
+			std::cout << "Key Event!!!" << std::endl;
+			gameon = handleKeyEvents(e, playerShip);	
 			
 		}
-
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		updatePosition(playerShip, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}

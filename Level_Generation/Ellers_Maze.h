@@ -1,9 +1,11 @@
 #pragma once
-//#include <math.h>
-//#include <time.h>
-//#include <iostream>
-#define ROW_SIZE 20
-#define COL_SIZE 20
+#include <math.h>
+#include <time.h>
+#include <iostream>
+#include <SDL.h>
+#include <SDL_image.h>
+#define ROW_SIZE 35
+#define COL_SIZE 19
 
 
 class Ellers_Maze
@@ -23,6 +25,10 @@ public:
 
 	/*Test output of maze*/
 	void test_output();
+	void drawMaze(SDL_Texture *maze_wall, SDL_Renderer *mRender);
+
+	int getRowSize();
+	int getColSize();
 
 private:
 
