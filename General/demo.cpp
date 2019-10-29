@@ -237,7 +237,8 @@ void run_demo(gpRender gr){
 					break;
 			}
 		}
-		
+		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
+		hpent.changeBar(playerent);
 		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 
