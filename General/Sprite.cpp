@@ -30,7 +30,18 @@
 		drawBox.y = (int)Sprite::y;
 	}
 
-
+	bool Sprite::isShip()
+	{
+		return type == 1;
+	}
+	bool Sprite::isCelestialBody()
+	{
+		return type == 2;
+	}
+	bool Sprite::isUI()
+	{
+		return type == 3;
+	}
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
@@ -77,6 +88,12 @@
 	}
 	int Sprite::getF(){
 		return animFrame;
+	}
+	void Sprite::setRenderOrder(int new_order){
+		renderOrder = new_order;
+	}
+	int Sprite::getRenderOrder(){
+		return renderOrder;
 	}
 	
 

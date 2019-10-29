@@ -3,10 +3,10 @@
 
 #define PI 3.14159265
 
-constexpr double ACCEL = 3600.0;
+constexpr double ACCEL = 60.0;
 constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
-constexpr float MAX_DELTAV = 2;
+constexpr float MAX_DELTAV = 1;
 constexpr float MAX_ROTATIONSPEED = 6;
 constexpr float MAX_ROTATIONRATE = 2;
 
@@ -28,7 +28,7 @@ float direction;
 
 
 //General wrapper function to handle Key evenets
-bool handleKeyEvents(SDL_Event e, Sprite &ent){
+bool handleKeyEvents(SDL_Event e, Ship &ent){
 	if (e.type == SDL_QUIT) {
 		return  false;
 	}
@@ -44,7 +44,7 @@ bool handleKeyEvents(SDL_Event e, Sprite &ent){
 }
 
 //Handles Up Key Events
-void handleKeyUpEvent(SDL_Event e, Sprite &ent){
+void handleKeyUpEvent(SDL_Event e, Ship &ent){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
 				//std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
@@ -73,13 +73,14 @@ void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 				
 
 				break;
+				
 		}
 	
 	}
 }
 
 //Handles down Key Events
-void handleKeyDownEvent(SDL_Event e, Sprite &ent){
+void handleKeyDownEvent(SDL_Event e, Ship &ent){
 	direction = (ent.getAngle() - 90.0)*PI/180;	
 
 	switch(e.key.keysym.sym) {
@@ -110,6 +111,16 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_x:
 			speed = 0;
 			deltaV = 0;
+		
+		case SDLK_g:
+			if(ent.getCurrHp() != ent.getMaxHp())	
+				ent.setCurrHp(ent.getCurrHp() + 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
+		case SDLK_f:
+			ent.setCurrHp(ent.getCurrHp() - 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
 		case SDLK_SPACE:
 			//Fire laser
 			break;
@@ -155,9 +166,9 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 0;  i < osSprite.size(); i++){
+	for(int i = 1;  i < osSprite.size(); i++){
 		//so, one of these should result in collison if they are the same box
-		isCollision = check_collision(a, osSprite.at(i)->getDrawBox());
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;
 	}
@@ -168,6 +179,7 @@ bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
+	speed *= TimeData::get_timestep();
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
 	{
@@ -218,11 +230,11 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
-	std::cout << ent.getAngle() - 90 << std::endl;
+	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
 	std::cout << "speedX: " << speedX << std::endl;
-	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
@@ -283,6 +295,75 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 		ent.setY(ent.getTrueY() - speedY);
 	}
 
+	/**std::cout << ent.getAngle() - 90 << std::endl;
+	std::cout << "x: " << ent.getTrueX()  << std::endl;	
+	std::cout << "y: " << ent.getTrueY()  << std::endl;
+	std::cout << "speedX: " << speedX << std::endl;
+	std::cout << "speedY: " << speedY << std::endl;
+	std::cout << "Grav x: " << gravPulls[0] << std::endl;
+	std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
+
+}
+
+
+void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	//needs to be changed to update all objects in the list
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < -MAX_SPEED)
+	{
+		speed = -MAX_SPEED;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
+	
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	ent.setAngle(ent.getAngle() + rotationSpeed);
+	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
+
+	std::vector<float> gravPulls = calculateGravityPull(ent, osSprite);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	ent.setSpeedX(speedX);
+	ent.setSpeedY(speedY);
+
+	ent.setX(ent.getTrueX() + speedX);
+	if(ent.getTrueX() < 0 
+
+
+		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+
+		ent.setX(ent.getTrueX() - speedX);
+	}
+	ent.setY(ent.getTrueY() + speedY);
+	if(ent.getY() < 0 
+		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+
+		ent.setY(ent.getTrueY() - speedY);
+	}
+
 	std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
 	std::cout << "y: " << ent.getTrueY()  << std::endl;
@@ -292,5 +373,3 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 	std::cout << "Grav y: " << gravPulls[1] << std::endl;
 
 }
-
-

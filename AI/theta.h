@@ -18,19 +18,20 @@
     {
         public:
             typedef std::pair<int,int> Point;
-            typedef std::queue<Point> Path;
+            typedef std::queue<Point>* Path;
             typedef std::vector<std::vector<bool> > Mesh;
             // Give a 2D vector to represent the collision mesh, and an integer vision radius
             Pathfinder(Mesh  &m, int v): visionRange(v), mesh(m) {}
             Path pathfind(Point start, Point goal);
             void update_mesh(Mesh &m);
+
     
         private:
             int visionRange;
             Mesh &mesh;
             std::map<Point, int> gScore;
             std::map<Point, Point> parent;
-            p_queue open;
+            p_queue* open;
             std::set<Point> closed;
             int heuristic(Point p1, Point p2);
             int distance(Point p1, Point p2);
@@ -38,6 +39,8 @@
             std::vector<Point> neighborhood(Point s);
             void update_vertex(Point s, Point neighbor, Point goal);
             Path reconstruct_path(Point s);
+            bool isOutofBound(Point s, int xdif, int ydif);
+            std::vector<Point> defineNeighbors(Point s);
     };
 
 

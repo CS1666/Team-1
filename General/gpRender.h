@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <string>
 #include "Sprite.h"
+#include "../General/HpBar.h"
 
 #pragma once
 
@@ -57,5 +58,6 @@ class gpRender{
 		int SCREEN_HEIGHT = 720;
 		int FPS = 60;
 		int frameDelay = 1000/ FPS;
+		SDL_Texture* bgsheet;
 		
 };
