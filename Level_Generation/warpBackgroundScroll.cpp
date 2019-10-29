@@ -107,11 +107,11 @@ int main() {
 		return 1;
 	}
 	
-	gBackground = loadImage("images/warpEffect.png");
+	gBackground = loadImage("Assets/Objects/warpEffect.png");
 
 	int scroll_offset = 0;
 	
-	gShipSheet = loadImage("images/warpShip.png");
+	gShipSheet = loadImage("Assets/Objects/warpShip.png");
 
 	// Moving box
 	SDL_Rect moveBox = {CAM_WIDTH/2 - TILE_SIZE/2, CAM_HEIGHT/2 - TILE_SIZE/2, TILE_SIZE, TILE_SIZE};	
