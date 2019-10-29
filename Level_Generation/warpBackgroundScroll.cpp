@@ -19,13 +19,6 @@ SDL_Renderer* gRenderer = nullptr;
 SDL_Texture* gBackground;
 SDL_Texture* gShipSheet;
 
-// For the Ship
-//SDL_Rect gShipRect = {0, 0, TILE_SIZE, TILE_SIZE};
-// For the plane
-//SDL_Rect gShipRect = {TILE_SIZE, 0, TILE_SIZE, TILE_SIZE};
-// For the UFO
-//SDL_Rect gShipRect = {0, TILE_SIZE, TILE_SIZE, TILE_SIZE};
-// For the helicopter
 SDL_Rect gShipRect = {0, 0, TILE_SIZE, TILE_SIZE};
 
 bool init() {	
