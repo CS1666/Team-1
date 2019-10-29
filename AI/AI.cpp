@@ -45,16 +45,11 @@
 
                 for (int x = object[0]; x < object[0] + object[2]; x++)
                 {
+                    for (int y = object[1]; y < object[1] + object[3]; y++)
 
-                    newStoredMapState[x][object[1]] = 0;
-
-                    newStoredMapState[x][object[1] + object[3]] = 0;
-                }
-
-                for (int y = object[1]; y < object[0] - object[2]; y--)
-                {
-                    newStoredMapState[object[0]][y] = 0;
-                    newStoredMapState[object[0] + object[2]][y] = 0;
+                        {
+                                 newStoredMapState[x][y] = 1;                                newStoredMapState[x][y] = 1;
+                        }
                 }
             }
             
@@ -74,12 +69,20 @@
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
-		    if(storedMapState==newState){
-                return false;
-            }
-			     
+		   if(storedMapState.empty()){
+                return true;
+           }
 
-		    return true;
+           for(int x = 0; x < newState.size(); x++){
+                for(int y = 0; y <newState[x].size(); y++){
+                    if(newState[x][y] != storedMapState[x][y]){
+                        return true;
+                    }
+                }
+            }               
+                    
+         return false;
+
 		}
 		//calculate the path for a ship and destination
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
