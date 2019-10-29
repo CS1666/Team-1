@@ -34,27 +34,34 @@
 
     	bool AI::createMapState(Sector currentSector)
     	{
+    		// Buffer in pixels
+    		const int buffer = 50;
+
+    		// Gets sector size and sets mesh size to be the size of the sector
     		vector<int> sectorSize = currentSector.getSize();
 
+    		// Gets the positions and sizes of everything within the sector
 			vector<vector<int> > currentState = currentSector.getState();
 
+			// Creates a new map state with everything equal to zero
     		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
+    		// Puts 1's at the edges of objecys within the sector + the size of the buffer
             for (vector<int> object : currentState)
             {
 
                 for (int x = object[0]; x < object[0] + object[2]; x++)
                 {
+                	
+                    newStoredMapState[x][object[1] - buffer] = 0;
 
-                    newStoredMapState[x][object[1]] = 0;
-
-                    newStoredMapState[x][object[1] + object[3]] = 0;
+                    newStoredMapState[x][object[1] + object[3] + buffer] = 0;
                 }
 
                 for (int y = object[1]; y < object[0] - object[2]; y--)
                 {
-                    newStoredMapState[object[0]][y] = 0;
-                    newStoredMapState[object[0] + object[2]][y] = 0;
+                    newStoredMapState[object[0] - buffer][y] = 0;
+                    newStoredMapState[object[0] + object[2] + buffer][y] = 0;
                 }
             }
             
