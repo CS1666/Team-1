@@ -12,7 +12,7 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
-#include "../General/Ellers_Maze.h"
+#include "../Level_Generation/Ellers_Maze.h"
 #include "../General/planet.h"
 #include "phy_enviroment.h"
 
