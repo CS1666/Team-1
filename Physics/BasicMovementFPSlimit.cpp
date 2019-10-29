@@ -28,7 +28,7 @@ float direction;
 
 
 //General wrapper function to handle Key evenets
-bool handleKeyEvents(SDL_Event e, Sprite &ent){
+bool handleKeyEvents(SDL_Event e, Ship &ent){
 	if (e.type == SDL_QUIT) {
 		return  false;
 	}
@@ -44,7 +44,7 @@ bool handleKeyEvents(SDL_Event e, Sprite &ent){
 }
 
 //Handles Up Key Events
-void handleKeyUpEvent(SDL_Event e, Sprite &ent){
+void handleKeyUpEvent(SDL_Event e, Ship &ent){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
 				////std::cout <<  (ent.getVY() - MAX_SPEED) << std::endl;
@@ -73,13 +73,14 @@ void handleKeyUpEvent(SDL_Event e, Sprite &ent){
 				
 
 				break;
+				
 		}
 	
 	}
 }
 
 //Handles down Key Events
-void handleKeyDownEvent(SDL_Event e, Sprite &ent){
+void handleKeyDownEvent(SDL_Event e, Ship &ent){
 	direction = (ent.getAngle() - 90.0)*PI/180;	
 
 	switch(e.key.keysym.sym) {
@@ -110,6 +111,16 @@ void handleKeyDownEvent(SDL_Event e, Sprite &ent){
 		case SDLK_x:
 			speed = 0;
 			deltaV = 0;
+		
+		case SDLK_g:
+			if(ent.getCurrHp() != ent.getMaxHp())	
+				ent.setCurrHp(ent.getCurrHp() + 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
+		case SDLK_f:
+			ent.setCurrHp(ent.getCurrHp() - 5);
+			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
+			break;
 		case SDLK_SPACE:
 			//Fire laser
 			break;
