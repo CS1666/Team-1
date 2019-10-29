@@ -100,7 +100,7 @@ void close() {
 	SDL_Quit();
 }
 
-int main() {
+int backgroundWarpMovement() {
 	if (!init()) {
 		std::cout <<  "Failed to initialize!" << std::endl;
 		close();
