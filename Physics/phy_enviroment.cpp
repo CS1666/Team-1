@@ -12,7 +12,7 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
-#include "../General/Ellers_Maze.h"
+#include "../Level_Generation/Ellers_Maze.h"
 #include "../General/planet.h"
 #include "phy_enviroment.h"
 
@@ -178,6 +178,7 @@ void run_phy_enviro(gpRender gr){
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			gameon = handleKeyEvents(e, playerent);	
+			
 			switch(e.key.keysym.sym) {
 				case SDLK_w:
 					if(e.type == SDL_KEYDOWN){
@@ -189,8 +190,9 @@ void run_phy_enviro(gpRender gr){
 					break;
 			}
 		}
-
-
+		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
+		hpent.changeBar(playerent);
+		std::cout << hpent.getW() << endl;
 		planet1ent.updatePosition();
 		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
