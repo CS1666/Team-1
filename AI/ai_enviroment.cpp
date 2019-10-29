@@ -151,7 +151,6 @@ void run_ai_enviro(gpRender gr){
 		//position needs to be in booleans?
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
-		    ai.createMapState(sector);
 		    aiShip.followPath(aient);
 		    if(aiShip.getPathComplete())
 		    {
