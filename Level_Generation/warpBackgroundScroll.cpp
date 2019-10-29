@@ -26,7 +26,7 @@ SDL_Texture* gShipSheet;
 // For the UFO
 //SDL_Rect gShipRect = {0, TILE_SIZE, TILE_SIZE, TILE_SIZE};
 // For the helicopter
-SDL_Rect gShipRect = {TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE};
+SDL_Rect gShipRect = {0, 0, TILE_SIZE, TILE_SIZE};
 
 bool init() {	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -38,7 +38,7 @@ bool init() {
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 	
-	gWindow = SDL_CreateWindow("Simple BG scroll", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, CAM_WIDTH, CAM_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("Warping", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, CAM_WIDTH, CAM_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		return  false;
@@ -185,12 +185,12 @@ int backgroundWarpMovement() {
 		SDL_RenderClear(gRenderer);
 
 		// Always scroll the background
-		scroll_offset++;
+		scroll_offset += 4;
 		if (scroll_offset > CAM_HEIGHT)
-			scroll_offset = 0;		//might be wrong
+			scroll_offset = -1;		
 		bgRect.y = scroll_offset;
 		SDL_RenderCopy(gRenderer, gBackground, nullptr, &bgRect);
-		bgRect.y += CAM_HEIGHT;
+		bgRect.y -= CAM_HEIGHT;
 		SDL_RenderCopy(gRenderer, gBackground, nullptr, &bgRect);
 
 		// Draw the Ship
