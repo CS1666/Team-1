@@ -166,7 +166,7 @@
 		}
 		else if(angle>curRotation)
 		{
-		    if(angle+maxRotation>curRotation)
+		    if(angle-maxRotation>curRotation)
 		    {
 			if(maxRotation>rotation)
 			    entity.setAngle(angle-(rotation++));
@@ -185,7 +185,7 @@
 		//simulate turning, acceleration of ship
 		if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 		{
-		    if(cur_x+maxVelocity>x_coord)
+		    if(cur_x-maxVelocity>x_coord)
 		    {
 			if(maxVelocity>xVelocity)
 			    cur_x-=xVelocity++;
@@ -203,8 +203,22 @@
 		    }
 		    else if(cur_x<x_coord)
 			cur_x++;
-		    if(cur_y>y_coord)
+		    if(cur_y-maxVelocity>y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y-=yVelocity++;
+			else
+			    cur_y-=yVelocity;
+		    }
+		    else if(cur_y>y_coord)
 			cur_y--;
+		    else if(cur_y+maxVelocity<y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y+=yVelocity++;
+			else
+			    cur_y+=yVelocity;
+		    }
 		    else if(cur_y<y_coord)
 			cur_y++;
 		    entity.setX(cur_x);
