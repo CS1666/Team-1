@@ -213,7 +213,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	// Try to move Horizontally
 
 
-	ent.setX(ent.getTrueX() + speedX);
+	/**ent.setX(ent.getTrueX() + speedX);
 	if(ent.getTrueX() < 0 
 
 
@@ -228,7 +228,8 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 		|| check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getTrueY() - speedY);
-	}
+	}**/
+	
 
 	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	

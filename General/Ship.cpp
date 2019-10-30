@@ -233,8 +233,11 @@
 		}
 	    }
 	    else
+	    {
+		setSpeedY(0);
+		setSpeedX(0);
 	        pathComplete=true;
-	    cout<<pathComplete<<endl;
+	    }
     }
 
     bool Ship::getPathComplete()

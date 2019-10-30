@@ -10,7 +10,7 @@ typedef std::pair<int,int> Point;
 typedef std::queue<Point>* Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
-constexpr int MAX_DEPTH=10; //max depth before we force backtrack rebuild
+constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
@@ -65,11 +65,11 @@ Path Pathfinder::pathfind(Point start, Point goal)
         //std::cout << "size:  " << open->getSize() << std::endl;
 
         std::vector<Point> npath = neighborhood(s);
-        std::cout << "--------Begining Neigh--------"<< std::endl;
+        //std::cout << "--------Begining Neigh--------"<< std::endl;
         for (std::pair<int,int> neighbor : npath)
         {
             
-            std::cout << "Iter " << i << "Size " << npath.size() << std::endl;
+            //std::cout << "Iter " << i << "Size " << npath.size() << std::endl;
             i = i + 1;
 
             auto inClosed = closed.find(neighbor);
@@ -98,7 +98,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
                 //std::cout << "Done up V " << i + 20 << std::endl;
             }
         }
-        std::cout << "-----------End  Neigh--------"<< std::endl;
+        //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
     ////std::cout << "Stuck 4" << std::endl;
     return Path();
@@ -211,10 +211,10 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
         if (line_of_sight(s, neighbor))
         {   
 
-            std::cout << "P1: " << s.first  << " P2: " << s.second << std::endl;
-            std::cout << "PN1: " << neighbor.first  << " PN2: " << neighbor.second << std::endl;
-            std::cout << "1: " << gScore[parent[s]] + distance(parent[s], neighbor)  << " 2: " << gScore[neighbor] << std::endl;
-            std::cout << "\n" << std::endl;
+            //std::cout << "P1: " << s.first  << " P2: " << s.second << std::endl;
+            //std::cout << "PN1: " << neighbor.first  << " PN2: " << neighbor.second << std::endl;
+            //std::cout << "1: " << gScore[parent[s]] + distance(parent[s], neighbor)  << " 2: " << gScore[neighbor] << std::endl;
+            //std::cout << "\n" << std::endl;
             if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
             {
                 gScore[neighbor] = gScore[parent[s]] + distance(parent[s], neighbor);
@@ -248,7 +248,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    //std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
     std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {

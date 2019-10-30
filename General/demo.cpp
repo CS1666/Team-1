@@ -323,6 +323,7 @@ void run_demo(gpRender gr){
 						break;
 				}
 			}
+			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderPresent(gr.getRender());
 		}
