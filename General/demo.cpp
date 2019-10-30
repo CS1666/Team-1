@@ -10,6 +10,7 @@
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
+#include "../Physics/Audio.h"
 #include "../General/gpRender.h"
 #include "../Level_Generation/Ellers_Maze.h"
 #include "demo.h"
@@ -50,6 +51,9 @@ void run_demo(gpRender gr){
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
 	std::vector<Sprite*> osSprite2; // 2nd vector for rendering (will contain objects that ignore collision)
+	
+	//Audio Initilization
+	Audio::load_audio();
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};

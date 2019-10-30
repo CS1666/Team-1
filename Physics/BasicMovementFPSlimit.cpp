@@ -1,5 +1,6 @@
 #include "BasicMovementFPSlimit.h"
 #include "TimeData.h"
+#include "../Physics/Audio.h"
 
 #define PI 3.14159265
 
@@ -88,12 +89,14 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
 			deltaV += (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
 			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_s:
@@ -101,12 +104,14 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 			//ent.setVY(ent.getVY() + MAX_SPEED);
 			
 			deltaV -= (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 		case SDLK_x:
 			speed = 0;
