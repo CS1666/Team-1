@@ -64,6 +64,12 @@ class Sprite{
 		int animFrame;
 		int type = 0;
 		float x,y;
+		// set renderOrder for all objects
+		// 0 = player ship
+		// 1 = objects with collision but no gravity (all other ships + space station)
+		// 2 = objects with gravity (stars, planets, astroids, etc.)
+		// 3 = UI
+		// 4 = black hole
 		int renderOrder;
 
 		//Velocity variables
