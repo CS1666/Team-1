@@ -171,11 +171,11 @@ void run_ai_enviro(gpRender gr){
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			std::cout << "Key Event!!!" << std::endl;
+			//std::cout << "Key Event!!!" << std::endl;
 			gameon = handleKeyEvents(e, playerShip);	
 			
 		}
-		updatePosition(playerShip, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
