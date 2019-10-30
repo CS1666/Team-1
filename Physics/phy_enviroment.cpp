@@ -11,6 +11,7 @@
 #include "../General/SpaceStation.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
+#include "../Physics/Audio.h"
 #include "../General/gpRender.h"
 #include "../Level_Generation/Ellers_Maze.h"
 #include "../General/planet.h"
@@ -51,6 +52,9 @@ void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 	std::vector<Sprite*> osSprite;
 	std::vector<Sprite*> osSprite2;
+
+	//load audio for sound
+	Audio::load_audio();
 
 	bool gameon = false;
 	int titleFrame = 0;
