@@ -1,176 +1,452 @@
-
 #include "Ship.h"
 #include <SDL.h> //temp
 #include <iostream>
 #include <math.h>
-    Ship::Ship(): Sprite() {};
+#include "../Physics/TimeData.h"
+#include "../Physics/BasicGravity.h"
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
+#define PI 3.14159265
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
+constexpr double ACCEL = 60.0;
+constexpr double ROTATION_ACCEL = 7200.0;
+constexpr float MAX_SPEED = 6;
+constexpr float MAX_DELTAV = 1;
+constexpr float MAX_ROTATIONSPEED = 6;
+constexpr float MAX_ROTATIONRATE = 2;
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
+Ship::Ship(): Sprite() {};
 
-    Ship::~Ship()
-    {
-        SDL_DestroyTexture(assetTex);
-        assetTex = nullptr;
-    }
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-    void Ship::setSprite(string newSprite)
-    {
-        sprite = newSprite;
-    }
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-    string Ship::getSprite()
-    {
-        return sprite;
-    }
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
-    void Ship::checkPhysics()
-    {
+Ship::~Ship()
+{
+	SDL_DestroyTexture(assetTex);
+	assetTex = nullptr;
+}
 
-    }
+void Ship::setSprite(string newSprite)
+{
+	sprite = newSprite;
+}
 
-    void Ship::setSpeedX(float speed)
-    {
-        speedX = speed;
-    }
-    void Ship::setSpeedY(float speed)
-    {
-        speedY = speed;
-    }
+string Ship::getSprite()
+{
+	return sprite;
+}
 
-    //integrate BasicMovementFPSlimit.cpp
-    void Ship::setPosition(pair<int,int> newPosition)
-    {
-        position = newPosition;
-    }
+void Ship::checkPhysics()
+{
 
-    //integrate BasicMovementFPSlimit.cpp
-    void Ship::updateMovement()
-    {
-        
-    }
+}
 
-    void Ship::checkAction(/*stream*/)
-    {
+void Ship::setSpeedX(float speed)
+{
+	speedX = speed;
+}
+void Ship::setSpeedY(float speed)
+{
+	speedY = speed;
+}
 
-    }
+//integrate BasicMovementFPSlimit.cpp
+void Ship::setPosition(pair<int,int> newPosition)
+{
+	position = newPosition;
+}
 
-    void Ship::updateHull(int newHull)
-    {
-        hull = newHull;
-    }
-    
-    pair<int,int> Ship::getPosition()
-    {
-        return position;
-    }
+bool check_collision(SDL_Rect* a, SDL_Rect* b) {
+	// Check vertical overlap
+	if (a->y + a->h <= b->y)
+		return false;
+	if (a->y >= b->y + b->h)
+		return false;
 
-    void Ship::setDestination(pair<int,int> newDestination)
-    {
-        destination = newDestination;
-    }
+	// Check horizontal overlap
+	if (a->x >= b->x + b->w)
+		return false;
+	if (a->x + a->w <= b->x)
+		return false;
 
-    pair<int,int> Ship::getDestination()
-    {
-        return destination;
-    }
+	// Must overlap in both
+	return true;
+}
 
-    void Ship::setPath(queue<pair<int,int>>* thePath)
-    {
-    	path = thePath;
-        pathComplete=false;
-    }
+bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+	bool isCollision = false;
+	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+	for(int i = 1;  i < osSprite.size(); i++){
+		//so, one of these should result in collison if they are the same box
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+		//std::cout << "Is last command Illegal?" << std::endl;
+		//std::cout << "Checked collisions: " << i << std::endl;
+	}
+	return isCollision;
+}
 
-    int Ship::getMaxVelocity()
-    {
-        return maxVelocity;
-    }
+void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
+{
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < -MAX_SPEED)
+	{
+		speed = -MAX_SPEED;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
 
-    int Ship::getCurrHp()
-    {
-       return currHp;    
-    }
+	//std::cout << getVX() << ", " << getVY() <<std::endl;
+	setAngle(getAngle() + rotationSpeed);
+	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
 
-    void Ship::setCurrHp(int newCurrHp)
-    {
-       currHp = newCurrHp;    
-    }
+	std::vector<float> gravPulls = calculateGravityPull(*this, *osSprite[1]);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	setSpeedX(speedX);
+	setSpeedY(speedY);
+	setX(getTrueX() + speedX);
+	if(getTrueX() < 0 
 
-    int Ship::getMaxHp()
-    {
-	   return maxHp;    
-    }
+		|| (getX() + getW() > ZONE_WIDTH)
+		|| check_all_collisions(getDrawBox(), osSprite)){
 
-    void Ship::setMaxHp(int newMaxHp)
-    {
-	   maxHp = newMaxHp;    
-    }
+		setX(getTrueX() - speedX);
+	}
+	setY(getTrueY() + speedY);
+	if(getY() < 0 
+		|| (getY() + getH() > ZONE_HEIGHT)
+		|| check_all_collisions(getDrawBox(), osSprite)){
 
-    pair<int, int> Ship::getSize()
-    {
-        return size;
-    }
+		setY(getTrueY() - speedY);
+	}
+}
 
-    void Ship::setSize(pair<int, int> newSize)
-    {
-        size = newSize;
-    }
+void Ship::updateHull(int newHull)
+{
+	hull = newHull;
+}
 
-    //ai follows path assigned to it by ai class
-    void Ship::followPath(Sprite& entity)
-    {
-	    //note: change the path in Ship.h to whatever is returned.
-	    if(!path->empty())
-	    {
-		//note: assumed whatever we're using is some (x,y)
-		pair<int,int> coords=path->front();
-		int x_coord=coords.first;
-		int y_coord=coords.second;
-		int cur_x=position.first;
-		int cur_y=position.second;
-		//get angle of destination
-		double newAngle= atan((double)-y_coord/(double)x_coord);
-		cout<<"new angle: "<<newAngle*180/3.14<<endl;
-		double angle=entity.getAngle();
-		entity.setAngle(newAngle*180/3.14+180);
-	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
-		//note: since we don't have updateMovement implemented, most
-		//of the stuff here can probably be removed/handled by that
-		//currently will literally go 1 pixel at a time.
-		//also, need to render the ship in this method or something.
-		if(cur_x != x_coord || cur_y != y_coord)
+pair<int,int> Ship::getPosition()
+{
+	return position;
+}
+
+void Ship::setDestination(pair<int,int> newDestination)
+{
+	destination = newDestination;
+}
+
+pair<int,int> Ship::getDestination()
+{
+	return destination;
+}
+
+void Ship::setPath(queue<pair<int,int>>* thePath)
+{
+//fullstops ship when setting path
+cout<<"something"<<endl;
+xVelocity=0;
+yVelocity=0;
+rotation=0;
+maxVelocity=10;
+maxRotation=10;
+rotationSet=false;
+	path = thePath;
+	pathComplete=false;
+}
+
+int Ship::getMaxVelocity()
+{
+	return maxVelocity;
+}
+
+int Ship::getCurrHp()
+{
+	return currHp;    
+}
+
+void Ship::setCurrHp(int newCurrHp)
+{
+	currHp = newCurrHp;    
+}
+
+int Ship::getMaxHp()
+{
+	return maxHp;    
+}
+
+void Ship::setMaxHp(int newMaxHp)
+{
+	maxHp = newMaxHp;    
+}
+
+pair<int, int> Ship::getSize()
+{
+	return size;
+}
+
+void Ship::setSize(pair<int, int> newSize)
+{
+	size = newSize;
+}
+
+//ai follows path assigned to it by ai class
+void Ship::followPath(Sprite& entity)
+{
+	//note: change the path in Ship.h to whatever is returned.
+	if(!path->empty())
+	{
+	//note: assumed whatever we're using is some (x,y)
+	pair<int,int> coords=path->front();
+	int x_coord=coords.first;
+	int y_coord=coords.second;
+	int cur_x=position.first;
+	int cur_y=position.second;
+	//get angle of destination
+	if(!rotationSet)
+	{
+		curRotation= atan2((double)-y_coord,(double)x_coord);
+		curRotation=(int)std::floor(curRotation*180/3.14+180);
+		rotationSet=true;
+	}
+	double angle=entity.getAngle();
+	cout<<"currotation:"<<curRotation<<endl;
+	cout<<"cur angle: "<<angle<<endl;
+	bool angleChanged=false;
+	if(curRotation>angle)
+	{
+		//pretty shit acceleration stuff tbh
+		if(curRotation>angle+maxRotation)
 		{
-		    if(cur_x>x_coord)
-			cur_x--;
-		    else if(cur_x<x_coord)
-			cur_x++;
-		    if(cur_y>y_coord)
-			cur_y--;
-		    else if(cur_y<y_coord)
-			cur_y++;
-		    entity.setX(cur_x);
-		    entity.setY(cur_y);
-		    position.first=cur_x;
-		    position.second=cur_y;
+		if(maxRotation>rotation)
+			entity.setAngle(angle+rotation++);
+		else
+			entity.setAngle(angle+rotation);
 		}
 		else
-		    path->pop();
-	    }
-	    else
-	        pathComplete=true;
-	    cout<<pathComplete<<endl;
-    }
-
-    bool Ship::getPathComplete()
-    {
-    	return pathComplete;
-    }
-
-	int Ship::getMass()
-	{
-		return mass;	
+			entity.setAngle(angle+1);
+		angleChanged=true;
 	}
+	else if(angle>curRotation)
+	{
+		if(angle-maxRotation>curRotation)
+		{
+		if(maxRotation>rotation)
+			entity.setAngle(angle-(rotation++));
+		else
+			entity.setAngle(angle-rotation);
+		}
+		else
+		entity.setAngle(angle-1);
+		angleChanged=true;
+	}
+	//entity.setAngle(122);
+//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
+	std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+	//note: since we don't have updateMovement implemented, most
+	//of the stuff here can probably be removed/handled by that
+	//simulate turning, acceleration of ship
+	if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
+	{
+		if(cur_x-maxVelocity>x_coord)
+		{
+		if(maxVelocity>xVelocity)
+			cur_x-=xVelocity++;
+		else
+			cur_x-=xVelocity;
+		}
+		else if(cur_x>x_coord)
+		cur_x=x_coord; //skipped
+		else if(cur_x+maxVelocity<x_coord)
+		{
+		if(maxVelocity>xVelocity)
+			cur_x+=xVelocity++;
+		else
+			cur_x+=xVelocity;
+		}
+		else if(cur_x<x_coord)
+		cur_x=x_coord; //skipped
+		if(cur_y-maxVelocity>y_coord)
+		{
+		if(maxVelocity>yVelocity)
+			cur_y-=yVelocity++;
+		else
+			cur_y-=yVelocity;
+		}
+		else if(cur_y>y_coord)
+		cur_y=y_coord; //skipped
+		else if(cur_y+maxVelocity<y_coord)
+		{
+		if(maxVelocity>yVelocity)
+			cur_y+=yVelocity++;
+		else
+			cur_y+=yVelocity;
+		}
+		else if(cur_y<y_coord)
+		cur_y=y_coord; //skipped
+		entity.setX(cur_x);
+		entity.setY(cur_y);
+		position.first=cur_x;
+		position.second=cur_y;
+	}
+	else if(cur_x==x_coord&&cur_y==y_coord)
+	{
+		path->pop();
+		rotationSet=false;
+	}
+	}
+	else
+	{
+	setSpeedY(0);
+	setSpeedX(0);
+		pathComplete=true;
+	}
+}
+
+bool Ship::getPathComplete()
+{
+	return pathComplete;
+}
+
+int Ship::getMass()
+{
+	return mass;	
+}
+/*
+void Ship::fireWeapon(gpRender gr, std::vector<Sprite*> sprites)
+{
+	SDL_Rect pdb = {getX() + getW()/2, getY() - 20, 2, 20};
+	SDL_Texture* ptex = gr.loadImage("Assets/Objects/laser.png");
+	Sprite laser(pdb, ptex);
+	laser.setAngle(getAngle());
+	//osSprite.push_back(&laser);
+	sprites.push_back(&laser);
+}*/
+
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 0;};
+
+//General wrapper function to handle Key evenets
+bool Hero::handleKeyEvents(SDL_Event e){
+	if (e.type == SDL_QUIT) {
+		return  false;
+	}
+	else if(e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+		handleKeyDownEvent(e);
+	}
+	else if(e.type == SDL_KEYUP){
+		handleKeyUpEvent(e);
+	}
+
+	return true;
+	
+}
+
+//Handles Up Key Events
+void Hero::handleKeyUpEvent(SDL_Event e){
+	if(e.type == SDL_KEYUP){
+		switch(e.key.keysym.sym){
+			
+
+			case SDLK_s:
+							
+				deltaV = 0;
+				break;
+			case SDLK_a:
+				
+			case SDLK_d:
+				
+				rotationRate = 0;
+				
+
+				break;
+				
+		}
+	
+	}
+}
+
+//Handles down Key Events
+void Hero::handleKeyDownEvent(SDL_Event e){
+	//direction = (getAngle() - 90.0)*PI/180;	
+
+	switch(e.key.keysym.sym) {
+		case SDLK_w:
+			
+			deltaV += (ACCEL * TimeData::get_timestep());
+			break;
+
+		case SDLK_a:
+
+			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
+			break;
+
+		case SDLK_s:
+		
+			//setVY(getVY() + MAX_SPEED);
+			
+			deltaV -= (ACCEL * TimeData::get_timestep());
+			break;
+
+		case SDLK_d:
+			
+			//setVX(getVX() + MAX_SPEED);
+			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
+			break;
+		case SDLK_x:
+			speed = 0;
+			deltaV = 0;
+		
+		case SDLK_g:
+			if(getCurrHp() != getMaxHp())	
+				setCurrHp(getCurrHp() + 5);
+			std::cout << "Current hp: " << getCurrHp() << std::endl;
+			break;
+		case SDLK_f:
+			setCurrHp(getCurrHp() - 5);
+			std::cout << "Current hp: " << getCurrHp() << std::endl;
+			break;
+		case SDLK_SPACE:
+			//fireWeapon();
+			break;
+	}
+	
+	if(deltaV > MAX_DELTAV)
+	{
+		deltaV = MAX_DELTAV;
+	}
+	else if(deltaV < -MAX_DELTAV)
+	{
+		deltaV = -MAX_DELTAV;
+	}
+	if(rotationRate > MAX_ROTATIONRATE)
+	{
+		rotationRate = MAX_ROTATIONRATE;
+	}
+	else if(rotationRate < -MAX_ROTATIONRATE)
+	{
+		rotationRate = -MAX_ROTATIONRATE;
+	}
+}

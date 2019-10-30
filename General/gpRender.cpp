@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "gpRender.h"
 
+
 //--------------------------------Constructors--------------------------------------------------
 gpRender::gpRender() {};
 gpRender::gpRender(const char* win_name){

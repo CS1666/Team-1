@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <string>
 #include <vector>
+
 #include "NSDL_Circ.h"
 
 
@@ -45,7 +46,10 @@ class Sprite{
 
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
-
+		void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+		/*bool check_collision(SDL_Rect* a, SDL_Rect* b);
+		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
+*/
 		
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();

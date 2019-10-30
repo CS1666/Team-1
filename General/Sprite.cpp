@@ -1,5 +1,6 @@
 
 	#include "Sprite.h"
+	#include <iostream>
 
 	
 	//------------------------------------Constructors-----------------------------------------------
@@ -96,6 +97,14 @@
 		return renderOrder;
 	}
 	
+	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+		//std::cout << "nothing" << std::endl;
+	}
+/*
+	bool check_collision(SDL_Rect* a, SDL_Rect* b) {}
+
+	bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){}
+	*/
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){
