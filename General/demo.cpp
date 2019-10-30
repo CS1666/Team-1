@@ -50,10 +50,10 @@ void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
-	std::vector<Sprite*> osSprite2; // 2nd vector for rendering (will contain objects that ignore collision)
-	
+
 	//Audio Initilization
 	Audio::load_audio();
+
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -141,14 +141,11 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid4ent);
 
 
-	for(auto sprite : osSprite){
-		osSprite2.push_back(sprite);
-	}
-
+	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
-	osSprite2.push_back(&hpent);
+	osSprite.push_back(&hpent);
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -306,7 +303,7 @@ void run_demo(gpRender gr){
 				fixed = true;
 			}
 
-			gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
 		
 		Ellers_Maze maze;
@@ -332,7 +329,11 @@ void run_demo(gpRender gr){
 			SDL_RenderPresent(gr.getRender());
 		}
 
+
 		SDL_RenderClear(gr.getRender());
+
+		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+
 	}
 	
 }

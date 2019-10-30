@@ -51,8 +51,7 @@ std::vector<std::pair<int, int>> randNumP(){
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 	std::vector<Sprite*> osSprite;
-	std::vector<Sprite*> osSprite2;
-
+	
 	//load audio for sound
 	Audio::load_audio();
 
@@ -72,7 +71,7 @@ void run_phy_enviro(gpRender gr){
 	playerent.setMaxHp(100);
 	playerent.setRenderOrder(0);
 	osSprite.push_back(&playerent);
-	osSprite2.push_back(&playerent);
+	
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
@@ -81,22 +80,23 @@ void run_phy_enviro(gpRender gr){
 
 	osSprite.push_back(&starent);
 
-	osSprite2.push_back(&starent);
+	std::vector <std::pair<int, int>> randCoords = randNumP();
+
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	Planet planet1ent(db3, tex3,1, starent, 100);
 	osSprite.push_back(&planet1ent);
-	osSprite2.push_back(&planet1ent);
 
 	//Space Station Initialization-
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/Asteroid.png"); //placeholder img
 	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SpaceStation ss_ent(db4, tex_ss);
 	//osSprite.push_back(&ss_ent);
-	osSprite2.push_back(&ss_ent);
+	osSprite.push_back(&ss_ent);
 	
 	//planet1ent.initVelocity(starent);
+
 	
 	//Ship Cruiser initilization
 	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -108,7 +108,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
-	osSprite2.push_back(&hpent);
+	osSprite.push_back(&hpent);
 	
 	srand(time(0));
 	SDL_Rect bgtile[100];
@@ -247,6 +247,6 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-		gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
 }
