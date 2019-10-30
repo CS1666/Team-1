@@ -6,10 +6,10 @@ using namespace std;
 
 
 
-Planet::Planet(): Sprite() {};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {renderOrder = 2;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star sun): Sprite(dBox, aTex), mass{mass} {initVelocity(sun); renderOrder = 2;};
+Planet::Planet(): Sprite() {orbitalVel = 100;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {renderOrder = 2;orbitalVel = 100;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star &sun, float vel): Sprite(dBox, aTex), mass{mass}, orbitalVel{vel}{initVelocity(sun);renderOrder = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;
@@ -25,12 +25,12 @@ void Planet::initVelocity(Star& star)
 	}
 	angle += 1.57079632679;
 	//float vel = std::sqrt(1000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
-	float vel = 100;
-	vx = vel*cos(angle);
-	vy = vel*sin(angle);
+	vx = orbitalVel*cos(angle);
+	vy = orbitalVel*sin(angle);
 	std::cout << angle * 180 / 3.1415926 << std::endl;
 	std::cout << vx << std::endl;
 	std::cout << vy << std::endl;
+	std::cout << "oribital velocity " << orbitalVel<< std::endl;
 }
 
 int Planet::getRadius()
@@ -103,7 +103,7 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 		pointAngle += 3.1415926;
 	}
 	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
-	float grav = 10000.0/600; //std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
+	float grav = orbitalVel*orbitalVel/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
 	//grav *= TimeData::get_timestep()*TimeData::get_timestep();
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);

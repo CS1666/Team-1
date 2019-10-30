@@ -4,13 +4,14 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
+#include "Ship.h"
 
 using namespace std;
 
 class HpBar : public Sprite 
 {
     private:
-        
+        int ogW;
 	float percentage;
 
     public:
@@ -20,6 +21,8 @@ class HpBar : public Sprite
         
         void setPercentage(float Percentage);
         float getPercentage();
+	void changeBar(Ship &player);
+	int getOgW();
 
 };
 
