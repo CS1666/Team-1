@@ -1,13 +1,15 @@
 
 #include "Ship.h"
 #include <SDL.h> //temp
+#include <iostream>
+#include <math.h>
     Ship::Ship(): Sprite() {};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {};
+    Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
     Ship::~Ship()
     {
@@ -39,10 +41,8 @@
         speedY = speed;
     }
 
-
-
     //integrate BasicMovementFPSlimit.cpp
-    void Ship::setPosition(vector<int> newPosition)
+    void Ship::setPosition(pair<int,int> newPosition)
     {
         position = newPosition;
     }
@@ -63,22 +63,22 @@
         hull = newHull;
     }
     
-    vector<int> Ship::getPosition()
+    pair<int,int> Ship::getPosition()
     {
         return position;
     }
 
-    void Ship::setDestination(vector<int> newDestination)
+    void Ship::setDestination(pair<int,int> newDestination)
     {
         destination = newDestination;
     }
 
-    vector<int> Ship::getDestination()
+    pair<int,int> Ship::getDestination()
     {
         return destination;
     }
 
-    void Ship::setPath(queue<pair<int,int>> thePath)
+    void Ship::setPath(queue<pair<int,int>>* thePath)
     {
     	path = thePath;
         pathComplete=false;
@@ -89,18 +89,55 @@
         return maxVelocity;
     }
 
+    int Ship::getCurrHp()
+    {
+       return currHp;    
+    }
+
+    void Ship::setCurrHp(int newCurrHp)
+    {
+       currHp = newCurrHp;    
+    }
+
+    int Ship::getMaxHp()
+    {
+	   return maxHp;    
+    }
+
+    void Ship::setMaxHp(int newMaxHp)
+    {
+	   maxHp = newMaxHp;    
+    }
+
+    pair<int, int> Ship::getSize()
+    {
+        return size;
+    }
+
+    void Ship::setSize(pair<int, int> newSize)
+    {
+        size = newSize;
+    }
+
     //ai follows path assigned to it by ai class
     void Ship::followPath(Sprite& entity)
     {
 	    //note: change the path in Ship.h to whatever is returned.
-	    if(!path.empty())
+	    if(!path->empty())
 	    {
 		//note: assumed whatever we're using is some (x,y)
-		pair<int,int> coords=path.front();
+		pair<int,int> coords=path->front();
 		int x_coord=coords.first;
 		int y_coord=coords.second;
-		int cur_x=position[0];
-		int cur_y=position[1];
+		int cur_x=position.first;
+		int cur_y=position.second;
+		//get angle of destination
+		double newAngle= atan((double)-y_coord/(double)x_coord);
+		cout<<"new angle: "<<newAngle*180/3.14<<endl;
+		double angle=entity.getAngle();
+		entity.setAngle(newAngle*180/3.14+180);
+	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
+        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//currently will literally go 1 pixel at a time.
@@ -109,22 +146,23 @@
 		{
 		    if(cur_x>x_coord)
 			cur_x--;
-		    else
+		    else if(cur_x<x_coord)
 			cur_x++;
 		    if(cur_y>y_coord)
 			cur_y--;
-		    else
+		    else if(cur_y<y_coord)
 			cur_y++;
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
-		    position[0]=cur_x;
-		    position[1]=cur_y;
+		    position.first=cur_x;
+		    position.second=cur_y;
 		}
 		else
-		    path.pop();
+		    path->pop();
 	    }
 	    else
 	        pathComplete=true;
+	    cout<<pathComplete<<endl;
     }
 
     bool Ship::getPathComplete()

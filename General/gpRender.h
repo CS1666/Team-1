@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <string>
 #include "Sprite.h"
+#include "../General/HpBar.h"
 
 #pragma once
 
@@ -42,8 +43,12 @@ class gpRender{
 		int getSW();
 		int getSH();
 		int getFD();
-
+		
 		SDL_Renderer* getRender();
+		SDL_Texture *getWall();
+		int getImageWidth();
+		int getImageHeight();
+		
 
 
 
@@ -57,5 +62,9 @@ class gpRender{
 		int SCREEN_HEIGHT = 720;
 		int FPS = 60;
 		int frameDelay = 1000/ FPS;
+		SDL_Texture* bgsheet;
+		int image_width;
+		int image_height;
+		SDL_Texture *maze_wall;
 		
 };
