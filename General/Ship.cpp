@@ -146,7 +146,7 @@
 		{
 			//if(y_coord>cur_y)
 			curRotation= atan2(-ySlope,xSlope);
-			cout<<"radiant cur: "<<curRotation<<endl;
+			//cout<<"radiant cur: "<<curRotation<<endl;
 			//else
 			  //  curRotation=atan2(ySlope,xSlope);
 			if(std::abs(curRotation)==0||curRotation==3.14159)
@@ -156,8 +156,8 @@
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		cout<<"currotation:"<<curRotation<<endl;
-		cout<<"cur angle: "<<angle<<endl;
+		//cout<<"currotation:"<<curRotation<<endl;
+		//cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
 		if(curRotation>angle)
 		{
@@ -190,7 +190,7 @@
 		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+        //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//simulate turning, acceleration of ship

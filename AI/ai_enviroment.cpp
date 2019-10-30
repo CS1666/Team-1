@@ -154,7 +154,7 @@ void run_ai_enviro(gpRender gr){
 	pathq=ai.calculatePath(aiShip2,path);
 	if(!pathq2->empty())
 	    aiShip2.setPath(pathq2);
-	cout<<"pathfinded?"<<endl;
+	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
@@ -182,7 +182,7 @@ void run_ai_enviro(gpRender gr){
                                 pathq2 = ai.calculatePath(aiShip2,path2);
                                 aiShip2.setPath(pathq2);
                     }
-		cout<<"ok?"<<endl;
+		//cout<<"ok?"<<endl;
 		}
 
 		//DOESN"T WORK AT THIS TIME
