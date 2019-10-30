@@ -7,7 +7,7 @@ FOLDERS = $(wildcard ./General/*.o)\
 		
 CC = clang++
 COMPILER_FLAGS = -Wall -I/usr/include/SDL2 -std=c++11
-LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
 
 all: 
@@ -15,12 +15,14 @@ all:
 	+$(MAKE) -C General
 	+$(MAKE) -C Physics
 	+$(MAKE) -C Level_Generation
+	rm -f *.o
 	+$(MAKE) main.o
 	+@echo How to run:
 	+@echo Type  ./main.o arg,
 	+@echo args currently supported: none, c, a, l, p
 main.o: main.cpp 
 	$(CC) $^ $(FOLDERS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
 
 clean:
 	rm *.o

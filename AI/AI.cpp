@@ -34,36 +34,34 @@
 
     	bool AI::createMapState(Sector currentSector)
     	{
+    		// Buffer in pixels
+    		const int buffer = 50;
 
+    		// Gets sector size and sets mesh size to be the size of the sector
     		vector<int> sectorSize = currentSector.getSize();
 
+    		// Gets the positions and sizes of everything within the sector
+			  vector<vector<int> > currentState = currentSector.getState();
+
+			  // Creates a new map state with everything equal to zero
     		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
 
-            vector<Star> stars = currentSector.getStars();
-            
-            for (Star star : stars)
+    		// Puts 1's at the edges of objecys within the sector + the size of the buffer
+            for (vector<int> object : currentState)
             {
-                vector<int> starSize = star.getSize();
 
-                vector<int> starPosition = star.getPosition();
-
-                for (int x = starPosition[0]; x < starPosition[0] + starSize[0]; x++)
+                for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
                 {
-
-                    newStoredMapState[x][starPosition[1]] = 1;
-
-                    newStoredMapState[x][starPosition[1] + starSize[1]] = 1;
-                }
-
-
-                for (int y = starPosition[1]; y < starPosition[0] - starSize[0]; y--)
-                {
-                    newStoredMapState[starPosition[0]][y] = 1;
-                    newStoredMapState[starPosition[0] + starSize[0]][y] = 1;
+                    for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
+                    {
+                        newStoredMapState[x][y] = 1;
+                        newStoredMapState[x][y] = 1;
+                    }
                 }
             }
             
-            if(checkMapState(newStoredMapState)){
+            if(checkMapState(newStoredMapState))
+            {
                 storedMapState=newStoredMapState;
                 return true;
             }
@@ -78,18 +76,27 @@
 		//true if different, false if same
 		bool AI::checkMapState(vector<vector<bool> > newState)
 		{
-		    if(storedMapState==newState){
-                return false;
-            }
-			     
+		   if(storedMapState.empty()){
+                return true;
+           }
 
-		    return true;
+           for(int x = 0; x < newState.size(); x++){
+                for(int y = 0; y <newState[x].size(); y++){
+                    if(newState[x][y] != storedMapState[x][y]){
+                        return true;
+                    }
+                }
+            }               
+                    
+         return false;
+
 		}
 		//calculate the path for a ship and destination
 		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
+		    cout<<curPos.first<<endl;
+		    cout<<curPos.second<<endl;
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
-            
 		    return pth;
 		}

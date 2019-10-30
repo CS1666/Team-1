@@ -52,6 +52,8 @@ gpRender::gpRender(const char* win_name){
 		isInit =  false;
 	}
 	bgsheet = loadImage("Assets/Objects/backgroundss.png");
+	
+	maze_wall = loadImage("Assets/Objects/Maze_Wall.png");
 };
 
 //--------------------------------Destructors---------------------------------------------------
@@ -211,6 +213,9 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 		std::cout << "Unable to create texture from " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
 	}
 
+	image_width = startSurf->w;
+	image_height = startSurf->h;
+	
 	SDL_FreeSurface(startSurf);
 
 	return newText;
@@ -250,4 +255,19 @@ int gpRender::getFD(){
 
 SDL_Renderer* gpRender::getRender(){
 	return gRenderer;
+}
+
+int gpRender::getImageWidth()
+{
+	return image_width;
+}
+
+int gpRender::getImageHeight()
+{
+	return image_height;
+}
+
+SDL_Texture* gpRender::getWall()
+{
+	return maze_wall;
 }

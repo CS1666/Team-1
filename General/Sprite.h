@@ -7,7 +7,6 @@
 #pragma once
 
 
-
 class Sprite{
 
 	public:
@@ -55,14 +54,15 @@ class Sprite{
 		//Methods that deal with Circle drawn entities
 		NSDL_Circ* getDrawCirc();
 		bool isCircEnt(); 
-
-	
-
+		bool isShip();
+		bool isCelestialBody();
+		bool isUI();
 	protected:
 		SDL_Rect drawBox;
 		NSDL_Circ drawCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
+		int type = 0;
 		float x,y;
 		// set renderOrder for all objects
 		// 0 = player ship
