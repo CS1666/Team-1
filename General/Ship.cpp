@@ -139,16 +139,25 @@
 		int y_coord=coords.second;
 		int cur_x=position.first;
 		int cur_y=position.second;
+		double xSlope=x_coord-cur_x;
+		double ySlope=y_coord-cur_y;
 		//get angle of destination
 		if(!rotationSet)
 		{
-			curRotation= atan2((double)-y_coord,(double)x_coord);
-			curRotation=(int)std::floor(curRotation*180/3.14+180);
+			//if(y_coord>cur_y)
+			curRotation= atan2(-ySlope,xSlope);
+			//cout<<"radiant cur: "<<curRotation<<endl;
+			//else
+			  //  curRotation=atan2(ySlope,xSlope);
+			if(std::abs(curRotation)==0||curRotation==3.14159)
+			    curRotation=(int)std::floor(curRotation*180/3.14+90);
+			else
+			    curRotation=(int)std::floor(curRotation*180/3.14+180);
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		cout<<"currotation:"<<curRotation<<endl;
-		cout<<"cur angle: "<<angle<<endl;
+		//cout<<"currotation:"<<curRotation<<endl;
+		//cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
 		if(curRotation>angle)
 		{
@@ -177,9 +186,11 @@
 			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
+		if(entity.getAngle()>360)
+		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+        //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//simulate turning, acceleration of ship
@@ -193,7 +204,10 @@
 			    cur_x-=xVelocity;
 		    }
 		    else if(cur_x>x_coord)
+		    {
 			cur_x=x_coord; //skipped
+			rotationSet=false;
+		    }
 		    else if(cur_x+maxVelocity<x_coord)
 		    {
 			if(maxVelocity>xVelocity)
@@ -202,7 +216,10 @@
 			    cur_x+=xVelocity;
 		    }
 		    else if(cur_x<x_coord)
+		    {
 			cur_x=x_coord; //skipped
+			rotationSet=false;
+		    }
 		    if(cur_y-maxVelocity>y_coord)
 		    {
 			if(maxVelocity>yVelocity)
@@ -211,7 +228,10 @@
 			    cur_y-=yVelocity;
 		    }
 		    else if(cur_y>y_coord)
+		    {
 			cur_y=y_coord; //skipped
+			rotationSet=false;
+		    }
 		    else if(cur_y+maxVelocity<y_coord)
 		    {
 			if(maxVelocity>yVelocity)
@@ -220,7 +240,10 @@
 			    cur_y+=yVelocity;
 		    }
 		    else if(cur_y<y_coord)
+		    {
 			cur_y=y_coord; //skipped
+			rotationSet=false;
+		    }
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
 		    position.first=cur_x;
