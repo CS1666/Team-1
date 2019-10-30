@@ -80,6 +80,14 @@
 
     void Ship::setPath(queue<pair<int,int>>* thePath)
     {
+	//fullstops ship when setting path
+	cout<<"something"<<endl;
+	xVelocity=0;
+	yVelocity=0;
+	rotation=0;
+	maxVelocity=10;
+	maxRotation=10;
+	rotationSet=false;
     	path = thePath;
         pathComplete=false;
     }
@@ -125,57 +133,112 @@
 	    //note: change the path in Ship.h to whatever is returned.
 	    if(!path->empty())
 	    {
-    		//note: assumed whatever we're using is some (x,y)
-    		pair<int,int> coords=path->front();
-    		int x_coord=coords.first;
-    		int y_coord=coords.second;
-    		int cur_x=position.first;
-    		int cur_y=position.second;
-    		//get angle of destination
-    		//double newAngle= atan((double)-y_coord/(double)x_coord);
-    		//cout<<"new angle: "<<newAngle*180/3.14<<endl;
-    		//double angle=entity.getAngle();
-    		//entity.setAngle(newAngle*180/3.14+180);
-    	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-            //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
-    		//note: since we don't have updateMovement implemented, most
-    		//of the stuff here can probably be removed/handled by that
-    		//currently will literally go 1 pixel at a time.
-    		//also, need to render the ship in this method or something.
-    		if(cur_x != x_coord || cur_y != y_coord)
-    		{
-                for(int i = 0; i < 10; i++){
-                if(cur_x>x_coord)
-                cur_x--;
-                else if(cur_x<x_coord)
-                cur_x++;
-                if(cur_y>y_coord)
-                cur_y--;
-                else if(cur_y<y_coord)
-                cur_y++;
-                entity.setX(cur_x);
-                entity.setY(cur_y);
-                position.first=cur_x;
-                position.second=cur_y;
-                }
-    		    
-    		   
-    		}
-    		else{
-    		    path->pop();
-                setSpeedY(0);
-                setSpeedX(0);
-                }
-    	    }
-	
-        else
-        {
-            pathComplete=true;
-            setSpeedY(0);
-            setSpeedX(0);
-        }
-      }
-      
+		//note: assumed whatever we're using is some (x,y)
+		pair<int,int> coords=path->front();
+		int x_coord=coords.first;
+		int y_coord=coords.second;
+		int cur_x=position.first;
+		int cur_y=position.second;
+		//get angle of destination
+		if(!rotationSet)
+		{
+			curRotation= atan2((double)-y_coord,(double)x_coord);
+			curRotation=(int)std::floor(curRotation*180/3.14+180);
+			rotationSet=true;
+		}
+		double angle=entity.getAngle();
+		cout<<"currotation:"<<curRotation<<endl;
+		cout<<"cur angle: "<<angle<<endl;
+		bool angleChanged=false;
+		if(curRotation>angle)
+		{
+		    //pretty shit acceleration stuff tbh
+		    if(curRotation>angle+maxRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle+rotation++);
+			else
+			    entity.setAngle(angle+rotation);
+		    }
+		    else
+		        entity.setAngle(angle+1);
+		    angleChanged=true;
+		}
+		else if(angle>curRotation)
+		{
+		    if(angle-maxRotation>curRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle-(rotation++));
+			else
+			    entity.setAngle(angle-rotation);
+		    }
+		    else
+			entity.setAngle(angle-1);
+		    angleChanged=true;
+		}
+		//entity.setAngle(122);
+	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
+        std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+		//note: since we don't have updateMovement implemented, most
+		//of the stuff here can probably be removed/handled by that
+		//simulate turning, acceleration of ship
+		if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
+		{
+		    if(cur_x-maxVelocity>x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x-=xVelocity++;
+			else
+			    cur_x-=xVelocity;
+		    }
+		    else if(cur_x>x_coord)
+			cur_x=x_coord; //skipped
+		    else if(cur_x+maxVelocity<x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x+=xVelocity++;
+			else
+			    cur_x+=xVelocity;
+		    }
+		    else if(cur_x<x_coord)
+			cur_x=x_coord; //skipped
+		    if(cur_y-maxVelocity>y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y-=yVelocity++;
+			else
+			    cur_y-=yVelocity;
+		    }
+		    else if(cur_y>y_coord)
+			cur_y=y_coord; //skipped
+		    else if(cur_y+maxVelocity<y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y+=yVelocity++;
+			else
+			    cur_y+=yVelocity;
+		    }
+		    else if(cur_y<y_coord)
+			cur_y=y_coord; //skipped
+		    entity.setX(cur_x);
+		    entity.setY(cur_y);
+		    position.first=cur_x;
+		    position.second=cur_y;
+		}
+		else if(cur_x==x_coord&&cur_y==y_coord)
+		{
+		    path->pop();
+		    rotationSet=false;
+		}
+	    }
+	    else
+	    {
+		setSpeedY(0);
+		setSpeedX(0);
+	        pathComplete=true;
+	    }
+    }
 
     bool Ship::getPathComplete()
     {

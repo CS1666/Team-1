@@ -14,10 +14,14 @@ class Ship : public Sprite
         int hull;
         string sprite;
         pair<int,int> position;
-        int velocity;
-        float rotation;
+        int xVelocity;
+	int yVelocity;
+        float maxRotation;
         int weaponType;
         bool damageTaken;
+	bool rotationSet;
+	float curRotation;
+	float rotation;
         int maxVelocity;
         string currKey;
 
