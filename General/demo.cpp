@@ -69,9 +69,9 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&playerent);
 	
 	
-	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
+	//SDL_Rect db2 = {800,400,332,315};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,415};
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
@@ -83,19 +83,19 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
-	SDL_Rect db4 = {randCoords[1].first,randCoords[1].second+ 400,200,200};
+	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	Sprite planet2ent(db4, tex4);
 
 	osSprite.push_back(&planet2ent);
 
 	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
-	SDL_Rect db5 = {randCoords[2].first +400,randCoords[2].second+ 700,200,200};
+	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
 	Sprite planet3ent(db5, tex5);
 
 	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
-	SDL_Rect db6 = {randCoords[3].first +1200,randCoords[3].second+ 600,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	Sprite planet4ent(db6, tex6);
 
 	osSprite.push_back(&planet4ent);
