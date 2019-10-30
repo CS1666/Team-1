@@ -11,7 +11,7 @@
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../General/gpRender.h"
-#include "../General/Ellers_Maze.h"
+#include "../Level_Generation/Ellers_Maze.h"
 #include "demo.h"
 
 std::vector<std::pair<int, int>> randNum(){
@@ -48,7 +48,8 @@ constexpr int ZONE_HEIGHT = 2160;
 void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite;
+	std::vector<Sprite*> osSprite; // vector for collision checker
+	std::vector<Sprite*> osSprite2; // 2nd vector for rendering (will contain objects that ignore collision)
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -62,8 +63,11 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	Ship playerent(db, tex, 0);
+	playerent.setRenderOrder(0);
+	playerent.setCurrHp(100);
+	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
-
+	
 	
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
@@ -72,8 +76,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&starent);
 
-		osSprite.push_back(&starent);
-SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	Sprite planet1ent(db3, tex3);
 
@@ -132,6 +135,16 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	Sprite asteroid4ent(db12, tex12);
 
 	osSprite.push_back(&asteroid4ent);
+
+
+	for(auto sprite : osSprite){
+		osSprite2.push_back(sprite);
+	}
+
+	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
+	SDL_Rect hp = {10,10,300,20};
+	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
+	osSprite2.push_back(&hpent);
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -171,86 +184,151 @@ SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
 	SDL_Event e;
-	bool gameon = true;
+	bool gameon = false;
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
+	int titleFrame = 0;
+	// title screen
+	SDL_Texture* titletex = gr.loadImage("Assets/Objects/title1.png");
+	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
+	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	SDL_Event s;
+	while(!gameon){
+		if(titleFrame == 0){
+			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
+			titleFrame++;
+		}else{
+			SDL_RenderCopy(gr.getRender(), titletex2, nullptr, &title);
+			titleFrame--;
+		}
+		SDL_RenderPresent(gr.getRender());
+		SDL_Delay(300);
+		// start game when enter key is pressed
+		while(SDL_PollEvent(&s)){	
+			switch(s.key.keysym.sym){ 
+				case SDLK_RETURN:
+					if(s.type == SDL_KEYDOWN){
+						SDL_RenderClear(gr.getRender());
+						gameon = true;
+					}
+			}	
+			
+		}
+	}
 
-	//Game Loop
 	while(gameon)
 	{
-		gr.setFrameStart(SDL_GetTicks());
-		TimeData::update_timestep();
+		SDL_RenderClear(gr.getRender());
+		bool solar = true;
 
-		//Handles all incoming Key events
-		while(SDL_PollEvent(&e)) {
-			gameon = handleKeyEvents(e, playerent);	
-			switch(e.key.keysym.sym) {
-				case SDLK_w:
-					if(e.type == SDL_KEYDOWN){
-						animate = true;
-					}
-					else if (e.type == SDL_KEYUP){
-						animate = false;
-					}
-					break;
+		//Game Loop
+		while(gameon && solar)
+		{
+			
+			gr.setFrameStart(SDL_GetTicks());
+			TimeData::update_timestep();
+
+			//Handles all incoming Key events
+			while(SDL_PollEvent(&e)) {
+				gameon = handleKeyEvents(e, playerent);	
+				switch(e.key.keysym.sym) {
+					case SDLK_w:
+						if(e.type == SDL_KEYDOWN){
+							animate = true;
+						}
+						else if (e.type == SDL_KEYUP){
+							animate = false;
+						}
+						break;
+
+					case SDLK_m:
+						if(e.type == SDL_KEYDOWN){
+							solar = false;
+						}
+						break;
+				}
 			}
-		}
-		
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-		TimeData::update_move_last_time();
+			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
+			hpent.changeBar(playerent);
+			updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			TimeData::update_move_last_time();
 
-		if (animate){
-			if (TimeData::getTimeSinceAnim() > 100) {
-				if (animation <= 1){
-					cycle = true;
+			if (animate){
+				if (TimeData::getTimeSinceAnim() > 100) {
+					if (animation <= 1){
+						cycle = true;
+					}
+					else if(animation == 3){
+						cycle = false;
+					}
+					
+					if (cycle){
+						animation++;
+					}
+					else{
+						animation--;
+					}
+					
+					TimeData::update_anim_last_time();
+					playerent.setF(animation);
 				}
-				else if(animation == 3){
-					cycle = false;
-				}
-				
-				if (cycle){
-					animation++;
-				}
-				else{
-					animation--;
-				}
-				
-				TimeData::update_anim_last_time();
+			}
+			else{
+				animation = 0;
 				playerent.setF(animation);
 			}
-		}
-		else{
-			animation = 0;
-			playerent.setF(animation);
-		}
 
-		//Renders all renderable objects onto the screen
+			//Renders all renderable objects onto the screen
 
-		camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
-		camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
+			camera.x = playerent.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
+			camera.y = playerent.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
+			
+			if (camera.x < 0){
+				camera.x = 0;
+				fixed = true;
+			}
+			else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH){
+				camera.x = ZONE_WIDTH - SCREEN_WIDTH;
+				fixed = true;
+			}
+			if (camera.y < 0){
+				camera.y = 0;
+
+				fixed = true;
+			}
+			else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
+				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
+				fixed = true;
+			}
+
+			gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		}
 		
-		if (camera.x < 0){
-			camera.x = 0;
-			fixed = true;
-		}
-		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH){
-			camera.x = ZONE_WIDTH - SCREEN_WIDTH;
-			fixed = true;
-		}
-		if (camera.y < 0){
-			camera.y = 0;
+		Ellers_Maze maze;
+		SDL_RenderClear(gr.getRender());
+		bool mazeCheck = true;
 
-			fixed = true;
-		}
-		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
-			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
-			fixed = true;
+		while(mazeCheck && gameon)
+		{
+			SDL_RenderClear(gr.getRender());
+			while(SDL_PollEvent(&e)) {
+				gameon = handleKeyEvents(e, playerent);	
+				switch(e.key.keysym.sym) {
+					case SDLK_m:
+						if(e.type == SDL_KEYDOWN){
+							mazeCheck = false;
+						}
+						
+						break;
+				}
+			}
+			
+			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderPresent(gr.getRender());
 		}
 
-		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		SDL_RenderClear(gr.getRender());
 	}
 	
-	Ellers_Maze test_maze;
-	test_maze.test_output();
 }

@@ -813,9 +813,67 @@
 	}
 	/*End of test output*/
 
+	int Ellers_Maze::getRowSize()
+	{
+		return ROW_SIZE;
+	}
 
+	int Ellers_Maze::getColSize()
+	{
+		return COL_SIZE;
+	}
 
+	void Ellers_Maze::drawMaze(SDL_Texture *maze_wall, SDL_Renderer *mRender)
+	{
+   		int x = 4;
+    		int y = 4;
+	    	int width = 36;
+	    	int height = 4;
+	    	int row = 0;
+	    	int col = 0;
+		SDL_Point h;
+		h.x = 0;
+		h.y = 0;
+		for(row = 0; row < getRowSize(); row++)
+		{
+			for(col = 0; col < getColSize(); col++)
+			{
+			    if(row == 0)
+			    {
+				SDL_Rect section = {x, y, width, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
 
+			    }
+
+				if(col == 0)
+				{
+				    SDL_Rect section = {x, y, width, height};
+				    SDL_RenderCopyEx(mRender, maze_wall, NULL, &section, 0, &h, SDL_FLIP_NONE);
+				}
+
+			    if(hasRight(row, col))
+			    {
+				SDL_Rect section = {x, y+width, width, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+			    }
+			    else
+			    {
+				SDL_Rect section = {x, y, height, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+			    }
+
+			    if(hasBottom(row, col))
+			    {
+				SDL_Rect section = {x+width, y, width, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
+			    }
+			    y += width;
+
+			}
+			y = 4;
+			x += width;
+    		}
+	}
 
 //int main()
 //{

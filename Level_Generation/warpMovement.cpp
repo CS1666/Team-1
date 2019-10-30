@@ -1,21 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
-
-
-
 #include <SDL.h>
 #include <SDL_image.h>
 
-
-
-
-
 constexpr int CAM_WIDTH = 1280;
 constexpr int CAM_HEIGHT = 720;
-constexpr int BG_WIDTH = 1280;
-constexpr int BG_HEIGHT = 720;
 constexpr int TILE_SIZE = 100;
 
 // Function declarations
@@ -29,9 +19,7 @@ SDL_Renderer* gRenderer = nullptr;
 SDL_Texture* gBackground;
 SDL_Texture* gShipSheet;
 
-// For the ship
 SDL_Rect gShipRect = {0, 0, TILE_SIZE, TILE_SIZE};
-
 
 bool init() {	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -43,7 +31,7 @@ bool init() {
 		std::cout << "Warning: Linear texture filtering not enabled!" << std::endl;
 	}
 	
-	gWindow = SDL_CreateWindow("Tiling", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, CAM_WIDTH, CAM_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("Warping", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, CAM_WIDTH, CAM_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == nullptr) {
 		std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 		return  false;
@@ -112,19 +100,21 @@ int warpMovement() {
 		return 1;
 	}
 	
-	gBackground = loadImage("Assets/Objects/bg.png");
+	gBackground = loadImage("Assets/Objects/warpEffect.png");
+
+	int scroll_offset = 0;
+	
 	gShipSheet = loadImage("Assets/Objects/warpShip.png");
 
 	// Moving box
-	SDL_Rect moveBox = {BG_WIDTH/2 - TILE_SIZE/2, BG_HEIGHT/2 - TILE_SIZE/2, TILE_SIZE, TILE_SIZE};	
+	SDL_Rect moveBox = {CAM_WIDTH/2 - TILE_SIZE/2, CAM_HEIGHT/2 - TILE_SIZE/2, TILE_SIZE, TILE_SIZE};	
 	int x_vel = 0;
 	int y_vel = 0;
 	int x_deltav = 0;
 	int y_deltav = 0;
 
-	SDL_Rect camera = {BG_WIDTH/2 - CAM_WIDTH/2, BG_HEIGHT/2 - CAM_HEIGHT, CAM_WIDTH, CAM_HEIGHT};
-	SDL_Rect shipcam = {CAM_WIDTH/2, CAM_HEIGHT/2, TILE_SIZE, TILE_SIZE};
-
+	SDL_Rect bgRect = {0, 0, CAM_WIDTH, CAM_HEIGHT};
+	
 	SDL_Event e;
 	bool gameon = true;
 	while(gameon) {
@@ -172,37 +162,32 @@ int warpMovement() {
 		else if (y_vel > 5)
 			y_vel = 5;
 
-		// Move ship
+		// Move Ship vertically
 		moveBox.y += y_vel;
-		if (moveBox.y < 0 || (moveBox.y + TILE_SIZE > BG_HEIGHT))
+		// Vertical movement constrained by camera height and tiles at bottom
+		if (moveBox.y < 0 || (moveBox.y + TILE_SIZE > CAM_HEIGHT))
 			moveBox.y -= y_vel;
-		moveBox.x += x_vel;
-		if (moveBox.x < 0 || (moveBox.x + TILE_SIZE > BG_WIDTH))
-			moveBox.x -= x_vel;
-			
-		// Make sure ship is centered in camera
-		camera.x = (moveBox.x + moveBox.w/2) - CAM_WIDTH/2;
-		if (camera.x < 0)
-			camera.x = 0;
-		else if (camera.x + CAM_WIDTH > BG_WIDTH)
-			camera.x = BG_WIDTH - CAM_WIDTH;
 
-		camera.y = (moveBox.y + moveBox.h/2) - CAM_HEIGHT/2;
-		if (camera.y < 0)
-			camera.y = 0;
-		else if (camera.y + CAM_HEIGHT > BG_HEIGHT)
-			camera.y = BG_HEIGHT - CAM_HEIGHT;
+		// Move Ship horizontally
+		moveBox.x += x_vel;
+		// Horizontal movement constrained by length of level
+		if (moveBox.x < 0 || (moveBox.x + TILE_SIZE > CAM_WIDTH))
+			moveBox.x -= x_vel;
 
 		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
 		SDL_RenderClear(gRenderer);
-		
-		// Draw the portion of the background currently highlighted by the camera
-		SDL_RenderCopy(gRenderer, gBackground, &camera, nullptr);
 
-		// Draw the ship
-		shipcam.x = moveBox.x - camera.x;
-		shipcam.y = moveBox.y - camera.y;
-		SDL_RenderCopy(gRenderer, gShipSheet, &gShipRect, &shipcam);
+		// Always scroll the background
+		scroll_offset += 4;
+		if (scroll_offset > CAM_HEIGHT)
+			scroll_offset = -1;		
+		bgRect.y = scroll_offset;
+		SDL_RenderCopy(gRenderer, gBackground, nullptr, &bgRect);
+		bgRect.y -= CAM_HEIGHT;
+		SDL_RenderCopy(gRenderer, gBackground, nullptr, &bgRect);
+
+		// Draw the Ship
+		SDL_RenderCopy(gRenderer, gShipSheet, &gShipRect, &moveBox);
 
 		SDL_RenderPresent(gRenderer);
 	}

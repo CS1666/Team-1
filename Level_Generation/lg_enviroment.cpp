@@ -50,7 +50,7 @@ void run_lg_enviro(gpRender gr){
 	
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-	bool fixed = false;
+	bool fixed = true;
 	
 	//randNumVector();
 	std::vector <std::pair<int, int>> randCoords = randNumVector();
@@ -59,7 +59,7 @@ void run_lg_enviro(gpRender gr){
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Sprite playerent(db, tex, 0);
+	Ship playerent(db, tex, 0);
 	osSprite.push_back(&playerent);
 
 
