@@ -15,9 +15,12 @@ class Ship : public Sprite
         string sprite;
         pair<int,int> position;
         int velocity;
-        float rotation;
+        float maxRotation;
         int weaponType;
         bool damageTaken;
+	bool rotationSet;
+	float curRotation;
+	float rotation;
         int maxVelocity;
         string currKey;
 
