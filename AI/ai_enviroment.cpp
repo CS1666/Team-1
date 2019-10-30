@@ -58,6 +58,7 @@ void run_ai_enviro(gpRender gr){
 
 	//----------------------AI Ship initilization--------------------//
 	Ship aiShip;
+	Ship aiShip2;
 	//AI init
 
 	AI ai;
@@ -65,14 +66,18 @@ void run_ai_enviro(gpRender gr){
 	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(pair<int,int>(1010, 600));
-
+	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
+	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
+	aiShip2.setDestination(pair<int,int>(200,600));
 	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
-	
+	SDL_Texture* tex3 = gr.loadImage(aiShip2.getSprite());
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
-
+	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 	Sprite aient(db1, tex1);
+	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
-	
+	osSprite.push_back(&aient2);
+	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
 
@@ -139,12 +144,17 @@ void run_ai_enviro(gpRender gr){
 
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
+	vector<vector<bool>>mesh2=ai.getMapState();
 	Pathfinder path(mesh, 10);
+	Pathfinder path2(mesh2, 10);
 	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip, path);
-
-	if((!pathq->empty())){
-		aiShip.setPath(pathq);
-	
+	queue<pair<int,int>>*pathq2 = ai.calculatePath(aiShip2, path2);
+	if((!pathq->empty()))
+	    aiShip.setPath(pathq);
+	pathq=ai.calculatePath(aiShip2,path);
+	if(!pathq2->empty())
+	    aiShip2.setPath(pathq2);
+	cout<<"pathfinded?"<<endl;
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
@@ -157,15 +167,22 @@ void run_ai_enviro(gpRender gr){
 				pathq = ai.calculatePath(aiShip,path);
 				aiShip.setPath(pathq);
 		    }
+		//cout<<"???????"<<endl;
 		}
 		else{
-		    
 		    aiShip.setDestination(pair<int,int>(10, 60));
-
 		    pathq = ai.calculatePath(aiShip, path);
-		
 		    aiShip.setPath(pathq);
-		   
+		}
+		if(aiShip2.getPosition()!=aiShip2.getDestination())
+		{
+		    aiShip2.followPath(aient2);
+                    if(aiShip2.getPathComplete())
+                    {
+                                pathq2 = ai.calculatePath(aiShip2,path2);
+                                aiShip2.setPath(pathq2);
+                    }
+		cout<<"ok?"<<endl;
 		}
 
 		//DOESN"T WORK AT THIS TIME
@@ -179,7 +196,6 @@ void run_ai_enviro(gpRender gr){
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
-	}
 
-	
+
 }
