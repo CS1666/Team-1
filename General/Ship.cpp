@@ -193,7 +193,7 @@
 			    cur_x-=xVelocity;
 		    }
 		    else if(cur_x>x_coord)
-			cur_x--;
+			cur_x=x_coord; //skipped
 		    else if(cur_x+maxVelocity<x_coord)
 		    {
 			if(maxVelocity>xVelocity)
@@ -202,7 +202,7 @@
 			    cur_x+=xVelocity;
 		    }
 		    else if(cur_x<x_coord)
-			cur_x++;
+			cur_x=x_coord; //skipped
 		    if(cur_y-maxVelocity>y_coord)
 		    {
 			if(maxVelocity>yVelocity)
@@ -211,7 +211,7 @@
 			    cur_y-=yVelocity;
 		    }
 		    else if(cur_y>y_coord)
-			cur_y--;
+			cur_y=y_coord; //skipped
 		    else if(cur_y+maxVelocity<y_coord)
 		    {
 			if(maxVelocity>yVelocity)
@@ -220,7 +220,7 @@
 			    cur_y+=yVelocity;
 		    }
 		    else if(cur_y<y_coord)
-			cur_y++;
+			cur_y=y_coord; //skipped
 		    entity.setX(cur_x);
 		    entity.setY(cur_y);
 		    position.first=cur_x;
