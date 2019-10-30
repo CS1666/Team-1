@@ -153,13 +153,8 @@ void run_demo(gpRender gr){
 	SDL_Rect db3 = {400,300,225,300};
 	Sprite emyent(db3, tex3);
 	*/
-
-	SDL_Rect pdb = {0, 0, 2, 20};
-	SDL_Texture* ptex = gr.loadImage("Assets/Objects/laser.png");
-	Projectile laser(pdb, ptex);
-	//laser.setAngle(playerent.getAngle());
-	//osSprite.push_back(&laser);
-	//osSprite2.push_back(&laser);
+	
+	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
 	srand(time(0));
 	SDL_Rect bgtile[100];
@@ -258,28 +253,16 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						//Projectile laser = playerent.fireWeapon(gr);
-						//Sprite laser(pdb, ptex);
-						laser.setX(playerent.getX() + playerent.getW()/2);
-						laser.setY(playerent.getY() - 20);
-						laser.setAngle(playerent.getAngle());
-						//osSprite.push_back(&laser);
-						osSprite2.push_back(&laser);
-						//playerent.fireWeapon(gr, osSprite2);
-						
+						osSprite2.push_back(new Projectile(playerent.fireWeapon(ltex)));					
 						break;
 				}
 			}
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
-			/*for(auto ent : osSprite) {
-    			updatePosition(*ent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
- 			}*/
-			//updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			playerent.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			/*for(auto ent : osSprite2) {
+
+			for(auto ent : osSprite2) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			}*/
+			}
 
 			TimeData::update_move_last_time();
 
@@ -330,7 +313,6 @@ void run_demo(gpRender gr){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 				fixed = true;
 			}
-
 			gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
 		

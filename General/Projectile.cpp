@@ -6,6 +6,8 @@ Projectile::Projectile(): Sprite() {};
 
 Projectile::Projectile(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
+Projectile::Projectile(const Projectile &spr): Sprite(spr.drawBox, spr.assetTex) {renderOrder = 1;};
+
 void Projectile::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
 {
 	float speedX = 10*cos((getAngle() - 90.0)*PI/180);

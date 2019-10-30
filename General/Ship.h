@@ -84,7 +84,7 @@ class Ship : public Sprite
         int getCurrHp();
         void setMaxHp(int newMaxHp);
         int getMaxHp();
-        //void fireWeapon(gpRender gr, std::vector<Sprite*> sprites); 
+        Projectile fireWeapon(SDL_Texture* texture); 
         
 };
 

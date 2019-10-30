@@ -10,7 +10,7 @@
 
 	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-
+	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, drawCirc{spr.drawCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
 
 	//------------------------------------Destructor--------------------------------------------------
 	Sprite::~Sprite(){
@@ -98,7 +98,6 @@
 	}
 	
 	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
-		//std::cout << "nothing" << std::endl;
 	}
 /*
 	bool check_collision(SDL_Rect* a, SDL_Rect* b) {}

@@ -22,5 +22,6 @@ class Projectile : public Sprite
     public:
         Projectile();
         Projectile(SDL_Rect dBox, SDL_Texture* aTex);
+        Projectile(const Projectile &spr);
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
 };

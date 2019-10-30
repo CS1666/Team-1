@@ -335,16 +335,27 @@ int Ship::getMass()
 {
 	return mass;	
 }
-/*
-void Ship::fireWeapon(gpRender gr, std::vector<Sprite*> sprites)
+
+Projectile Ship::fireWeapon(SDL_Texture* texture)
 {
-	SDL_Rect pdb = {getX() + getW()/2, getY() - 20, 2, 20};
-	SDL_Texture* ptex = gr.loadImage("Assets/Objects/laser.png");
-	Sprite laser(pdb, ptex);
+	//float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+	//float speedY = speed*sin((getAngle() - 90.0)*PI/180);
+
+
+	std::cout << "Firing Angle: " << getAngle() << std::endl;
+	int X = getTrueX() + (getW()/2);//*cos(getAngle());
+	int Y = getTrueY();// + (getW()/2)*sin(getAngle());
+	std::cout << "Ship X: " << getTrueX() << std::endl;
+	std::cout << "Ship Y: " << getTrueY() << std::endl;
+	std::cout << "Laser X: " << X << std::endl;
+	std::cout << "Laser Y: " << Y << std::endl;
+	SDL_Rect ldb = {X, Y, 2, 10};
+	Projectile laser(ldb, texture);
 	laser.setAngle(getAngle());
+	return laser;
+	//std::cout << "Laser: " << laser.getTexture() << std::endl;
 	//osSprite.push_back(&laser);
-	sprites.push_back(&laser);
-}*/
+}
 
 Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 0;};
 
@@ -379,10 +390,8 @@ void Hero::handleKeyUpEvent(SDL_Event e){
 			case SDLK_d:
 				
 				rotationRate = 0;
-				
-
-				break;
-				
+			
+				break;	
 		}
 	
 	}

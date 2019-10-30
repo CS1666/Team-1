@@ -124,13 +124,10 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
-		
 		//check if entity within range of camera but ignores UI
 		else if ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
 			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH()) && entity->getRenderOrder() != 3){
-			
 			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
-
 			SDL_Point center;
 			if (entity->isRectEnt()){
 				center.x = entity->getW()/2;
