@@ -6,11 +6,14 @@
 #include "Sprite.h"
 #include "gpRender.h"
 
+
 //--------------------------------Constructors--------------------------------------------------
 gpRender::gpRender() {};
 gpRender::gpRender(const char* win_name){
 	// Flag what subsystems to initialize
 	// For now, just video
+	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
 		isInit = false;
@@ -49,6 +52,9 @@ gpRender::gpRender(const char* win_name){
 		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
 		isInit =  false;
 	}
+	bgsheet = loadImage("Assets/Objects/backgroundss.png");
+	
+	maze_wall = loadImage("Assets/Objects/Maze_Wall.png");
 };
 
 //--------------------------------Destructors---------------------------------------------------
@@ -75,8 +81,7 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 	
 	SDL_RenderClear(gRenderer);
 
-	//Render 2 randomly generated background layers and 2 randomly placed distant galaxies
-	SDL_Texture* bgsheet = loadImage("Assets/Objects/backgroundss.png");
+	
 
 	if (camera.x - 200 < galaxies[0] && galaxies[0] < camera.x + SCREEN_WIDTH*3 &&
 		camera.y - 200 < galaxies[1] && galaxies[1] < camera.x + SCREEN_WIDTH*3){
@@ -111,7 +116,7 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 
 		//To check if entity is player, player must be the first entity added
 		//Also checks if camera should be fixed
-		if ((entity == osEntity.at(0)) && !fixed){
+		if ((entity->getRenderOrder() == 0 || entity == osEntity.at(0)) && !fixed){
 			SDL_Point center;
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
@@ -119,13 +124,10 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
-
-		//check if entity within range of camera
+		//check if entity within range of camera but ignores UI
 		else if ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
-			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH())){
-			
+			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH()) && entity->getRenderOrder() != 3){
 			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
-
 			SDL_Point center;
 			if (entity->isRectEnt()){
 				center.x = entity->getW()/2;
@@ -142,7 +144,21 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 				entity->getDrawCirc()->RenderFillCirc(gRenderer);
 			}
 		}
+
+		// checks if it's UI
+		if (entity->getRenderOrder() == 3){
+			SDL_Point center;
+			
+			SDL_Rect campos = {entity->getX(), entity->getY(), entity->getW(), entity->getH()};
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			
+			SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
+		}
+
 	}
+	
+	
 	SDL_RenderPresent(gRenderer);
 
 	//If you are using new functionality
@@ -172,6 +188,9 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 		std::cout << "Unable to create texture from " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
 	}
 
+	image_width = startSurf->w;
+	image_height = startSurf->h;
+	
 	SDL_FreeSurface(startSurf);
 
 	return newText;
@@ -211,4 +230,19 @@ int gpRender::getFD(){
 
 SDL_Renderer* gpRender::getRender(){
 	return gRenderer;
+}
+
+int gpRender::getImageWidth()
+{
+	return image_width;
+}
+
+int gpRender::getImageHeight()
+{
+	return image_height;
+}
+
+SDL_Texture* gpRender::getWall()
+{
+	return maze_wall;
 }

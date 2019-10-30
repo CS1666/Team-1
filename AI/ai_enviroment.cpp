@@ -10,6 +10,7 @@
 #include "AI.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
+#include "theta.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -17,6 +18,10 @@ constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
+
+vector<Sprite*> initilizeSprites(){
+
+}
 void run_ai_enviro(gpRender gr){
 
 
@@ -32,36 +37,65 @@ void run_ai_enviro(gpRender gr){
 	//gpRender object that is used to render object onto screen
 
 	//Ship object init
+
+
+	//----------------------Player Ship initilization--------------------//
+	Ship playerShip;
+
+	playerShip.setSprite("Assets/Objects/ship_capital_ally.png");
+	playerShip.setPosition(pair<int,int>(50,50));
+	
+
+	SDL_Texture* ptex = gr.loadImage(playerShip.getSprite());
+	
+	SDL_Rect pdb = {50,50,PLAYER_WIDTH,PLAYER_HEIGHT};
+
+	
+	Sprite playerent(pdb, ptex);
+	osSprite.push_back(&playerent);
+	
+	//--------------------------End-----------------------------------//
+
+	//----------------------AI Ship initilization--------------------//
 	Ship aiShip;
 	//AI init
 
 	AI ai;
 
-	aiShip.setSprite("Assets/Objects/ship_capital_ally.png");
-	aiShip.setPosition({10, 10});
-	aiShip.setDestination({600, 325});
+	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
+	aiShip.setPosition(pair<int,int>(100,200));
+	aiShip.setDestination(pair<int,int>(1010, 600));
 
-	SDL_Texture* tex = gr.loadImage(aiShip.getSprite());
-	//SDL_Rect db = {50,325,75,75};
-	SDL_Rect db = {10,10,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
+	
+	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	Sprite playerent(db, tex);
-	osSprite.push_back(&playerent);
+	Sprite aient(db1, tex1);
+	osSprite.push_back(&aient);
+	
 
-	//positions = gameState, only track the ship for now
-	//destination is also a vector
-	positions.push_back({10,10});
+	//--------------------------End-----------------------------------//
 
-	vector<int> destination={500,500};
-
-
-	//Red giant Initilzation-
+	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {500,200,300,300};
 	Sprite starent(db2, tex2);
 
-	osSprite.push_back(&starent);
+	Star star;
 
+	star.setSize({300, 300});
+	star.setPosition({500, 200});
+
+	Sector sector;
+
+	sector.setSize({1280, 720});
+	sector.setStars({star});
+	osSprite.push_back(&starent);
+	//----------------------------------------------------------------------
+
+
+
+//------------------------------------Rendering Background--------------------------------------//
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -93,86 +127,59 @@ void run_ai_enviro(gpRender gr){
 	bggalaxies[2] = rand() % (ZONE_WIDTH - 200);
 	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
+	//------------------------------------Rendering Background--------------------------------------//
 
-	Star star;
 
-	star.setSize({300, 300});
-	star.setPosition({500, 200});
-
-	Sector sector;
-
-	sector.setSize({1280, 720});
-	sector.setStars({star});
+	
 
 	SDL_Event e;
 	bool gameon = true;
-	//int animation = 0;
-	//bool cycle;
-	//bool animate;
-	//Uint32 anim_last_time = SDL_GetTicks();
+	
 
+
+	ai.createMapState(sector);
+	vector<vector<bool> > mesh = ai.getMapState();
+	Pathfinder path(mesh, 10);
+	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip, path);
+
+	if((!pathq->empty())){
+		aiShip.setPath(pathq);
+	
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		//position needs to be in booleans?
-		if(aiShip.getPosition()!=destination) //&& ai.checkMapState(positions))
+		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
-		    cout<<"goes into here"<<endl;
-		    ai.createMapState(sector);
-		    //aiShip.setPath(ai.calculatePath(aiShip,destination));
-		    //make a testing queue of a path
-		    std::queue<pair<int,int>> test=queue<pair<int,int>>();
-		    test.push(pair<int,int>(225,225));
-		    test.push(pair<int,int>(300,300));
-		    test.push(pair<int,int>(500,500));
-		    aiShip.setPath(test);
-		    aiShip.followPath(playerent);
-		}
-		//Handles all incoming Key events
-		while(SDL_PollEvent(&e)) {
-			gameon = handleKeyEvents(e, playerent);	
-			/*switch(e.key.keysym.sym) {
-				case SDLK_w:
-					if(e.type == SDL_KEYDOWN){
-						animate = true;
-					}
-					else if (e.type == SDL_KEYUP){
-						animate = false;
-					}
-					break;
-			}*/
-		}
-
-		updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-
-		/*if (animate){
-			if (SDL_GetTicks() - anim_last_time > 150) {
-				if (animation == 0){
-					cycle = true;
-				}
-				else if(animation == 3){
-					cycle = false;
-				}
-				
-				if (cycle){
-					animation++;
-				}
-				else{
-					animation--;
-				}
-				
-				anim_last_time = SDL_GetTicks();
-				playerent.setF(animation);
-			}
+		    aiShip.followPath(aient);
+		    if(aiShip.getPathComplete())
+		    {
+				pathq = ai.calculatePath(aiShip,path);
+				aiShip.setPath(pathq);
+		    }
 		}
 		else{
-			animation = 0;
-			playerent.setF(animation);
-		}*/
-		
+		    
+		    aiShip.setDestination(pair<int,int>(10, 60));
 
-		//Renders all renderable objects onto the screen
+		    pathq = ai.calculatePath(aiShip, path);
+		
+		    aiShip.setPath(pathq);
+		   
+		}
+
+		//DOESN"T WORK AT THIS TIME
+		//Handles all incoming Key events
+		while(SDL_PollEvent(&e)) {
+			//std::cout << "Key Event!!!" << std::endl;
+			gameon = handleKeyEvents(e, playerShip);	
+			
+		}
+		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		}
 	}
+
+	
 }

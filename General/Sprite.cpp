@@ -1,5 +1,6 @@
 
 	#include "Sprite.h"
+	#include <iostream>
 
 	
 	//------------------------------------Constructors-----------------------------------------------
@@ -9,7 +10,7 @@
 
 	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-
+	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, drawCirc{spr.drawCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
 
 	//------------------------------------Destructor--------------------------------------------------
 	Sprite::~Sprite(){
@@ -30,7 +31,18 @@
 		drawBox.y = (int)Sprite::y;
 	}
 
-
+	bool Sprite::isShip()
+	{
+		return type == 1;
+	}
+	bool Sprite::isCelestialBody()
+	{
+		return type == 2;
+	}
+	bool Sprite::isUI()
+	{
+		return type == 3;
+	}
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
@@ -78,7 +90,20 @@
 	int Sprite::getF(){
 		return animFrame;
 	}
+	void Sprite::setRenderOrder(int new_order){
+		renderOrder = new_order;
+	}
+	int Sprite::getRenderOrder(){
+		return renderOrder;
+	}
 	
+	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	}
+/*
+	bool check_collision(SDL_Rect* a, SDL_Rect* b) {}
+
+	bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){}
+	*/
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){

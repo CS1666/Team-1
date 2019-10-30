@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "../General/Ship.h"
 #include "../General/Sector.h"
-#include "./theta.h"
+#include "theta.h"
 
 #include <math.h>
 
@@ -25,9 +25,10 @@ class AI
         void setShips(vector<Ship> newShips);
 		bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(Ship *shipToPath);
+        vector<vector<bool>> getMapState();
         void lineOfSight();
-        void createMapState(Sector currentSector);
-        std::queue<vector<int>> calculatePath(Ship theShip, vector<int> destination);
-        int calculateDistance(vector<int> start, vector<int> stop);
+        bool createMapState(Sector currentSector);
+        queue<pair<int,int>>* calculatePath(Ship theShip, Pathfinder Path);
+        int calculateDistance(pair<int,int> start, pair<int,int>stop);
 	
 };
