@@ -75,7 +75,6 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
-	osSprite2.push_back(&starent);
 	std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
