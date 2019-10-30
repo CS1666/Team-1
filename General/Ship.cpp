@@ -82,7 +82,8 @@
     {
 	//fullstops ship when setting path
 	cout<<"something"<<endl;
-	velocity=0;
+	xVelocity=0;
+	yVelocity=0;
 	rotation=0;
 	maxVelocity=10;
 	maxRotation=10;
@@ -151,14 +152,29 @@
 		bool angleChanged=false;
 		if(curRotation>angle)
 		{
-		    //cout<<"should be rotating clockwrise"<<endl;
-		    entity.setAngle(angle+1);
+		    //pretty shit acceleration stuff tbh
+		    if(curRotation>angle+maxRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle+rotation++);
+			else
+			    entity.setAngle(angle+rotation);
+		    }
+		    else
+		        entity.setAngle(angle+1);
 		    angleChanged=true;
 		}
 		else if(angle>curRotation)
 		{
-		    //cout<<"should be rotating counterclock"<<endl;
-		    entity.setAngle(angle-1);
+		    if(angle+maxRotation>curRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle-(rotation++));
+			else
+			    entity.setAngle(angle-rotation);
+		    }
+		    else
+			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
 		//entity.setAngle(122);
@@ -169,8 +185,22 @@
 		//simulate turning, acceleration of ship
 		if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 		{
-		    if(cur_x>x_coord)
+		    if(cur_x+maxVelocity>x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x-=xVelocity++;
+			else
+			    cur_x-=xVelocity;
+		    }
+		    else if(cur_x>x_coord)
 			cur_x--;
+		    else if(cur_x+maxVelocity<x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x+=xVelocity++;
+			else
+			    cur_x+=xVelocity;
+		    }
 		    else if(cur_x<x_coord)
 			cur_x++;
 		    if(cur_y>y_coord)
