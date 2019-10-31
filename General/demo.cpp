@@ -6,10 +6,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
+#include "../General/HpBar.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
+#include "../Physics/Audio.h"
 #include "../General/gpRender.h"
 #include "../Level_Generation/Ellers_Maze.h"
 #include "demo.h"
@@ -49,7 +51,9 @@ void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
-	std::vector<Sprite*> osSprite2; // 2nd vector for rendering (will contain objects that ignore collision)
+
+	//Audio Initilization
+	Audio::load_audio();
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -62,16 +66,18 @@ void run_demo(gpRender gr){
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	Ship playerent(db, tex, 0);
-	playerent.setRenderOrder(0);
+	//Ship playerent(db, tex, 0);
+	Hero playerent(db, tex);
+	//playerent.setRenderOrder(0);
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
 	
 	
-	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
+	//SDL_Rect db2 = {800,400,332,315};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,415};
+
 	Star starent(db2, tex2);
 
 	osSprite.push_back(&starent);
@@ -83,19 +89,23 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
-	SDL_Rect db4 = {randCoords[1].first,randCoords[1].second+ 400,200,200};
+
+	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
+
 	Sprite planet2ent(db4, tex4);
 
 	osSprite.push_back(&planet2ent);
 
 	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
-	SDL_Rect db5 = {randCoords[2].first +400,randCoords[2].second+ 700,200,200};
+	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+
 	Sprite planet3ent(db5, tex5);
 
 	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
-	SDL_Rect db6 = {randCoords[3].first +1200,randCoords[3].second+ 600,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+
 	Sprite planet4ent(db6, tex6);
 
 	osSprite.push_back(&planet4ent);
@@ -135,22 +145,20 @@ void run_demo(gpRender gr){
 	Sprite asteroid4ent(db12, tex12);
 
 	osSprite.push_back(&asteroid4ent);
-
-
-	for(auto sprite : osSprite){
-		osSprite2.push_back(sprite);
-	}
-
+	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
-	osSprite2.push_back(&hpent);
+	osSprite.push_back(&hpent);
+
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db3 = {400,300,225,300};
 	Sprite emyent(db3, tex3);
 	*/
+
+	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
 	srand(time(0));
 	SDL_Rect bgtile[100];
@@ -231,7 +239,9 @@ void run_demo(gpRender gr){
 
 			//Handles all incoming Key events
 			while(SDL_PollEvent(&e)) {
-				gameon = handleKeyEvents(e, playerent);	
+
+				gameon = playerent.handleKeyEvents(e);
+
 				switch(e.key.keysym.sym) {
 					case SDLK_w:
 						if(e.type == SDL_KEYDOWN){
@@ -247,11 +257,18 @@ void run_demo(gpRender gr){
 							solar = false;
 						}
 						break;
+					case SDLK_SPACE:
+						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						break;
 				}
 			}
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
-			updatePosition(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+
+			for(auto ent : osSprite) {
+				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}
+      
 			TimeData::update_move_last_time();
 
 			if (animate){
@@ -302,7 +319,7 @@ void run_demo(gpRender gr){
 				fixed = true;
 			}
 
-			gr.renderOnScreenEntity(osSprite2, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
 		
 		Ellers_Maze maze;
