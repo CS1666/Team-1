@@ -165,166 +165,188 @@ pair<int,int> Ship::getDestination()
 }
 
 void Ship::setPath(queue<pair<int,int>>* thePath)
-{
-//fullstops ship when setting path
-cout<<"something"<<endl;
-xVelocity=0;
-yVelocity=0;
-rotation=0;
-maxVelocity=10;
-maxRotation=10;
-rotationSet=false;
-	path = thePath;
-	pathComplete=false;
-}
+    {
+	//fullstops ship when setting path
+	cout<<"something"<<endl;
+	xVelocity=0;
+	yVelocity=0;
+	rotation=0;
+	maxVelocity=10;
+	maxRotation=10;
+	rotationSet=false;
+    	path = thePath;
+        pathComplete=false;
+    }
 
-int Ship::getMaxVelocity()
-{
-	return maxVelocity;
-}
+    int Ship::getMaxVelocity()
+    {
+        return maxVelocity;
+    }
 
-int Ship::getCurrHp()
-{
-	return currHp;    
-}
+    int Ship::getCurrHp()
+    {
+       return currHp;    
+    }
 
-void Ship::setCurrHp(int newCurrHp)
-{
-	currHp = newCurrHp;    
-}
+    void Ship::setCurrHp(int newCurrHp)
+    {
+       currHp = newCurrHp;    
+    }
 
-int Ship::getMaxHp()
-{
-	return maxHp;    
-}
+    int Ship::getMaxHp()
+    {
+	   return maxHp;    
+    }
 
-void Ship::setMaxHp(int newMaxHp)
-{
-	maxHp = newMaxHp;    
-}
+    void Ship::setMaxHp(int newMaxHp)
+    {
+	   maxHp = newMaxHp;    
+    }
 
-pair<int, int> Ship::getSize()
-{
-	return size;
-}
+    pair<int, int> Ship::getSize()
+    {
+        return size;
+    }
 
-void Ship::setSize(pair<int, int> newSize)
-{
-	size = newSize;
-}
+    void Ship::setSize(pair<int, int> newSize)
+    {
+        size = newSize;
+    }
 
-//ai follows path assigned to it by ai class
-void Ship::followPath(Sprite& entity)
-{
-	//note: change the path in Ship.h to whatever is returned.
-	if(!path->empty())
-	{
-	//note: assumed whatever we're using is some (x,y)
-	pair<int,int> coords=path->front();
-	int x_coord=coords.first;
-	int y_coord=coords.second;
-	int cur_x=position.first;
-	int cur_y=position.second;
-	//get angle of destination
-	if(!rotationSet)
-	{
-		curRotation= atan2((double)-y_coord,(double)x_coord);
-		curRotation=(int)std::floor(curRotation*180/3.14+180);
-		rotationSet=true;
-	}
-	double angle=entity.getAngle();
-	cout<<"currotation:"<<curRotation<<endl;
-	cout<<"cur angle: "<<angle<<endl;
-	bool angleChanged=false;
-	if(curRotation>angle)
-	{
-		//pretty shit acceleration stuff tbh
-		if(curRotation>angle+maxRotation)
+    //ai follows path assigned to it by ai class
+    void Ship::followPath(Sprite& entity)
+    {
+	    //note: change the path in Ship.h to whatever is returned.
+	    if(!path->empty())
+	    {
+		//note: assumed whatever we're using is some (x,y)
+		pair<int,int> coords=path->front();
+		int x_coord=coords.first;
+		int y_coord=coords.second;
+		int cur_x=position.first;
+		int cur_y=position.second;
+		double xSlope=x_coord-cur_x;
+		double ySlope=y_coord-cur_y;
+		//get angle of destination
+		if(!rotationSet)
 		{
-		if(maxRotation>rotation)
-			entity.setAngle(angle+rotation++);
-		else
-			entity.setAngle(angle+rotation);
+			//if(y_coord>cur_y)
+			curRotation= atan2(-ySlope,xSlope);
+			//cout<<"radiant cur: "<<curRotation<<endl;
+			//else
+			  //  curRotation=atan2(ySlope,xSlope);
+			if(std::abs(curRotation)==0||curRotation==3.14159)
+			    curRotation=(int)std::floor(curRotation*180/3.14+90);
+			else
+			    curRotation=(int)std::floor(curRotation*180/3.14+180);
+			rotationSet=true;
 		}
-		else
-			entity.setAngle(angle+1);
-		angleChanged=true;
-	}
-	else if(angle>curRotation)
-	{
-		if(angle-maxRotation>curRotation)
+		double angle=entity.getAngle();
+		//cout<<"currotation:"<<curRotation<<endl;
+		//cout<<"cur angle: "<<angle<<endl;
+		bool angleChanged=false;
+		if(curRotation>angle)
 		{
-		if(maxRotation>rotation)
-			entity.setAngle(angle-(rotation++));
-		else
-			entity.setAngle(angle-rotation);
+		    //pretty shit acceleration stuff tbh
+		    if(curRotation>angle+maxRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle+rotation++);
+			else
+			    entity.setAngle(angle+rotation);
+		    }
+		    else
+		        entity.setAngle(angle+1);
+		    angleChanged=true;
 		}
-		else
-		entity.setAngle(angle-1);
-		angleChanged=true;
-	}
-	//entity.setAngle(122);
-//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-	std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
-	//note: since we don't have updateMovement implemented, most
-	//of the stuff here can probably be removed/handled by that
-	//simulate turning, acceleration of ship
-	if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
-	{
-		if(cur_x-maxVelocity>x_coord)
+		else if(angle>curRotation)
 		{
-		if(maxVelocity>xVelocity)
-			cur_x-=xVelocity++;
-		else
-			cur_x-=xVelocity;
+		    if(angle-maxRotation>curRotation)
+		    {
+			if(maxRotation>rotation)
+			    entity.setAngle(angle-(rotation++));
+			else
+			    entity.setAngle(angle-rotation);
+		    }
+		    else
+			entity.setAngle(angle-1);
+		    angleChanged=true;
 		}
-		else if(cur_x>x_coord)
-		cur_x=x_coord; //skipped
-		else if(cur_x+maxVelocity<x_coord)
+		if(entity.getAngle()>360)
+		    entity.setAngle((int)entity.getAngle()%360);
+		//entity.setAngle(122);
+	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
+        //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+		//note: since we don't have updateMovement implemented, most
+		//of the stuff here can probably be removed/handled by that
+		//simulate turning, acceleration of ship
+		if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 		{
-		if(maxVelocity>xVelocity)
-			cur_x+=xVelocity++;
-		else
-			cur_x+=xVelocity;
+		    if(cur_x-maxVelocity>x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x-=xVelocity++;
+			else
+			    cur_x-=xVelocity;
+		    }
+		    else if(cur_x>x_coord)
+		    {
+			cur_x=x_coord; //skipped
+			rotationSet=false;
+		    }
+		    else if(cur_x+maxVelocity<x_coord)
+		    {
+			if(maxVelocity>xVelocity)
+			    cur_x+=xVelocity++;
+			else
+			    cur_x+=xVelocity;
+		    }
+		    else if(cur_x<x_coord)
+		    {
+			cur_x=x_coord; //skipped
+			rotationSet=false;
+		    }
+		    if(cur_y-maxVelocity>y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y-=yVelocity++;
+			else
+			    cur_y-=yVelocity;
+		    }
+		    else if(cur_y>y_coord)
+		    {
+			cur_y=y_coord; //skipped
+			rotationSet=false;
+		    }
+		    else if(cur_y+maxVelocity<y_coord)
+		    {
+			if(maxVelocity>yVelocity)
+			    cur_y+=yVelocity++;
+			else
+			    cur_y+=yVelocity;
+		    }
+		    else if(cur_y<y_coord)
+		    {
+			cur_y=y_coord; //skipped
+			rotationSet=false;
+		    }
+		    entity.setX(cur_x);
+		    entity.setY(cur_y);
+		    position.first=cur_x;
+		    position.second=cur_y;
 		}
-		else if(cur_x<x_coord)
-		cur_x=x_coord; //skipped
-		if(cur_y-maxVelocity>y_coord)
+		else if(cur_x==x_coord&&cur_y==y_coord)
 		{
-		if(maxVelocity>yVelocity)
-			cur_y-=yVelocity++;
-		else
-			cur_y-=yVelocity;
+		    path->pop();
+		    rotationSet=false;
 		}
-		else if(cur_y>y_coord)
-		cur_y=y_coord; //skipped
-		else if(cur_y+maxVelocity<y_coord)
-		{
-		if(maxVelocity>yVelocity)
-			cur_y+=yVelocity++;
-		else
-			cur_y+=yVelocity;
-		}
-		else if(cur_y<y_coord)
-		cur_y=y_coord; //skipped
-		entity.setX(cur_x);
-		entity.setY(cur_y);
-		position.first=cur_x;
-		position.second=cur_y;
-	}
-	else if(cur_x==x_coord&&cur_y==y_coord)
-	{
-		path->pop();
-		rotationSet=false;
-	}
-	}
-	else
-	{
-	setSpeedY(0);
-	setSpeedX(0);
-		pathComplete=true;
-	}
-}
+	    }
+	    else
+	    {
+		setSpeedY(0);
+		setSpeedX(0);
+	        pathComplete=true;
+	    }
 
 bool Ship::getPathComplete()
 {
@@ -353,11 +375,10 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 	Projectile laser(ldb, texture);
 	laser.setAngle(getAngle());
 	return laser;
-	//std::cout << "Laser: " << laser.getTexture() << std::endl;
-	//osSprite.push_back(&laser);
 }
 
 Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 0;};
+
 
 //General wrapper function to handle Key evenets
 bool Hero::handleKeyEvents(SDL_Event e){

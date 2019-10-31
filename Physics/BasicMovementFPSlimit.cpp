@@ -1,5 +1,6 @@
 #include "BasicMovementFPSlimit.h"
 #include "TimeData.h"
+#include "../Physics/Audio.h"
 
 #define PI 3.14159265
 
@@ -88,12 +89,14 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 			
 			//ent.setVY(ent.getVY() - MAX_SPEED);
 			deltaV += (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_a:
 
 			//ent.setVX(ent.getVX() - MAX_SPEED);
 			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_s:
@@ -101,12 +104,14 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 			//ent.setVY(ent.getVY() + MAX_SPEED);
 			
 			deltaV -= (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_d:
 			
 			//ent.setVX(ent.getVX() + MAX_SPEED);
 			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 		case SDLK_x:
 			speed = 0;
@@ -164,10 +169,12 @@ bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
-		//so, one of these should result in collison if they are the same box
-		isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
-		//std::cout << "Is last command Illegal?" << std::endl;
-		//std::cout << "Checked collisions: " << i << std::endl;
+		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
+			//so, one of these should result in collison if they are the same box
+			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+			//std::cout << "Is last command Illegal?" << std::endl;
+			//std::cout << "Checked collisions: " << i << std::endl;
+		}
 	}
 	return isCollision;
 }
