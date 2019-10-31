@@ -347,6 +347,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		setSpeedX(0);
 	        pathComplete=true;
 	    }
+	}
 
 bool Ship::getPathComplete()
 {
