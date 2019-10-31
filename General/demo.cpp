@@ -258,14 +258,14 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						osSprite2.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
 						break;
 				}
 			}
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-			for(auto ent : osSprite2) {
+			for(auto ent : osSprite) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
       
