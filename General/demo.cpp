@@ -325,9 +325,13 @@ void run_demo(gpRender gr){
 		Ellers_Maze maze;
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
+		int col = 0;
+		int row = 0;
+		int numCols = maze.getColSize();
+		int numRows = maze.getRowSize();
 
 		while(mazeCheck && gameon)
-		{
+		{	
 			SDL_RenderClear(gr.getRender());
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
@@ -336,7 +340,42 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
 						}
+						break;
 						
+					case SDLK_w:
+						if(e.type == SDL_KEYDOWN){
+							//move up
+							if(col != 0 and !maze.hasBottom(row, col-1)){
+								col--;
+							}
+						}
+						break;
+
+					case SDLK_s:
+						if(e.type == SDL_KEYDOWN){
+							//move down
+							if(col != numCols-1 and !maze.hasBottom(row,col)){
+								col++;
+							}
+						}
+						break;
+
+					case SDLK_a:
+						if(e.type == SDL_KEYDOWN){
+							//move left
+							if(row != 0 and !maze.hasRight(row-1,col)){
+								row--;
+							}
+						}
+						break;
+
+					case SDLK_d:
+						if(e.type == SDL_KEYDOWN){
+							//move right
+							if(row != numRows-1 and !maze.hasRight(row,col)){
+								row++;
+							}
+						}
 						break;
 				}
 			}
