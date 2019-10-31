@@ -320,7 +320,6 @@ void run_demo(gpRender gr){
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
-
 		}
 		
 		Ellers_Maze maze;
