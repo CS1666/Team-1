@@ -325,9 +325,13 @@ void run_demo(gpRender gr){
 		Ellers_Maze maze;
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
+		int col = 0;
+		int row = 0;
+		int numCols = maze.getColSize();
+		int numRows = maze.getRowSize();
 
 		while(mazeCheck && gameon)
-		{
+		{	
 			SDL_RenderClear(gr.getRender());
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
