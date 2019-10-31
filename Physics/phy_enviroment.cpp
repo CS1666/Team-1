@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../General/Sprite.h"
+#include "../General/HpBar.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../General/SpaceStation.h"
