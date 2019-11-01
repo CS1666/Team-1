@@ -349,7 +349,7 @@ void run_demo(gpRender gr){
 					case SDLK_d:
 						if(e.type == SDL_KEYDOWN){
 							//move right
-							if(col != 0 and !maze.hasBottom(col-1, row)){
+							if(col != numCols-1 and !maze.hasBottom(col, row)){
 								col++;
 								warpRect.x += indexSize;
 							}
@@ -359,7 +359,7 @@ void run_demo(gpRender gr){
 					case SDLK_a:
 						if(e.type == SDL_KEYDOWN){
 							//move left
-							if(col != numCols-1 and !maze.hasBottom(col,row)){
+							if(col != 0 and !maze.hasBottom(col-1,row)){
 								col--;
 								warpRect.x -= indexSize;
 							}
