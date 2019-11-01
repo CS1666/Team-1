@@ -3,8 +3,6 @@
 #include <SDL_image.h>
 #include <string>
 #include "Sprite.h"
-#include "../General/HpBar.h"
-
 #pragma once
 
 
