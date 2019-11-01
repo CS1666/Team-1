@@ -390,11 +390,11 @@ void run_demo(gpRender gr){
 						}
 						break;
 				}
-				//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+				SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
-			SDL_RenderPresent(gr.getRender(), warpTex, nullptr, &warpRect);
+			SDL_RenderPresent(gr.getRender());
 		}
 
 		SDL_RenderClear(gr.getRender());
