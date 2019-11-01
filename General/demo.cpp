@@ -350,7 +350,7 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							//move up
 							if(col != 0 and !maze.hasBottom(col-1, row)){
-								row--;
+								col--;
 								warpRect.y -= indexSize;
 								//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
@@ -361,7 +361,7 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							//move down
 							if(col != numCols-1 and !maze.hasBottom(col,row)){
-								row++;
+								col++;
 								warpRect.y += indexSize;
 								//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
@@ -372,7 +372,7 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							//move left
 							if(row != 0 and !maze.hasRight(col,row-1)){
-								col--;
+								row--;
 								warpRect.x -= indexSize;
 								//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
@@ -383,18 +383,18 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							//move right
 							if(row != numRows-1 and !maze.hasRight(col, row)){
-								col++;
+								row++;
 								warpRect.x += indexSize;
 								//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
 						}
 						break;
 				}
-				SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+				//SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
-			SDL_RenderPresent(gr.getRender());
+			SDL_RenderPresent(gr.getRender(), warpTex, nullptr, &warpRect);
 		}
 
 		SDL_RenderClear(gr.getRender());
