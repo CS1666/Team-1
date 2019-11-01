@@ -329,9 +329,9 @@ void run_demo(gpRender gr){
 		int row = 0;
 		int numCols = maze.getColSize();
 		int numRows = maze.getRowSize();
-		int indexSize = 10;
+		int indexSize = 30;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-		SDL_Rect warpRect = {0, 0, 25, 25};
+		SDL_Rect warpRect = {5, 5, 25, 25};
 
 		while(mazeCheck && gameon)
 		{	
@@ -352,6 +352,7 @@ void run_demo(gpRender gr){
 							if(col != 0 and !maze.hasBottom(row, col-1)){
 								col--;
 								warpRect.y -= indexSize;
+								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
 						}
 						break;
@@ -362,6 +363,7 @@ void run_demo(gpRender gr){
 							if(col != numCols-1 and !maze.hasBottom(row,col)){
 								col++;
 								warpRect.y += indexSize;
+								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
 						}
 						break;
@@ -372,6 +374,7 @@ void run_demo(gpRender gr){
 							if(row != 0 and !maze.hasRight(row-1,col)){
 								row--;
 								warpRect.x -= indexSize;
+								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
 						}
 						break;
@@ -382,11 +385,12 @@ void run_demo(gpRender gr){
 							if(row != numRows-1 and !maze.hasRight(row,col)){
 								row++;
 								warpRect.x += indexSize;
+								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 							}
 						}
 						break;
 				}
-				SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+				
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
