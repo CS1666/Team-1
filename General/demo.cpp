@@ -346,7 +346,7 @@ void run_demo(gpRender gr){
 						}
 						break;
 						
-					case SDLK_w:
+					case SDLK_a:
 						if(e.type == SDL_KEYDOWN){
 							//move up
 							if(col != 0 and !maze.hasBottom(col-1, row)){
@@ -357,7 +357,7 @@ void run_demo(gpRender gr){
 						}
 						break;
 
-					case SDLK_s:
+					case SDLK_d:
 						if(e.type == SDL_KEYDOWN){
 							//move down
 							if(col != numCols-1 and !maze.hasBottom(col,row)){
@@ -368,7 +368,7 @@ void run_demo(gpRender gr){
 						}
 						break;
 
-					case SDLK_a:
+					case SDLK_w:
 						if(e.type == SDL_KEYDOWN){
 							//move left
 							if(row != 0 and !maze.hasRight(col,row-1)){
@@ -379,7 +379,7 @@ void run_demo(gpRender gr){
 						}
 						break;
 
-					case SDLK_d:
+					case SDLK_s:
 						if(e.type == SDL_KEYDOWN){
 							//move right
 							if(row != numRows-1 and !maze.hasRight(col, row)){
@@ -390,10 +390,11 @@ void run_demo(gpRender gr){
 						}
 						break;
 				}
-				SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+				
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			SDL_RenderPresent(gr.getRender());
 		}
 
