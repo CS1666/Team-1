@@ -329,10 +329,15 @@ void run_demo(gpRender gr){
 		int row = 0;
 		int numCols = maze.getColSize();
 		int numRows = maze.getRowSize();
+		int indexSize = 10;
 
 		while(mazeCheck && gameon)
 		{	
 			SDL_RenderClear(gr.getRender());
+			
+			SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
+			SDL_Rect warpRect = {0, 0, 10, 10};
+			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
 				switch(e.key.keysym.sym) {
@@ -347,6 +352,7 @@ void run_demo(gpRender gr){
 							//move up
 							if(col != 0 and !maze.hasBottom(row, col-1)){
 								col--;
+								warpRect.y -= indexSize;
 							}
 						}
 						break;
@@ -356,6 +362,7 @@ void run_demo(gpRender gr){
 							//move down
 							if(col != numCols-1 and !maze.hasBottom(row,col)){
 								col++;
+								warpRect.y += indexSize;
 							}
 						}
 						break;
@@ -365,6 +372,7 @@ void run_demo(gpRender gr){
 							//move left
 							if(row != 0 and !maze.hasRight(row-1,col)){
 								row--;
+								warpRect.x -= indexSize;
 							}
 						}
 						break;
@@ -374,6 +382,7 @@ void run_demo(gpRender gr){
 							//move right
 							if(row != numRows-1 and !maze.hasRight(row,col)){
 								row++;
+								warpRect.x += indexSize;
 							}
 						}
 						break;
