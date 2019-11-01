@@ -387,6 +387,7 @@ void run_demo(gpRender gr){
 						}
 						break;
 				}
+				SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
