@@ -329,9 +329,9 @@ void run_demo(gpRender gr){
 		int row = 0;
 		int numCols = maze.getColSize();
 		int numRows = maze.getRowSize();
-		int indexSize = 30;
+		int indexSize = 40;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-		SDL_Rect warpRect = {5, 5, 25, 25};
+		SDL_Rect warpRect = {10, 10, 25, 25};
 
 		while(mazeCheck && gameon)
 		{	
@@ -349,7 +349,7 @@ void run_demo(gpRender gr){
 					case SDLK_w:
 						if(e.type == SDL_KEYDOWN){
 							//move up
-							if(col != 0 and !maze.hasBottom(row, col-1)){
+							if(col != 0 and !maze.hasBottom(col-1, row)){
 								col--;
 								warpRect.y -= indexSize;
 								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
@@ -360,7 +360,7 @@ void run_demo(gpRender gr){
 					case SDLK_s:
 						if(e.type == SDL_KEYDOWN){
 							//move down
-							if(col != numCols-1 and !maze.hasBottom(row,col)){
+							if(col != numCols-1 and !maze.hasBottom(col,row)){
 								col++;
 								warpRect.y += indexSize;
 								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
@@ -371,7 +371,7 @@ void run_demo(gpRender gr){
 					case SDLK_a:
 						if(e.type == SDL_KEYDOWN){
 							//move left
-							if(row != 0 and !maze.hasRight(row-1,col)){
+							if(row != 0 and !maze.hasRight(col,row-1)){
 								row--;
 								warpRect.x -= indexSize;
 								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
@@ -382,7 +382,7 @@ void run_demo(gpRender gr){
 					case SDLK_d:
 						if(e.type == SDL_KEYDOWN){
 							//move right
-							if(row != numRows-1 and !maze.hasRight(row,col)){
+							if(row != numRows-1 and !maze.hasRight(col, row)){
 								row++;
 								warpRect.x += indexSize;
 								SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
