@@ -327,8 +327,8 @@ void run_demo(gpRender gr){
 		bool mazeCheck = true;
 		int col = 0;
 		int row = 0;
-		int numCols = maze.getColSize();
-		int numRows = maze.getRowSize();
+		int numCols = maze.getRowSize();
+		int numRows = maze.getColSize();
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
 		SDL_Rect warpRect = {7, 10, 25, 25};
