@@ -380,7 +380,7 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							//move down
 							if(row != numRows-1 and !maze.hasRight(col, row)){
-								col++;
+								row++;
 								warpRect.y += indexSize;
 							}
 						}
