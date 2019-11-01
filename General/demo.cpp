@@ -346,11 +346,31 @@ void run_demo(gpRender gr){
 						}
 						break;
 						
+					case SDLK_d:
+						if(e.type == SDL_KEYDOWN){
+							//move right
+							if(col != 0 and !maze.hasBottom(col-1, row)){
+								col++;
+								warpRect.x += indexSize;
+							}
+						}
+						break;
+
+					case SDLK_a:
+						if(e.type == SDL_KEYDOWN){
+							//move left
+							if(col != numCols-1 and !maze.hasBottom(col,row)){
+								col--;
+								warpRect.x -= indexSize;
+							}
+						}
+						break;
+
 					case SDLK_w:
 						if(e.type == SDL_KEYDOWN){
 							//move up
-							if(col != 0 and !maze.hasBottom(col-1, row)){
-								col--;
+							if(row != 0 and !maze.hasRight(col,row-1)){
+								row--;
 								warpRect.y -= indexSize;
 							}
 						}
@@ -359,29 +379,9 @@ void run_demo(gpRender gr){
 					case SDLK_s:
 						if(e.type == SDL_KEYDOWN){
 							//move down
-							if(col != numCols-1 and !maze.hasBottom(col,row)){
-								col++;
-								warpRect.y += indexSize;
-							}
-						}
-						break;
-
-					case SDLK_a:
-						if(e.type == SDL_KEYDOWN){
-							//move left
-							if(row != 0 and !maze.hasRight(col,row-1)){
-								row--;
-								warpRect.x -= indexSize;
-							}
-						}
-						break;
-
-					case SDLK_d:
-						if(e.type == SDL_KEYDOWN){
-							//move right
 							if(row != numRows-1 and !maze.hasRight(col, row)){
 								col++;
-								warpRect.x += indexSize;
+								warpRect.y += indexSize;
 							}
 						}
 						break;
