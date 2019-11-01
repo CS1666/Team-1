@@ -330,13 +330,12 @@ void run_demo(gpRender gr){
 		int numCols = maze.getColSize();
 		int numRows = maze.getRowSize();
 		int indexSize = 10;
+		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
+		SDL_Rect warpRect = {0, 0, 25, 25};
 
 		while(mazeCheck && gameon)
 		{	
 			SDL_RenderClear(gr.getRender());
-			
-			SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-			SDL_Rect warpRect = {0, 0, 10, 10};
 			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
