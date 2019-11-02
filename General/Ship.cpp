@@ -167,7 +167,7 @@ pair<int,int> Ship::getDestination()
 void Ship::setPath(queue<pair<int,int>>* thePath)
     {
 	//fullstops ship when setting path
-	cout<<"something"<<endl;
+	//cout<<"something"<<endl;
 	xVelocity=0;
 	yVelocity=0;
 	rotation=0;
@@ -232,13 +232,45 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		{
 			//if(y_coord>cur_y)
 			curRotation= atan2(-ySlope,xSlope);
-			//cout<<"radiant cur: "<<curRotation<<endl;
-			//else
-			  //  curRotation=atan2(ySlope,xSlope);
-			if(std::abs(curRotation)==0||curRotation==3.14159)
-			    curRotation=(int)std::floor(curRotation*180/3.14+90);
+			if(curRotation<0)
+			    curRotation+=2*PI;
+			//cout<<"radian cur: "<<curRotation<<endl;
+			char n;
+			if(xSlope==0&&ySlope<0)
+			    curRotation=0;
+			else if(ySlope==0&&xSlope<0)
+			    curRotation=270;
+			else if(xSlope==0&&ySlope>0)
+			    curRotation=180;
+			else if(ySlope==0&&xSlope>0)
+			    curRotation=90;
+			else if(curRotation>0&&curRotation<PI/2)
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI);
+			//	cout<<"first quad"<<endl;
+			//	cin>>n;
+			}
+			else if(curRotation>PI/2&&curRotation<3*PI/2 && ySlope>0)
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI);
+			//	cout<<"second quad"<<endl;
+			//	cin>>n;
+			}
+			else if(curRotation>3*PI/2&&curRotation<2*PI)
+			{
+			    curRotation=(int)floor(curRotation*180/PI-180);
+				//cout<<"third quad"<<endl;
+				//cin>>n;
+			}
 			else
-			    curRotation=(int)std::floor(curRotation*180/3.14+180);
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI+180);
+			    //cout<<"fourth quad"<<endl;
+			   //cin>>n;
+			}
+			//cout<<"rotation: "<<curRotation<<endl;
+			//int n;
+			//cin>>n;
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
@@ -272,7 +304,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
-		if(entity.getAngle()>360)
+		if(abs(entity.getAngle()>360))
 		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;

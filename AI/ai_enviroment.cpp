@@ -77,7 +77,7 @@ void run_ai_enviro(gpRender gr){
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
 	osSprite.push_back(&aient2);
-	cout<<"push back ok"<<endl;
+//	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
 
