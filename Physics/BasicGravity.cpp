@@ -62,7 +62,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 	{	
 		bodyX = bodyent->getTrueX() + bodyent->getW()/2.0;
 		bodyY = bodyent->getTrueY() + bodyent->getH()/2.0;
-		if(!(bodyX == playerX && bodyY == playerY ))
+		if(bodyent->getRenderOrder() ==2)
 		{
 			//make fix this
 			pointSlope = (bodyY - playerY)/(bodyX - playerX);

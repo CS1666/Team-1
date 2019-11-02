@@ -103,7 +103,7 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 		pointAngle += 3.1415926;
 	}
 	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
-	float grav = orbitalVel*orbitalVel/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
+	float grav = (orbitalVel*orbitalVel)/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
 	//grav *= TimeData::get_timestep()*TimeData::get_timestep();
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);

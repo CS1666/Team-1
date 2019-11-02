@@ -258,14 +258,14 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						osSprite2.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
 						break;
 				}
 			}
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-			for(auto ent : osSprite2) {
+			for(auto ent : osSprite) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
       
@@ -320,16 +320,23 @@ void run_demo(gpRender gr){
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
-
 		}
 		
 		Ellers_Maze maze;
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
+		int col = 0;
+		int row = 0;
+		int numCols = maze.getRowSize();
+		int numRows = maze.getColSize();
+		int indexSize = 36;
+		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
+		SDL_Rect warpRect = {7, 10, 25, 25};
 
 		while(mazeCheck && gameon)
-		{
+		{	
 			SDL_RenderClear(gr.getRender());
+			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
 				switch(e.key.keysym.sym) {
@@ -337,12 +344,53 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
 						}
+						break;
 						
+					case SDLK_d:
+						if(e.type == SDL_KEYDOWN){
+							//move right
+							if(col != numCols-1 and !maze.hasBottom(col, row)){
+								col++;
+								warpRect.x += indexSize;
+							}
+						}
+						break;
+
+					case SDLK_a:
+						if(e.type == SDL_KEYDOWN){
+							//move left
+							if(col != 0 and !maze.hasBottom(col-1,row)){
+								col--;
+								warpRect.x -= indexSize;
+							}
+						}
+						break;
+
+					case SDLK_w:
+						if(e.type == SDL_KEYDOWN){
+							//move up
+							if(row != 0 and !maze.hasRight(col,row-1)){
+								row--;
+								warpRect.y -= indexSize;
+							}
+						}
+						break;
+
+					case SDLK_s:
+						if(e.type == SDL_KEYDOWN){
+							//move down
+							if(row != numRows-1 and !maze.hasRight(col, row)){
+								row++;
+								warpRect.y += indexSize;
+							}
+						}
 						break;
 				}
+				
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			SDL_RenderPresent(gr.getRender());
 		}
 
