@@ -76,8 +76,8 @@ void run_phy_enviro(gpRender gr){
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,315};
-	Star starent(db2, tex2);
+	SDL_Rect db2 = {800,400,332,332};
+	Star starent(db2, tex2, db2.w/2);
 
 	osSprite.push_back(&starent);
 
@@ -86,7 +86,8 @@ void run_phy_enviro(gpRender gr){
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
-	Planet planet1ent(db3, tex3,1, starent, 100);
+	NSDL_Circ dc3 = {db3.x + (db3.w / 2) + (db3.h / 2), db3.y + (db3.w / 2) + (db3.h / 2), db3.w / 2}
+	Planet planet1ent(db3, tex3, dc3, 1, starent, 100);
 	osSprite.push_back(&planet1ent);
 
 	//Space Station Initialization-

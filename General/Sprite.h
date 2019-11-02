@@ -16,6 +16,8 @@ class Sprite{
 		Sprite();
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int radius);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int radius, int anim);
 		Sprite(const Sprite &spr);
 
 		//Destructors
