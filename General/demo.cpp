@@ -53,7 +53,7 @@ void run_demo(gpRender gr){
 	std::vector<Sprite*> osSprite; // vector for collision checker
 
 	//Audio Initilization
-	Audio::load_audio();
+	Audio::load_chunk("Assets/Objects/thrustSound.wav");
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
