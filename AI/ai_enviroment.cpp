@@ -67,7 +67,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(pair<int,int>(1010, 600));
 	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
-	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
+	aiShip2.setPosition(pair<int,int>(200 ,200)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(pair<int,int>(200,600));
 	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
 	SDL_Texture* tex3 = gr.loadImage(aiShip2.getSprite());

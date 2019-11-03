@@ -13,6 +13,7 @@ struct pair_hash
 {
     std::size_t operator() (const std::pair<int, int> & pair) const
     {
+        //change
         return std::hash<int>()(pair.first)^std::hash<int>()(pair.second);
     }
 };

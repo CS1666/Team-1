@@ -41,7 +41,7 @@
     		vector<int> sectorSize = currentSector.getSize();
 
     		// Gets the positions and sizes of everything within the sector
-			  vector<vector<int> > currentState = currentSector.getState();
+			vector<vector<int> > currentState = currentSector.getState();
 
 			  // Creates a new map state with everything equal to zero
     		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
@@ -54,8 +54,11 @@
                 {
                     for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
                     {
-                        newStoredMapState[x][y] = 1;
-                        newStoredMapState[x][y] = 1;
+                        if (x >= 0 && x < newStoredMapState.size() && y >=0 && y < newStoredMapState[0].size())
+                        {
+                            newStoredMapState[x][y] = 1;
+                        }
+
                     }
                 }
             }

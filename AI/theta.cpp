@@ -13,8 +13,8 @@ typedef std::vector<std::vector<bool> > Mesh;
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
-constexpr int SHIP_HEIGHT = 50;
-constexpr int SHIP_WIDTH = 50;
+constexpr int SHIP_HEIGHT = 1;
+constexpr int SHIP_WIDTH = 1;
 
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
@@ -153,7 +153,7 @@ std::vector<Point> Pathfinder::defineNeighbors(Point s){
 
     std::vector<Point> neighbors;
 
-    for (int x = s.first + 1; x < s.first + SHIP_WIDTH - 1; x++)
+    for (int x = s.first; x < s.first + SHIP_WIDTH - 1; x++)
     {
         if(isOutofBound(std::pair<int, int>({x, s.second}), 0, -1)){
             neighbors.push_back(Point({x, s.second-1}));
@@ -164,7 +164,7 @@ std::vector<Point> Pathfinder::defineNeighbors(Point s){
         }
     }
 
-    for (int y = s.second + 1; y < s.second + SHIP_HEIGHT - 1; y++)
+    for (int y = s.second; y < s.second + SHIP_HEIGHT - 1; y++)
     {
         if(isOutofBound(std::pair<int, int>({s.first, y}), -1, 0)){
             neighbors.push_back(Point({s.first-1, y}));

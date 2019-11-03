@@ -211,8 +211,8 @@ Point& p_queue::pop()
     return result.first;
 }
 
-void p_queue::ndelete(Point& P){
-
+void p_queue::ndelete(Point& P)
+{
     if(contains(P)){
         ////std::cout << "Deleting point" << std::endl;
         int index = indirection->at(P);
@@ -220,7 +220,6 @@ void p_queue::ndelete(Point& P){
         pop();
         push_down_heap(index);
     }
-    
 }
 
 Point& p_queue::top()
