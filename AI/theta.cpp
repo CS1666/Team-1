@@ -13,6 +13,8 @@ typedef std::vector<std::vector<bool> > Mesh;
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
+constexpr int SHIP_HEIGHT = 50;
+constexpr int SHIP_WIDTH = 50;
 
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
@@ -47,7 +49,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // This is basically A*
     while (!open->empty())
     {
-        
+        std::cout << "1" << std::endl;
         // Get the point with the LOWEST expected cost
         ////std::cout << "Before pop" << std::endl;
         Point s = open->pop();
@@ -68,6 +70,8 @@ Path Pathfinder::pathfind(Point start, Point goal)
         //std::cout << "--------Begining Neigh--------"<< std::endl;
         for (std::pair<int,int> neighbor : npath)
         {
+
+            std::cout << "First: " << neighbor.first << " Second: " << neighbor.second << std::endl;
             
             //std::cout << "Iter " << i << "Size " << npath.size() << std::endl;
             i = i + 1;
@@ -100,6 +104,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         }
         //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
+    std::cout << "2" << std::endl;
     ////std::cout << "Stuck 4" << std::endl;
     return Path();
 }
@@ -134,10 +139,9 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     //////std::cout << "Bf iter "  << std::endl;                    
     for(auto itr : result)
     {   
-        
+        std::cout << "first: " << itr.first << " second: " << itr.second << std::endl;
         if (!mesh[itr.first][itr.second])
         {
-            
             fresult.push_back(itr);
         }
         //////std::cout << "Lff iter"  << std::endl;
@@ -149,42 +153,26 @@ std::vector<Point> Pathfinder::defineNeighbors(Point s){
 
     std::vector<Point> neighbors;
 
-    if(isOutofBound(s, -1, -1)){
-        neighbors.push_back(Point({s.first-1,s.second-1}));
+    for (int x = s.first + 1; x < s.first + SHIP_WIDTH - 1; x++)
+    {
+        if(isOutofBound(std::pair<int, int>({x, s.second}), 0, -1)){
+            neighbors.push_back(Point({x, s.second-1}));
+        }
+
+        if(isOutofBound(std::pair<int, int>({x, s.second + SHIP_HEIGHT}), 0, 1)){
+            neighbors.push_back(Point({x, s.second+SHIP_HEIGHT+1}));
+        }
     }
 
-    if(isOutofBound(s, 0, -1)){
-        neighbors.push_back(Point({s.first, s.second-1}));
+    for (int y = s.second + 1; y < s.second + SHIP_HEIGHT - 1; y++)
+    {
+        if(isOutofBound(std::pair<int, int>({s.first, y}), -1, 0)){
+            neighbors.push_back(Point({s.first-1, y}));
+        }
 
-    }
-
-    if(isOutofBound(s, 1, -1)){
-        neighbors.push_back(Point({s.first + 1, s.second-1}));
-
-    }
-
-    if(isOutofBound(s,-1, 0)){
-        neighbors.push_back(Point({s.first - 1, s.second}));
-
-    }
-
-    if(isOutofBound(s,1, 0)){
-        neighbors.push_back(Point({s.first + 1, s.second}));
-
-    }
-
-    if(isOutofBound(s,-1, 1)){
-        neighbors.push_back(Point({s.first - 1, s.second + 1}));
-
-    }
-
-    if(isOutofBound(s,0, 1)){
-        neighbors.push_back(Point({s.first, s.second + 1}));
-
-    }
-
-     if(isOutofBound(s,1, 1)){
-        neighbors.push_back(Point({s.first + 1, s.second + 1}));
+        if(isOutofBound(std::pair<int, int>({s.first + SHIP_WIDTH, y}), 1, 0)){
+            neighbors.push_back(Point({s.first + SHIP_WIDTH + 1, y}));
+        }
     }
 
     return neighbors;
@@ -199,18 +187,22 @@ bool Pathfinder::isOutofBound(Point s, int xdif, int ydif){
 // Main difference between A* and Theta*. This checks for euclidean distance instead of just adjacency
 void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 {       
+    std::cout << "3" << std::endl;
     if(neighbor == goal){
+
+        std::cout << "3.1" << std::endl;
 
         open->ndelete(neighbor);
                
         open->insert(neighbor, 0);
     }
-
-    else{
+    else
+    {
+        std::cout << "3.2" << std::endl;
   
         if (line_of_sight(s, neighbor))
         {   
-
+            std::cout << "3.2.1" << std::endl;
             //std::cout << "P1: " << s.first  << " P2: " << s.second << std::endl;
             //std::cout << "PN1: " << neighbor.first  << " PN2: " << neighbor.second << std::endl;
             //std::cout << "1: " << gScore[parent[s]] + distance(parent[s], neighbor)  << " 2: " << gScore[neighbor] << std::endl;
@@ -227,13 +219,17 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
         } 
         else
         {
+            std::cout << "3.2.2" << std::endl;
             if (gScore[s] + distance(s, neighbor) < gScore[neighbor])
             {
+                std::cout << "3.2.2.1" << std::endl;
                 gScore[neighbor] = gScore[s] + distance(s, neighbor);
+                std::cout << "3.2.2.2" << std::endl;
                 parent[neighbor] = s;
-               
+                std::cout << "3.2.2.3" << std::endl;
+                std::cout << "Does open contain neighbor " << open->contains(neighbor) << std::endl;
                 open->ndelete(neighbor);
-                
+                std::cout << "3.2.2.4" << std::endl;
                 open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
             }
         }
@@ -241,7 +237,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
     }
 
     
-   
+   std::cout << "4" << std::endl;
 }
 
 
