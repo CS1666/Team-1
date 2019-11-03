@@ -54,7 +54,7 @@ void run_phy_enviro(gpRender gr){
 	std::vector<Sprite*> osSprite;
 	
 	//load audio for sound
-	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 	Audio::load_music("Assets/Sound/ambientSpace.wav");
 	bool gameon = false;
 	int titleFrame = 0;
@@ -203,7 +203,6 @@ void run_phy_enviro(gpRender gr){
 		planet1ent.updatePosition();
 		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
-
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
 				if (animation <= 1){

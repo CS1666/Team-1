@@ -18,6 +18,7 @@ class Audio{
 		//static void play_music();
 		//static void stop_music();
 		static void play_thrust_sound();
+		static void pause_thrust_sound();
 		static void play_music();
 		static void close();
 };
