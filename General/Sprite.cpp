@@ -73,7 +73,16 @@
 			return assetTex;
 	}
 	void Sprite::setAngle(double new_angle){
-		angle = new_angle;
+		if(abs(new_angle)>=360)
+		{
+		    double leftOver=new_angle/360;
+		    if(angle>0)
+			angle=(int)new_angle%360+leftOver;
+		    else
+			angle=(int)new_angle%360-leftOver;
+		}
+		else
+		    angle = new_angle;
 	}
 	double Sprite::getAngle(){
 		return angle;

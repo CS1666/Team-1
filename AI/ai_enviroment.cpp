@@ -164,10 +164,9 @@ void run_ai_enviro(gpRender gr){
 				pathq = ai.calculatePath(aiShip,path);
 				aiShip.setPath(pathq);
 		    }
-		//cout<<"???????"<<endl;
 		}
 		else{
-		    aiShip.setDestination(pair<int,int>(10, 60));
+		    aiShip.setDestination(playerShip.getPosition());
 		    pathq = ai.calculatePath(aiShip, path);
 		    aiShip.setPath(pathq);
 		}
@@ -179,7 +178,12 @@ void run_ai_enviro(gpRender gr){
                                 pathq2 = ai.calculatePath(aiShip2,path2);
                                 aiShip2.setPath(pathq2);
                     }
-		//cout<<"ok?"<<endl;
+		}
+		else
+		{
+		    aiShip2.setDestination(playerShip.getPosition());
+		    pathq=ai.calculatePath(aiShip2,path);
+		    aiShip2.setPath(pathq);
 		}
 
 		//DOESN"T WORK AT THIS TIME
