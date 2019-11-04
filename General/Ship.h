@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
+#include "Projectile.h"
 #include <queue>
+#include "gpRender.h"
+
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
@@ -14,10 +17,14 @@ class Ship : public Sprite
         int hull;
         string sprite;
         pair<int,int> position;
-        int velocity;
-        float rotation;
+        int xVelocity;
+	int yVelocity;
+        float maxRotation;
         int weaponType;
         bool damageTaken;
+	bool rotationSet;
+	float curRotation;
+	float rotation;
         int maxVelocity;
         string currKey;
 
@@ -37,6 +44,12 @@ class Ship : public Sprite
         bool pathComplete;
 
     public:
+        float speed = 0;
+        float deltaV = 0;
+        float rotationRate = 0;
+        float rotationSpeed = 0;
+        float direction;
+
         Ship();
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
@@ -50,14 +63,14 @@ class Ship : public Sprite
 
         void setSpeedX(float speed);
         void setSpeedY(float speed);
-        void updateMovement();
-        void checkAction(/*stream*/);
+        void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
 
         void setSize(pair<int,int> newSize);
         pair<int,int> getSize();
+
 
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
@@ -71,12 +84,21 @@ class Ship : public Sprite
         int getCurrHp();
         void setMaxHp(int newMaxHp);
         int getMaxHp();
+        Projectile fireWeapon(SDL_Texture* texture); 
+        
 };
 
-class Hero:Ship{};
+class Hero: public Ship{        
+        public:
+                Hero(SDL_Rect dBox, SDL_Texture* aTex);
+                
+                bool handleKeyEvents(SDL_Event e);
+                void handleKeyUpEvent(SDL_Event e);
+                void handleKeyDownEvent(SDL_Event e);
+};
 
-class Fighter:Ship{};
+class Fighter: public Ship{};
 
-class Cruiser:Ship{};
+class Cruiser: public Ship{};
 
-class Capital:Ship{};
+class Capital: public Ship{};
