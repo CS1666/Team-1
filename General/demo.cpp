@@ -265,8 +265,16 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
+
 			for(auto ent : osSprite) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}
+
+			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
+			{
+				
+				solar = false;
+				
 			}
       
 			TimeData::update_move_last_time();
@@ -337,6 +345,10 @@ void run_demo(gpRender gr){
 		{	
 			SDL_RenderClear(gr.getRender());
 			
+			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+			SDL_RenderPresent(gr.getRender());
+			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
 				switch(e.key.keysym.sym) {
@@ -388,10 +400,13 @@ void run_demo(gpRender gr){
 				}
 				
 			}
+
+			if(maze.isEnd(col, row))
+			{
+				mazeCheck = false;
+			}
 			
-			maze.drawMaze(gr.getWall(), gr.getRender());
-			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
-			SDL_RenderPresent(gr.getRender());
+			
 		}
 
 		SDL_RenderClear(gr.getRender());
