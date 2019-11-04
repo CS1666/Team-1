@@ -453,7 +453,7 @@ void Hero::handleKeyUpEvent(SDL_Event e){
 
 //Handles down Key Events
 void Hero::handleKeyDownEvent(SDL_Event e){
-	//direction = (getAngle() - 90.0)*PI/180;	
+	//direction = (getAngle() - 90.0)*PI/180;
 
 	switch(e.key.keysym.sym) {
 		case SDLK_w:

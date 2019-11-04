@@ -11,6 +11,7 @@
 #include "../General/Ship.h"
 #include "../General/Sector.h"
 #include "theta.h"
+#include "../Physics/TimeData.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -27,7 +28,7 @@ void run_ai_enviro(gpRender gr){
 
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite;
+	std::vector<Sprite*> osSprite;;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
 	//Camera Initilization
@@ -40,19 +41,15 @@ void run_ai_enviro(gpRender gr){
 
 
 	//----------------------Player Ship initilization--------------------//
-	Ship playerShip;
-
-	playerShip.setSprite("Assets/Objects/ship_capital_ally.png");
-	playerShip.setPosition(pair<int,int>(50,50));
 	
 
-	SDL_Texture* ptex = gr.loadImage(playerShip.getSprite());
+	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
 	
 	SDL_Rect pdb = {50,50,PLAYER_WIDTH,PLAYER_HEIGHT};
 
+	Hero playerShip(pdb, ptex);
 	
-	Sprite playerent(pdb, ptex);
-	osSprite.push_back(&playerent);
+	osSprite.push_back(&playerShip);
 	
 	//--------------------------End-----------------------------------//
 
@@ -77,6 +74,7 @@ void run_ai_enviro(gpRender gr){
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
 	osSprite.push_back(&aient2);
+	
 //	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
@@ -134,9 +132,6 @@ void run_ai_enviro(gpRender gr){
 
 	//------------------------------------Rendering Background--------------------------------------//
 
-
-	
-
 	SDL_Event e;
 	bool gameon = true;
 	
@@ -157,7 +152,9 @@ void run_ai_enviro(gpRender gr){
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	while(gameon) {
+		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
+		TimeData::update_timestep();
 		//position needs to be in booleans?
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
@@ -189,10 +186,14 @@ void run_ai_enviro(gpRender gr){
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
 			//std::cout << "Key Event!!!" << std::endl;
-			gameon = handleKeyEvents(e, playerShip);	
+			gameon = playerShip.handleKeyEvents(e);
 			
 		}
 		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		
+		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		
+		TimeData::update_move_last_time();
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		}
