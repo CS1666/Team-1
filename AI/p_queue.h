@@ -10,6 +10,7 @@
 typedef std::pair<int,int> Point;
 
 
+
 class p_queue
 {
     public:
