@@ -10,7 +10,7 @@ typedef std::pair<int,int> Point;
 typedef std::queue<Point>* Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
-constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
+constexpr int MAX_DEPTH=200; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
@@ -31,7 +31,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     ////std::cout << "Before p_queue" << std::endl;
-    open =  new p_queue();
+    open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
     ////std::cout << "After p_queue" << std::endl;
 
     ////std::cout << "Before insert" << std::endl;
@@ -262,5 +262,3 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
-
-
