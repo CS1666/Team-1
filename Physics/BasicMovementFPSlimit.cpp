@@ -242,8 +242,9 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
-void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+bool updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
+	bool result;
 	speed += deltaV;
 	rotationSpeed += rotationRate;
 	if (rotationSpeed < 0)
@@ -299,6 +300,16 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 
 		ent.setY(ent.getTrueY() - speedY);
 	}
+	
+	if(ent.getX() + ent.getW() > ZONE_WIDTH || ent.getTrueX() < 0)
+	{
+			result = false;
+	}
+	
+	if(ent.getY() + ent.getH() > ZONE_HEIGHT || ent.getY() < 0)
+	{
+			result = false;
+	}
 
 	/**std::cout << ent.getAngle() - 90 << std::endl;
 	std::cout << "x: " << ent.getTrueX()  << std::endl;	
@@ -307,6 +318,7 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 	std::cout << "speedY: " << speedY << std::endl;
 	std::cout << "Grav x: " << gravPulls[0] << std::endl;
 	std::cout << "Grav y: " << gravPulls[1] << std::endl;**/
+	return result;
 
 }
 
