@@ -185,7 +185,7 @@ void run_ai_enviro(gpRender gr){
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			//std::cout << "Key Event!!!" << std::endl;
+			////std::cout << "Key Event!!!" << std::endl;
 			gameon = playerShip.handleKeyEvents(e);
 			
 		}
