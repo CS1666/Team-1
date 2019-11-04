@@ -1,8 +1,8 @@
 #include "SpaceStation.h"
 SpaceStation::SpaceStation(): Sprite() {};
-SpaceStation::SpaceStation(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;};
+SpaceStation::SpaceStation(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 1;};
 
-SpaceStation::SpaceStation(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass}{renderOrder = 2;};
+SpaceStation::SpaceStation(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass}{renderOrder = 1;};
 
 	int SpaceStation::getRadius()
 	{

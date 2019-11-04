@@ -53,7 +53,7 @@ void run_demo(gpRender gr){
 	std::vector<Sprite*> osSprite; // vector for collision checker
 
 	//Audio Initilization
-	Audio::load_audio();
+	Audio::load_chunk("Assets/Objects/thrustSound.wav");
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -325,10 +325,18 @@ void run_demo(gpRender gr){
 		Ellers_Maze maze;
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
+		int col = 0;
+		int row = 0;
+		int numCols = maze.getRowSize();
+		int numRows = maze.getColSize();
+		int indexSize = 36;
+		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
+		SDL_Rect warpRect = {7, 10, 25, 25};
 
 		while(mazeCheck && gameon)
-		{
+		{	
 			SDL_RenderClear(gr.getRender());
+			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
 				switch(e.key.keysym.sym) {
@@ -336,12 +344,53 @@ void run_demo(gpRender gr){
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
 						}
+						break;
 						
+					case SDLK_d:
+						if(e.type == SDL_KEYDOWN){
+							//move right
+							if(col != numCols-1 and !maze.hasBottom(col, row)){
+								col++;
+								warpRect.x += indexSize;
+							}
+						}
+						break;
+
+					case SDLK_a:
+						if(e.type == SDL_KEYDOWN){
+							//move left
+							if(col != 0 and !maze.hasBottom(col-1,row)){
+								col--;
+								warpRect.x -= indexSize;
+							}
+						}
+						break;
+
+					case SDLK_w:
+						if(e.type == SDL_KEYDOWN){
+							//move up
+							if(row != 0 and !maze.hasRight(col,row-1)){
+								row--;
+								warpRect.y -= indexSize;
+							}
+						}
+						break;
+
+					case SDLK_s:
+						if(e.type == SDL_KEYDOWN){
+							//move down
+							if(row != numRows-1 and !maze.hasRight(col, row)){
+								row++;
+								warpRect.y += indexSize;
+							}
+						}
 						break;
 				}
+				
 			}
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
 			SDL_RenderPresent(gr.getRender());
 		}
 

@@ -54,8 +54,8 @@ void run_phy_enviro(gpRender gr){
 	std::vector<Sprite*> osSprite;
 	
 	//load audio for sound
-	Audio::load_audio();
-
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_music("Assets/Sound/ambientSpace.wav");
 	bool gameon = false;
 	int titleFrame = 0;
 
@@ -154,6 +154,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -202,7 +203,6 @@ void run_phy_enviro(gpRender gr){
 		planet1ent.updatePosition();
 		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
-
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
 				if (animation <= 1){
@@ -250,4 +250,5 @@ void run_phy_enviro(gpRender gr){
 		}
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
+	Audio::close();
 }
