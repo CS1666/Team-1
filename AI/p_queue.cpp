@@ -3,15 +3,17 @@
 #include <ctime>
 #include <stdexcept>
 
-p_queue::p_queue(){
+p_queue::p_queue(int width, int heigth){
     container = new std::vector<std::pair<Point,int>>();
-    indirection = new std::unordered_map<Point, int, pair_hash>;
+    std::vector<int> x(heigth, -1);
+    indirection = std::vector<std::vector<int>>(width, x);
 }
 
 p_queue& p_queue::operator=(p_queue& a){
-
+;
     std::vector<std::pair<Point,int>>* npq = new std::vector<std::pair<Point,int>>;
-    std::unordered_map<Point, int, pair_hash>* nin = new std::unordered_map<Point, int, pair_hash>;
+    std::vector<int> x(indirection[0].size(), -1);
+    std::vector<std::vector<int>> nin =  std::vector<std::vector<int>>(indirection.size(), x);
 
     npq = a.container;
 
@@ -20,8 +22,6 @@ p_queue& p_queue::operator=(p_queue& a){
 
     nin = a.indirection;
 
-    delete a.indirection;
-    a.indirection = nin;
 
     return *this;
 }
@@ -30,13 +30,7 @@ bool p_queue::lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2)
     return p1.second > p2.second;
 }
 
-void p_queue::print_pque(){
-    for(int i = 0; i < container->size(); i++){
-        //std::cout << "index " << i << ": X: " << container->at(i).first.first << " Y: " << container->at(i).first.second << " prio: " << container->at(i).second <<  std::endl;
-    }
 
-    //std::cout << "\n" << std::endl;
-}
 void p_queue::push_up_heap(int index){
     
 
@@ -163,10 +157,13 @@ void p_queue::swap_nodes(int a, int b){
     
     //swap points in inderection
 
+    Point pa = container->begin()[a].first;
+    Point pb = container->begin()[b].first;
+
     ////std::cout << "L" <<std::endl;
-    indirection->at(container->begin()[a].first) = b;
+    indirection[pa.first][pa.second] = b;
     ////std::cout << "M" <<std::endl;
-    indirection->at(container->begin()[b].first) = a;
+    indirection[pb.first][pb.second] = a;
     ////std::cout << "N" <<std::endl;
 
 }
@@ -177,7 +174,7 @@ void p_queue::insert(Point& x, int p)
 
     //Addes element to bottom of heap and adds to indirection
     container->push_back(elem);
-    indirection->insert(std::pair<Point,int>(elem.first, (container->size() - 1)));
+    indirection[x.first][x.second] = (container->size() - 1);
 
     //Begins heapify process
     push_up_heap(container->size() - 1); 
@@ -194,7 +191,7 @@ Point& p_queue::pop()
       swap_nodes(0, container->size() - 1);
       result = container->back();
       container->pop_back();
-      indirection->erase(result.first);
+      indirection[result.first.first][result.first.second] = -1;
 
       push_down_heap(0);
       //pop off last element from heap
@@ -204,7 +201,7 @@ Point& p_queue::pop()
 
       result = container->back();
       container->pop_back();
-      indirection->erase(result.first);
+      indirection[result.first.first][result.first.second] = -1;
 
     }
 
@@ -215,7 +212,7 @@ void p_queue::ndelete(Point& P){
 
     if(contains(P)){
         ////std::cout << "Deleting point" << std::endl;
-        int index = indirection->at(P);
+        int index = indirection[P.first][P.second];
         swap_nodes(index, container->size() - 1);
         pop();
         push_down_heap(index);
@@ -242,12 +239,12 @@ bool p_queue::contains(Point& key)
     if(container->empty()){
         return false;
     }
-    try{
-        auto pqiter = indirection->at(key);
-    }catch(std::out_of_range& ex){
+    
+    else if(indirection[key.first][key.second] == -1){
         return false;
     }
-    
+       
+
     return true;
    
 }
