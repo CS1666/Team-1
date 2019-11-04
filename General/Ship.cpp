@@ -128,17 +128,17 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 	setX(getTrueX() + speedX);
-	if(getTrueX() < 0 
+	if(/*getTrueX() < 0 
 
 		|| (getX() + getW() > ZONE_WIDTH)
-		|| check_all_collisions(getDrawBox(), osSprite)){
+		||*/ check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
 	}
 	setY(getTrueY() + speedY);
-	if(getY() < 0 
+	if(/*getY() < 0 
 		|| (getY() + getH() > ZONE_HEIGHT)
-		|| check_all_collisions(getDrawBox(), osSprite)){
+		||*/ check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
 	}
