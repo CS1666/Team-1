@@ -225,15 +225,23 @@ void run_demo(gpRender gr){
 		}
 	}
 
+	int startPlayerX = playerent.getX();
+	int startPlayerY = playerent.getY();
+	
 	while(gameon)
 	{
+		playerent.setX(startPlayerX);
+		playerent.setY(startPlayerY);
+		playerent.speed = 0;
+		playerent.deltaV = 0;
+		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
+		
 
 		//Game Loop
 		while(gameon && solar)
-		{
-			
+		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
 
