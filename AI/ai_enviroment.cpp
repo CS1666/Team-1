@@ -45,10 +45,10 @@ void run_ai_enviro(gpRender gr){
 
 	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
 	
-	SDL_Rect pdb = {50,50,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Rect pdb = {250,250,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	Hero playerShip(pdb, ptex);
-	
+	playerShip.setPosition(pair<int,int>(250,250));
 	osSprite.push_back(&playerShip);
 	
 	//--------------------------End-----------------------------------//
@@ -62,10 +62,12 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
 	aiShip.setPosition(pair<int,int>(100,200));
-	aiShip.setDestination(pair<int,int>(1010, 600));
+	cout<<playerShip.getDestination().first<<endl;
+	cout<<playerShip.getDestination().second<<endl;
+	aiShip.setDestination(playerShip.getPosition());
 	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
-	aiShip2.setDestination(pair<int,int>(200,600));
+	aiShip2.setDestination(playerShip.getPosition());
 	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
 	SDL_Texture* tex3 = gr.loadImage(aiShip2.getSprite());
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -163,8 +165,9 @@ void run_ai_enviro(gpRender gr){
 		//position needs to be in booleans?
 		for(auto &ship : aiControlled)
 		{
-		    if(ship->getPosition()!=ship->getDestination())
-		    {
+		    //if(ship->getPosition()!=ship->getDestination())
+		    //{
+			ship->setDestination(playerShip.getPosition());
 			if(ship->getSprite().length()>36)//work around until Ship render works
 			    ship->followPath(aient);
 			else
@@ -174,13 +177,7 @@ void run_ai_enviro(gpRender gr){
 			    pathq=ai.calculatePath(*ship,path);
 			    ship->setPath(pathq);
 			}
-		    }
-		    else
-		    {
-			ship->setDestination(playerShip.getDestination());
-			pathq=ai.calculatePath(*ship,path);
-			ship->setPath(pathq);
-		    }
+		    //}
 		}/*
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
