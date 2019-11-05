@@ -29,6 +29,8 @@ public:
 
 	int getRowSize();
 	int getColSize();
+	
+	bool isEnd(int row, int col);
 
 private:
 
@@ -54,6 +56,12 @@ private:
 
 	/*Recursive Backtracking algorithm, fallback*/
 	void recMaze(int i, int j, int prevDir);
+
+	void setEnd(int side);
+
+	int rowEnd;
+	int colEnd;
+
 
 	/*Eller's Maze*/
 	void create_maze();
