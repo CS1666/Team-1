@@ -278,10 +278,10 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		//cout<<"currotation:"<<curRotation<<endl;
-		//cout<<"cur angle: "<<angle<<endl;
+		cout<<"currotation:"<<curRotation<<endl;
+		cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
-		if(curRotation>angle)
+		if(curRotation>angle||curRotation-angle>=180)
 		{
 		    //pretty shit acceleration stuff tbh
 		    if(curRotation>angle+maxRotation)
@@ -295,7 +295,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		        entity.setAngle(angle+1);
 		    angleChanged=true;
 		}
-		else if(angle>curRotation)
+		else if(curRotation<angle||curRotation-angle<-180)
 		{
 		    if(angle-maxRotation>curRotation)
 		    {
@@ -308,8 +308,6 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
-		if(abs(entity.getAngle()>360))
-		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
         //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
