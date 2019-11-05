@@ -28,7 +28,7 @@ void run_ai_enviro(gpRender gr){
 
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite;;
+	std::vector<Sprite*> osSprite;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
 	//Camera Initilization
@@ -74,7 +74,12 @@ void run_ai_enviro(gpRender gr){
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
 	osSprite.push_back(&aient2);
-	
+	vector<Ship*> aiControlled;
+	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
+	aiControlled.push_back(&aiShip);
+	aiControlled.push_back(&aiShip2);
+	tempAiShipSprites.push_back(&aient);
+	tempAiShipSprites.push_back(&aient2);
 //	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
@@ -156,6 +161,27 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
+		for(auto &ship : aiControlled)
+		{
+		    if(ship->getPosition()!=ship->getDestination())
+		    {
+			if(ship->getSprite().length()>36)//work around until Ship render works
+			    ship->followPath(aient);
+			else
+			    ship->followPath(aient2);
+			if(ship->getPathComplete())
+			{
+			    pathq=ai.calculatePath(*ship,path);
+			    ship->setPath(pathq);
+			}
+		    }
+		    else
+		    {
+			ship->setDestination(playerShip.getDestination());
+			pathq=ai.calculatePath(*ship,path);
+			ship->setPath(pathq);
+		    }
+		}/*
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
 		    aiShip.followPath(aient);
@@ -185,7 +211,7 @@ void run_ai_enviro(gpRender gr){
 		    pathq=ai.calculatePath(aiShip2,path);
 		    aiShip2.setPath(pathq);
 		}
-
+*/
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
