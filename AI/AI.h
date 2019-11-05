@@ -29,6 +29,7 @@ class AI
         void lineOfSight();
         bool createMapState(Sector currentSector);
         queue<pair<int,int>>* calculatePath(Ship theShip, Pathfinder Path);
-        int calculateDistance(pair<int,int> start, pair<int,int>stop);
+        void orderShip(Ship theShip, Ship playerShip);//note: idk if this is best place to put this method
+	int calculateDistance(pair<int,int> start, pair<int,int>stop);
 	
 };

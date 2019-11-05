@@ -42,7 +42,7 @@ class Ship : public Sprite
         bool isUser;
         bool isAlly;
         bool pathComplete;
-	int currGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
+	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
 
     public:
         float speed = 0;

@@ -382,7 +382,14 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 	        pathComplete=true;
 	    }
 	}
-
+void Ship::setGoal(int newGoal)
+{
+    curGoal=newGoal;
+}
+int Ship::getGoal()
+{
+    return curGoal;
+}
 bool Ship::getPathComplete()
 {
 	return pathComplete;
