@@ -93,7 +93,7 @@ void run_demo(gpRender gr){
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
-	Audio::load_music("Assets/Sound/spacegamemainsound.wav")
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
