@@ -95,6 +95,8 @@ void run_demo(gpRender gr){
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
 
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
+
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -121,6 +123,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex2 = gr.loadImage(z);
 	//SDL_Rect db2 = {800,400,332,315};
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
+
 	NSDL_Circ dc2 = {db2};
 
 	Star starent(db2, tex2, dc2);
