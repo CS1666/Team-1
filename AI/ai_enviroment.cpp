@@ -8,6 +8,7 @@
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
 #include "AI.h"
+#include "../General/Sprite.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
 #include "theta.h"
@@ -219,7 +220,7 @@ void run_ai_enviro(gpRender gr){
 		}
 		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
-		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		playerShip.updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
 		TimeData::update_move_last_time();
 

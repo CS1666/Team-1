@@ -69,14 +69,14 @@ class Ship : public Sprite
         void updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
 
-        void setPosition(pair<int,int> newPosition);
+        /*void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
 
         void setSize(pair<int,int> newSize);
-        pair<int,int> getSize();
+        pair<int,int> getSize();*/
 
-	      void setGoal(int newGoal);
-	      int getGoal();
+        void setGoal(int newGoal);
+	int getGoal();
 
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class

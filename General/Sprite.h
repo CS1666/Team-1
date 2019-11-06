@@ -37,9 +37,8 @@ class Sprite{
 		int getY();
 		void setPosition(std::pair<int,int> newPos);
 		std::pair<int,int> getPosition();
-		std::pair<int, int> getSize();
 		void setSize(std::pair<int, int> newSize);
-		
+		std::pair<int, int> getSize();
 
 		float getTrueX();
 		float getTrueY();

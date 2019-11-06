@@ -1,5 +1,6 @@
 
 #include "Sector.h"
+#include "../General/Sprite.h"
 
 vector<Star> Sector::getStars()
 {
