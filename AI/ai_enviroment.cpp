@@ -28,7 +28,7 @@ void run_ai_enviro(gpRender gr){
 
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite;;
+	std::vector<Sprite*> osSprite;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
 	//Camera Initilization
@@ -45,10 +45,10 @@ void run_ai_enviro(gpRender gr){
 
 	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
 	
-	SDL_Rect pdb = {50,50,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Rect pdb = {250,250,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	Hero playerShip(pdb, ptex);
-	
+	playerShip.setPosition(pair<int,int>(250,250));
 	osSprite.push_back(&playerShip);
 	
 	//--------------------------End-----------------------------------//
@@ -62,10 +62,12 @@ void run_ai_enviro(gpRender gr){
 
 	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
 	aiShip.setPosition(pair<int,int>(100,200));
-	aiShip.setDestination(pair<int,int>(1010, 600));
+	cout<<playerShip.getDestination().first<<endl;
+	cout<<playerShip.getDestination().second<<endl;
+	aiShip.setDestination(playerShip.getPosition());
 	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
-	aiShip2.setDestination(pair<int,int>(200,600));
+	aiShip2.setDestination(playerShip.getPosition());
 	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
 	SDL_Texture* tex3 = gr.loadImage(aiShip2.getSprite());
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -74,7 +76,12 @@ void run_ai_enviro(gpRender gr){
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
 	osSprite.push_back(&aient2);
-	
+	vector<Ship*> aiControlled;
+	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
+	aiControlled.push_back(&aiShip);
+	aiControlled.push_back(&aiShip2);
+	tempAiShipSprites.push_back(&aient);
+	tempAiShipSprites.push_back(&aient2);
 //	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
@@ -156,6 +163,22 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
+		for(auto &ship : aiControlled)
+		{
+		    //if(ship->getPosition()!=ship->getDestination())
+		    //{
+			ship->setDestination(playerShip.getPosition());
+			if(ship->getSprite().length()>36)//work around until Ship render works
+			    ship->followPath(aient);
+			else
+			    ship->followPath(aient2);
+			if(ship->getPathComplete())
+			{
+			    pathq=ai.calculatePath(*ship,path);
+			    ship->setPath(pathq);
+			}
+		    //}
+		}/*
 		if(aiShip.getPosition()!=aiShip.getDestination())
 		{
 		    aiShip.followPath(aient);
@@ -164,10 +187,9 @@ void run_ai_enviro(gpRender gr){
 				pathq = ai.calculatePath(aiShip,path);
 				aiShip.setPath(pathq);
 		    }
-		//cout<<"???????"<<endl;
 		}
 		else{
-		    aiShip.setDestination(pair<int,int>(10, 60));
+		    aiShip.setDestination(playerShip.getPosition());
 		    pathq = ai.calculatePath(aiShip, path);
 		    aiShip.setPath(pathq);
 		}
@@ -179,9 +201,14 @@ void run_ai_enviro(gpRender gr){
                                 pathq2 = ai.calculatePath(aiShip2,path2);
                                 aiShip2.setPath(pathq2);
                     }
-		//cout<<"ok?"<<endl;
 		}
-
+		else
+		{
+		    aiShip2.setDestination(playerShip.getPosition());
+		    pathq=ai.calculatePath(aiShip2,path);
+		    aiShip2.setPath(pathq);
+		}
+*/
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {

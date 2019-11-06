@@ -128,19 +128,24 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 	setX(getTrueX() + speedX);
-	if(/*getTrueX() < 0 
 
+	position.first=(int)getTrueX()+speedX;
+	if(getTrueX() < 0 
 		|| (getX() + getW() > ZONE_WIDTH)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+		|| check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
+		position.first=(int)getTrueX()-speedX;
 	}
 	setY(getTrueY() + speedY);
-	if(/*getY() < 0 
+
+	position.second=(int)getTrueY()+speedY;
+	if(getY() < 0 
 		|| (getY() + getH() > ZONE_HEIGHT)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+		|| check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
+		position.second=(int)getTrueY()-speedY;
 	}
 }
 
@@ -274,10 +279,10 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		//cout<<"currotation:"<<curRotation<<endl;
-		//cout<<"cur angle: "<<angle<<endl;
+		cout<<"currotation:"<<curRotation<<endl;
+		cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
-		if(curRotation>angle)
+		if(curRotation>angle||curRotation-angle>=180)
 		{
 		    //pretty shit acceleration stuff tbh
 		    if(curRotation>angle+maxRotation)
@@ -291,7 +296,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		        entity.setAngle(angle+1);
 		    angleChanged=true;
 		}
-		else if(angle>curRotation)
+		else if(curRotation<angle||curRotation-angle<-180)
 		{
 		    if(angle-maxRotation>curRotation)
 		    {
@@ -304,8 +309,6 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
-		if(abs(entity.getAngle()>360))
-		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
         //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
@@ -380,7 +383,14 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 	        pathComplete=true;
 	    }
 	}
-
+void Ship::setGoal(int newGoal)
+{
+    curGoal=newGoal;
+}
+int Ship::getGoal()
+{
+    return curGoal;
+}
 bool Ship::getPathComplete()
 {
 	return pathComplete;

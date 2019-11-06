@@ -10,7 +10,7 @@ typedef std::pair<int,int> Point;
 typedef std::queue<Point>* Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
-constexpr int MAX_DEPTH=200; //max depth before we force backtrack rebuild
+constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
 
