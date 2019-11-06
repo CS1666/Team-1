@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
+#include "Projectile.h"
 #include <queue>
+#include "gpRender.h"
+
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
@@ -39,8 +42,15 @@ class Ship : public Sprite
         bool isUser;
         bool isAlly;
         bool pathComplete;
+	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
 
     public:
+        float speed = 0;
+        float deltaV = 0;
+        float rotationRate = 0;
+        float rotationSpeed = 0;
+        float direction;
+
         Ship();
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
@@ -54,8 +64,7 @@ class Ship : public Sprite
 
         void setSpeedX(float speed);
         void setSpeedY(float speed);
-        void updateMovement();
-        void checkAction(/*stream*/);
+        void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
@@ -63,6 +72,8 @@ class Ship : public Sprite
         void setSize(pair<int,int> newSize);
         pair<int,int> getSize();
 
+	void setGoal(int newGoal);
+	int getGoal();
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
@@ -75,12 +86,21 @@ class Ship : public Sprite
         int getCurrHp();
         void setMaxHp(int newMaxHp);
         int getMaxHp();
+        Projectile fireWeapon(SDL_Texture* texture); 
+        
 };
 
-class Hero:Ship{};
+class Hero: public Ship{        
+        public:
+                Hero(SDL_Rect dBox, SDL_Texture* aTex);
+                
+                bool handleKeyEvents(SDL_Event e);
+                void handleKeyUpEvent(SDL_Event e);
+                void handleKeyDownEvent(SDL_Event e);
+};
 
-class Fighter:Ship{};
+class Fighter: public Ship{};
 
-class Cruiser:Ship{};
+class Cruiser: public Ship{};
 
-class Capital:Ship{};
+class Capital: public Ship{};

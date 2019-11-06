@@ -21,17 +21,17 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // gScore is our cost map for each point
     gScore = std::map<Point, int>();
     gScore.insert(std::pair<Point, int>(start, 0));
-    std::cout<<start.first<<std::endl;
-    std::cout<<start.second<<std::endl;
+    //std::cout<<start.first<<std::endl;
+    //std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
     parent = std::map<Point, Point>();
     parent.insert(std::pair<Point, Point>(start, start));
-    std::cout<<parent[start].first<<std::endl;
-    std::cout<<parent[start].second<<std::endl;
+    //std::cout<<parent[start].first<<std::endl;
+    //std::cout<<parent[start].second<<std::endl;
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     ////std::cout << "Before p_queue" << std::endl;
-    open =  new p_queue();
+    open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
     ////std::cout << "After p_queue" << std::endl;
 
     ////std::cout << "Before insert" << std::endl;
@@ -262,5 +262,3 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
-
-

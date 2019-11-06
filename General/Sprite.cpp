@@ -1,5 +1,6 @@
 
 	#include "Sprite.h"
+	#include <iostream>
 
 	
 	//------------------------------------Constructors-----------------------------------------------
@@ -9,7 +10,7 @@
 
 	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-
+	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, drawCirc{spr.drawCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
 
 	//------------------------------------Destructor--------------------------------------------------
 	Sprite::~Sprite(){
@@ -72,7 +73,15 @@
 			return assetTex;
 	}
 	void Sprite::setAngle(double new_angle){
-		angle = new_angle;
+		if(new_angle>=360)
+		{
+		    double leftOver=new_angle/360;
+		    angle=(int)new_angle%360+leftOver;
+		}
+		else if(new_angle<0)
+		    angle=new_angle+360;
+		else
+		    angle = new_angle;
 	}
 	double Sprite::getAngle(){
 		return angle;
@@ -96,6 +105,13 @@
 		return renderOrder;
 	}
 	
+	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	}
+/*
+	bool check_collision(SDL_Rect* a, SDL_Rect* b) {}
+
+	bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){}
+	*/
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){

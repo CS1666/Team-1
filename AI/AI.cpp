@@ -100,3 +100,11 @@
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
 		    return pth;
 		}
+void AI::orderShip(Ship theShip,Ship player)
+{
+    if(theShip.getGoal()==0)//follow player
+    {
+	theShip.setDestination(player.getPosition());
+	//do pathfinding here? idk
+    }
+}
