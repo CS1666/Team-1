@@ -781,6 +781,10 @@
 	}
 
 	/*Get current seed being used*/
+	void Ellers_Maze::setSeed(){
+		this->seed = seed + 100;
+	}
+
 	unsigned int Ellers_Maze::getSeed()
 	{
 		return seed;

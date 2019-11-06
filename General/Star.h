@@ -12,27 +12,30 @@ class Star : public Sprite
 		int radius;
 		int gravity;
 		string type;
+		vector<int> position;
 		string sprite;
 		int mass;
+		vector<int> size;
 
 	public:
 		Star();
-		Star(SDL_Rect dBox, SDL_Texture* aTex);
-		Star(SDL_Rect dBox, SDL_Texture* aTex, int mass);
 		Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
 		Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass);
+		//to be deprecated
+		Star(SDL_Rect dBox, SDL_Texture* aTex);
+		Star(SDL_Rect dBox, SDL_Texture* aTex, int mass);
 		int getRadius();
 		int getGravity();
 		string getType();
+		vector<int> getPosition();
 		string getSprite();
 		void setRadius(int r);
 		void setGravity(int g);
 		void setType(string t);
+		void setPosition(vector<int> newPos);
 		void setSprite(string s);
 		int getMass();
 		void setMass(int newMass);
-		//vector<int> getSize();
-		//void setSize(vector<int> newSize);
-		//void setPosition(std::vector<int> newPos);
-		//std::vector<int> getPosition();
+		vector<int> getSize();
+		void setSize(vector<int> newSize);
 };

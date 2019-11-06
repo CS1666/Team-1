@@ -1,4 +1,5 @@
 #include "BasicGravity.h"
+#include "../General/Sprite.h"
 #define PI 3.14159265
 
 #define G .00000000006674

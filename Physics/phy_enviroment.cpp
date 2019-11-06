@@ -76,9 +76,10 @@ void run_phy_enviro(gpRender gr){
 
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {800,400,332,332};
+	SDL_Rect db2 = {800,400,332,315};
 	NSDL_Circ dc2 = {db2};
 	Star starent(db2, tex2, dc2);
+
 	osSprite.push_back(&starent);
 
 	std::vector <std::pair<int, int>> randCoords = randNumP();
@@ -87,7 +88,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3, 1, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,1, starent, 100);
 	osSprite.push_back(&planet1ent);
 
 	//Space Station Initialization-
@@ -201,9 +202,8 @@ void run_phy_enviro(gpRender gr){
 		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
-		for(auto ent : osSprite) {
-			ent->updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-		}
+		planet1ent.updatePosition();
+		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {

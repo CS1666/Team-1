@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <tuple>
 #include <string>
 #include <algorithm>
 #include <SDL.h>
@@ -8,8 +9,8 @@
 #include "../General/Sprite.h"
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
-#include "../General/Star.h"
 #include "../General/planet.h"
+#include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"
@@ -37,11 +38,40 @@ std::vector<std::pair<int, int>> randNum(){
 	std::transform(coorX.begin(), coorX.end(), coorY.begin(), std::back_inserter(coords), 
 		[](int a, int b){return std::make_pair(a, b);});
 
-	/*for(int k = 0; k<10; k++){
+	for(int k = 0; k<10; k++){
 	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
-	}*/
+	}
 
 	 return coords;
+}
+std::tuple<int, int, std::string, std::string, std::string, std::string> callAsset(){
+	int assetNumSun = rand()%3 + 1;
+	switch(assetNumSun){
+		case 1:
+		{
+			std::tuple<int, int, std::string, std::string, std::string,std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 2:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 3:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		default:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+	}
 }
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
@@ -49,18 +79,31 @@ constexpr int ZONE_WIDTH = 3840;
 constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
+	
+	Ellers_Maze seed;
+	int sunSeed = seed.getSeed();
+	//int seed2 = time(0) + 100;
+	srand(sunSeed);
+	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
+	//tuple to control the sun and subsequent spawns
+	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
+
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 
 	bool fixed = false;
+	//call tuple stuff
+	int sunHeight = std::get<0>(sunAsset);
+	int sunWidth = std::get<1>(sunAsset); 
+	std::string z = std::get<2>(sunAsset);
 
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
@@ -75,9 +118,9 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&playerent);
 	
 	
-	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Texture* tex2 = gr.loadImage(z);
 	//SDL_Rect db2 = {800,400,332,315};
-	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,432};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 	NSDL_Circ dc2 = {db2};
 
 	Star starent(db2, tex2, dc2);
@@ -93,6 +136,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
+
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
 
@@ -119,7 +163,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
 	NSDL_Circ dc7 = {db7};
-
+	
 	Planet planet5ent(db7, tex7, dc7);
 
 	osSprite.push_back(&planet5ent);
@@ -127,8 +171,8 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
 	NSDL_Circ dc8 = {db8};
-
-	Planet planet6ent(db8, tex8, dc8);
+	
+	Sprite planet6ent(db8, tex8, dc8);
 
 	osSprite.push_back(&planet6ent);
 
@@ -170,7 +214,7 @@ void run_demo(gpRender gr){
 
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
-	srand(time(0));
+
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
@@ -212,7 +256,6 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
-	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -284,21 +327,17 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-			/* Only update player for now until planets don't float offscreen
 
 			for(auto ent : osSprite) {
-				ent->updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			}*/
+				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}
 
-      playerent.updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			
-      if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
+			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				
 				solar = false;
 				
 			}
-			
       
 			TimeData::update_move_last_time();
 
@@ -378,6 +417,7 @@ void run_demo(gpRender gr){
 					case SDLK_m:
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
+							seed.setSeed();
 						}
 						break;
 						

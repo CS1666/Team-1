@@ -2,6 +2,9 @@
 Star::Star(): Sprite(), type{2} {};
 Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;};
 Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(dBox, aTex, dCirc), mass{mass}{renderOrder = 2;};
+//to be deprecated
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass}{renderOrder = 2;};
 
 	int Star::getRadius()
 	{
@@ -16,6 +19,11 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(
 	string Star::getType()
 	{
 		return type;
+	}
+
+	vector<int> Star::getPosition()
+	{
+		return position;
 	}
 
 	string Star::getSprite()
@@ -38,6 +46,11 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(
 		type = t;
 	}
 
+	void Star::setPosition(vector<int> newPos)
+	{
+		position = newPos;
+	}
+
 	void Star::setSprite(string s)
 	{
 		sprite = s;
@@ -49,4 +62,14 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(
 
 	void Star::setMass(int newMass){
 		mass = newMass;	
+	}
+
+	vector<int> Star::getSize()
+	{
+		return size;
+	}
+
+	void Star::setSize(vector<int> newSize)
+	{
+		size = newSize;
 	}

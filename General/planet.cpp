@@ -10,6 +10,10 @@ Planet::Planet(): Sprite() {orbitalVel = 100;};
 Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;};
 Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(dBox, aTex, dCirc), mass{mass} {renderOrder = 2;orbitalVel = 100;};
 Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass, Star &sun, float vel): Sprite(dBox, aTex, dCirc), mass{mass}, orbitalVel{vel}{initVelocity(sun);renderOrder = 2;};
+
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {renderOrder = 2;orbitalVel = 100;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star &sun, float vel): Sprite(dBox, aTex), mass{mass}, orbitalVel{vel}{initVelocity(sun);renderOrder = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;
@@ -73,7 +77,7 @@ void Planet::setMass(int newMass)
 	mass = newMass;	
 }
 
-void Planet::updatePosition(std::vector<Sprite*>& osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
+void Planet::updatePosition()
 {
 	std::vector<float> gravs = calulateGravity(sun);
 	fx = gravs[0];
@@ -88,9 +92,7 @@ void Planet::updatePosition(std::vector<Sprite*>& osSprite, int ZONE_WIDTH, int 
 	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
 	std::cout << "planet X: " << this->getTrueX() << std::endl;
 	std::cout << "planet Y: " << this->getTrueY() << std::endl;
-	check_all_collisions(getCollisionCirc(), osSprite);
 }
-
 //for now only calculate the gravity contribution from the sun
 std::vector<float> Planet::calulateGravity(Star& sun)
 {
