@@ -16,8 +16,10 @@ class Sprite{
 		Sprite();
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
-		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int radius);
-		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int radius, int anim);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int anim);
 		Sprite(const Sprite &spr);
 
 		//Destructors
@@ -33,6 +35,11 @@ class Sprite{
 		int getX();
 		void setY(float y);
 		int getY();
+		void setPosition(std::pair<int,int> newPos);
+		std::pair<int,int> getPosition();
+		std::pair<int, int> getSize();
+		void setSize(std::pair<int, int> newSize);
+		
 
 		float getTrueX();
 		float getTrueY();
@@ -41,6 +48,8 @@ class Sprite{
 		SDL_Texture* getTexture();
 		void setAngle(double new_angle);
 		double getAngle();
+		void setH(int h);
+		void setW(int w);
 		int getH();
 		int getW();
 		void setF(int anim);
@@ -48,28 +57,35 @@ class Sprite{
 
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
-		virtual void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
-		/*bool check_collision(SDL_Rect* a, SDL_Rect* b);
+		virtual void updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+		bool check_collision(SDL_Rect* a, SDL_Rect* b);
+		bool check_collision(SDL_Rect* a, NSDL_Circ* b);
+		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
-*/
+		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
+
 		
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
+		SDL_Rect* getCollisionBox();
 		bool isRectEnt();  
 
 		//Methods that deal with Circle drawn entities
-		NSDL_Circ* getDrawCirc();
+		NSDL_Circ* getCollisionCirc();
 		bool isCircEnt(); 
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
 	protected:
 		SDL_Rect drawBox;
-		NSDL_Circ drawCirc;
+		SDL_Rect collisionBox;
+		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
 		int type = 0;
 		float x,y;
+		std::pair<int,int> position;
+		std::pair<int,int> size;
 		// set renderOrder for all objects
 		// 0 = player ship
 		// 1 = objects with collision but no gravity (all other ships + space station)

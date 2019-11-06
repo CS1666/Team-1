@@ -84,16 +84,17 @@ void run_ai_enviro(gpRender gr){
 	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {500,200,300,300};
-	Sprite starent(db2, tex2);
+	NSDL_Circ dc2 = {db2};
+	Sprite starent(db2, tex2, dc2);
 
 	Star star;
 
-	star.setSize({300, 300});
-	star.setPosition({500, 200});
+	star.setSize(pair<int,int>(300, 300));
+	star.setPosition(pair<int,int>(500, 200));
 
 	Sector sector;
 
-	sector.setSize({1280, 720});
+	sector.setSize(pair<int,int>(1280, 720));
 	sector.setStars({star});
 	osSprite.push_back(&starent);
 	//----------------------------------------------------------------------

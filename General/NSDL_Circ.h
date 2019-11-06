@@ -5,6 +5,7 @@ class NSDL_Circ{
 		//Constructors
 		NSDL_Circ();
 		NSDL_Circ(int x, int y,  int t);
+		NSDL_Circ(SDL_Rect drawbox);
 
 		//Destructors
 		~NSDL_Circ();

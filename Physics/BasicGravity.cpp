@@ -165,14 +165,14 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getX() - (int)speedX);
 	}
 	ent.setY(ent.getY() + (int)speedY);
 	if(ent.getY() < 0 
 		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getY() - (int)speedY);
 	}
