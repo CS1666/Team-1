@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <tuple>
 #include <string>
 #include <algorithm>
 #include <SDL.h>
@@ -42,24 +43,66 @@ std::vector<std::pair<int, int>> randNum(){
 
 	 return coords;
 }
+std::tuple<int, int, std::string, std::string, std::string, std::string> callAsset(){
+	int assetNumSun = rand()%3 + 1;
+	switch(assetNumSun){
+		case 1:
+		{
+			std::tuple<int, int, std::string, std::string, std::string,std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 2:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 3:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		default:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+	}
+}
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
+	
+	Ellers_Maze seed;
+	int sunSeed = seed.getSeed();
+	//int seed2 = time(0) + 100;
+	srand(sunSeed);
+	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
+	//tuple to control the sun and subsequent spawns
+	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
+
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 
 	bool fixed = false;
+	//call tuple stuff
+	int sunHeight = std::get<0>(sunAsset);
+	int sunWidth = std::get<1>(sunAsset); 
+	std::string z = std::get<2>(sunAsset);
 
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
@@ -74,9 +117,9 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&playerent);
 	
 	
-	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Texture* tex2 = gr.loadImage(z);
 	//SDL_Rect db2 = {800,400,332,315};
-	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,415};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 
 	Star starent(db2, tex2);
 
@@ -160,7 +203,7 @@ void run_demo(gpRender gr){
 
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
-	srand(time(0));
+
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
@@ -202,7 +245,6 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
-	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -364,6 +406,7 @@ void run_demo(gpRender gr){
 					case SDLK_m:
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
+							seed.setSeed();
 						}
 						break;
 						
