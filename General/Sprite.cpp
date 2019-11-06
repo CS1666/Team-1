@@ -94,14 +94,8 @@
 	double Sprite::getAngle(){
 		return angle;
 	}
-	void Sprite::setH(int h){
-		drawBox.h = h;
-	}
 	int Sprite::getH(){
 		return drawBox.h;
-	}
-	void Sprite::setW(int w){
-		drawBox.w = w;
 	}
 	int Sprite::getW(){
 		return drawBox.w;
@@ -119,31 +113,7 @@
 		return renderOrder;
 	}
 	
-	void Sprite::setPosition(std::pair<int,int> newPos)
-	{
-		setX(newPos.first);
-		setY(newPos.second);
-		position = newPos;
-	}
-
-	std::pair<int,int> Sprite::getPosition()
-	{
-		return position;
-	}
-
-    void Sprite::setSize(std::pair<int, int> newSize)
-    {
-		setW(newSize.first);
-		setH(newSize.second);
-        size = newSize;
-    }
-
-	std::pair<int, int> Sprite::getSize()
-    {
-        return size;
-    }
-
-	void Sprite::updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	}
 
 	bool Sprite::check_collision(SDL_Rect* a, SDL_Rect* b) {
@@ -242,7 +212,7 @@
 		}
 		return isCollision;
 	}
-
+	
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){
 		return &drawBox;
@@ -258,11 +228,8 @@
 	NSDL_Circ* Sprite::getCollisionCirc(){
 		return &collisionCirc;
 	}
-
-
 	
 	bool Sprite::isCircEnt(){
-
 		return collisionCirc.getR() != 0;
 	}
 

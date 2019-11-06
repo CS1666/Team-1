@@ -1,6 +1,5 @@
 
 #include "Sector.h"
-#include "../General/Sprite.h"
 
 vector<Star> Sector::getStars()
 {
@@ -12,12 +11,12 @@ void Sector::setStars(vector<Star> newStars)
 	__stars = newStars;
 }
 
-void Sector::setSize(pair<int,int> newSize)
+void Sector::setSize(vector<int> newSize)
 {
 	__size = newSize;
 }
 
-pair<int,int> Sector::getSize()
+vector<int> Sector::getSize()
 {
 	return __size;
 }
@@ -28,10 +27,10 @@ vector<vector<int> > Sector::getState()
 
 	for (Star star : __stars)
 	{
-		pair<int,int> size = star.getSize();
-		pair<int,int> position = star.getPosition();
+		vector<int> size = star.getSize();
+		vector<int> position = star.getPosition();
 
-		currentState.push_back({position.first, position.second, size.first, size.second});
+		currentState.push_back({position[0], position[1], size[0], size[1]});
 
 	}
 

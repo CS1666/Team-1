@@ -8,7 +8,6 @@
 #include "../General/gpRender.h"
 #include "ai_enviroment.h"
 #include "AI.h"
-#include "../General/Sprite.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
 #include "theta.h"
@@ -90,17 +89,16 @@ void run_ai_enviro(gpRender gr){
 	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {500,200,300,300};
-	NSDL_Circ dc2 = {db2};
-	Sprite starent(db2, tex2, dc2);
+	Sprite starent(db2, tex2);
 
 	Star star;
 
-	star.setSize(pair<int,int>(300, 300));
-	star.setPosition(pair<int,int>(500, 200));
+	star.setSize({300, 300});
+	star.setPosition({500, 200});
 
 	Sector sector;
 
-	sector.setSize(pair<int,int>(1280, 720));
+	sector.setSize({1280, 720});
 	sector.setStars({star});
 	osSprite.push_back(&starent);
 	//----------------------------------------------------------------------
@@ -220,7 +218,7 @@ void run_ai_enviro(gpRender gr){
 		}
 		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
-		playerShip.updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
 		TimeData::update_move_last_time();
 

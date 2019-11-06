@@ -21,6 +21,7 @@ public:
 	bool hasRight(int row, int col);
 
 	/*Get maze seed*/
+	void setSeed();
 	unsigned int getSeed();
 
 	/*Test output of maze*/

@@ -35,10 +35,6 @@ class Sprite{
 		int getX();
 		void setY(float y);
 		int getY();
-		void setPosition(std::pair<int,int> newPos);
-		std::pair<int,int> getPosition();
-		void setSize(std::pair<int, int> newSize);
-		std::pair<int, int> getSize();
 
 		float getTrueX();
 		float getTrueY();
@@ -47,8 +43,6 @@ class Sprite{
 		SDL_Texture* getTexture();
 		void setAngle(double new_angle);
 		double getAngle();
-		void setH(int h);
-		void setW(int w);
 		int getH();
 		int getW();
 		void setF(int anim);
@@ -56,13 +50,12 @@ class Sprite{
 
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
-		virtual void updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+		virtual void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
 		bool check_collision(SDL_Rect* a, SDL_Rect* b);
 		bool check_collision(SDL_Rect* a, NSDL_Circ* b);
 		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
-
 		
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
@@ -83,8 +76,6 @@ class Sprite{
 		int animFrame;
 		int type = 0;
 		float x,y;
-		std::pair<int,int> position;
-		std::pair<int,int> size;
 		// set renderOrder for all objects
 		// 0 = player ship
 		// 1 = objects with collision but no gravity (all other ships + space station)

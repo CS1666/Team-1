@@ -16,18 +16,11 @@ constexpr float MAX_ROTATIONRATE = 2;
 
 Ship::Ship(): Sprite() {};
 
-//Most of these except the last one with every attribute (cBox, anim, mass) should be deprecated 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
-
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox): Sprite(dBox, aTex, cBox) {renderOrder = 1;};
-
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim): Sprite(dBox, aTex, cBox, anim) {renderOrder = 1;};
-
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim, int mass): Sprite(dBox, aTex, cBox, anim), mass{mass} {renderOrder = 1;};
 
 Ship::~Ship()
 {
@@ -59,7 +52,13 @@ void Ship::setSpeedY(float speed)
 	speedY = speed;
 }
 
-void Ship::updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
+//integrate BasicMovementFPSlimit.cpp
+void Ship::setPosition(pair<int,int> newPosition)
+{
+	position = newPosition;
+}
+
+void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
 {
 	speed += deltaV;
 	rotationSpeed += rotationRate;
@@ -126,6 +125,11 @@ void Ship::updateHull(int newHull)
 	hull = newHull;
 }
 
+pair<int,int> Ship::getPosition()
+{
+	return position;
+}
+
 void Ship::setDestination(pair<int,int> newDestination)
 {
 	destination = newDestination;
@@ -173,6 +177,16 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
     void Ship::setMaxHp(int newMaxHp)
     {
 	   maxHp = newMaxHp;    
+    }
+
+    pair<int, int> Ship::getSize()
+    {
+        return size;
+    }
+
+    void Ship::setSize(pair<int, int> newSize)
+    {
+        size = newSize;
     }
 
     //ai follows path assigned to it by ai class
