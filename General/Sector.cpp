@@ -11,12 +11,12 @@ void Sector::setStars(vector<Star> newStars)
 	__stars = newStars;
 }
 
-void Sector::setSize(vector<int> newSize)
+void Sector::setSize(pair<int,int> newSize)
 {
 	__size = newSize;
 }
 
-vector<int> Sector::getSize()
+pair<int,int> Sector::getSize()
 {
 	return __size;
 }
@@ -27,10 +27,10 @@ vector<vector<int> > Sector::getState()
 
 	for (Star star : __stars)
 	{
-		vector<int> size = star.getSize();
-		vector<int> position = star.getPosition();
+		pair<int,int> size = star.getSize();
+		pair<int,int> position = star.getPosition();
 
-		currentState.push_back({position[0], position[1], size[0], size[1]});
+		currentState.push_back({position.first, position.second, size.first, size.second});
 
 	}
 

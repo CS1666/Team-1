@@ -16,7 +16,6 @@ class Ship : public Sprite
     private:
         int hull;
         string sprite;
-        pair<int,int> position;
         int xVelocity;
 	int yVelocity;
         float maxRotation;
@@ -29,7 +28,6 @@ class Ship : public Sprite
         string currKey;
 
         int mass;
-        pair<int, int> size;
 
         float speedX;
         float speedY;
@@ -50,11 +48,15 @@ class Ship : public Sprite
         float rotationRate = 0;
         float rotationSpeed = 0;
         float direction;
-
+        
+        //Most of these except the last one with every attribute (cBox, anim, mass) should be deprecated at some point
         Ship();
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass);
+        Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox);
+        Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim);
+        Ship(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim, int mass);
         ~Ship();
         
         void setSprite(string newSprite);
@@ -64,16 +66,18 @@ class Ship : public Sprite
 
         void setSpeedX(float speed);
         void setSpeedY(float speed);
-        void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+        void updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
+
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
 
         void setSize(pair<int,int> newSize);
         pair<int,int> getSize();
 
-	void setGoal(int newGoal);
-	int getGoal();
+	      void setGoal(int newGoal);
+	      int getGoal();
+
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);

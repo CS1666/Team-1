@@ -4,13 +4,21 @@
 
 	
 	//------------------------------------Constructors-----------------------------------------------
-	Sprite::Sprite(): drawBox{0,0,0,0},  drawCirc{}, assetTex{nullptr}, x{0}, y{0}{};
+	Sprite::Sprite(): drawBox{0,0,0,0},  collisionCirc{}, assetTex{nullptr}, x{0}, y{0}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, drawCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, drawCirc{spr.drawCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
+
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
+
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ -1 }, x{ (float)dBox.x }, y{ (float)dBox.y }{};
+
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int anim) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ anim }, x{ (float)dBox.x }, y{ (float)dBox.y }{};
+
+	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, collisionBox{spr.collisionBox}, collisionCirc{spr.collisionCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
 
 	//------------------------------------Destructor--------------------------------------------------
 	Sprite::~Sprite(){
@@ -86,8 +94,14 @@
 	double Sprite::getAngle(){
 		return angle;
 	}
+	void Sprite::setH(int h){
+		drawBox.h = h;
+	}
 	int Sprite::getH(){
 		return drawBox.h;
+	}
+	void Sprite::setW(int w){
+		drawBox.w = w;
 	}
 	int Sprite::getW(){
 		return drawBox.w;
@@ -105,13 +119,129 @@
 		return renderOrder;
 	}
 	
-	void Sprite::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	void Sprite::setPosition(std::pair<int,int> newPos)
+	{
+		setX(newPos.first);
+		setY(newPos.second);
+		position = newPos;
 	}
-/*
-	bool check_collision(SDL_Rect* a, SDL_Rect* b) {}
 
-	bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){}
-	*/
+	std::pair<int,int> Sprite::getPosition()
+	{
+		return position;
+	}
+
+    void Sprite::setSize(std::pair<int, int> newSize)
+    {
+		setW(newSize.first);
+		setH(newSize.second);
+        size = newSize;
+    }
+
+	std::pair<int, int> Sprite::getSize()
+    {
+        return size;
+    }
+
+	void Sprite::updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
+	}
+
+	bool Sprite::check_collision(SDL_Rect* a, SDL_Rect* b) {
+		// Check vertical overlap
+		if (a->y + a->h <= b->y)
+			return false;
+		if (a->y >= b->y + b->h)
+			return false;
+
+		// Check horizontal overlap
+		if (a->x >= b->x + b->w)
+			return false;
+		if (a->x + a->w <= b->x)
+			return false;
+
+		// Must overlap in both
+		return true;
+	}
+
+	bool Sprite::check_collision(SDL_Rect* a, NSDL_Circ* b) {
+		int c_x, c_y;
+		int d_x, d_y;
+		int distsq;
+
+		// Need to find closest x/y cooridinates to the Circ
+		if (b->getX() < a->x)
+			c_x = a->x;
+		else if (b->getX() > a->x + a->w)
+			c_x = a->x + a->w;
+		else
+			c_x = b->getX();
+
+		if (b->getY() < a->y)
+			c_y = a->y;
+		else if (b->getY() > a->y + a->h)
+			c_y = a->y + a->h;
+		else
+			c_y = b->getY();
+
+		// Find distance from Circ to Rect
+		d_x = b->getX() - c_x;
+		d_y = b->getY() - c_y;
+
+		// Compare square of distances
+		distsq = d_x * d_x + d_y * d_y;
+		if (distsq < (b->getR() * b->getR()))
+			return true;
+
+		// else
+		return false;
+	}
+
+	bool Sprite::check_collision(NSDL_Circ* a, NSDL_Circ* b) {
+		int radsum = a->getR() + b->getR();
+		int d_x, d_y;
+		int distsq;
+
+		d_x = a->getX() - b->getX();
+		d_y = a->getY() - b->getY();
+		distsq = d_x * d_x + d_y * d_y;
+		if (distsq < (radsum * radsum))
+			return true;
+
+		// else
+		return false;
+	}
+
+	bool Sprite::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+		bool isCollision = false;
+		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+		for (int i = 1; i < osSprite.size(); i++) {
+			//so, one of these should result in collison if they are the same box
+			if (osSprite.at(i)->isCircEnt()){
+				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
+			}
+			/*else
+				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());*/
+			//std::cout << "Is last command Illegal?" << std::endl;
+			//std::cout << "Checked collisions: " << i << std::endl;
+		}
+		
+		return isCollision;
+	}
+	
+	bool Sprite::check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite){
+		bool isCollision = false;
+		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+		for (int i = 1; i < osSprite.size(); i++) {
+			//so, one of these should result in collison if they are the same box
+			if (osSprite.at(i)->isCircEnt())
+				isCollision = check_collision(a, osSprite.at(i)->getCollisionCirc());
+			else
+				isCollision = check_collision(osSprite.at(i)->getDrawBox(), a);
+			//std::cout << "Is last command Illegal?" << std::endl;
+			//std::cout << "Checked collisions: " << i << std::endl;
+		}
+		return isCollision;
+	}
 
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){
@@ -125,15 +255,15 @@
 	
 
 	//---------------------------Functions Related to Drawing a Circle-----------------------------------------
-	NSDL_Circ* Sprite::getDrawCirc(){
-		return &drawCirc;
+	NSDL_Circ* Sprite::getCollisionCirc(){
+		return &collisionCirc;
 	}
 
 
 	
 	bool Sprite::isCircEnt(){
 
-		return drawCirc.getR() != 0;
+		return collisionCirc.getR() != 0;
 	}
 
 

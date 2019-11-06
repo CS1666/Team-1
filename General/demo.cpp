@@ -9,6 +9,7 @@
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
 #include "../General/Star.h"
+#include "../General/planet.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"
@@ -36,9 +37,9 @@ std::vector<std::pair<int, int>> randNum(){
 	std::transform(coorX.begin(), coorX.end(), coorY.begin(), std::back_inserter(coords), 
 		[](int a, int b){return std::make_pair(a, b);});
 
-	for(int k = 0; k<10; k++){
+	/*for(int k = 0; k<10; k++){
 	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
-	}
+	}*/
 
 	 return coords;
 }
@@ -76,49 +77,58 @@ void run_demo(gpRender gr){
 	
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	//SDL_Rect db2 = {800,400,332,315};
-	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,415};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,432};
+	NSDL_Circ dc2 = {db2};
 
-	Star starent(db2, tex2);
+	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
-	Sprite planet1ent(db3, tex3);
+	NSDL_Circ dc3 = {db3};
+
+	Planet planet1ent(db3, tex3, dc3);
 
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
-
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
+	NSDL_Circ dc4 = {db4};
 
-	Sprite planet2ent(db4, tex4);
+	Planet planet2ent(db4, tex4, dc4);
 
 	osSprite.push_back(&planet2ent);
 
 	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc5 = {db5};
 
-	Sprite planet3ent(db5, tex5);
+	Planet planet3ent(db5, tex5, dc5);
 
 	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc6 = {db6};
 
-	Sprite planet4ent(db6, tex6);
+	Planet planet4ent(db6, tex6, dc6);
 
 	osSprite.push_back(&planet4ent);
 
 	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
-	Sprite planet5ent(db7, tex7);
+	NSDL_Circ dc7 = {db7};
+
+	Planet planet5ent(db7, tex7, dc7);
 
 	osSprite.push_back(&planet5ent);
 
 	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
-	Sprite planet6ent(db8, tex8);
+	NSDL_Circ dc8 = {db8};
+
+	Planet planet6ent(db8, tex8, dc8);
 
 	osSprite.push_back(&planet6ent);
 
@@ -274,17 +284,21 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
+			/* Only update player for now until planets don't float offscreen
 
 			for(auto ent : osSprite) {
-				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			}
+				ent->updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}*/
 
-			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
+      playerent.updatePosition(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			
+      if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				
 				solar = false;
 				
 			}
+			
       
 			TimeData::update_move_last_time();
 

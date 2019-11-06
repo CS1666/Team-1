@@ -14,15 +14,15 @@ class Sector
 
 		vector<Star> __stars;
 		vector<Ship> __ships;
-		vector<int> __size;
+		pair<int,int> __size;
 
 	public:
 		void setStars(vector<Star> newStars);
 		vector<Star> getStars();
 		void setShips(vector<Ship> newShips);
 		vector<Ship> getShips();
-		void setSize(vector<int> newSize);
-		vector<int> getSize();
+		void setSize(pair<int,int> newSize);
+		pair<int,int> getSize();
 		vector<vector<int> > getState();
 
 };

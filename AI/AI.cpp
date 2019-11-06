@@ -38,13 +38,13 @@
     		const int buffer = 50;
 
     		// Gets sector size and sets mesh size to be the size of the sector
-    		vector<int> sectorSize = currentSector.getSize();
+    		pair<int,int> sectorSize = currentSector.getSize();
 
     		// Gets the positions and sizes of everything within the sector
 			  vector<vector<int> > currentState = currentSector.getState();
 
 			  // Creates a new map state with everything equal to zero
-    		vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
+    		vector<vector<bool> > newStoredMapState (sectorSize.first, std::vector<bool>(sectorSize.second, 0));
 
     		// Puts 1's at the edges of objecys within the sector + the size of the buffer
             for (vector<int> object : currentState)
