@@ -197,9 +197,9 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	{
 		speed = MAX_SPEED;
 	}
-	else if(speed < -MAX_SPEED)
+	else if(speed < 0)
 	{
-		speed = -MAX_SPEED;
+		speed = 0;
 	}
 	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{
@@ -242,6 +242,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
+
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
@@ -327,9 +328,9 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 	{
 		speed = MAX_SPEED;
 	}
-	else if(speed < -MAX_SPEED)
+	else if(speed < 0)
 	{
-		speed = -MAX_SPEED;
+		speed = 0;
 	}
 	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{
