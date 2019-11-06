@@ -58,35 +58,6 @@ void Ship::setPosition(pair<int,int> newPosition)
 	position = newPosition;
 }
 
-bool check_collision(SDL_Rect* a, SDL_Rect* b) {
-	// Check vertical overlap
-	if (a->y + a->h <= b->y)
-		return false;
-	if (a->y >= b->y + b->h)
-		return false;
-
-	// Check horizontal overlap
-	if (a->x >= b->x + b->w)
-		return false;
-	if (a->x + a->w <= b->x)
-		return false;
-
-	// Must overlap in both
-	return true;
-}
-
-bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
-	bool isCollision = false;
-	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-	for(int i = 1;  i < osSprite.size(); i++){
-		//so, one of these should result in collison if they are the same box
-		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
-		//std::cout << "Is last command Illegal?" << std::endl;
-		//std::cout << "Checked collisions: " << i << std::endl;
-	}
-	return isCollision;
-}
-
 void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
 {
 	speed += deltaV;
