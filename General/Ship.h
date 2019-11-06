@@ -40,6 +40,7 @@ class Ship : public Sprite
         bool isUser;
         bool isAlly;
         bool pathComplete;
+	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
 
     public:
         float speed = 0;
@@ -67,8 +68,15 @@ class Ship : public Sprite
         void setSpeedY(float speed);
         void updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
-        //void setPosition(pair<int,int> newPosition);
-        //pair<int,int> getPosition();
+
+        void setPosition(pair<int,int> newPosition);
+        pair<int,int> getPosition();
+
+        void setSize(pair<int,int> newSize);
+        pair<int,int> getSize();
+
+	      void setGoal(int newGoal);
+	      int getGoal();
 
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class

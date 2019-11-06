@@ -94,25 +94,30 @@ void Ship::updatePosition(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
-	std::vector<float> gravPulls = calculateGravityPull(*this, *osSprite[1]);
+	std::vector<float> gravPulls = calculateGravityPull(*this, *osSprite[3]);
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 	setX(getTrueX() + speedX);
-	if(getTrueX() < 0 
 
+	position.first=(int)getTrueX()+speedX;
+	if(/*getTrueX() < 0 
 		|| (getX() + getW() > ZONE_WIDTH)
-		|| check_all_collisions(getDrawBox(), osSprite)){
+		||*/ check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
+		position.first=(int)getTrueX()-speedX;
 	}
 	setY(getTrueY() + speedY);
-	if(getY() < 0 
+
+	position.second=(int)getTrueY()+speedY;
+	if(/*getY() < 0 
 		|| (getY() + getH() > ZONE_HEIGHT)
-		|| check_all_collisions(getDrawBox(), osSprite)){
+		||*/ check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
+		position.second=(int)getTrueY()-speedY;
 	}
 }
 
@@ -134,7 +139,7 @@ pair<int,int> Ship::getDestination()
 void Ship::setPath(queue<pair<int,int>>* thePath)
     {
 	//fullstops ship when setting path
-	cout<<"something"<<endl;
+	//cout<<"something"<<endl;
 	xVelocity=0;
 	yVelocity=0;
 	rotation=0;
@@ -189,20 +194,52 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		{
 			//if(y_coord>cur_y)
 			curRotation= atan2(-ySlope,xSlope);
-			//cout<<"radiant cur: "<<curRotation<<endl;
-			//else
-			  //  curRotation=atan2(ySlope,xSlope);
-			if(std::abs(curRotation)==0||curRotation==3.14159)
-			    curRotation=(int)std::floor(curRotation*180/3.14+90);
+			if(curRotation<0)
+			    curRotation+=2*PI;
+			//cout<<"radian cur: "<<curRotation<<endl;
+			char n;
+			if(xSlope==0&&ySlope<0)
+			    curRotation=0;
+			else if(ySlope==0&&xSlope<0)
+			    curRotation=270;
+			else if(xSlope==0&&ySlope>0)
+			    curRotation=180;
+			else if(ySlope==0&&xSlope>0)
+			    curRotation=90;
+			else if(curRotation>0&&curRotation<PI/2)
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI);
+			//	cout<<"first quad"<<endl;
+			//	cin>>n;
+			}
+			else if(curRotation>PI/2&&curRotation<3*PI/2 && ySlope>0)
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI);
+			//	cout<<"second quad"<<endl;
+			//	cin>>n;
+			}
+			else if(curRotation>3*PI/2&&curRotation<2*PI)
+			{
+			    curRotation=(int)floor(curRotation*180/PI-180);
+				//cout<<"third quad"<<endl;
+				//cin>>n;
+			}
 			else
-			    curRotation=(int)std::floor(curRotation*180/3.14+180);
+			{
+			    curRotation=(int)std::floor(curRotation*180/PI+180);
+			    //cout<<"fourth quad"<<endl;
+			   //cin>>n;
+			}
+			//cout<<"rotation: "<<curRotation<<endl;
+			//int n;
+			//cin>>n;
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		//cout<<"currotation:"<<curRotation<<endl;
-		//cout<<"cur angle: "<<angle<<endl;
+		cout<<"currotation:"<<curRotation<<endl;
+		cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
-		if(curRotation>angle)
+		if(curRotation>angle||curRotation-angle>=180)
 		{
 		    //pretty shit acceleration stuff tbh
 		    if(curRotation>angle+maxRotation)
@@ -216,7 +253,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		        entity.setAngle(angle+1);
 		    angleChanged=true;
 		}
-		else if(angle>curRotation)
+		else if(curRotation<angle||curRotation-angle<-180)
 		{
 		    if(angle-maxRotation>curRotation)
 		    {
@@ -229,8 +266,6 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			entity.setAngle(angle-1);
 		    angleChanged=true;
 		}
-		if(entity.getAngle()>360)
-		    entity.setAngle((int)entity.getAngle()%360);
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
         //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
@@ -305,7 +340,14 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 	        pathComplete=true;
 	    }
 	}
-
+void Ship::setGoal(int newGoal)
+{
+    curGoal=newGoal;
+}
+int Ship::getGoal()
+{
+    return curGoal;
+}
 bool Ship::getPathComplete()
 {
 	return pathComplete;
@@ -378,7 +420,7 @@ void Hero::handleKeyUpEvent(SDL_Event e){
 
 //Handles down Key Events
 void Hero::handleKeyDownEvent(SDL_Event e){
-	//direction = (getAngle() - 90.0)*PI/180;	
+	//direction = (getAngle() - 90.0)*PI/180;
 
 	switch(e.key.keysym.sym) {
 		case SDLK_w:

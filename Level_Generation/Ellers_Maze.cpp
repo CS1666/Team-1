@@ -721,6 +721,43 @@
 	}
 	/*End of create Eller's Maze*/
 
+	bool Ellers_Maze::isEnd(int row, int col)
+	{
+		
+		if(rowEnd == row && colEnd == col)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void Ellers_Maze::setEnd(int side)
+	{
+		side = rand() % 4;
+		switch(side)
+		{
+			case 0: //top
+				rowEnd = 0;
+				colEnd = rand() % COL_SIZE + 1;
+				break;
+
+			case 1: //right
+				colEnd = COL_SIZE - 1;
+				rowEnd = rand() % ROW_SIZE;
+				break;
+
+			case 2: //bottom
+				rowEnd = ROW_SIZE - 1;
+				colEnd = rand() % COL_SIZE;
+				break;
+
+			case 3: //left
+				colEnd = 0;
+				rowEnd = rand() % ROW_SIZE + 1;
+				break;
+		}
+	}
+
 
 
 	/*Default constructor*/
@@ -728,6 +765,8 @@
 	{
 		//startCreate();	//Uncomment if you want recursive backtracking algorithm
 		create_maze();		//Comment out, if you want recursive backtracking algorithm
+		setEnd(0);
+		std::cout << "Row End: " << rowEnd << " Col End: " << colEnd << std::endl;
 	}
 
 	/*Get if current cell has bottom*/
@@ -825,7 +864,7 @@
 
 	void Ellers_Maze::drawMaze(SDL_Texture *maze_wall, SDL_Renderer *mRender)
 	{
-   		int x = 4;
+   		int x = 8;
     		int y = 4;
 	    	int width = 36;
 	    	int height = 4;
@@ -838,35 +877,38 @@
 		{
 			for(col = 0; col < getColSize(); col++)
 			{
-			    if(row == 0)
+			    if(!(row == rowEnd && col == colEnd))
 			    {
-				SDL_Rect section = {x, y, width, height};
-				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
+				    if(row == 0)
+				    {
+					SDL_Rect section = {x, y, width, height};
+					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
 
-			    }
+				    }
 
-				if(col == 0)
-				{
-				    SDL_Rect section = {x, y, width, height};
-				    SDL_RenderCopyEx(mRender, maze_wall, NULL, &section, 0, &h, SDL_FLIP_NONE);
-				}
+					if(col == 0)
+					{
+					    SDL_Rect section = {x, y, width, height};
+					    SDL_RenderCopyEx(mRender, maze_wall, NULL, &section, 0, &h, SDL_FLIP_NONE);
+					}
 
-			    if(hasRight(row, col))
-			    {
-				SDL_Rect section = {x, y+width, width, height};
-				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
-			    }
-			    else
-			    {
-				SDL_Rect section = {x, y, height, height};
-				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
-			    }
+				    if(hasRight(row, col))
+				    {
+					SDL_Rect section = {x, y+width, width, height};
+					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+				    }
+				    else
+				    {
+					SDL_Rect section = {x, y, height, height};
+					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+				    }
 
-			    if(hasBottom(row, col))
-			    {
-				SDL_Rect section = {x+width, y, width, height};
-				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
-			    }
+				    if(hasBottom(row, col))
+				    {
+					SDL_Rect section = {x+width, y, width, height};
+					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
+				    }
+		 	    }
 			    y += width;
 
 			}
