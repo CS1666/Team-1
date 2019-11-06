@@ -54,7 +54,7 @@ void run_demo(gpRender gr){
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
-
+	Audio::load_music("Assets/Sound/ambientSpace.wav");
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -202,6 +202,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -225,15 +226,23 @@ void run_demo(gpRender gr){
 		}
 	}
 
+	int startPlayerX = playerent.getX();
+	int startPlayerY = playerent.getY();
+	
 	while(gameon)
 	{
+		playerent.setX(startPlayerX);
+		playerent.setY(startPlayerY);
+		playerent.speed = 0;
+		playerent.deltaV = 0;
+		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
+		
 
 		//Game Loop
 		while(gameon && solar)
-		{
-			
+		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
 
@@ -265,8 +274,16 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
+
 			for(auto ent : osSprite) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}
+
+			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
+			{
+				
+				solar = false;
+				
 			}
       
 			TimeData::update_move_last_time();
@@ -337,6 +354,10 @@ void run_demo(gpRender gr){
 		{	
 			SDL_RenderClear(gr.getRender());
 			
+			maze.drawMaze(gr.getWall(), gr.getRender());
+			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+			SDL_RenderPresent(gr.getRender());
+			
 			while(SDL_PollEvent(&e)) {
 				gameon = handleKeyEvents(e, playerent);	
 				switch(e.key.keysym.sym) {
@@ -388,10 +409,13 @@ void run_demo(gpRender gr){
 				}
 				
 			}
+
+			if(maze.isEnd(col, row))
+			{
+				mazeCheck = false;
+			}
 			
-			maze.drawMaze(gr.getWall(), gr.getRender());
-			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
-			SDL_RenderPresent(gr.getRender());
+			
 		}
 
 		SDL_RenderClear(gr.getRender());
