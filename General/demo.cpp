@@ -259,6 +259,9 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	
+	Audio::play_music();
+	
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
