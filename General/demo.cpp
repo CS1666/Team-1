@@ -54,7 +54,7 @@ void run_demo(gpRender gr){
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
-
+	Audio::load_music("Assets/Sound/ambientSpace.wav");
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -202,6 +202,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
