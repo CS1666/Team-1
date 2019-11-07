@@ -28,12 +28,18 @@ class p_queue
         bool compPoints(Point& a, Point& b);
         int getSize();
         std::vector<std::pair<Point,int>>* getContainer();
-        int getLeftNode(int currpos);
-        int getRightNode(int currpos);
-        int getParent(int currpos);
-        void print_pque();
+
+      
 
     private:
         std::vector<std::pair<Point, int>>* container;
         std::vector<std::vector<int>> indirection;
+
+        std::pair<Point, int> getLeftNode(int currindex);
+        std::pair<Point, int> getRightNode(int currindex);
+        std::pair<Point, int> getParentNode(int currindex);
+        
+        int getLeftIndex(int currindex);
+        int getRightIndex(int currindex);
+        int getParentIndex(int currindex);
 };
