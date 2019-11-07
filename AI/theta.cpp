@@ -1,4 +1,3 @@
-   
 #include "theta.h"
 #include <vector>
 #include <math.h>

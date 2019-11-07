@@ -87,7 +87,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
 
-	//std::cout << getVX() << ", " << getVY() <<std::endl;
+	////std::cout << getVX() << ", " << getVY() <<std::endl;
 	setAngle(getAngle() + rotationSpeed);
 	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
 	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
@@ -282,7 +282,7 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		}
 		//entity.setAngle(122);
 	//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-        //std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 		//note: since we don't have updateMovement implemented, most
 		//of the stuff here can probably be removed/handled by that
 		//simulate turning, acceleration of ship
@@ -378,13 +378,13 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 	//float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 
 
-	std::cout << "Firing Angle: " << getAngle() << std::endl;
+	//std::cout << "Firing Angle: " << getAngle() << std::endl;
 	int X = getTrueX() + (getW()/2);//*cos(getAngle());
 	int Y = getTrueY();// + (getW()/2)*sin(getAngle());
-	std::cout << "Ship X: " << getTrueX() << std::endl;
-	std::cout << "Ship Y: " << getTrueY() << std::endl;
-	std::cout << "Laser X: " << X << std::endl;
-	std::cout << "Laser Y: " << Y << std::endl;
+	//std::cout << "Ship X: " << getTrueX() << std::endl;
+	//std::cout << "Ship Y: " << getTrueY() << std::endl;
+	//std::cout << "Laser X: " << X << std::endl;
+	//std::cout << "Laser Y: " << Y << std::endl;
 	SDL_Rect ldb = {X, Y, 2, 10};
 	Projectile laser(ldb, texture);
 	laser.setAngle(getAngle());
@@ -466,11 +466,11 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		case SDLK_g:
 			if(getCurrHp() != getMaxHp())	
 				setCurrHp(getCurrHp() + 5);
-			std::cout << "Current hp: " << getCurrHp() << std::endl;
+			//std::cout << "Current hp: " << getCurrHp() << std::endl;
 			break;
 		case SDLK_f:
 			setCurrHp(getCurrHp() - 5);
-			std::cout << "Current hp: " << getCurrHp() << std::endl;
+			//std::cout << "Current hp: " << getCurrHp() << std::endl;
 			break;
 		case SDLK_SPACE:
 			//fireWeapon();
