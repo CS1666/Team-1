@@ -157,6 +157,8 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
+	bool is_space_station_in_range = false;
+	SDL_Texture* e_tex = gr.
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -178,11 +180,25 @@ void run_phy_enviro(gpRender gr){
 			
 		}
 	}
-
+	
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
+		
+		//Handle spacestation proximity code
+		//just double the size of the collision box and do a collision check
+		//physics function
+		if(!is_space_station_in_range){
+			if(check_proximity(playerent, ss_ent, 3)){
+				//then we set the is_space_station_in_range flag to true
+				is_space_station_in_range = true;
+				//we display the E png to show that space station can be accessed
+				
+			}
+		} else {
+			//we need to check if our ship has left the range of the space station
+		}
 		
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
