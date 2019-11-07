@@ -10,7 +10,7 @@ p_queue::p_queue(int width, int heigth){
 }
 
 p_queue& p_queue::operator=(p_queue& a){
-;
+
     std::vector<std::pair<Point,int>>* npq = new std::vector<std::pair<Point,int>>;
     std::vector<int> x(indirection[0].size(), -1);
     std::vector<std::vector<int>> nin =  std::vector<std::vector<int>>(indirection.size(), x);
@@ -271,7 +271,6 @@ int p_queue::getParent(int currpos){
     return (currpos - 1)/2;
 }
 
-}
 
 
 
