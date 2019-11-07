@@ -19,6 +19,9 @@ class Star : public Sprite
 
 	public:
 		Star();
+		Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
+		Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass);
+		//to be deprecated
 		Star(SDL_Rect dBox, SDL_Texture* aTex);
 		Star(SDL_Rect dBox, SDL_Texture* aTex, int mass);
 		int getRadius();
