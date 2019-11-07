@@ -10,7 +10,6 @@
 typedef std::pair<int,int> Point;
 
 
-
 class p_queue
 {
     public:
@@ -36,5 +35,5 @@ class p_queue
 
     private:
         std::vector<std::pair<Point, int>>* container;
-        std::vector<std::vector<int>*>* indirection;
+        std::vector<std::vector<int>> indirection;
 };
