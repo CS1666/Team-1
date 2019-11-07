@@ -171,7 +171,7 @@ bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	for(int i = 1;  i < osSprite.size(); i++){
 		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
 			//so, one of these should result in collison if they are the same box
-			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}
@@ -242,6 +242,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
+
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
