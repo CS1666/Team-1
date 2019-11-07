@@ -54,8 +54,8 @@ void run_phy_enviro(gpRender gr){
 	std::vector<Sprite*> osSprite;
 	
 	//load audio for sound
-	Audio::load_audio();
-
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_music("Assets/Sound/ambientSpace.wav");
 	bool gameon = false;
 	int titleFrame = 0;
 
@@ -77,7 +77,8 @@ void run_phy_enviro(gpRender gr){
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
-	Star starent(db2, tex2);
+	NSDL_Circ dc2 = {db2};
+	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
 
@@ -86,7 +87,8 @@ void run_phy_enviro(gpRender gr){
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
-	Planet planet1ent(db3, tex3,1, starent, 100);
+	NSDL_Circ dc3 = {db3};
+	Planet planet1ent(db3, tex3, dc3,1, starent, 100);
 	osSprite.push_back(&planet1ent);
 
 	//Space Station Initialization-
@@ -154,6 +156,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	Audio::play_music();
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -202,7 +205,6 @@ void run_phy_enviro(gpRender gr){
 		planet1ent.updatePosition();
 		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
-
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
 				if (animation <= 1){
@@ -250,4 +252,5 @@ void run_phy_enviro(gpRender gr){
 		}
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 	}
+	Audio::close();
 }

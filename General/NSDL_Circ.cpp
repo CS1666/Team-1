@@ -5,6 +5,7 @@
 	//-------------------------------Constructors-----------------------------------------------
 	NSDL_Circ::NSDL_Circ() : x{0}, y{0}, r{0} {};
 	NSDL_Circ::NSDL_Circ(int nx, int ny,  int nr): x{nx}, y{ny}, r{nr} {};
+	NSDL_Circ::NSDL_Circ(SDL_Rect drawbox): x{drawbox.x + drawbox.w/2}, y{drawbox.y + drawbox.h/2}, r{drawbox.w/2} {};
 
 	//-------------------------------Destructors------------------------------------------------
 	NSDL_Circ::~NSDL_Circ() {};

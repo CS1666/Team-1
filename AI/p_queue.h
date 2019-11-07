@@ -9,18 +9,12 @@
 
 typedef std::pair<int,int> Point;
 
-struct pair_hash
-{
-    std::size_t operator() (const std::pair<int, int> & pair) const
-    {
-        return std::hash<int>()(pair.first)^std::hash<int>()(pair.second);
-    }
-};
+
 
 class p_queue
 {
     public:
-        p_queue();
+        p_queue(int width, int height);
         p_queue& operator=(p_queue& a);
         bool lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2);
         void push_up_heap(int index);
@@ -42,5 +36,5 @@ class p_queue
 
     private:
         std::vector<std::pair<Point, int>>* container;
-        std::unordered_map<Point, int, pair_hash>* indirection;
+        std::vector<std::vector<int>*>* indirection;
 };

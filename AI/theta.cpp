@@ -1,5 +1,4 @@
-   
-#include "theta.h"
+   #include "theta.h"
 #include <vector>
 #include <math.h>
 #include "p_queue.h"
@@ -31,7 +30,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     ////std::cout << "Before p_queue" << std::endl;
-    open =  new p_queue();
+    open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
     ////std::cout << "After p_queue" << std::endl;
 
     ////std::cout << "Before insert" << std::endl;
@@ -262,5 +261,3 @@ Path Pathfinder::reconstruct_path(Point s)
         return total_path;
     }
 }
-
-
