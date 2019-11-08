@@ -12,6 +12,7 @@ p_queue::p_queue(int width, int heigth){
 p_queue& p_queue::operator=(p_queue& a){
 
     std::vector<std::pair<Point,double>>* npq = new std::vector<std::pair<Point,double>>;
+
     std::vector<int> x(indirection[0].size(), -1);
     std::vector<std::vector<int>> nin =  std::vector<std::vector<int>>(indirection.size(), x);
 
@@ -212,6 +213,7 @@ std::pair<Point, int> p_queue::getRightNode(int currindex){
         return std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<double>::max());
     }
 }
+
 
 int p_queue::getRightIndex(int currpos){
     return 2*currpos + 2;
