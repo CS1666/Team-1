@@ -67,6 +67,7 @@ void run_ai_enviro(gpRender gr){
 	cout<<playerShip.getDestination().second<<endl;
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
+
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
 	SDL_Texture* tex1 = gr.loadImage(aiShip.getSprite());
@@ -213,7 +214,7 @@ void run_ai_enviro(gpRender gr){
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			//std::cout << "Key Event!!!" << std::endl;
+			////std::cout << "Key Event!!!" << std::endl;
 			gameon = playerShip.handleKeyEvents(e);
 			
 		}
