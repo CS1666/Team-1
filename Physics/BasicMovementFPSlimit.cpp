@@ -126,9 +126,6 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 			ent.setCurrHp(ent.getCurrHp() - 5);
 			std::cout << "Current hp: " << ent.getCurrHp() << std::endl;
 			break;
-		case SDLK_SPACE:
-			//Fire laser
-			break;
 		
 	}
 	if(deltaV > MAX_DELTAV)
@@ -151,7 +148,7 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 }
 
 //tis is te simple collision check from the examples
-bool check_collision(SDL_Rect* a, SDL_Rect* b) {
+bool check_collision2(SDL_Rect* a, SDL_Rect* b) {
 	// Check vertical overlap
 	if (a->y + a->h <= b->y)
 		return false;
@@ -168,13 +165,13 @@ bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 	return true;
 }
 
-bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
 		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
 			//so, one of these should result in collison if they are the same box
-			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}
@@ -200,9 +197,9 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	{
 		speed = MAX_SPEED;
 	}
-	else if(speed < -MAX_SPEED)
+	else if(speed < 0)
 	{
-		speed = -MAX_SPEED;
+		speed = 0;
 	}
 	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{
@@ -245,6 +242,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 	std::cout << "speedY: " << speedY << std::endl;**/
 
 }
+
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
 	speed += deltaV;
@@ -291,14 +289,14 @@ void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, i
 
 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getTrueX() - speedX);
 	}
 	ent.setY(ent.getTrueY() + speedY);
 	if(ent.getY() < 0 
 		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getTrueY() - speedY);
 	}
@@ -330,9 +328,9 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 	{
 		speed = MAX_SPEED;
 	}
-	else if(speed < -MAX_SPEED)
+	else if(speed < 0)
 	{
-		speed = -MAX_SPEED;
+		speed = 0;
 	}
 	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{
@@ -360,14 +358,14 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 
 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getTrueX() - speedX);
 	}
 	ent.setY(ent.getTrueY() + speedY);
 	if(ent.getY() < 0 
 		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getTrueY() - speedY);
 	}
