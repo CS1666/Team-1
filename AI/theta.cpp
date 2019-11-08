@@ -18,8 +18,8 @@ Path Pathfinder::pathfind(Point start, Point goal)
 {
     ////std::cout << "Path finding" << std::endl;
     // gScore is our cost map for each point
-    gScore = std::map<Point, int>();
-    gScore.insert(std::pair<Point, int>(start, 0));
+    gScore = std::map<Point, double>();
+    gScore.insert(std::pair<Point, double>(start, 0));
     //std::cout<<start.first<<std::endl;
     //std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
@@ -85,7 +85,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
                 {
                     //std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
-                    gScore.insert(std::pair<Point, int>(neighbor, std::numeric_limits<int>::max()));
+                    gScore.insert(std::pair<Point, double>(neighbor, std::numeric_limits<double>::max()));
                     parent.insert(std::pair<Point, Point>(neighbor, start));
                 }
                 //std::cout << "UP V " << i + 20 << std::endl;
@@ -130,7 +130,7 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     
     std::vector<Point> result = defineNeighbors(s);
     std::vector<Point> fresult;
-    //////std::cout << "Bf iter "  << std::endl;                    
+    //std::cout << "Bf iter "  << std::endl;                    
     for(auto itr : result)
     {   
         
@@ -139,7 +139,7 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
             
             fresult.push_back(itr);
         }
-        //////std::cout << "Lff iter"  << std::endl;
+        //std::cout << "Lff iter"  << std::endl;
     }
     return fresult;
 }
@@ -210,15 +210,11 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
         if (line_of_sight(s, neighbor))
         {   
 
-            //std::cout << "P1: " << s.first  << " P2: " << s.second << std::endl;
-            //std::cout << "PN1: " << neighbor.first  << " PN2: " << neighbor.second << std::endl;
-            //std::cout << "1: " << gScore[parent[s]] + distance(parent[s], neighbor)  << " 2: " << gScore[neighbor] << std::endl;
-            //std::cout << "\n" << std::endl;
             if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
             {
                 gScore[neighbor] = gScore[parent[s]] + distance(parent[s], neighbor);
                 parent[neighbor] = parent[s];
-              
+                
                 open->ndelete(neighbor);
                
                 open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
