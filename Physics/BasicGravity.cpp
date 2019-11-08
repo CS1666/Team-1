@@ -1,4 +1,5 @@
 #include "BasicGravity.h"
+#include "../General/Sprite.h"
 #define PI 3.14159265
 
 #define G .00000000006674
@@ -62,7 +63,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 	{	
 		bodyX = bodyent->getTrueX() + bodyent->getW()/2.0;
 		bodyY = bodyent->getTrueY() + bodyent->getH()/2.0;
-		if(!(bodyX == playerX && bodyY == playerY ))
+		if(bodyent->getRenderOrder() ==2)
 		{
 			//make fix this
 			pointSlope = (bodyY - playerY)/(bodyX - playerX);
@@ -165,14 +166,14 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 	//std::cout << "Things work up until here?" << std::endl;
 	if(ent.getX() < 0 
 		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setX(ent.getX() - (int)speedX);
 	}
 	ent.setY(ent.getY() + (int)speedY);
 	if(ent.getY() < 0 
 		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| check_all_collisions(ent.getDrawBox(), osSprite)){
+		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
 
 		ent.setY(ent.getY() - (int)speedY);
 	}

@@ -3,15 +3,18 @@
 #include <ctime>
 #include <stdexcept>
 
-p_queue::p_queue(){
-    container = new std::vector<std::pair<Point,int>>();
-    indirection = new std::unordered_map<Point, int, pair_hash>;
+p_queue::p_queue(int width, int heigth){
+    container = new std::vector<std::pair<Point,double>>();
+    std::vector<int> x(heigth, -1);
+    indirection = std::vector<std::vector<int>>(width, x);
 }
 
 p_queue& p_queue::operator=(p_queue& a){
 
-    std::vector<std::pair<Point,int>>* npq = new std::vector<std::pair<Point,int>>;
-    std::unordered_map<Point, int, pair_hash>* nin = new std::unordered_map<Point, int, pair_hash>;
+    std::vector<std::pair<Point,double>>* npq = new std::vector<std::pair<Point,double>>;
+
+    std::vector<int> x(indirection[0].size(), -1);
+    std::vector<std::vector<int>> nin =  std::vector<std::vector<int>>(indirection.size(), x);
 
     npq = a.container;
 
@@ -20,51 +23,35 @@ p_queue& p_queue::operator=(p_queue& a){
 
     nin = a.indirection;
 
-    delete a.indirection;
-    a.indirection = nin;
 
     return *this;
 }
-bool p_queue::lessPriority(std::pair<Point, int> &p1, std::pair<Point, int> &p2)
-{
-    return p1.second > p2.second;
+bool p_queue::lessPriority(std::pair<Point, double> &p1, std::pair<Point, double> &p2)
+{   
+    return std::abs(p1.second) > std::abs(p2.second);
 }
 
-void p_queue::print_pque(){
-    for(int i = 0; i < container->size(); i++){
-        //std::cout << "index " << i << ": X: " << container->at(i).first.first << " Y: " << container->at(i).first.second << " prio: " << container->at(i).second <<  std::endl;
-    }
 
-    //std::cout << "\n" << std::endl;
-}
 void p_queue::push_up_heap(int index){
     
-
-    //std::cout << "\nPushing up: " << container->at(index).second << std::endl;
     if(index != 0){
         
-        std::pair<Point, int> child = container->at(index);
+        std::pair<Point, double> child = container->at(index);
 
-        ////std::cout << "B" <<std::endl;
-        std::pair<Point, int> parent = container->at(getParent(index));
+        std::pair<Point, double> parent = container->at(getParentIndex(index));
         while(!lessPriority(child,parent)){
-            ////std::cout << "C" <<std::endl;
-            ////std::cout << "Parent p  " << getParent(index) << ": " << parent.second <<" child p "<< index << ": " << child.second << std::endl;
-            swap_nodes(index, getParent(index));
 
-            ////std::cout << "D" <<std::endl;
-            index = getParent(index);
-            ////std::cout << "E" <<std::endl;
+            swap_nodes(index, getParentIndex(index));
+            index = getParentIndex(index);
+        
             child = container->at(index);
 
             //Stop if at top of heap
             if(index == 0){
                 break;
             }
-            ////std::cout << "F" <<std::endl;
-            parent = container->at(getParent(index));
-            ////std::cout << "Parent p  " << getParent(index) << ": " << parent.second <<" child p "<< index << ": " << child.second << std::endl;
-            ////std::cout << "G" <<std::endl;
+            parent = container->at(getParentIndex(index));
+           
 
         }
     }
@@ -72,112 +59,53 @@ void p_queue::push_up_heap(int index){
 }
 
 void p_queue::push_down_heap(int index){
-    
+    //std::cout << "Pushing Down" << std::endl;
     int currindex = index;
-    int rindex = getRightNode(currindex);
-    int lindex = getLeftNode(currindex);
-    std::pair<Point, int> parent;
-    std::pair<Point, int> lchild;
-    std::pair<Point, int> rchild;
+    std::pair<Point, double> parent;
+    std::pair<Point, double> lchild;
+    std::pair<Point, double> rchild;
 
-    //std::cout << "A" << std::endl;
     parent = container->at(index);
+    lchild = getLeftNode(currindex);
+    rchild = getRightNode(currindex);
 
-    //Checks to make sure both left and right child exist before assigning them
-    //To respective var
-    //If they do not exist assign point, int pair where
-    //Point = (-1,-1)
-    //int = infinity
-    //std::cout << "B" << std::endl;
-    if(lindex < container->size()){
-        //std::cout << "c" << std::endl;
-        lchild = container->at(getLeftNode(index));
-    }
-    else{
-        //std::cout << "D" << std::endl;
-        lchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
-    }
-
-    //std::cout << "E" << std::endl;
-    if(rindex < container->size()){
-        //std::cout << "F" << std::endl;
-        rchild = container->at(getRightNode(index));
-    }
-    else{
-        //std::cout << "G" << std::endl;
-        rchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
-    }
      
-    //std::cout << "H" << std::endl;
     while(lessPriority(parent, lchild) || lessPriority(parent, rchild) ){
 
         //Go right
-        //std::cout << "Parent p: " << parent.second <<" lchild p: "<< lchild.second <<"rchild p: "<<rchild.second<< std::endl;
-        //std::cout << "I" << std::endl;
         if(lessPriority(lchild, rchild)){
-            //std::cout << "J" << std::endl;
-            swap_nodes(index, getRightNode(index));
-            //std::cout << "K" << std::endl;
-            index = getRightNode(index);
+            swap_nodes(index, getRightIndex(index));
+            index = getRightIndex(index);
         }
         //Go left
         else{
-            //std::cout << "L" << std::endl;
-            swap_nodes(index, getLeftNode(index));
-            //std::cout << "M" << std::endl;
-            index = getLeftNode(index);
+            swap_nodes(index, getLeftIndex(index));
+            index = getLeftIndex(index);
         }
-        
-        //std::cout << "O" << std::endl;
         parent = container->at(index);
-        //std::cout << "P" << std::endl;
-        
-        lindex = getLeftNode(index);
-        rindex = getRightNode(index);
-        if(lindex < container->size()){
-            //std::cout << "Q" << std::endl;
-            lchild = container->at(getLeftNode(index));
-
-        }
-        else{
-            //std::cout << "R" << std::endl;
-            lchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
-        }
-
-        if(rindex < container->size()){
-            //std::cout << "S" << std::endl;
-            rchild = container->at(getRightNode(index));
-        }
-        else{
-            //std::cout << "T" << std::endl;
-            rchild = std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
-        }
-
-        //std::cout << "Parent p: " << parent.second <<" lchild p: "<< lchild.second <<"rchild p: "<<rchild.second<< "\n" << std::endl;
+        lchild = getLeftNode(index);
+        rchild = getRightNode(index);   
     }
 }
 
 void p_queue::swap_nodes(int a, int b){
-
+    //std::cout << "Swapping " << a  << " with " << b << std::endl;
     swap(container->at(a),container->at(b));
     
-    //swap points in inderection
+    Point pa = container->begin()[a].first;
+    Point pb = container->begin()[b].first;
 
-    ////std::cout << "L" <<std::endl;
-    indirection->at(container->begin()[a].first) = b;
-    ////std::cout << "M" <<std::endl;
-    indirection->at(container->begin()[b].first) = a;
-    ////std::cout << "N" <<std::endl;
+    indirection[pa.first][pa.second] = b;
+    indirection[pb.first][pb.second] = a;
 
 }
-void p_queue::insert(Point& x, int p)
+void p_queue::insert(Point& x, double p)
 {   
-    ////std::cout << "Inserting point" <<std::endl;
-    auto elem = std::pair<Point, int>(x,p);
+    auto elem = std::pair<Point, double>(x,p);
 
     //Addes element to bottom of heap and adds to indirection
     container->push_back(elem);
-    indirection->insert(std::pair<Point,int>(elem.first, (container->size() - 1)));
+    indirection[x.first][x.second] = (container->size() - 1);
 
     //Begins heapify process
     push_up_heap(container->size() - 1); 
@@ -186,25 +114,23 @@ void p_queue::insert(Point& x, int p)
 
 Point& p_queue::pop()
 {   
-    //std::cout << "\nPopping: " << container->size() << std::endl;
-    std::pair<Point, int> result;
+    std::pair<Point, double> result;
 
     if (container->size() > 1)
     {
       swap_nodes(0, container->size() - 1);
       result = container->back();
       container->pop_back();
-      indirection->erase(result.first);
+      indirection[result.first.first][result.first.second] = -1;
 
       push_down_heap(0);
-      //pop off last element from heap
-      //push down from root element to heapify heap
+      
     }
     else if(!container->empty()){
 
       result = container->back();
       container->pop_back();
-      indirection->erase(result.first);
+      indirection[result.first.first][result.first.second] = -1;
 
     }
 
@@ -212,10 +138,10 @@ Point& p_queue::pop()
 }
 
 void p_queue::ndelete(Point& P){
-
+    //std::cout << "Deleting 1" << std::endl;
     if(contains(P)){
-        ////std::cout << "Deleting point" << std::endl;
-        int index = indirection->at(P);
+        //std::cout << "Deleting 2" << std::endl;
+        int index = indirection[P.first][P.second];
         swap_nodes(index, container->size() - 1);
         pop();
         push_down_heap(index);
@@ -242,17 +168,16 @@ bool p_queue::contains(Point& key)
     if(container->empty()){
         return false;
     }
-    try{
-        auto pqiter = indirection->at(key);
-    }catch(std::out_of_range& ex){
+    
+    else if(indirection[key.first][key.second] == -1){
         return false;
     }
-    
+
     return true;
    
 }
 
-std::vector<std::pair<Point,int>>* p_queue::getContainer(){
+std::vector<std::pair<Point,double>>* p_queue::getContainer(){
     return container;
 }
 
@@ -262,18 +187,46 @@ int p_queue::getSize(){
 }
 
 
-int p_queue::getLeftNode(int currpos){
+std::pair<Point, int> p_queue::getLeftNode(int currindex){
+
+    int lindex = getLeftIndex(currindex);
+
+    if(lindex < container->size()){
+        return container->at(lindex);
+    }
+    else{
+        return std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<int>::max());
+    }
+}
+
+int p_queue::getLeftIndex(int currpos){
     return 2*currpos + 1 ;
 }
 
-int p_queue::getRightNode(int currpos){
+std::pair<Point, int> p_queue::getRightNode(int currindex){
+    int rindex = getRightIndex(currindex);
+
+    if(rindex < container->size()){
+        return container->at(rindex);
+    }
+    else{
+        return std::pair<Point, int>(std::pair<int, int>(-1,-1), std::numeric_limits<double>::max());
+    }
+}
+
+
+int p_queue::getRightIndex(int currpos){
     return 2*currpos + 2;
 }
 
-int p_queue::getParent(int currpos){
-    return (currpos - 1)/2;
+std::pair<Point, int> p_queue::getParentNode(int currindex){
+    
+    if(currindex != 0){
+        return container->at(getParentIndex(currindex));
+    }
+
 }
 
-
-
-
+int p_queue::getParentIndex(int currpos){
+    return (currpos - 1)/2;
+}
