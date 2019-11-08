@@ -408,6 +408,8 @@ void run_demo(gpRender gr){
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
 		SDL_Rect warpRect = {7, 10, 25, 25};
+		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
+		SDL_Rect spotlightRect = {1287, 730, 2560, 1440};
 
 		while(mazeCheck && gameon)
 		{	
@@ -415,6 +417,7 @@ void run_demo(gpRender gr){
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+			SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
 			SDL_RenderPresent(gr.getRender());
 			
 			while(SDL_PollEvent(&e)) {
@@ -433,6 +436,7 @@ void run_demo(gpRender gr){
 							if(col != numCols-1 and !maze.hasBottom(col, row)){
 								col++;
 								warpRect.x += indexSize;
+								spotlightRect.x += indexSize;
 							}
 						}
 						break;
@@ -443,6 +447,7 @@ void run_demo(gpRender gr){
 							if(col != 0 and !maze.hasBottom(col-1,row)){
 								col--;
 								warpRect.x -= indexSize;
+								spotlightRect.x -= indexSize;
 							}
 						}
 						break;
@@ -453,6 +458,7 @@ void run_demo(gpRender gr){
 							if(row != 0 and !maze.hasRight(col,row-1)){
 								row--;
 								warpRect.y -= indexSize;
+								spotlightRect.y -= indexSize;
 							}
 						}
 						break;
@@ -463,6 +469,7 @@ void run_demo(gpRender gr){
 							if(row != numRows-1 and !maze.hasRight(col, row)){
 								row++;
 								warpRect.y += indexSize;
+								spotlightRect.y += indexSize;
 							}
 						}
 						break;
