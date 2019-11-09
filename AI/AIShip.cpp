@@ -43,7 +43,7 @@ void AIShip::followPath()
 				   setAngle(angle+rotation);
 			    }
 			    else
-			        .setAngle(angle+1);
+			       setAngle(angle+1);
 			    angleChanged=true;
 			}
 			else if(newAngle<angle||newAngle-angle<-180)

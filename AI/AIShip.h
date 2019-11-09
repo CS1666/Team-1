@@ -15,7 +15,7 @@ class AIShip: public Ship{
 
 	private:
 		void calculateNewAngle(pair<int,int> destination);
-		bool rotateToAngle(Sprite& entity);
+		bool rotateToAngle();
 		bool pathComplete;
 		pair<int,int> destination;
         std::queue<pair<int,int>>* path;
