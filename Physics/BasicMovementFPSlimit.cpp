@@ -165,13 +165,38 @@ bool check_collision2(SDL_Rect* a, SDL_Rect* b) {
 	return true;
 }
 
+//sz is the size scale factor to apply to the bounding box to check proximity, 
+//  which avoids doing a magnitude check between 2 vectors
+//
+//keep in mind that only bounding box a will be scaled up,
+//  so if one of the two bounding boxes was very large,
+//  then put the large one in the b parameter, and make the sz bigger
+bool check_proximity(Sprite &aSprite, Sprite &bSprite, int sz) {
+	SDL_Rect* a = aSprite.getDrawBox();
+	SDL_Rect* b = bSprite.getDrawBox();
+	// Check vertical overlap
+	if (a->y + (a->h * sz) <= b->y)
+		return false;
+	if (a->y - (a->h * (sz - 1)) >= b->y + b->h)
+		return false;
+
+	// Check horizontal overlap
+	if (a->x - (a->w * (sz - 1)) >= b->x + b->w)
+		return false;
+	if (a->x + (a->w * sz) <= b->x)
+		return false;
+
+	// Must overlap in both
+	return true;
+}
+
 bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
 		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
 			//so, one of these should result in collison if they are the same box
-			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <tuple>
 #include <string>
 #include <algorithm>
 #include <SDL.h>
@@ -8,6 +9,7 @@
 #include "../General/Sprite.h"
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
+#include "../General/planet.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
@@ -42,24 +44,68 @@ std::vector<std::pair<int, int>> randNum(){
 
 	 return coords;
 }
+std::tuple<int, int, std::string, std::string, std::string, std::string> callAsset(){
+	int assetNumSun = rand()%3 + 1;
+	switch(assetNumSun){
+		case 1:
+		{
+			std::tuple<int, int, std::string, std::string, std::string,std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 2:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		case 3:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+		default:
+		{
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(332, 315, "Assets/Objects/red_giant.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			return sunAsset;
+		}
+			break;
+	}
+}
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 60;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
+	
+	Ellers_Maze seed;
+	int sunSeed = seed.getSeed();
+	//int seed2 = time(0) + 100;
+	srand(sunSeed);
+	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker
+	//tuple to control the sun and subsequent spawns
+	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
+
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 
 	bool fixed = false;
+	//call tuple stuff
+	int sunHeight = std::get<0>(sunAsset);
+	int sunWidth = std::get<1>(sunAsset); 
+	std::string z = std::get<2>(sunAsset);
 
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
@@ -74,51 +120,62 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&playerent);
 	
 	
-	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
+	SDL_Texture* tex2 = gr.loadImage(z);
 	//SDL_Rect db2 = {800,400,332,315};
-	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,432,415};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 
-	Star starent(db2, tex2);
+	NSDL_Circ dc2 = {db2};
+
+	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
-	Sprite planet1ent(db3, tex3);
+	NSDL_Circ dc3 = {db3};
+
+	Planet planet1ent(db3, tex3, dc3);
 
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
 
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
+	NSDL_Circ dc4 = {db4};
 
-	Sprite planet2ent(db4, tex4);
+	Planet planet2ent(db4, tex4, dc4);
 
 	osSprite.push_back(&planet2ent);
 
 	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc5 = {db5};
 
-	Sprite planet3ent(db5, tex5);
+	Planet planet3ent(db5, tex5, dc5);
 
 	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc6 = {db6};
 
-	Sprite planet4ent(db6, tex6);
+	Planet planet4ent(db6, tex6, dc6);
 
 	osSprite.push_back(&planet4ent);
 
 	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
-	Sprite planet5ent(db7, tex7);
+	NSDL_Circ dc7 = {db7};
+	
+	Planet planet5ent(db7, tex7, dc7);
 
 	osSprite.push_back(&planet5ent);
 
 	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
-	Sprite planet6ent(db8, tex8);
+	NSDL_Circ dc8 = {db8};
+	
+	Sprite planet6ent(db8, tex8, dc8);
 
 	osSprite.push_back(&planet6ent);
 
@@ -160,7 +217,7 @@ void run_demo(gpRender gr){
 
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
-	srand(time(0));
+
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer2( ZONE_WIDTH/40 , std::vector<SDL_Rect*> (ZONE_HEIGHT/40, 0));
@@ -202,6 +259,9 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	
+	Audio::play_music();
+	
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -348,6 +408,8 @@ void run_demo(gpRender gr){
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
 		SDL_Rect warpRect = {7, 10, 25, 25};
+		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
+		SDL_Rect spotlightRect = {-1273, -710, 2560, 1440};
 
 		while(mazeCheck && gameon)
 		{	
@@ -355,6 +417,7 @@ void run_demo(gpRender gr){
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+			SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
 			SDL_RenderPresent(gr.getRender());
 			
 			while(SDL_PollEvent(&e)) {
@@ -363,6 +426,7 @@ void run_demo(gpRender gr){
 					case SDLK_m:
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
+							seed.setSeed();
 						}
 						break;
 						
@@ -372,6 +436,7 @@ void run_demo(gpRender gr){
 							if(col != numCols-1 and !maze.hasBottom(col, row)){
 								col++;
 								warpRect.x += indexSize;
+								spotlightRect.x += indexSize;
 							}
 						}
 						break;
@@ -382,6 +447,7 @@ void run_demo(gpRender gr){
 							if(col != 0 and !maze.hasBottom(col-1,row)){
 								col--;
 								warpRect.x -= indexSize;
+								spotlightRect.x -= indexSize;
 							}
 						}
 						break;
@@ -392,6 +458,7 @@ void run_demo(gpRender gr){
 							if(row != 0 and !maze.hasRight(col,row-1)){
 								row--;
 								warpRect.y -= indexSize;
+								spotlightRect.y -= indexSize;
 							}
 						}
 						break;
@@ -402,6 +469,7 @@ void run_demo(gpRender gr){
 							if(row != numRows-1 and !maze.hasRight(col, row)){
 								row++;
 								warpRect.y += indexSize;
+								spotlightRect.y += indexSize;
 							}
 						}
 						break;
