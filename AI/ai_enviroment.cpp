@@ -74,6 +74,8 @@ void run_ai_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage(aiShip2.getSprite());
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
+	aiShip.setGoal(0);
+	aiShip2.setGoal(0);
 	Sprite aient(db1, tex1);
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
@@ -168,17 +170,32 @@ void run_ai_enviro(gpRender gr){
 		for(auto &ship : aiControlled)
 		{
 		    //if(ship->getPosition()!=ship->getDestination())
-		    //{
-			ship->setDestination(playerShip.getPosition());
-			if(ship->getSprite().length()>36)//work around until Ship render works
-			    ship->followPath(aient);
-			else
-			    ship->followPath(aient2);
-			if(ship->getPathComplete())
+		    //{ // follow
+			if(ship->getGoal()==0)
 			{
-			    pathq=ai.calculatePath(*ship,path);
-			    ship->setPath(pathq);
+			    ship->setDestination(playerShip.getPosition());
+			    if(ship->getSprite().length()>36)//work around until Ship render works
+			        ship->followPath(aient);
+			    else
+			        ship->followPath(aient2);
+			    if(ship->getPathComplete())
+			    {
+			        pathq=ai.calculatePath(*ship,path);
+			        ship->setPath(pathq);
+			    }
 			}
+			//defend
+			if(ship->getGoal()==1)
+			{
+			    if(ship->getDestination()!=ship->getPosition())
+			        ship->setDestination(ship->getPosition());
+			    //insert radar stuff
+			}
+		    //use radar stuff to check if another ship close enough to be seen
+		    if(1==1)
+			ship->setGoal(1);
+		    else //revert to defending if out of range
+			ship->setGoal(0);
 		    //}
 		}/*
 		if(aiShip.getPosition()!=aiShip.getDestination())
