@@ -212,10 +212,10 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 			//cin>>n;
 			rotationSet=true;
 		}
-		double angle=entity.getAngle();
+		float angle=entity.getAngle();
 		cout<<"newAngle:"<<newAngle<<endl;
 		cout<<"cur angle: "<<angle<<endl;
-		bool angleChanged=false;
+		bool angleChanged=rotateToAngle(entity);
 		if(newAngle>angle||newAngle-angle>=180)
 		{
 		    //pretty shit acceleration stuff tbh
@@ -347,6 +347,42 @@ void Ship::calculateNewAngle(pair<int,int> destination)
     else
         newAngle=(int)std::floor(newAngle*180/PI+180);
 }
+//rotate to the angle calculated
+bool Ship::rotateToAngle(Sprite& entity)
+{
+    double angle=entity.getAngle();
+    if(newAngle>angle||newAngle-angle>=180)
+    {
+	//pretty shit acceleration stuff tbh
+        if(newAngle>angle+maxRotation)
+        {
+            if(maxRotation>rotation)
+        	entity.setAngle(angle+rotation++);
+            else
+                entity.setAngle(angle+rotation);
+        }
+        else
+             entity.setAngle(angle+1);
+        return true;
+    }
+    else if(newAngle<angle||newAngle-angle<-180)
+    {
+    	if(angle-maxRotation>newAngle)
+        {
+            if(maxRotation>rotation)
+        	entity.setAngle(angle-(rotation++));
+             else
+                entity.setAngle(angle-rotation);
+        }
+        else
+	    entity.setAngle(angle-1);
+       return true;
+    }
+    return false;
+}
+
+
+
 void Ship::setGoal(int newGoal)
 {
     curGoal=newGoal;

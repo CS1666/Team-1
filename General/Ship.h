@@ -43,7 +43,10 @@ class Ship : public Sprite
         bool isAlly;
         bool pathComplete;
 	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
+	//move this stuff
 	void calculateNewAngle(pair<int,int> destination);
+	bool rotateToAngle(Sprite& entity);
+	void goTowardsDestination();
     public:
         float speed = 0;
         float deltaV = 0;
