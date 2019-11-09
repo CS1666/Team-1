@@ -151,7 +151,7 @@ int Ship::getMaxHp()
 	return maxHp;    
 }
 
-void Ship::setMaxHp(int newMaxHp)
+void Ship::setMaxHp(int newMaxHp)    
 {
 	maxHp = newMaxHp;    
 }

@@ -19,6 +19,7 @@ class Ship : public Sprite
 
         int hull;
         int weaponType;
+
         int maxVelocity;
         int xVelocity;
         int yVelocity;
@@ -32,17 +33,18 @@ class Ship : public Sprite
         float maxRotation;
         float speedX;
         float speedY;
+        float newAngle;
 
         bool damageTaken;
         bool rotationSet;
         bool isUser;
         bool isAlly;
-        bool pathComplete;
 
         string sprite;
         pair<int, int> size;
         pair<int,int> position;
        
+
 
 
     public:
