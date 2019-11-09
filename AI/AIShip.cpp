@@ -1,5 +1,4 @@
 
-#pragma once
 #define PI 3.14159265
 #include "AIShip.h"
 
@@ -7,7 +6,7 @@ AIShip::AIShip() : Ship() {};
 AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 1;};
 
 //ai follows path assigned to it by ai class
-void AIShip::followPath(Sprite& entity)
+void AIShip::followPath()
 {
     //note: change the path in Ship.h to whatever is returned.
     if(!path->empty())
@@ -66,7 +65,7 @@ void AIShip::followPath(Sprite& entity)
 			//cin>>n;
 			rotationSet=true;
 		}
-		double angle=entity.getAngle();
+		double angle= getAngle();
 		cout<<"currotation:"<<curRotation<<endl;
 		cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
@@ -76,12 +75,12 @@ void AIShip::followPath(Sprite& entity)
 		    if(curRotation>angle+maxRotation)
 		    {
 			if(maxRotation>rotation)
-			    entity.setAngle(angle+rotation++);
+			    setAngle(angle+rotation++);
 			else
-			    entity.setAngle(angle+rotation);
+			    setAngle(angle+rotation);
 		    }
 		    else
-		        entity.setAngle(angle+1);
+		        setAngle(angle+1);
 		    angleChanged=true;
 		}
 		else if(curRotation<angle||curRotation-angle<-180)
@@ -89,12 +88,12 @@ void AIShip::followPath(Sprite& entity)
 		    if(angle-maxRotation>curRotation)
 		    {
 			if(maxRotation>rotation)
-			    entity.setAngle(angle-(rotation++));
+			    setAngle(angle-(rotation++));
 			else
-			    entity.setAngle(angle-rotation);
+			    setAngle(angle-rotation);
 		    }
 		    else
-			entity.setAngle(angle-1);
+			 	setAngle(angle-1);
 		    angleChanged=true;
 		}
 		//entity.setAngle(122);
@@ -153,8 +152,8 @@ void AIShip::followPath(Sprite& entity)
 			cur_y=y_coord; //skipped
 			rotationSet=false;
 		    }
-		    entity.setX(cur_x);
-		    entity.setY(cur_y);
+		    setX(cur_x);
+		    setY(cur_y);
 		    position.first=cur_x;
 		    position.second=cur_y;
 		}
