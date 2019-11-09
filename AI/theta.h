@@ -29,7 +29,7 @@
         private:
             int visionRange;
             Mesh &mesh;
-            std::map<Point, int> gScore;
+            std::map<Point, double> gScore;
             std::map<Point, Point> parent;
             p_queue* open;
             std::set<Point> closed;

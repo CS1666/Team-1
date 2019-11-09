@@ -157,6 +157,12 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
+	bool is_space_station_in_range = false;
+	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
+	SDL_Rect e_rect = {50, 50, 100, 100};
+	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
+	SDL_Rect ss_UI_rect = { 200, 200, 200, 200};
+	bool in_space_station_menu = false;
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -178,11 +184,33 @@ void run_phy_enviro(gpRender gr){
 			
 		}
 	}
-
+	
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
+		
+		//Handle spacestation proximity code
+		//Prox code = just increase the size of the ship collision box and do a collision check
+		//physics function
+		if(!is_space_station_in_range){
+			if(check_proximity(playerent, ss_ent, 3)){
+				//then we set the is_space_station_in_range flag to true
+				is_space_station_in_range = true;
+				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			}
+		} else {
+			//we display the E png to show that space station can be accessed
+				
+				//SDL_RenderPresent(gr.getRender());
+			//we need to check if our ship has left the range of the space station
+			if(!check_proximity(playerent, ss_ent, 3)){
+				//then we set the is_space_station_in_range flag to true
+				is_space_station_in_range = false;
+				in_space_station_menu = false;
+				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			}
+		}
 		
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -195,6 +223,22 @@ void run_phy_enviro(gpRender gr){
 					}
 					else if (e.type == SDL_KEYUP){
 						animate = false;
+					}
+					break;
+				
+				case SDLK_e:
+					if(is_space_station_in_range){
+					if(s.type == SDL_KEYDOWN){
+						//SDL_RenderClear(gr.getRender());
+						//gameon = false;
+						if(!in_space_station_menu){
+							in_space_station_menu = true;
+							SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
+							SDL_RenderPresent(gr.getRender());
+						} else {
+							//in_space_station_menu = false;
+						}
+					}
 					}
 					break;
 			}
@@ -250,7 +294,20 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
+
+		if(is_space_station_in_range){
+		//we display the E png to show that space station can be accessed
+				SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+				SDL_RenderPresent(gr.getRender());
+				if(in_space_station_menu){
+					SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
+					SDL_RenderPresent(gr.getRender());
+				}
+				
+		}
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		
+		
 	}
 	Audio::close();
 }
