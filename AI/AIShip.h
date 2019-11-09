@@ -5,7 +5,7 @@ class AIShip: public Ship{
 	public:
 		AIShip();
 		AIShip(SDL_Rect dbox,SDL_Texture* aTex);
-		void followPath(Sprite& entity);
+		void followPath();
 		void setGoal(int newGoal);
 		int getGoal();
 		bool getPathComplete();

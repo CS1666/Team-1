@@ -1,5 +1,4 @@
 
-#pragma once
 #define PI 3.14159265
 #include "AIShip.h"
 
@@ -7,7 +6,7 @@ AIShip::AIShip() : Ship() {};
 AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 1;};
 
 //ai follows path assigned to it by ai class
- void AIShip::followPath(Sprite& entity)
+void AIShip::followPath()
     {
 	    //note: change the path in Ship.h to whatever is returned.
 	    if(!path->empty())
@@ -29,22 +28,22 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrd
 				//cin>>n;
 				rotationSet=true;
 			}
-			float angle=entity.getAngle();
+			float angle=getAngle();
 			cout<<"newAngle:"<<newAngle<<endl;
 			cout<<"cur angle: "<<angle<<endl;
-			bool angleChanged=rotateToAngle(entity);
+			bool angleChanged=rotateToAngle();
 			if(newAngle>angle||newAngle-angle>=180)
 			{
 			    //pretty shit acceleration stuff tbh
 			    if(newAngle>angle+maxRotation)
 			    {
 				if(maxRotation>rotation)
-				    entity.setAngle(angle+rotation++);
+				    setAngle(angle+rotation++);
 				else
-				    entity.setAngle(angle+rotation);
+				   setAngle(angle+rotation);
 			    }
 			    else
-			        entity.setAngle(angle+1);
+			        .setAngle(angle+1);
 			    angleChanged=true;
 			}
 			else if(newAngle<angle||newAngle-angle<-180)
@@ -52,12 +51,12 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrd
 			    if(angle-maxRotation>newAngle)
 			    {
 				if(maxRotation>rotation)
-				    entity.setAngle(angle-(rotation++));
+				    setAngle(angle-(rotation++));
 				else
-				    entity.setAngle(angle-rotation);
+				    setAngle(angle-rotation);
 			    }
 			    else
-				entity.setAngle(angle-1);
+				  setAngle(angle-1);
 			    angleChanged=true;
 			}
 			//entity.setAngle(122);
@@ -116,8 +115,8 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrd
 				cur_y=y_coord; //skipped
 				rotationSet=false;
 			    }
-			    entity.setX(cur_x);
-			    entity.setY(cur_y);
+			    setX(cur_x);
+			    setY(cur_y);
 			    position.first=cur_x;
 			    position.second=cur_y;
 			}
@@ -165,21 +164,21 @@ void AIShip::calculateNewAngle(pair<int,int> destination)
         newAngle=(int)std::floor(newAngle*180/PI+180);
 }
 //rotate to the angle calculated
-bool AIShip::rotateToAngle(Sprite& entity)
+bool AIShip::rotateToAngle()
 {
-    double angle=entity.getAngle();
+    double angle= getAngle();
     if(newAngle>angle||newAngle-angle>=180)
     {
 	//pretty shit acceleration stuff tbh
         if(newAngle>angle+maxRotation)
         {
             if(maxRotation>rotation)
-        	entity.setAngle(angle+rotation++);
+                setAngle(angle+rotation++);
             else
-                entity.setAngle(angle+rotation);
+                setAngle(angle+rotation);
         }
         else
-             entity.setAngle(angle+1);
+             setAngle(angle+1);
         return true;
     }
     else if(newAngle<angle||newAngle-angle<-180)
@@ -187,16 +186,17 @@ bool AIShip::rotateToAngle(Sprite& entity)
     	if(angle-maxRotation>newAngle)
         {
             if(maxRotation>rotation)
-        	entity.setAngle(angle-(rotation++));
+        	    setAngle(angle-(rotation++));
              else
-                entity.setAngle(angle-rotation);
+               setAngle(angle-rotation);
         }
         else
-	    entity.setAngle(angle-1);
+	    setAngle(angle-1);
        return true;
     }
     return false;
 }
+
 
 void AIShip::setGoal(int newGoal)
 {
