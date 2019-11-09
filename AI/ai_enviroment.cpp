@@ -11,6 +11,7 @@
 #include "AI.h"
 #include "../General/Ship.h"
 #include "../General/Sector.h"
+#include "AIShip.h"
 #include "theta.h"
 #include "../Physics/TimeData.h"
 using namespace std;
@@ -55,16 +56,15 @@ void run_ai_enviro(gpRender gr){
 	//--------------------------End-----------------------------------//
 
 	//----------------------AI Ship initilization--------------------//
-	Ship aiShip;
-	Ship aiShip2;
+	AIShip aiShip;
+	AIShip aiShip2;
 	//AI init
 
 	AI ai;
 
 	aiShip.setSprite("Assets/Objects/ship_capital_enemy.png");
 	aiShip.setPosition(pair<int,int>(100,200));
-	cout<<playerShip.getDestination().first<<endl;
-	cout<<playerShip.getDestination().second<<endl;
+	
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip2.setSprite("Assets/Objects/ship_capital_hero.png");
 
@@ -78,7 +78,7 @@ void run_ai_enviro(gpRender gr){
 	Sprite aient2(db3,tex3);
 	osSprite.push_back(&aient);
 	osSprite.push_back(&aient2);
-	vector<Ship*> aiControlled;
+	vector<AIShip*> aiControlled;
 	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
 	aiControlled.push_back(&aiShip);
 	aiControlled.push_back(&aiShip2);

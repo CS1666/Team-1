@@ -2,12 +2,12 @@
 
 
   
-        void AI::setShips(vector<Ship> newShips)
+        void AI::setShips(vector<AIShip> newShips)
         {
             __ships = newShips;
         }
 
-        void AI::setShipPath(Ship *shipToPath)
+        void AI::setShipPath(AIShip *shipToPath)
         {
 
         }
@@ -95,7 +95,7 @@
 
 		}
 		//calculate the path for a ship and destination
-		queue<pair<int,int>>* AI::calculatePath(Ship theShip, Pathfinder path )
+		queue<pair<int,int>>* AI::calculatePath(AIShip theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
 		    cout<<curPos.first<<endl;
@@ -103,7 +103,7 @@
 		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
 		    return pth;
 		}
-void AI::orderShip(Ship theShip,Ship player)
+void AI::orderShip(AIShip theShip, Ship player)
 {
     if(theShip.getGoal()==0)//follow player
     {
