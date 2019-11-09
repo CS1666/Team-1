@@ -23,7 +23,7 @@ class Ship : public Sprite
         int weaponType;
         bool damageTaken;
 	bool rotationSet;
-	float curRotation;
+	float newAngle;
 	float rotation;
         int maxVelocity;
         string currKey;
@@ -43,7 +43,7 @@ class Ship : public Sprite
         bool isAlly;
         bool pathComplete;
 	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
-
+	void calculateNewAngle(pair<int,int> destination);
     public:
         float speed = 0;
         float deltaV = 0;

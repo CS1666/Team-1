@@ -206,57 +206,20 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		//get angle of destination
 		if(!rotationSet)
 		{
-			//if(y_coord>cur_y)
-			curRotation= atan2(-ySlope,xSlope);
-			if(curRotation<0)
-			    curRotation+=2*PI;
-			//cout<<"radian cur: "<<curRotation<<endl;
-			char n;
-			if(xSlope==0&&ySlope<0)
-			    curRotation=0;
-			else if(ySlope==0&&xSlope<0)
-			    curRotation=270;
-			else if(xSlope==0&&ySlope>0)
-			    curRotation=180;
-			else if(ySlope==0&&xSlope>0)
-			    curRotation=90;
-			else if(curRotation>0&&curRotation<PI/2)
-			{
-			    curRotation=(int)std::floor(curRotation*180/PI);
-			//	cout<<"first quad"<<endl;
-			//	cin>>n;
-			}
-			else if(curRotation>PI/2&&curRotation<3*PI/2 && ySlope>0)
-			{
-			    curRotation=(int)std::floor(curRotation*180/PI);
-			//	cout<<"second quad"<<endl;
-			//	cin>>n;
-			}
-			else if(curRotation>3*PI/2&&curRotation<2*PI)
-			{
-			    curRotation=(int)floor(curRotation*180/PI-180);
-				//cout<<"third quad"<<endl;
-				//cin>>n;
-			}
-			else
-			{
-			    curRotation=(int)std::floor(curRotation*180/PI+180);
-			    //cout<<"fourth quad"<<endl;
-			   //cin>>n;
-			}
-			//cout<<"rotation: "<<curRotation<<endl;
+			calculateNewAngle(coords);
+			//cout<<"rotation: "<<newAngle<<endl;
 			//int n;
 			//cin>>n;
 			rotationSet=true;
 		}
 		double angle=entity.getAngle();
-		cout<<"currotation:"<<curRotation<<endl;
+		cout<<"newAngle:"<<newAngle<<endl;
 		cout<<"cur angle: "<<angle<<endl;
 		bool angleChanged=false;
-		if(curRotation>angle||curRotation-angle>=180)
+		if(newAngle>angle||newAngle-angle>=180)
 		{
 		    //pretty shit acceleration stuff tbh
-		    if(curRotation>angle+maxRotation)
+		    if(newAngle>angle+maxRotation)
 		    {
 			if(maxRotation>rotation)
 			    entity.setAngle(angle+rotation++);
@@ -267,9 +230,9 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 		        entity.setAngle(angle+1);
 		    angleChanged=true;
 		}
-		else if(curRotation<angle||curRotation-angle<-180)
+		else if(newAngle<angle||newAngle-angle<-180)
 		{
-		    if(angle-maxRotation>curRotation)
+		    if(angle-maxRotation>newAngle)
 		    {
 			if(maxRotation>rotation)
 			    entity.setAngle(angle-(rotation++));
@@ -354,6 +317,36 @@ void Ship::setPath(queue<pair<int,int>>* thePath)
 	        pathComplete=true;
 	    }
 	}
+//calculates the new angle and sets it in its own function
+void Ship::calculateNewAngle(pair<int,int> destination)
+{
+    //most of this initialization is currently still in follow path, but we want to use updateMovement so idk
+    int x_coord=destination.first;
+    int y_coord=destination.second;
+    int cur_x=position.first;
+    int cur_y=position.second;
+    double xSlope=x_coord-cur_x;
+    double ySlope=y_coord-cur_y;
+    newAngle= atan2(-ySlope,xSlope);
+    if(newAngle<0)
+	newAngle+=2*PI;
+    if(xSlope==0&&ySlope<0)
+        newAngle=0;
+    else if(ySlope==0&&xSlope<0)
+        newAngle=270;
+    else if(xSlope==0&&ySlope>0)
+        newAngle=180;
+    else if(ySlope==0&&xSlope>0)
+        newAngle=90;
+    else if(newAngle>0&&newAngle<PI/2)
+        newAngle=(int)std::floor(newAngle*180/PI);
+    else if(newAngle>PI/2&&newAngle<3*PI/2 && ySlope>0)
+        newAngle=(int)std::floor(newAngle*180/PI);
+    else if(newAngle>3*PI/2&&newAngle<2*PI)
+        newAngle=(int)floor(newAngle*180/PI-180);
+    else
+        newAngle=(int)std::floor(newAngle*180/PI+180);
+}
 void Ship::setGoal(int newGoal)
 {
     curGoal=newGoal;
