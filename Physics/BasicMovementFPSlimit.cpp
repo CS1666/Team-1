@@ -194,7 +194,7 @@ bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
-		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
+		if(osSprite.at(i)->getRenderOrder() != 1 && osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
 			//so, one of these should result in collison if they are the same box
 			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
@@ -203,6 +203,34 @@ bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	}
 	return isCollision;
 }
+
+std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> &osShip){
+	float playerXspd = playerent.getSpeedX();
+	float playerYspd = playerent.getSpeedY();
+	float otherXspd;
+	float otherYspd;
+	float playerResX = 0;
+	float playerResY = 0;
+	float otherResX = 0;
+	float otherResY = 0;
+	bool isCollision = false;
+	for(int i = 1; i < osShip.size(); i++){
+		isCollision |= check_collision2(playerent.getDrawBox(), osShip.at(i)->getDrawBox());
+		if(isCollision){
+			otherXspd = osShip.at(i)->getSpeedX();
+			otherYspd = osShip.at(i)->getSpeedY();
+			std::cout << "player X: " << playerent.getX() << std::endl;
+			std::cout << "target X: " << osShip.at(i)->getX() << std::endl;
+			if(playerent.getX() > osShip.at(i)->getX())
+				playerResX = 40;
+			if(playerent.getX() < osShip.at(i)->getX())
+				playerResX = -40;
+		}
+	}
+
+	return {playerResX, playerResY, otherResX, otherResY};
+}
+
 
 
 void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
@@ -404,3 +432,69 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 	std::cout << "Grav y: " << gravPulls[1] << std::endl;
 
 }
+
+void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT){
+	//needs to be changed to update all objects in the list
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < 0)
+	{
+		speed = 0;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
+	
+	//std::cout << ent.getVX() << ", " << ent.getVY() <<std::endl;
+	ent.setAngle(ent.getAngle() + rotationSpeed);
+	float speedX = speed*cos((ent.getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((ent.getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
+
+	std::vector<float> gravPulls = calculateGravityPull(ent, osSprite);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
+	speedX = speedX+momentumShift[0];
+	ent.setSpeedX(speedX);
+	ent.setSpeedY(speedY);
+
+	ent.setX(ent.getTrueX() + speedX);
+	if(ent.getTrueX() < 0 
+
+
+		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+
+		ent.setX(ent.getTrueX() - speedX);
+	}
+	ent.setY(ent.getTrueY() + speedY);
+	if(ent.getY() < 0 
+		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+
+		ent.setY(ent.getTrueY() - speedY);
+	}
+
+	std::cout << "Push x: " << momentumShift[0] << std::endl;
+
+}
+
+

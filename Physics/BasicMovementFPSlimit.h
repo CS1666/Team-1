@@ -19,3 +19,7 @@ void updatePosition(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH,
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
 
 void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT);
+
+
+std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> &osShip);
