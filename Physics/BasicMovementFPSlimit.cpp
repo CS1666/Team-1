@@ -219,8 +219,8 @@ std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> 
 		if(isCollision == true){
 			otherXspd = osShip.at(i)->getSpeedX();
 			otherYspd = osShip.at(i)->getSpeedY();
-			playerResX = -(playerXspd + otherXspd)/2;
-			playerResY = -(playerYspd + otherYspd)/2;
+			playerResX = (playerXspd + otherXspd)/2;
+			playerResY = (playerYspd + otherYspd)/2;
 			otherResX = (playerXspd + otherXspd)/2;
 			otherResY = (playerYspd + otherYspd)/2;
 
