@@ -52,6 +52,14 @@ void Ship::setSpeedY(float speed)
 	speedY = speed;
 }
 
+float Ship::getSpeedX(){
+	return speedX;
+}
+
+float Ship::getSpeedY(){
+	return speedY;
+}
+
 //integrate BasicMovementFPSlimit.cpp
 void Ship::setPosition(pair<int,int> newPosition)
 {
