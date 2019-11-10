@@ -215,20 +215,23 @@ std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> 
 	float otherResY = 0;
 	bool isCollision = false;
 	for(int i = 1; i < osShip.size(); i++){
-		isCollision |= check_collision2(playerent.getDrawBox(), osShip.at(i)->getDrawBox());
-		if(isCollision){
+		isCollision = check_collision2(playerent.getDrawBox(), osShip.at(i)->getDrawBox());
+		if(isCollision == true){
 			otherXspd = osShip.at(i)->getSpeedX();
 			otherYspd = osShip.at(i)->getSpeedY();
-			std::cout << "player X: " << playerent.getX() << std::endl;
-			std::cout << "target X: " << osShip.at(i)->getX() << std::endl;
-			if(playerent.getX() > osShip.at(i)->getX())
-				playerResX = 40;
-			if(playerent.getX() < osShip.at(i)->getX())
-				playerResX = -40;
+			playerResX = -(playerXspd + otherXspd)/2;
+			playerResY = -(playerYspd + otherYspd)/2;
+			otherResX = (playerXspd + otherXspd)/2;
+			otherResY = (playerYspd + otherYspd)/2;
+
+			osShip.at(i)->setSpeedX(otherResX);
+			osShip.at(i)->setSpeedY(otherResY);
+			osShip.at(i)->setX(osShip.at(i)->getTrueX() + (int)otherResX);
+			osShip.at(i)->setY(osShip.at(i)->getTrueY() + (int)otherResY);
 		}
 	}
 
-	return {playerResX, playerResY, otherResX, otherResY};
+	return {playerResX, playerResY};
 }
 
 
@@ -472,28 +475,53 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
 	std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
-	speedX = speedX+momentumShift[0];
-	ent.setSpeedX(speedX);
-	ent.setSpeedY(speedY);
+	if(momentumShift[0] != 0|| momentumShift[1] != 0){
+		std::cout << "Push x: " << momentumShift[0] << std::endl;
+		std::cout << "Push y: " << momentumShift[1] << std::endl;
 
-	ent.setX(ent.getTrueX() + speedX);
-	if(ent.getTrueX() < 0 
+		speedX = momentumShift[0];
+		speedY = momentumShift[1];
+
+		ent.setX(ent.getTrueX() + speedX);
+		speedX = 0;
+		if(ent.getTrueX() < 0 
 
 
-		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+			|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
-		ent.setX(ent.getTrueX() - speedX);
+			ent.setX(ent.getTrueX() - speedX);
+		}
+
+		ent.setY(ent.getTrueY() + speedY);
+		speedY = 0;
+		if(ent.getY() < 0 
+			|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+
+			ent.setY(ent.getTrueY() - speedY);
+		}
+	}else{
+		ent.setSpeedX(speedX);
+		ent.setSpeedY(speedY);
+
+		ent.setX(ent.getTrueX() + speedX);
+		if(ent.getTrueX() < 0 
+
+
+			|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
+			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+
+			ent.setX(ent.getTrueX() - speedX);
+		}
+		ent.setY(ent.getTrueY() + speedY);
+		if(ent.getY() < 0 
+			|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
+			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
+
+			ent.setY(ent.getTrueY() - speedY);
+		}
 	}
-	ent.setY(ent.getTrueY() + speedY);
-	if(ent.getY() < 0 
-		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| check_all_collisions2(ent.getDrawBox(), osSprite)){
-
-		ent.setY(ent.getTrueY() - speedY);
-	}
-
-	std::cout << "Push x: " << momentumShift[0] << std::endl;
 
 }
 
