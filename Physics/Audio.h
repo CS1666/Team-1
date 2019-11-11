@@ -12,6 +12,7 @@ class Audio{
 		//static Mix_Music *gMusic;
 		static Mix_Chunk *gThrustSound;
 		static Mix_Music *ambientBGM;
+		static bool isSolar;
 	public:
 		static void load_chunk(string filename);
 		static void load_music(string filename);
@@ -19,6 +20,7 @@ class Audio{
 		//static void stop_music();
 		static void play_thrust_sound();
 		static void pause_thrust_sound();
+		static void set_solar(bool iss);
 		static void play_music();
 		static void close();
 };
