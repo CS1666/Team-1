@@ -109,9 +109,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setX(getTrueX() + speedX);
 
 	position.first=(int)getTrueX()+speedX;
-	if(/*getTrueX() < 0 
-		|| (getX() + getW() > ZONE_WIDTH)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
 		position.first=(int)getTrueX()-speedX;
@@ -119,9 +117,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setY(getTrueY() + speedY);
 
 	position.second=(int)getTrueY()+speedY;
-	if(/*getY() < 0 
-		|| (getY() + getH() > ZONE_HEIGHT)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
 		position.second=(int)getTrueY()-speedY;
@@ -188,7 +184,7 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 
 	//std::cout << "Firing Angle: " << getAngle() << std::endl;
 	int X = getTrueX() + (getW()/2);//*cos(getAngle());
-	int Y = getTrueY();// + (getW()/2)*sin(getAngle());
+	int Y = getTrueY()+ (getW()/2);//*sin(getAngle());
 	//std::cout << "Ship X: " << getTrueX() << std::endl;
 	//std::cout << "Ship Y: " << getTrueY() << std::endl;
 	//std::cout << "Laser X: " << X << std::endl;

@@ -34,26 +34,6 @@ long mass2 = 4385000000;
 
 // function to handle gravitational pull
 //want max to be like 1 m/frame^2 min to be 0
-/*std::vector<float> calculateGravityPull(Sprite &playerent, Sprite &bodyent){
-	playerX = playerent.getTrueX() + playerent.getW()/2.0;
-	playerY = playerent.getTrueY() + playerent.getH()/2.0;
-	bodyX = bodyent.getTrueX() + bodyent.getW()/2.0;
-	bodyY = bodyent.getTrueY() + bodyent.getH()/2.0;
-	//make fix this
-	pointSlope = (bodyY - playerY)/(bodyX - playerX);
-	pointAngle = atan(pointSlope);
-	if(playerX > bodyX)
-	{
-		pointAngle += PI;
-	}
-	std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
-	float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
-	std::cout << "grav: " << grav << std::endl;
-	float gravX = grav*cos(pointAngle);
-	float gravY = grav*sin(pointAngle);
-	return {gravX, gravY};
-}*/ //depricated
-
 std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*> &osSprite){
 	playerX = playerent.getTrueX() + playerent.getW()/2.0;
 	playerY = playerent.getTrueY() + playerent.getH()/2.0;
