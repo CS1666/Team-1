@@ -93,10 +93,10 @@ void run_demo(gpRender gr){
 
 
 	//Audio Initilization
-	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
-
+	Audio::set_solar(true);
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -396,6 +396,7 @@ void run_demo(gpRender gr){
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			Audio::set_solar(solar);
 		}
 		
 		Ellers_Maze maze;
@@ -410,9 +411,9 @@ void run_demo(gpRender gr){
 		SDL_Rect warpRect = {7, 10, 25, 25};
 		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
 		SDL_Rect spotlightRect = {-1273, -710, 2560, 1440};
-
 		while(mazeCheck && gameon)
 		{	
+
 			SDL_RenderClear(gr.getRender());
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());

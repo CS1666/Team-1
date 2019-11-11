@@ -244,11 +244,13 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		case SDLK_w:
 			
 			deltaV += (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_a:
 
 			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_s:
@@ -256,12 +258,14 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 			//setVY(getVY() + MAX_SPEED);
 			
 			deltaV -= (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_d:
 			
 			//setVX(getVX() + MAX_SPEED);
 			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 		case SDLK_x:
 			speed = 0;
