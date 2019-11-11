@@ -139,19 +139,15 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 
 			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
 			SDL_Point center;
-			if (entity->isRectEnt()){
-				center.x = entity->getW()/2;
-				center.y = entity->getH()/2;
-				if(entity->getF() < 0){
-					SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
-				}
-				else{
-					SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
-					SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
-				}
+		
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			if(entity->getF() < 0){
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
-			else if(entity->isCircEnt()){
-				entity->getDrawCirc()->RenderFillCirc(gRenderer);
+			else{
+				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
 		}
 
@@ -162,20 +158,17 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
 
 			SDL_Point center;
-			if (entity->isRectEnt()){
-				center.x = entity->getW()/2;
-				center.y = entity->getH()/2;
-				if(entity->getF() < 0){
-					SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
-				}
-				else{
-					SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
-					SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
-				}
+		
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			if(entity->getF() < 0){
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
-			else if(entity->isCircEnt()){
-				entity->getDrawCirc()->RenderFillCirc(gRenderer);
+			else{
+				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
+		
 		}
 
 		// checks if it's UI and render it
