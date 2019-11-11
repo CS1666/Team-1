@@ -57,7 +57,7 @@ void run_phy_enviro(gpRender gr){
 	
 	//load audio for sound
 	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	bool gameon = false;
 	int titleFrame = 0;
 
