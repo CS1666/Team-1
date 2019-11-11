@@ -6,6 +6,65 @@
 
 
 /*Definitions of Ellers Maze Header*/
+/*Default constructor*/
+Ellers_Maze::Ellers_Maze()
+{
+	//startCreate();	//Uncomment if you want recursive backtracking algorithm
+	create_maze();		//Comment out, if you want recursive backtracking algorithm
+	setEnd(0);
+	
+}
+
+Ellers_Maze::Ellers_Maze(int side) : side{side}
+{
+	create_maze();
+	setEnd(side);
+	setStart(side);
+}
+
+int Ellers_Maze::getStartCol()
+{
+	return startCol;
+}
+
+int Ellers_Maze::getStartRow()
+{
+	return startRow;
+}
+
+int Ellers_Maze::getEndCol()
+{
+	return endCol;
+}
+
+int Ellers_Maze::getEndRow()
+{
+	return endRow;
+}
+
+void Ellers_Maze::setStart(int side)
+{
+	srand(time(NULL));
+	switch(side)
+	{
+		case 0:
+			startRow = 0;
+			startCol = rand() % COL_SIZE;
+			break;
+		case 1:
+			startRow = rand() % ROW_SIZE;
+			startCol = COL_SIZE - 1;
+			break;
+		case 2:
+			startRow = ROW_SIZE - 1;
+			startCol = rand() % COL_SIZE;
+			break;
+		case 3:
+			startRow = rand() % ROW_SIZE;
+			startCol = 0;
+			break;
+	}
+}
 
 /* The maze only looks for right walls, so when drawing the left edge, be sure to add the left walls as necessary, see testoutput for further clarification.
     No start/end openings have been added yet.  These can be added anywhere on any of the edges, fixed or random.
@@ -724,7 +783,7 @@
 	bool Ellers_Maze::isEnd(int row, int col)
 	{
 		
-		if(rowEnd == row && colEnd == col)
+		if(endRow == row && endCol == col)
 		{
 			return true;
 		}
@@ -733,41 +792,33 @@
 
 	void Ellers_Maze::setEnd(int side)
 	{
-		side = rand() % 4;
 		switch(side)
 		{
-			case 0: //top
-				rowEnd = 0;
-				colEnd = rand() % COL_SIZE + 1;
+			case 0: //top, set end to bottom
+				endRow = ROW_SIZE - 1;
+				endCol = rand() % COL_SIZE;
 				break;
 
-			case 1: //right
-				colEnd = COL_SIZE - 1;
-				rowEnd = rand() % ROW_SIZE;
+			case 1: //right, set end to left
+				endCol = 0;
+				endRow = rand() % ROW_SIZE;
 				break;
 
-			case 2: //bottom
-				rowEnd = ROW_SIZE - 1;
-				colEnd = rand() % COL_SIZE;
+			case 2: //bottom, set end to top
+				endRow = 0;
+				endCol = rand() % COL_SIZE;
 				break;
 
-			case 3: //left
-				colEnd = 0;
-				rowEnd = rand() % ROW_SIZE + 1;
+			case 3: //left, set end to right
+				endCol = COL_SIZE - 1;
+				endRow = rand() % ROW_SIZE;
 				break;
 		}
 	}
 
 
 
-	/*Default constructor*/
-	Ellers_Maze::Ellers_Maze()
-	{
-		//startCreate();	//Uncomment if you want recursive backtracking algorithm
-		create_maze();		//Comment out, if you want recursive backtracking algorithm
-		setEnd(0);
-		std::cout << "Row End: " << rowEnd << " Col End: " << colEnd << std::endl;
-	}
+	
 
 	/*Get if current cell has bottom*/
 	bool Ellers_Maze::hasBottom(int row, int col)
@@ -881,38 +932,43 @@
 		{
 			for(col = 0; col < getColSize(); col++)
 			{
-			    if(!(row == rowEnd && col == colEnd))
+			   
+			    if(row == 0)
 			    {
-				    if(row == 0)
-				    {
+				if(!(side == 2 && endCol == col))
+				{
 					SDL_Rect section = {x, y, width, height};
 					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
+				}
+				
+			    }
 
-				    }
-
-					if(col == 0)
-					{
-					    SDL_Rect section = {x, y, width, height};
-					    SDL_RenderCopyEx(mRender, maze_wall, NULL, &section, 0, &h, SDL_FLIP_NONE);
-					}
-
-				    if(hasRight(row, col))
+				if(col == 0)
+				{
+				    if(!(side == 1 && endRow == row))
 				    {
-					SDL_Rect section = {x, y+width, width, height};
-					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+				    	SDL_Rect section = {x, y, width, height};
+				    	SDL_RenderCopyEx(mRender, maze_wall, NULL, &section, 0, &h, SDL_FLIP_NONE);
 				    }
-				    else
-				    {
-					SDL_Rect section = {x, y, height, height};
-					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
-				    }
+				}
 
-				    if(hasBottom(row, col))
-				    {
-					SDL_Rect section = {x+width, y, width, height};
-					SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
-				    }
-		 	    }
+			    if(hasRight(row, col) && !(side == 3 && endRow == row && endCol == col))
+			    {
+				SDL_Rect section = {x, y+width, width, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+			    }
+			    else
+			    {
+				SDL_Rect section = {x, y, height, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  0, &h, SDL_FLIP_NONE);
+			    }
+
+			    if(hasBottom(row, col) && !(side == 0 && endRow == row && endCol == col))
+			    {
+				SDL_Rect section = {x+width, y, width, height};
+				SDL_RenderCopyEx(mRender, maze_wall, NULL, &section,  90, &h, SDL_FLIP_NONE);
+			    }
+		 	    
 			    y += width;
 
 			}
