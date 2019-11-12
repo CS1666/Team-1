@@ -17,6 +17,7 @@
 #include "../Level_Generation/Ellers_Maze.h"
 #include "../General/planet.h"
 #include "phy_enviroment.h"
+#include "../AI/AIShip.h"
 
 constexpr int PLAYER_WIDTH = 52;
 constexpr int PLAYER_HEIGHT = 50;
@@ -114,7 +115,8 @@ void run_phy_enviro(gpRender gr){
 	osShip.push_back(&ement);
 
 	SDL_Rect db6 = {500,400,50,50};
-	Ship ement2(db6, tex_em);
+	AIShip ement2(db6, tex_em);
+	ement2.setDestination(std::pair<int,int>(1000,1000));
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
 	osSprite.push_back(&ement2);
@@ -340,6 +342,8 @@ void run_phy_enviro(gpRender gr){
 				}
 				
 		}
+
+		
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		
 		

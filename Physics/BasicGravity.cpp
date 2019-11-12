@@ -46,9 +46,9 @@ std::vector<float> calculateGravityPull(Sprite &playerent, Sprite &bodyent){
 	{
 		pointAngle += PI;
 	}
-	std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
+	//std::cout << "angle: " << pointAngle * 180/ PI<< std::endl;
 	float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
-	std::cout << "grav: " << grav << std::endl;
+	//std::cout << "grav: " << grav << std::endl;
 	float gravX = grav*cos(pointAngle);
 	float gravY = grav*sin(pointAngle);
 	return {gravX, gravY};
