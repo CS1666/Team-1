@@ -57,7 +57,8 @@ void run_phy_enviro(gpRender gr){
 	
 	//load audio for sound
 	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
+	Audio::set_solar(true);
 	bool gameon = false;
 	int titleFrame = 0;
 
@@ -106,14 +107,14 @@ void run_phy_enviro(gpRender gr){
 	
 	//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db5 = {400,300,50,50};
+	SDL_Rect db5 = {500,300,50,50};
 	Ship ement(db5, tex_em);
 	ement.setCurrHp(100);
 	ement.setMaxHp(100);
 	osSprite.push_back(&ement);
 	osShip.push_back(&ement);
 
-	SDL_Rect db6 = {500,400,50,50};
+	SDL_Rect db6 = {400,500,50,50};
 	Ship ement2(db6, tex_em);
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
@@ -282,7 +283,7 @@ void run_phy_enviro(gpRender gr){
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
 		planet1ent.updatePosition();
-		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		updatePosition3(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
