@@ -29,36 +29,9 @@ void AIShip::followPath()
 				rotationSet=true;
 			}
 			float angle=getAngle();
-			cout<<"newAngle:"<<newAngle<<endl;
-			cout<<"cur angle: "<<angle<<endl;
+			//cout<<"newAngle:"<<newAngle<<endl;
+			//cout<<"cur angle: "<<angle<<endl;
 			bool angleChanged=rotateToAngle();
-			if(newAngle>angle||newAngle-angle>=180)
-			{
-			    //pretty shit acceleration stuff tbh
-			    if(newAngle>angle+maxRotation)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle+rotation++);
-				else
-				   setAngle(angle+rotation);
-			    }
-			    else
-			       setAngle(angle+1);
-			    angleChanged=true;
-			}
-			else if(newAngle<angle||newAngle-angle<-180)
-			{
-			    if(angle-maxRotation>newAngle)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle-(rotation++));
-				else
-				    setAngle(angle-rotation);
-			    }
-			    else
-				  setAngle(angle-1);
-			    angleChanged=true;
-			}
 			//entity.setAngle(122);
 		//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
 	        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;

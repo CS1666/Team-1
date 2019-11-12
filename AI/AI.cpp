@@ -95,12 +95,13 @@
 
 		}
 		//calculate the path for a ship and destination
-		queue<pair<int,int>>* AI::calculatePath(AIShip theShip, Pathfinder path )
+		queue<pair<int,int>>* AI::calculatePath(AIShip& theShip, Pathfinder path )
 		{
 		    pair<int,int> curPos=theShip.getPosition();
-		    cout<<curPos.first<<endl;
-		    cout<<curPos.second<<endl;
-		    queue<pair<int,int>>* pth = path.pathfind(theShip.getPosition(), theShip.getDestination());
+		    pair<int,int> curDest=theShip.getDestination();
+		    //cout<<curPos.first<<endl;
+		    //cout<<curPos.second<<endl;
+		    queue<pair<int,int>>* pth = path.pathfind(curPos,curDest);
 		    return pth;
 		}
 void AI::orderShip(AIShip theShip, Ship player)

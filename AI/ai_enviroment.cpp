@@ -36,7 +36,6 @@ void run_ai_enviro(gpRender gr){
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = true;
-
 	//gpRender object that is used to render object onto screen
 
 	//Ship object init
@@ -51,6 +50,8 @@ void run_ai_enviro(gpRender gr){
 
 	Hero playerShip(pdb, ptex);
 	playerShip.setPosition(pair<int,int>(250,250));
+	playerShip.setRenderOrder(0);
+	//cout<<"playership sprite: "<<playerShip.getTexture()<<endl;
 	osSprite.push_back(&playerShip);
 	
 	
@@ -68,6 +69,9 @@ void run_ai_enviro(gpRender gr){
 	AIShip aiShip(db1, tex1);
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(playerShip.getPosition());
+	aiShip.setRenderOrder(0);
+	aiShip.setF(-1);
+	//cout<<"aiShip texture: "<<aiShip.getTexture()<<endl;
 	osSprite.push_back(&aiShip);
 
 	
@@ -78,13 +82,13 @@ void run_ai_enviro(gpRender gr){
 	AIShip aiShip2(db3,tex3);
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
-	
+	aiShip2.setRenderOrder(0);
+	aiShip2.setF(-1);
+	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	osSprite.push_back(&aiShip2);
+	//Ship testship(db3,tex3);
 
-	Ship testship(db3,tex3);
-
-	osSprite.push_back(&testship);
-
+	//osSprite.push_back(&testship);
 	vector<AIShip*> aiControlled;
 	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
 	aiControlled.push_back(&aiShip);
