@@ -19,18 +19,25 @@ using namespace std;
 class AI
 {
     private:
-        vector<AIShip> __ships;
+        vector<AIShip*>* ships;
         vector<vector<bool> > storedMapState; //probably needs to be changed
+        Hero* playerShip;
+        Pathfinder* pathfinder;
 
     public:
-        void setShips(vector<AIShip> newShips);
-		bool checkMapState(vector<vector<bool> > newState); //change mapstate
+        void setShips(vector<AIShip*>* newShips);
+        bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
         void lineOfSight();
         bool createMapState(Sector currentSector);
-        queue<pair<int,int>>* calculatePath(AIShip theShip, Pathfinder Path);
+        queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
-	int calculateDistance(pair<int,int> start, pair<int,int>stop);
-	
+        void setPlayerShip(Hero* playerShip);
+        void setPathfinder(Pathfinder* npf);
+        Hero* getPlayerShip();
+        void followPlayer(AIShip* ship);
+        void executeAIActions();
+        int calculateDistance(pair<int,int> start, pair<int,int>stop);
+    
 };

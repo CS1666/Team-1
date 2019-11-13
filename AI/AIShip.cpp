@@ -1,9 +1,11 @@
-
 #define PI 3.14159265
 #include "AIShip.h"
 
 AIShip::AIShip() : Ship() {};
-AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 1;};
+AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
+	renderOrder = 1;
+	pathset = false;
+};
 
 //ai follows path assigned to it by ai class
 void AIShip::followPath()
@@ -29,36 +31,9 @@ void AIShip::followPath()
 				rotationSet=true;
 			}
 			float angle=getAngle();
-			cout<<"newAngle:"<<newAngle<<endl;
-			cout<<"cur angle: "<<angle<<endl;
+			//cout<<"newAngle:"<<newAngle<<endl;
+			//cout<<"cur angle: "<<angle<<endl;
 			bool angleChanged=rotateToAngle();
-			if(newAngle>angle||newAngle-angle>=180)
-			{
-			    //pretty shit acceleration stuff tbh
-			    if(newAngle>angle+maxRotation)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle+rotation++);
-				else
-				   setAngle(angle+rotation);
-			    }
-			    else
-			       setAngle(angle+1);
-			    angleChanged=true;
-			}
-			else if(newAngle<angle||newAngle-angle<-180)
-			{
-			    if(angle-maxRotation>newAngle)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle-(rotation++));
-				else
-				    setAngle(angle-rotation);
-			    }
-			    else
-				  setAngle(angle-1);
-			    angleChanged=true;
-			}
 			//entity.setAngle(122);
 		//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
 	        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
@@ -221,6 +196,9 @@ pair<int,int> AIShip::getDestination()
 	return destination;
 }
 
+bool AIShip::isPathSet(){
+	return pathset;
+}
 void AIShip::setPath(queue<pair<int,int>>* thePath)
 {
 	//fullstops ship when setting path
@@ -233,4 +211,5 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 	rotationSet=false;
     path = thePath;
     pathComplete=false;
+    pathset = true;
 }
