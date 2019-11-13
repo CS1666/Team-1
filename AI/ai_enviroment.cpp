@@ -84,7 +84,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
 	aiShip2.setF(-1);
-	aiShip2.setGoal(0);
+	aiShip2.setGoal(1);
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	osSprite.push_back(&aiShip2);
 	//Ship testship(db3,tex3);

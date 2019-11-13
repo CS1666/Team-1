@@ -13,6 +13,7 @@ class AIShip: public Ship{
 		pair<int,int> getDestination();
 		void setPath(queue<pair<int,int>>* thePath);
 		Projectile attackShip(pair<int,int> otherShip, SDL_Texture* laser);
+		void resetVariables();
     bool isPathSet();
 
 	private:
