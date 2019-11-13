@@ -12,6 +12,7 @@ class AIShip: public Ship{
 		void setDestination(pair<int,int> newDestination);
 		pair<int,int> getDestination();
 		void setPath(queue<pair<int,int>>* thePath);
+		bool isPathSet();
 
 	private:
 		void calculateNewAngle(pair<int,int> destination);
@@ -20,6 +21,7 @@ class AIShip: public Ship{
 		pair<int,int> destination;
         std::queue<pair<int,int>>* path;
         int curGoal;//'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
+        bool pathset;
 		
 
 };
