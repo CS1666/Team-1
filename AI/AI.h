@@ -39,5 +39,6 @@ class AI
         void followPlayer(AIShip* ship);
         void executeAIActions();
         int calculateDistance(pair<int,int> start, pair<int,int>stop);
-    
+        pair<int, int> radar(AIShip aiship);
+        bool checkBounds(int x, int y);
 };

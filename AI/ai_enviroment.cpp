@@ -176,7 +176,6 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
-		
 		ai.executeAIActions();
 
 		//DOESN"T WORK AT THIS TIME
