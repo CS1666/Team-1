@@ -38,9 +38,17 @@ class AI
         void setPlayerShip(Hero* playerShip);
         void setPathfinder(Pathfinder* npf);
         Hero* getPlayerShip();
-        void followPlayer(AIShip* ship);
         void executeAIActions();
         int calculateDistance(pair<int,int> start, pair<int,int>stop);
+
+
+        void followPlayer(AIShip* ship);
+        void Defend(AIShip* ship);
+        void Attack(AIShip* ship);
+        void Flee(AIShip* ship);
+    
+
         pair<int, int> radar(AIShip aiship);
         bool checkBounds(int x, int y);
+
 };
