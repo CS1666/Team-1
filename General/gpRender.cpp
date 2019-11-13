@@ -431,3 +431,7 @@ void gpRender::checkForDeath()
 		}
 	}
 }
+std::vector<Sprite*> gpRender::getOsSprite()
+{
+	return osEntity;
+}

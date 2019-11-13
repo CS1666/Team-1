@@ -53,7 +53,7 @@ class gpRender{
 		void pushSprite(Sprite* ent);
 		void checkForDeath();
 
-
+		std::vector<Sprite*> getOsSprite();
 	private:
 		SDL_Renderer* gRenderer;
 		SDL_Window* gWindow;
