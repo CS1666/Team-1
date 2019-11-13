@@ -3,7 +3,7 @@
 
 Mix_Chunk* Audio::gThrustSound = NULL;
 Mix_Music* Audio::ambientBGM = NULL;
-
+bool Audio::isSolar;
 void Audio::load_chunk(string filename){
 	gThrustSound = Mix_LoadWAV(filename.c_str());
 }
@@ -11,7 +11,10 @@ void Audio::load_music(string filename){
 	ambientBGM = Mix_LoadMUS(filename.c_str());
 }
 void Audio::play_thrust_sound(){
-	 Mix_PlayChannel( -1, gThrustSound, 0 );
+	if(isSolar)
+	{
+		Mix_PlayChannel( -1, gThrustSound, 0 );
+	}
 }
 void Audio::play_music(){
 	if( Mix_PlayingMusic() == 0 )
@@ -32,3 +35,7 @@ void Audio::close(){
 	Mix_Quit();
 }
 
+void Audio::set_solar(bool iss)
+{
+	isSolar = iss;
+}

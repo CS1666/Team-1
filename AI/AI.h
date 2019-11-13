@@ -7,6 +7,7 @@
 #include <set>
 #include <algorithm>
 #include "../General/Ship.h"
+#include "AIShip.h"
 #include "../General/Sector.h"
 #include "theta.h"
 
@@ -18,18 +19,36 @@ using namespace std;
 class AI
 {
     private:
-        vector<Ship> __ships;
+        vector<AIShip*>* ships;
         vector<vector<bool> > storedMapState; //probably needs to be changed
+        vector<vector<bool> > storedShipState; //probably needs to be changed
+        Hero* playerShip;
+        Pathfinder* pathfinder;
 
     public:
-        void setShips(vector<Ship> newShips);
-		bool checkMapState(vector<vector<bool> > newState); //change mapstate
-        void setShipPath(Ship *shipToPath);
+        void setShips(vector<AIShip*>* newShips);
+        bool checkMapState(vector<vector<bool> > newState); //change mapstate
+        void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
         void lineOfSight();
         bool createMapState(Sector currentSector);
-        queue<pair<int,int>>* calculatePath(Ship theShip, Pathfinder Path);
-        void orderShip(Ship theShip, Ship playerShip);//note: idk if this is best place to put this method
-	int calculateDistance(pair<int,int> start, pair<int,int>stop);
-	
+        bool createShipState(Sector currentSector);
+        queue<pair<int,int>>* calculatePath(AIShip& theShip);
+        void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
+        void setPlayerShip(Hero* playerShip);
+        void setPathfinder(Pathfinder* npf);
+        Hero* getPlayerShip();
+        void executeAIActions();
+        int calculateDistance(pair<int,int> start, pair<int,int>stop);
+
+
+        void followPlayer(AIShip* ship);
+        void defendPosition(AIShip* ship);
+        void Attack(AIShip* ship);
+        void Flee(AIShip* ship);
+	void doNothing(AIShip* ship);
+
+        pair<int, int> radar(AIShip aiship);
+        bool checkBounds(int x, int y);
+
 };

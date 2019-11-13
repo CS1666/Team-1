@@ -52,10 +52,13 @@ std::vector<std::pair<int, int>> randNumP(){
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 	std::vector<Sprite*> osSprite;
+	//Vector used to store all on screen entities
+	std::vector<Ship*> osShip;
 	
 	//load audio for sound
 	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
+	Audio::set_solar(true);
 	bool gameon = false;
 	int titleFrame = 0;
 
@@ -72,6 +75,7 @@ void run_phy_enviro(gpRender gr){
 	playerent.setMaxHp(100);
 	playerent.setRenderOrder(0);
 	osSprite.push_back(&playerent);
+	osShip.push_back(&playerent);
 	
 
 	//Red giant Initilzation-
@@ -101,18 +105,27 @@ void run_phy_enviro(gpRender gr){
 	//planet1ent.initVelocity(starent);
 
 	
-	//Ship Cruiser initilization
-	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	//SDL_Rect db3 = {400,300,225,300};
-	//Sprite emyent(db3, tex3);
+	/*//Ship Cruiser initilization
+	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db5 = {500,300,50,50};
+	Ship ement(db5, tex_em);
+	ement.setCurrHp(100);
+	ement.setMaxHp(100);
+	osSprite.push_back(&ement);
+	osShip.push_back(&ement);
 
-	//osSprite.push_back(&emyent);
-	
+	SDL_Rect db6 = {400,500,50,50};
+	Ship ement2(db6, tex_em);
+	ement2.setCurrHp(100);
+	ement2.setMaxHp(100);
+	osSprite.push_back(&ement2);
+	osShip.push_back(&ement2);*/
+
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
-	
+
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -189,7 +202,18 @@ void run_phy_enviro(gpRender gr){
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
-		
+
+		for(std::size_t i = 0; i != osShip.size(); i++){
+			if(osShip.at(i)->getCurrHp() <= 0){
+				for(std::size_t j = 0; j != osSprite.size(); j++){
+					if((Sprite*)osShip.at(i) == osSprite.at(j)){
+						osShip.erase(osShip.begin() + (i--));
+						osSprite.erase(osSprite.begin() + j);
+					}
+				}
+			}
+		}
+
 		//Handle spacestation proximity code
 		//Prox code = just increase the size of the ship collision box and do a collision check
 		//physics function
@@ -241,13 +265,25 @@ void run_phy_enviro(gpRender gr){
 					}
 					}
 					break;
+
+				/*case SDLK_p:
+					if(e.type == SDL_KEYDOWN){
+						ement.setCurrHp(0);
+					}
+					break;
+
+				case SDLK_o:
+					if(e.type == SDL_KEYDOWN){
+						ement2.setCurrHp(0);
+					}
+					break;*/
 			}
 		}
 		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
-		planet1ent.updatePosition();
-		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		planet1ent.updatePosition(playerent);
+		updatePosition3(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
