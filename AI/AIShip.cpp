@@ -211,5 +211,23 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 	rotationSet=false;
     path = thePath;
     pathComplete=false;
-    pathset = true;
+  pathset = true;
+}
+//note: need the texture for fireWeapon, idk why though
+Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
+{
+    //first calculate the angle to rotate to
+    if(!rotationSet)
+    {
+	calculateNewAngle(otherShip);
+	rotationSet=true;
+    }
+    //rotate to that angle
+    bool angleChanged=rotateToAngle();
+    //if not rotate then we are at angle we can fire at ship
+    if(!angleChanged)
+    {
+	return fireWeapon(laser);
+    }
+    return Projectile(); //null/empty sprite
 }
