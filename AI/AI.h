@@ -15,34 +15,29 @@
 
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
-typedef std::pair<int,int> Point;
-typedef std::queue<Point>* Path;
 
 class AI
 {
     private:
         vector<AIShip*>* ships;
-        Pathfinder* pathfinder;
-        Sector sect;
-        vector<vector<bool>> storedMapState;
-        Path calculatePath(AIShip* theShip);
-        void followPlayer(AIShip* ship);
+        vector<vector<bool> > storedMapState; //probably needs to be changed
         Hero* playerShip;
+        Pathfinder* pathfinder;
 
     public:
-        AI(vector<AIShip*>* ships, Sector sect);
-        void handleShipsActions();
         void setShips(vector<AIShip*>* newShips);
-        void setShipPath(AIShip *shipToPath, Path path);
-        void setPathfinder(Pathfinder* npf);
-
-        bool createMapState(Sector currentSector);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
-        vector<vector<bool>>* getMapState();
+        void setShipPath(AIShip *shipToPath);
+        vector<vector<bool>> getMapState();
         void lineOfSight();
-        void updatePlayerState(Hero* nplayerShip);
-        
+        bool createMapState(Sector currentSector);
+        queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
-	    int calculateDistance(pair<int,int> start, pair<int,int>stop);
-	
+        void setPlayerShip(Hero* playerShip);
+        void setPathfinder(Pathfinder* npf);
+        Hero* getPlayerShip();
+        void followPlayer(AIShip* ship);
+        void executeAIActions();
+        int calculateDistance(pair<int,int> start, pair<int,int>stop);
+    
 };

@@ -12,35 +12,30 @@ typedef std::vector<std::vector<bool> > Mesh;
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
-Pathfinder::Pathfinder(Mesh* m, int v): mesh{m}, visionRange{v} {};
-Pathfinder::~Pathfinder(){
-    delete open;
-    delete mesh;
-    
-}
-
 
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
-{   
-    
-    //This allows the second ship to move once the first one is done moving 
-    delete open;
-    
+{
+    ////std::cout << "Path finding" << std::endl;
     // gScore is our cost map for each point
     gScore = std::map<Point, double>();
     gScore.insert(std::pair<Point, double>(start, 0));
-   
+    //std::cout<<start.first<<std::endl;
+    //std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
     parent = std::map<Point, Point>();
     parent.insert(std::pair<Point, Point>(start, start));
-
+    //std::cout<<parent[start].first<<std::endl;
+    //std::cout<<parent[start].second<<std::endl;
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
-
+    ////std::cout << "Before p_queue" << std::endl;
     open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
+    ////std::cout << "After p_queue" << std::endl;
 
+    ////std::cout << "Before insert" << std::endl;
     open->insert(start, 0);
+    ////std::cout << "After insert" << std::endl;
 
     
     // Closed is the closed set unsurprisingly
@@ -53,45 +48,63 @@ Path Pathfinder::pathfind(Point start, Point goal)
     {
         
         // Get the point with the LOWEST expected cost
+        ////std::cout << "Before pop" << std::endl;
         Point s = open->pop();
-    
+        //std::cout << "After pop" << std::endl;
+        //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
         if (s == goal||counter++==MAX_DEPTH)
         {   
+            ////std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
         }
 
+        //std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
+        //std::cout << "size:  " << open->getSize() << std::endl;
+
         std::vector<Point> npath = neighborhood(s);
+        //std::cout << "--------Begining Neigh--------"<< std::endl;
         for (std::pair<int,int> neighbor : npath)
         {
             
+            //std::cout << "Iter " << i << "Size " << npath.size() << std::endl;
             i = i + 1;
 
             auto inClosed = closed.find(neighbor);
+            //std::cout << "Stuck c" << i << std::endl;
+
 
             if (inClosed == closed.end())
             {   
 
+                
+                //std::cout << "Stuck d" << i << std::endl;
 
                 if (!open->contains(neighbor))
                 {
+                    //std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
                     gScore.insert(std::pair<Point, double>(neighbor, std::numeric_limits<double>::max()));
                     parent.insert(std::pair<Point, Point>(neighbor, start));
                 }
+                //std::cout << "UP V " << i + 20 << std::endl;
                 update_vertex(s, neighbor, goal);
-  
+                 //if(neighbor.first == 100 and neighbor.second == 200){
+                    //open->print_pque();
+                //}
+    
+                //std::cout << "Done up V " << i + 20 << std::endl;
             }
         }
+        //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
-
-
+    ////std::cout << "Stuck 4" << std::endl;
     return Path();
 }
 
 // Naive implementation of update_mesh. Will need to modify to not leak tons of memory
-void Pathfinder::update_mesh(Mesh* m) {mesh = m;}
+void Pathfinder::update_mesh(Mesh &m) {mesh = m;}
 
 // We're using Euclidean distance for our heuristic for now
 int Pathfinder::heuristic(Point p1, Point p2)
@@ -117,16 +130,16 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     
     std::vector<Point> result = defineNeighbors(s);
     std::vector<Point> fresult;
-    ////std::cout << "Bf iter "  << std::endl;                    
+    //std::cout << "Bf iter "  << std::endl;                    
     for(auto itr : result)
     {   
         
-        if (!mesh->at(itr.first).at(itr.second))
+        if (!mesh[itr.first][itr.second])
         {
             
             fresult.push_back(itr);
         }
-        ////std::cout << "Lff iter"  << std::endl;
+        //std::cout << "Lff iter"  << std::endl;
     }
     return fresult;
 }
@@ -230,7 +243,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 // Back traces to build a path
 Path Pathfinder::reconstruct_path(Point s)
 {
-    ////std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
+    //std::cout << "Xq point: "<< s.first << " Yq point: " << s.second <<std::endl;
     std::queue<Point>* total_path = new std::queue<Point>();
     if (parent[s] == s)
     {

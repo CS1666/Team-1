@@ -21,15 +21,14 @@
             typedef std::queue<Point>* Path;
             typedef std::vector<std::vector<bool> > Mesh;
             // Give a 2D vector to represent the collision mesh, and an integer vision radius
-            Pathfinder(Mesh*  m, int v);
-            ~Pathfinder();
+            Pathfinder(Mesh  &m, int v): visionRange(v), mesh(m) {}
             Path pathfind(Point start, Point goal);
-            void update_mesh(Mesh* m);
+            void update_mesh(Mesh &m);
 
     
         private:
             int visionRange;
-            Mesh* mesh;
+            Mesh &mesh;
             std::map<Point, double> gScore;
             std::map<Point, Point> parent;
             p_queue* open;
@@ -43,5 +42,3 @@
             bool isOutofBound(Point s, int xdif, int ydif);
             std::vector<Point> defineNeighbors(Point s);
     };
-
-

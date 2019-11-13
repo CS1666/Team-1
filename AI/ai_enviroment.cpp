@@ -1,4 +1,3 @@
- 
 #include <iostream>
 #include <vector>
 #include <string>
@@ -20,7 +19,7 @@ constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 1280; 
 constexpr int ZONE_HEIGHT = 720;
-typedef std::vector<std::vector<bool> > Mesh;
+
 
 vector<Sprite*> initilizeSprites(){
 
@@ -36,7 +35,6 @@ void run_ai_enviro(gpRender gr){
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = true;
-
 	//gpRender object that is used to render object onto screen
 
 	//Ship object init
@@ -51,6 +49,8 @@ void run_ai_enviro(gpRender gr){
 
 	Hero playerShip(pdb, ptex);
 	playerShip.setPosition(pair<int,int>(250,250));
+	playerShip.setRenderOrder(0);
+	//cout<<"playership sprite: "<<playerShip.getTexture()<<endl;
 	osSprite.push_back(&playerShip);
 	
 	
@@ -65,30 +65,34 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ship_capital_enemy.png");
 	
-	AIShip* aiShip = new AIShip(db1, tex1);
-	aiShip->setPosition(pair<int,int>(100,200));
-	aiShip->setDestination(playerShip.getPosition());
-	osSprite.push_back(aiShip);
+	AIShip aiShip(db1, tex1);
+	aiShip.setPosition(pair<int,int>(100,200));
+	aiShip.setDestination(playerShip.getPosition());
+	aiShip.setRenderOrder(0);
+	aiShip.setF(-1);
+	//cout<<"aiShip texture: "<<aiShip.getTexture()<<endl;
+	osSprite.push_back(&aiShip);
 
 	
 	//AI Ship 2 init
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	AIShip* aiShip2 = new AIShip(db3,tex3);
-	aiShip2->setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
-	aiShip2->setDestination(playerShip.getPosition());
+	AIShip aiShip2(db3,tex3);
+	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
+	aiShip2.setDestination(playerShip.getPosition());
+	aiShip2.setRenderOrder(0);
+	aiShip2.setF(-1);
+	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
+	osSprite.push_back(&aiShip2);
+	//Ship testship(db3,tex3);
+
+	//osSprite.push_back(&testship);
+	vector<AIShip*> aiControlled;
 	
-	osSprite.push_back(aiShip2);
-
-	//std::cout << "AI controlled" << std::endl;
-	vector<AIShip*>* aiControlled = new vector<AIShip*>(); //remove/replace when we can use the Ship itself
-	//std::cout << "AI controlled" << std::endl;
-	aiControlled->push_back(aiShip);
-	//std::cout << "AI controlled" << std::endl;
-	aiControlled->push_back(aiShip2);
-	//std::cout << "AI controlled" << std::endl;
-
+	aiControlled.push_back(&aiShip);
+	aiControlled.push_back(&aiShip2);
+	
 //	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
@@ -148,30 +152,41 @@ void run_ai_enviro(gpRender gr){
 
 	SDL_Event e;
 	bool gameon = true;
+	
 
-	//std::cout << "Creating AI" << std::endl;
-	AI ai(aiControlled, sector);
+	AI ai;
 
-	//bool render = true;
+	ai.createMapState(sector);
+	vector<vector<bool> > mesh = ai.getMapState();
+
+	Pathfinder path(mesh, 10);
+
+	ai.setPathfinder(&path);
+	ai.setPlayerShip(&playerShip);
+	ai.setShips(&aiControlled);
+
+
+	
+	//cout<<"pathfinded?"<<endl;
+	//Game Loop
+	bool render = true;
 	while(gameon) {
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
-
-		//std::cout << "Updating Player Ship" << std::endl;
-		ai.updatePlayerState(&playerShip);
-
-		//std::cout << "Handeling Players Actions" << std::endl;
-		ai.handleShipsActions();
+		//position needs to be in booleans?
 		
-		//std::cout << "Rendering" << std::endl;
+		ai.executeAIActions();
+
+		//DOESN"T WORK AT THIS TIME
+		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			//////std::cout << "Key Event!!!" << std::endl;
+			
 			gameon = playerShip.handleKeyEvents(e);
 			
 		}
 		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-		////std::cout << "\nShip 1 postion: " << aiShip.getPosition().first <<" " << aiShip.getPosition().second << "\n" << std::endl;
+		//std::cout << "\nShip 1 postion: " << aiShip.getPosition().first <<" " << aiShip.getPosition().second << "\n" << std::endl;
 		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
 		TimeData::update_move_last_time();
@@ -181,8 +196,24 @@ void run_ai_enviro(gpRender gr){
 		
 		}
 
-	delete aiShip;
-	delete aiShip2;
-	//delete aiControlled;
+
 }
 
+
+	/**for(auto &ship : aiControlled)
+		{
+		   
+			if(!ship->isPathSet()){
+			
+	
+				ship->setPath(ai.calculatePath(*ship, path));
+			}
+			
+			ship->setDestination(playerShip.getPosition());
+			ship->followPath();
+			if(ship->getPathComplete())
+			{
+	
+			    ship->setPath(ai.calculatePath(*ship, path));
+			}
+		}**/
