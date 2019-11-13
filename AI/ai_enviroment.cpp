@@ -158,6 +158,7 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	ai.createMapState(sector);
+	ai.createShipState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
 
 	Pathfinder path(mesh, 10);

@@ -95,6 +95,46 @@
 
         }
 
+        bool AI::createShipState(Sector currentSector)
+        {
+            // Buffer in pixels
+            const int buffer = 50;
+
+            // Gets sector size and sets mesh size to be the size of the sector
+            vector<int> sectorSize = currentSector.getSize();
+
+            // Gets the positions and sizes of everything within the sector
+            vector<vector<int> > currentState = currentSector.getShipState();
+
+              // Creates a new map state with everything equal to zero
+            vector<vector<bool> > newStoredShipState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
+
+            // Puts 1's at the edges of objecys within the sector + the size of the buffer
+            for (vector<int> object : currentState)
+            {
+
+                for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
+                {
+                    for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
+                    {
+                        if (x >= 0 && x < newStoredShipState.size() && y >=0 && y < newStoredShipState[0].size())
+                        {
+                            newStoredShipState[x][y] = 1;
+                        }
+
+                    }
+                }
+            }
+            
+            if(checkMapState(newStoredShipState))
+            {
+                storedShipState=newStoredShipState;
+                return true;
+            }
+            return false;
+
+        }
+
         vector<vector<bool>> AI::getMapState(){
             return storedMapState;
         }
@@ -171,7 +211,7 @@ void AI::orderShip(AIShip theShip, Ship player)
 				{
 					double y = m * x + b;
 					z = sqrt(pow((shipPosition.first - x), 2.0) + pow((shipPosition.second - y), 2.0));
-					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
 					{
 						if (enemyPosition == make_pair(-1, -1))
 						{
@@ -198,7 +238,7 @@ void AI::orderShip(AIShip theShip, Ship player)
 					double y = m * x + b;
 					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
 
-					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
 					{
 						if (enemyPosition != make_pair(-1, -1))
 						{
@@ -225,7 +265,7 @@ void AI::orderShip(AIShip theShip, Ship player)
 					double y = m * x + b;
 					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
 
-					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
 					{
 						if (enemyPosition != make_pair(-1, -1))
 						{
@@ -251,7 +291,7 @@ void AI::orderShip(AIShip theShip, Ship player)
 					double y = m * x + b;
 					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
 
-					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
 					{
 						if (enemyPosition != make_pair(-1, -1))
 						{
