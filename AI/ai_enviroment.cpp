@@ -1,4 +1,3 @@
- 
 #include <iostream>
 #include <vector>
 #include <string>
@@ -60,7 +59,7 @@ void run_ai_enviro(gpRender gr){
 	//----------------------AI Ship initilization--------------------//
 	
 
-	AI ai;
+	
 
 	//AI Ship 1 init
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -91,11 +90,10 @@ void run_ai_enviro(gpRender gr){
 	SDL_Texture* laser=gr.loadImage("Assets/Objects/laser.png");
 	//osSprite.push_back(&testship);
 	vector<AIShip*> aiControlled;
-	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
+	
 	aiControlled.push_back(&aiShip);
 	aiControlled.push_back(&aiShip2);
-	tempAiShipSprites.push_back(&aiShip);
-	tempAiShipSprites.push_back(&aiShip2);
+	
 //	cout<<"push back ok"<<endl;
 
 	//--------------------------End-----------------------------------//
@@ -157,19 +155,19 @@ void run_ai_enviro(gpRender gr){
 	bool gameon = true;
 	
 
+	AI ai;
 
 	ai.createMapState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
-	vector<vector<bool>>mesh2=ai.getMapState();
+
 	Pathfinder path(mesh, 10);
-	Pathfinder path2(mesh2, 10);
-	queue<pair<int,int>>* pathq = ai.calculatePath(aiShip, path);
-	queue<pair<int,int>>*pathq2 = ai.calculatePath(aiShip2, path2);
-	if((!pathq->empty()))
-	    aiShip.setPath(pathq);
-	pathq=ai.calculatePath(aiShip2,path);
-	if(!pathq2->empty())
-	    aiShip2.setPath(pathq2);
+
+	ai.setPathfinder(&path);
+	ai.setPlayerShip(&playerShip);
+	ai.setShips(&aiControlled);
+
+
+	
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	bool render = true;
@@ -178,56 +176,13 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
-		for(auto &ship : aiControlled)
-		{
-		    //if(ship->getPosition()!=ship->getDestination())
-		    //{
-			ship->setDestination(playerShip.getPosition());
-			if(ship->getSprite().length()>36)//work around until Ship render works
-			    ship->followPath();
-			else
-			    ship->followPath();
-			if(ship->getPathComplete())
-			{
-			    pathq=ai.calculatePath(*ship,path);
-			    ship->setPath(pathq);
-			}
-		    //}
-		}/*
-		if(aiShip.getPosition()!=aiShip.getDestination())
-		{
-		    aiShip.followPath(aient);
-		    if(aiShip.getPathComplete())
-		    {
-				pathq = ai.calculatePath(aiShip,path);
-				aiShip.setPath(pathq);
-		    }
-		}
-		else{
-		    aiShip.setDestination(playerShip.getPosition());
-		    pathq = ai.calculatePath(aiShip, path);
-		    aiShip.setPath(pathq);
-		}
-		if(aiShip2.getPosition()!=aiShip2.getDestination())
-		{
-		    aiShip2.followPath(aient2);
-                    if(aiShip2.getPathComplete())
-                    {
-                                pathq2 = ai.calculatePath(aiShip2,path2);
-                                aiShip2.setPath(pathq2);
-                    }
-		}
-		else
-		{
-		    aiShip2.setDestination(playerShip.getPosition());
-		    pathq=ai.calculatePath(aiShip2,path);
-		    aiShip2.setPath(pathq);
-		}
-*/
+		
+		ai.executeAIActions();
+
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
-			////std::cout << "Key Event!!!" << std::endl;
+			
 			gameon = playerShip.handleKeyEvents(e);
 			
 		}
@@ -245,3 +200,21 @@ void run_ai_enviro(gpRender gr){
 
 }
 
+
+	/**for(auto &ship : aiControlled)
+		{
+		   
+			if(!ship->isPathSet()){
+			
+	
+				ship->setPath(ai.calculatePath(*ship, path));
+			}
+			
+			ship->setDestination(playerShip.getPosition());
+			ship->followPath();
+			if(ship->getPathComplete())
+			{
+	
+			    ship->setPath(ai.calculatePath(*ship, path));
+			}
+		}**/

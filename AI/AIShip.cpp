@@ -1,9 +1,11 @@
-
 #define PI 3.14159265
 #include "AIShip.h"
 
 AIShip::AIShip() : Ship() {};
-AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 1;};
+AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
+	renderOrder = 1;
+	pathset = false;
+};
 
 //ai follows path assigned to it by ai class
 void AIShip::followPath()
@@ -194,6 +196,9 @@ pair<int,int> AIShip::getDestination()
 	return destination;
 }
 
+bool AIShip::isPathSet(){
+	return pathset;
+}
 void AIShip::setPath(queue<pair<int,int>>* thePath)
 {
 	//fullstops ship when setting path
@@ -206,6 +211,7 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 	rotationSet=false;
     path = thePath;
     pathComplete=false;
+  pathset = true;
 }
 //note: need the texture for fireWeapon, idk why though
 Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)

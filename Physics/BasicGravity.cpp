@@ -112,4 +112,3 @@ void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WI
 	
 }
 
-
