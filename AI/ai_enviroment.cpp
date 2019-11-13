@@ -177,6 +177,7 @@ void run_ai_enviro(gpRender gr){
 		{
 		    //if(ship->getPosition()!=ship->getDestination())
 		    //{
+			ai.radar(*ship);
 			ship->setDestination(playerShip.getPosition());
 			if(ship->getSprite().length()>36)//work around until Ship render works
 			    ship->followPath();

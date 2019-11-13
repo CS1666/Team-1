@@ -111,3 +111,106 @@ void AI::orderShip(AIShip theShip, Ship player)
 	//do pathfinding here? idk
     }
 }
+
+	pair<int, int> AI::radar(AIShip aiship)
+	{
+		const double pi = 3.14152965358979323846;
+		pair<int, int> enemyPositions;
+		pair<int, int> shipPosition = aiship.getPosition();
+		pair<int, int> shipSize = aiship.getSize();
+
+		int radarSize =  100;
+
+		std::cout << "radar" <<std::endl;
+
+		for (double theta = 0; theta < 2.0*pi; theta += 1.0/16.0 * pi)
+		{
+			double m = tan(theta);
+
+			double b = shipPosition.second / (m*shipPosition.first);
+
+			std::cout << radarSize << std::endl;
+
+			if (theta >= 0 && theta < 1.0/2.0*pi)
+			{
+				double z = 0;
+
+				std::cout << "1" << std::endl;
+
+				for (int x = shipPosition.first; z < radarSize; x++)
+				{
+					std::cout << "2" << std::endl;
+					double y = m * x + b;
+					std::cout << "3" << std::endl;
+					z = sqrt(pow((shipPosition.first - x), 2.0) + pow((shipPosition.second - y), 2.0));
+					std::cout << "4" << std::endl;
+					std::cout << z<<std::endl;
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						//enemyPositions.push_back(make_pair(theta, z));
+					}
+				}
+
+			}
+			else if (theta > 1.0/2.0*pi && theta <= 1.0*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x--)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						//enemyPositions.push_back(make_pair(theta, z));
+					}
+				}
+
+			}
+			else if (theta > 1.0 && theta < 3.0/2.0*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x--)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						//enemyPositions.push_back(make_pair(theta, z));
+					}
+				}
+			}
+			else if (theta > 3/2*pi && theta < 2*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x++)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						//enemyPositions.push_back(make_pair(theta, z));
+					}
+				}
+			}
+
+		}
+
+		return enemyPositions;
+
+	}
+
+	bool AI::checkBounds(int x, int y)
+	{
+		if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
+		{
+			return true;
+		}
+
+		return false;
+	}
