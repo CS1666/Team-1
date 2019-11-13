@@ -178,10 +178,6 @@ bool AI::createShipState(Sector currentSector)
 
 }
 
-        vector<vector<bool>> AI::getMapState(){
-            return storedMapState;
-        }
-
 vector<vector<bool>> AI::getMapState(){
     return storedMapState;
 }
