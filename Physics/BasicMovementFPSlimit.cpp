@@ -4,7 +4,7 @@
 
 #define PI 3.14159265
 
-constexpr double ACCEL = 1.0;
+constexpr double ACCEL = 30.0;
 constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
 constexpr float MAX_DELTAV = 1;
