@@ -93,10 +93,10 @@ void run_demo(gpRender gr){
 
 
 	//Audio Initilization
-	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
-
+	Audio::set_solar(true);
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -294,6 +294,7 @@ void run_demo(gpRender gr){
 		playerent.setY(startPlayerY);
 		playerent.speed = 0;
 		playerent.deltaV = 0;
+		int side = 0;
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
@@ -342,6 +343,22 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
+				if(playerent.getTrueX() < 0)
+				{
+					side = 2;
+				}
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
+				{
+					side = 0;
+				}
+				else if(playerent.getY() < 0)
+				{
+					side = 1;
+				}
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
+				{
+					side = 3;
+				}
 				
 			}
       
@@ -396,28 +413,40 @@ void run_demo(gpRender gr){
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			Audio::set_solar(solar);
 		}
 		
-		Ellers_Maze maze;
+		Ellers_Maze maze(side);
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
-		int col = 0;
-		int row = 0;
+		int col = maze.getStartRow();
+		int row = maze.getStartCol();
 		int numCols = maze.getRowSize();
 		int numRows = maze.getColSize();
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-		SDL_Rect warpRect = {7, 10, 25, 25};
+		int spawnCol = 7 + col * indexSize;
+		int spawnRow = 10 + row * indexSize;
+		int spotCol = -1273 + col * indexSize;;
+		int spotRow = -710 + row * indexSize;
+			
+		SDL_Rect warpRect = {spawnCol, spawnRow, 25, 25};
 		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
-		SDL_Rect spotlightRect = {-1273, -710, 2560, 1440};
+
+		SDL_Rect spotlightRect = {spotCol, spotRow, 2560, 1440};
+		bool spotlight = true;
 
 		while(mazeCheck && gameon)
 		{	
+
 			SDL_RenderClear(gr.getRender());
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
-			SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
+			if(spotlight)
+			{
+				SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
+			}
 			SDL_RenderPresent(gr.getRender());
 			
 			while(SDL_PollEvent(&e)) {
@@ -473,6 +502,18 @@ void run_demo(gpRender gr){
 							}
 						}
 						break;
+					case SDLK_c:
+						if(e.type == SDL_KEYDOWN)
+						{
+							if(spotlight)
+							{
+								spotlight = false;
+							}	
+							else
+							{
+								spotlight = true;
+							}
+						}
 				}
 				
 			}
