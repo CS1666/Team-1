@@ -115,8 +115,7 @@
             }               
                     
          return false;
-
-        }
+		}
         //calculate the path for a ship and destination
         queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
         {

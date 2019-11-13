@@ -12,7 +12,8 @@ class AIShip: public Ship{
 		void setDestination(pair<int,int> newDestination);
 		pair<int,int> getDestination();
 		void setPath(queue<pair<int,int>>* thePath);
-		bool isPathSet();
+		Projectile attackShip(pair<int,int> otherShip, SDL_Texture* laser);
+    bool isPathSet();
 
 	private:
 		void calculateNewAngle(pair<int,int> destination);
