@@ -87,7 +87,8 @@ void run_ai_enviro(gpRender gr){
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	osSprite.push_back(&aiShip2);
 	//Ship testship(db3,tex3);
-
+	//load a laser to be reused
+	SDL_Texture* laser=gr.loadImage("Assets/Objects/laser.png");
 	//osSprite.push_back(&testship);
 	vector<AIShip*> aiControlled;
 	vector<Sprite*> tempAiShipSprites; //remove/replace when we can use the Ship itself
