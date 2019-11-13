@@ -1,10 +1,15 @@
 #include "AI.h"
 
 
-
 void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
+
+            for(AIShip* ship : *ships){
+            	radar(*ship);
+                followPlayer(ship);
+            }
+
 
         switch(ship->getGoal()){
 
@@ -170,12 +175,14 @@ Hero* AI::getPlayerShip(){
     return playerShip;
 }
 
+
 void AI::setPlayerShip(Hero* nplayerShip){
     playerShip = nplayerShip;
 }
 void AI::setPathfinder(Pathfinder* npf){
     pathfinder = npf;
 }
+
 void AI::orderShip(AIShip theShip, Ship player)
 {
     if(theShip.getGoal()==0)//follow player
@@ -184,3 +191,140 @@ void AI::orderShip(AIShip theShip, Ship player)
     //do pathfinding here? idk
     }
 }
+
+	pair<int, int> AI::radar(AIShip aiship)
+	{
+		const double pi = 3.14152965358979323846;
+		pair<int, int> enemyPosition = make_pair(-1, -1);
+		pair<int, int> shipPosition = aiship.getPosition();
+		pair<int, int> shipSize = aiship.getSize();
+
+		int radarSize =  100;
+
+		for (double theta = 0; theta < 2.0*pi; theta += 1.0/16.0 * pi)
+		{
+			double m = tan(theta);
+
+			double b = shipPosition.second / (m*shipPosition.first);
+
+			if (theta >= 0 && theta < 1.0/2.0*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x+=10)
+				{
+					double y = m * x + b;
+					z = sqrt(pow((shipPosition.first - x), 2.0) + pow((shipPosition.second - y), 2.0));
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						if (enemyPosition == make_pair(-1, -1))
+						{
+							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
+							if (z < closestEnemy)
+							{
+								enemyPosition = make_pair(int(x), int(y));
+							}
+						}
+						else
+						{
+							enemyPosition = make_pair(int(x), int(y));
+						}
+					}
+				}
+
+			}
+			else if (theta > 1.0/2.0*pi && theta <= 1.0*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x-=10)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						if (enemyPosition != make_pair(-1, -1))
+						{
+							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
+							if (z < closestEnemy)
+							{
+								enemyPosition = make_pair(int(x), int(y));
+							}
+						}
+						else
+						{
+							enemyPosition = make_pair(int(x), int(y));
+						}
+					}
+				}
+
+			}
+			else if (theta > 1.0 && theta < 3.0/2.0*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x-=10)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						if (enemyPosition != make_pair(-1, -1))
+						{
+							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
+							if (z < closestEnemy)
+							{
+								enemyPosition = make_pair(int(x), int(y));
+							}
+						}
+						else
+						{
+							enemyPosition = make_pair(int(x), int(y));
+						}
+					}
+				}
+			}
+			else if (theta > 3/2*pi && theta < 2*pi)
+			{
+				double z = 0;
+
+				for (int x = shipPosition.first; z < radarSize; x+=10)
+				{
+					double y = m * x + b;
+					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
+
+					if (checkBounds(int(x), int(y)) && storedMapState[int(x)][int(y)] == 1)
+					{
+						if (enemyPosition != make_pair(-1, -1))
+						{
+							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
+							if (z < closestEnemy)
+							{
+								enemyPosition = make_pair(int(x), int(y));
+							}
+						}
+						else
+						{
+							enemyPosition = make_pair(int(x), int(y));
+						}
+					}
+				}
+			}
+
+		}
+
+		return enemyPosition;
+
+	}
+
+	bool AI::checkBounds(int x, int y)
+	{
+		if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
+		{
+			return true;
+		}
+
+		return false;
+	}
