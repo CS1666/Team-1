@@ -70,6 +70,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip.setRenderOrder(0);
 	aiShip.setF(-1);
+	aiShip.setGoal(0);
 	//cout<<"aiShip texture: "<<aiShip.getTexture()<<endl;
 	osSprite.push_back(&aiShip);
 
@@ -83,6 +84,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
 	aiShip2.setF(-1);
+	aiShip2.setGoal(0);
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	osSprite.push_back(&aiShip2);
 	//Ship testship(db3,tex3);
@@ -176,7 +178,6 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
-		
 		ai.executeAIActions();
 
 		//DOESN"T WORK AT THIS TIME
