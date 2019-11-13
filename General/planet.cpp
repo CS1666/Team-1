@@ -31,10 +31,10 @@ void Planet::initVelocity(Star& star)
 	//float vel = std::sqrt(1000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
 	vx = orbitalVel*cos(angle);
 	vy = orbitalVel*sin(angle);
-	std::cout << angle * 180 / 3.1415926 << std::endl;
-	std::cout << vx << std::endl;
-	std::cout << vy << std::endl;
-	std::cout << "oribital velocity " << orbitalVel<< std::endl;
+	//std::cout << angle * 180 / 3.1415926 << std::endl;
+	//std::cout << vx << std::endl;
+	//std::cout << vy << std::endl;
+	//std::cout << "oribital velocity " << orbitalVel<< std::endl;
 }
 
 int Planet::getRadius()

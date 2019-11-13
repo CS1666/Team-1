@@ -1,9 +1,11 @@
-
 #define PI 3.14159265
 #include "AIShip.h"
 
 AIShip::AIShip() : Ship() {};
-AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 1;};
+AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
+	renderOrder = 1;
+	pathset = false;
+};
 
 //ai follows path assigned to it by ai class
 void AIShip::followPath()
@@ -29,36 +31,9 @@ void AIShip::followPath()
 				rotationSet=true;
 			}
 			float angle=getAngle();
-			cout<<"newAngle:"<<newAngle<<endl;
-			cout<<"cur angle: "<<angle<<endl;
+			//cout<<"newAngle:"<<newAngle<<endl;
+			//cout<<"cur angle: "<<angle<<endl;
 			bool angleChanged=rotateToAngle();
-			if(newAngle>angle||newAngle-angle>=180)
-			{
-			    //pretty shit acceleration stuff tbh
-			    if(newAngle>angle+maxRotation)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle+rotation++);
-				else
-				   setAngle(angle+rotation);
-			    }
-			    else
-			       setAngle(angle+1);
-			    angleChanged=true;
-			}
-			else if(newAngle<angle||newAngle-angle<-180)
-			{
-			    if(angle-maxRotation>newAngle)
-			    {
-				if(maxRotation>rotation)
-				    setAngle(angle-(rotation++));
-				else
-				    setAngle(angle-rotation);
-			    }
-			    else
-				  setAngle(angle-1);
-			    angleChanged=true;
-			}
 			//entity.setAngle(122);
 		//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
 	        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
@@ -221,16 +196,41 @@ pair<int,int> AIShip::getDestination()
 	return destination;
 }
 
+bool AIShip::isPathSet(){
+	return pathset;
+}
+void AIShip::resetVariables()
+{
+    xVelocity=0;
+    yVelocity=0;
+    rotation=0;
+    maxVelocity=10;
+    maxRotation=10;
+    rotationSet=false;
+}
 void AIShip::setPath(queue<pair<int,int>>* thePath)
 {
-	//fullstops ship when setting path
-	//cout<<"something"<<endl;
-	xVelocity=0;
-	yVelocity=0;
-	rotation=0;
-	maxVelocity=10;
-	maxRotation=10;
-	rotationSet=false;
+    resetVariables();
     path = thePath;
     pathComplete=false;
+  pathset = true;
+}
+//note: need the texture for fireWeapon, idk why though
+Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
+{
+    //first calculate the angle to rotate to
+    if(!rotationSet)
+    {
+	calculateNewAngle(otherShip);
+	rotationSet=true;
+    }
+    //rotate to that angle
+    bool angleChanged=rotateToAngle();
+    //if not rotate then we are at angle we can fire at ship
+    if(!angleChanged)
+    {
+	rotationSet=false;
+	return fireWeapon(laser);
+    }
+    return Projectile(); //null/empty sprite
 }
