@@ -16,6 +16,46 @@ constexpr float MAX_ROTATIONRATE = 2;
 
 Ship::Ship(): Sprite() {};
 
+Ship::Ship(const Ship& ship){
+
+	
+	currKey = ship.currKey;
+
+    hull = ship.hull;
+    weaponType = ship.weaponType;
+    maxVelocity = ship.maxVelocity;
+
+    xVelocity = ship.xVelocity;
+    yVelocity = ship.yVelocity;
+    currHp = ship.currHp;;
+    maxHp = ship.maxHp;
+    mass = ship.mass;
+   
+
+    curRotation = ship.curRotation;
+    rotation = ship.rotation;
+    maxRotation = ship.maxRotation;
+    speedX = ship.speedX;
+    speedY = ship.speedY;
+    newAngle = ship.newAngle;
+
+    damageTaken = ship.damageTaken;
+    rotationSet = ship.rotationSet;
+   	isUser = ship.isUser;
+  	isAlly = ship.isAlly;
+
+    sprite = ship.sprite;
+    size = ship.size;
+    position = ship.position;
+
+    speed = ship.speed;
+    deltaV = ship.deltaV;
+    rotationRate = ship.rotationRate;
+    rotationSpeed = ship.rotationSpeed;
+    direction = ship.direction;
+
+};
+
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
@@ -95,13 +135,13 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 		rotationSpeed = -MAX_ROTATIONSPEED;
 	}
 
-	////std::cout << getVX() << ", " << getVY() <<std::endl;
+	//////std::cout << getVX() << ", " << getVY() <<std::endl;
 	setAngle(getAngle() + rotationSpeed);
 	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
 	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
-	std::vector<float> gravPulls = calculateGravityPull(*this, *osSprite[3]);
+	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
 	setSpeedX(speedX);
@@ -109,9 +149,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setX(getTrueX() + speedX);
 
 	position.first=(int)getTrueX()+speedX;
-	if(/*getTrueX() < 0 
-		|| (getX() + getW() > ZONE_WIDTH)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
 		position.first=(int)getTrueX()-speedX;
@@ -119,9 +157,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setY(getTrueY() + speedY);
 
 	position.second=(int)getTrueY()+speedY;
-	if(/*getY() < 0 
-		|| (getY() + getH() > ZONE_HEIGHT)
-		||*/ check_all_collisions(getDrawBox(), osSprite)){
+	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
 		position.second=(int)getTrueY()-speedY;
@@ -182,13 +218,13 @@ int Ship::getMass()
 
 Projectile Ship::fireWeapon(SDL_Texture* texture)
 {
-	//float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+  //float speedX = speed*cos((getAngle() - 90.0)*PI/180);
 	//float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 
 
 	//std::cout << "Firing Angle: " << getAngle() << std::endl;
 	int X = getTrueX() + (getW()/2);//*cos(getAngle());
-	int Y = getTrueY();// + (getW()/2)*sin(getAngle());
+	int Y = getTrueY()+ (getW()/2);//*sin(getAngle());
 	//std::cout << "Ship X: " << getTrueX() << std::endl;
 	//std::cout << "Ship Y: " << getTrueY() << std::endl;
 	//std::cout << "Laser X: " << X << std::endl;
@@ -248,11 +284,13 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		case SDLK_w:
 			
 			deltaV += (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_a:
 
 			rotationRate -= (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_s:
@@ -260,12 +298,14 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 			//setVY(getVY() + MAX_SPEED);
 			
 			deltaV -= (ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 
 		case SDLK_d:
 			
 			//setVX(getVX() + MAX_SPEED);
 			rotationRate += (ROTATION_ACCEL * TimeData::get_timestep());
+			Audio::play_thrust_sound();
 			break;
 		case SDLK_x:
 			speed = 0;
@@ -274,11 +314,11 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		case SDLK_g:
 			if(getCurrHp() != getMaxHp())	
 				setCurrHp(getCurrHp() + 5);
-			//std::cout << "Current hp: " << getCurrHp() << std::endl;
+			////std::cout << "Current hp: " << getCurrHp() << std::endl;
 			break;
 		case SDLK_f:
 			setCurrHp(getCurrHp() - 5);
-			//std::cout << "Current hp: " << getCurrHp() << std::endl;
+			////std::cout << "Current hp: " << getCurrHp() << std::endl;
 			break;
 		case SDLK_SPACE:
 			//fireWeapon();
