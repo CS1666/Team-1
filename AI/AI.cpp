@@ -66,8 +66,9 @@ void AI::Flee(AIShip* ship){
 //if something on radar switch goal, else do nothing
 void AI::doNothing(AIShip* ship)
 {
+    //note: should have like a 2 second timer or something before becoming active
     if(radar(*ship).first!=-1)
-	ship->setGoal(2);
+	ship->setGoal(1);
 }
 void AI::setShips(vector<AIShip*>* newShips)
 {
