@@ -333,16 +333,19 @@ void run_phy_enviro(gpRender gr){
 
 		if(is_space_station_in_range){
 		//we display the E png to show that space station can be accessed
-				SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderPresent(gr.getRender());
+			if(in_space_station_menu){
+				SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
 				SDL_RenderPresent(gr.getRender());
-				if(in_space_station_menu){
-					SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
-					SDL_RenderPresent(gr.getRender());
-				}
+			}
 				
 		}
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
-		
+		if(playerent.getCurrHp() <=0 )
+		{
+			gameon = false;
+		}
 		
 	}
 	Audio::close();
