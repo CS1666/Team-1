@@ -16,6 +16,10 @@ class Sprite{
 		Sprite();
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex);
 		Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
+		Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int anim);
 		Sprite(const Sprite &spr);
 
 		//Destructors
@@ -47,23 +51,27 @@ class Sprite{
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
 		virtual void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
-		/*bool check_collision(SDL_Rect* a, SDL_Rect* b);
+		bool check_collision(SDL_Rect* a, SDL_Rect* b);
+		bool check_collision(SDL_Rect* a, NSDL_Circ* b);
+		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
-*/
+		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
 		
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
+		SDL_Rect* getCollisionBox();
 		bool isRectEnt();  
 
 		//Methods that deal with Circle drawn entities
-		NSDL_Circ* getDrawCirc();
+		NSDL_Circ* getCollisionCirc();
 		bool isCircEnt(); 
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
 	protected:
 		SDL_Rect drawBox;
-		NSDL_Circ drawCirc;
+		SDL_Rect collisionBox;
+		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
 		int type = 0;

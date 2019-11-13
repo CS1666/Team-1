@@ -9,6 +9,7 @@
 #include "../General/Sprite.h"
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
+#include "../General/planet.h"
 #include "../General/Star.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
@@ -92,8 +93,10 @@ void run_demo(gpRender gr){
 
 
 	//Audio Initilization
-	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
+	Audio::set_solar(true);
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -121,47 +124,58 @@ void run_demo(gpRender gr){
 	//SDL_Rect db2 = {800,400,332,315};
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 
-	Star starent(db2, tex2);
+	NSDL_Circ dc2 = {db2};
+
+	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
-	Sprite planet1ent(db3, tex3);
+	NSDL_Circ dc3 = {db3};
+
+	Planet planet1ent(db3, tex3, dc3);
 
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
 
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
+	NSDL_Circ dc4 = {db4};
 
-	Sprite planet2ent(db4, tex4);
+	Planet planet2ent(db4, tex4, dc4);
 
 	osSprite.push_back(&planet2ent);
 
 	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc5 = {db5};
 
-	Sprite planet3ent(db5, tex5);
+	Planet planet3ent(db5, tex5, dc5);
 
 	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc6 = {db6};
 
-	Sprite planet4ent(db6, tex6);
+	Planet planet4ent(db6, tex6, dc6);
 
 	osSprite.push_back(&planet4ent);
 
 	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
-	Sprite planet5ent(db7, tex7);
+	NSDL_Circ dc7 = {db7};
+	
+	Planet planet5ent(db7, tex7, dc7);
 
 	osSprite.push_back(&planet5ent);
 
 	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
-	Sprite planet6ent(db8, tex8);
+	NSDL_Circ dc8 = {db8};
+	
+	Sprite planet6ent(db8, tex8, dc8);
 
 	osSprite.push_back(&planet6ent);
 
@@ -245,6 +259,9 @@ void run_demo(gpRender gr){
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
+	
+	Audio::play_music();
+	
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -277,6 +294,7 @@ void run_demo(gpRender gr){
 		playerent.setY(startPlayerY);
 		playerent.speed = 0;
 		playerent.deltaV = 0;
+		int side = 0;
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
@@ -325,6 +343,22 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
+				if(playerent.getTrueX() < 0)
+				{
+					side = 2;
+				}
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
+				{
+					side = 0;
+				}
+				else if(playerent.getY() < 0)
+				{
+					side = 1;
+				}
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
+				{
+					side = 3;
+				}
 				
 			}
       
@@ -379,25 +413,40 @@ void run_demo(gpRender gr){
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			Audio::set_solar(solar);
 		}
 		
-		Ellers_Maze maze;
+		Ellers_Maze maze(side);
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
-		int col = 0;
-		int row = 0;
+		int col = maze.getStartRow();
+		int row = maze.getStartCol();
 		int numCols = maze.getRowSize();
 		int numRows = maze.getColSize();
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-		SDL_Rect warpRect = {7, 10, 25, 25};
+		int spawnCol = 7 + col * indexSize;
+		int spawnRow = 10 + row * indexSize;
+		int spotCol = -1273 + col * indexSize;;
+		int spotRow = -710 + row * indexSize;
+			
+		SDL_Rect warpRect = {spawnCol, spawnRow, 25, 25};
+		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
+
+		SDL_Rect spotlightRect = {spotCol, spotRow, 2560, 1440};
+		bool spotlight = true;
 
 		while(mazeCheck && gameon)
 		{	
+
 			SDL_RenderClear(gr.getRender());
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
+			if(spotlight)
+			{
+				SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
+			}
 			SDL_RenderPresent(gr.getRender());
 			
 			while(SDL_PollEvent(&e)) {
@@ -416,6 +465,7 @@ void run_demo(gpRender gr){
 							if(col != numCols-1 and !maze.hasBottom(col, row)){
 								col++;
 								warpRect.x += indexSize;
+								spotlightRect.x += indexSize;
 							}
 						}
 						break;
@@ -426,6 +476,7 @@ void run_demo(gpRender gr){
 							if(col != 0 and !maze.hasBottom(col-1,row)){
 								col--;
 								warpRect.x -= indexSize;
+								spotlightRect.x -= indexSize;
 							}
 						}
 						break;
@@ -436,6 +487,7 @@ void run_demo(gpRender gr){
 							if(row != 0 and !maze.hasRight(col,row-1)){
 								row--;
 								warpRect.y -= indexSize;
+								spotlightRect.y -= indexSize;
 							}
 						}
 						break;
@@ -446,9 +498,22 @@ void run_demo(gpRender gr){
 							if(row != numRows-1 and !maze.hasRight(col, row)){
 								row++;
 								warpRect.y += indexSize;
+								spotlightRect.y += indexSize;
 							}
 						}
 						break;
+					case SDLK_c:
+						if(e.type == SDL_KEYDOWN)
+						{
+							if(spotlight)
+							{
+								spotlight = false;
+							}	
+							else
+							{
+								spotlight = true;
+							}
+						}
 				}
 				
 			}
