@@ -21,6 +21,7 @@ class AI
     private:
         vector<AIShip*>* ships;
         vector<vector<bool> > storedMapState; //probably needs to be changed
+        vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
 
@@ -31,6 +32,7 @@ class AI
         vector<vector<bool>> getMapState();
         void lineOfSight();
         bool createMapState(Sector currentSector);
+        bool createShipState(Sector currentSector);
         queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
         void setPlayerShip(Hero* playerShip);
