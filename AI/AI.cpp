@@ -5,11 +5,7 @@ void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
 
-            for(AIShip* ship : *ships){
-            	radar(*ship);
-                followPlayer(ship);
-            }
-
+        radar(*ship);
 
         switch(ship->getGoal()){
 
