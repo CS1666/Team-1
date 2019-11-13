@@ -5,7 +5,7 @@
         void AI::executeAIActions(){
 
             for(AIShip* ship : *ships){
-
+            	radar(*ship);
                 followPlayer(ship);
             }
 
@@ -139,6 +139,7 @@
         void AI::setPathfinder(Pathfinder* npf){
             pathfinder = npf;
         }
+
 void AI::orderShip(AIShip theShip, Ship player)
 {
     if(theShip.getGoal()==0)//follow player
