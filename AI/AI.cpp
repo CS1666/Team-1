@@ -4,33 +4,22 @@
 void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
-
-            for(AIShip* ship : *ships){
-            	radar(*ship);
-                followPlayer(ship);
-            }
-
-
         switch(ship->getGoal()){
-
             case(0)://Action 1: Follow Player
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
-                Defend(ship);
+                defendPosition(ship);
                 break;
 
             case(2)://Action 3: Attack Enemy
                 Attack(ship);
                 break;
-
-            
             case(3)://Action 4: Run away from enemy
                 Flee(ship);
                 break;
-
-            default://If not assigned goal follow player
-                followPlayer(ship);
+            default://If not assigned goal do nothing
+                doNothing(ship);
                 break;
 
         }
@@ -55,8 +44,15 @@ void AI::followPlayer(AIShip* ship){
 }
 
 
-void AI::Defend(AIShip* ship){
-
+void AI::defendPosition(AIShip* ship){
+    pair<int,int> shipDetected=radar(*ship);
+    cout<<shipDetected.first<<endl;
+    cout<<shipDetected.second<<endl;
+    if(shipDetected.first!=-1)
+    {
+	ship->attackShip(shipDetected,nullptr);//should be a laser texture
+    }
+   //todo: have different radar range?
 }
 
 void AI::Attack(AIShip* ship){
@@ -67,7 +63,12 @@ void AI::Flee(AIShip* ship){
 
 }
 
-
+//if something on radar switch goal, else do nothing
+void AI::doNothing(AIShip* ship)
+{
+    if(radar(*ship).first!=-1)
+	ship->setGoal(2);
+}
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;

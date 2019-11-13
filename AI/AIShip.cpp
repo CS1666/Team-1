@@ -199,16 +199,18 @@ pair<int,int> AIShip::getDestination()
 bool AIShip::isPathSet(){
 	return pathset;
 }
+void AIShip::resetVariables()
+{
+    xVelocity=0;
+    yVelocity=0;
+    rotation=0;
+    maxVelocity=10;
+    maxRotation=10;
+    rotationSet=false;
+}
 void AIShip::setPath(queue<pair<int,int>>* thePath)
 {
-	//fullstops ship when setting path
-	//cout<<"something"<<endl;
-	xVelocity=0;
-	yVelocity=0;
-	rotation=0;
-	maxVelocity=10;
-	maxRotation=10;
-	rotationSet=false;
+    resetVariables();
     path = thePath;
     pathComplete=false;
   pathset = true;
@@ -227,6 +229,7 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
     //if not rotate then we are at angle we can fire at ship
     if(!angleChanged)
     {
+	rotationSet=false;
 	return fireWeapon(laser);
     }
     return Projectile(); //null/empty sprite

@@ -41,10 +41,10 @@ class AI
 
 
         void followPlayer(AIShip* ship);
-        void Defend(AIShip* ship);
+        void defendPosition(AIShip* ship);
         void Attack(AIShip* ship);
         void Flee(AIShip* ship);
-    
+	void doNothing(AIShip* ship);
 
         pair<int, int> radar(AIShip aiship);
         bool checkBounds(int x, int y);
