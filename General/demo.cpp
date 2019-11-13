@@ -87,7 +87,7 @@ void run_demo(gpRender gr){
 	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite; // vector for collision checker
+	std::vector<Sprite*> osSprite; // vector for collision checker and rendering
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
 
@@ -409,7 +409,7 @@ void run_demo(gpRender gr){
 			}
 			else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
-				fixed = true;
+				fixed = true;bgzonelayer1;
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
