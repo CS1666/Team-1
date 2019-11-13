@@ -105,7 +105,7 @@ void run_phy_enviro(gpRender gr){
 	//planet1ent.initVelocity(starent);
 
 	
-	//Ship Cruiser initilization
+	/*//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db5 = {500,300,50,50};
 	Ship ement(db5, tex_em);
@@ -119,7 +119,7 @@ void run_phy_enviro(gpRender gr){
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
 	osSprite.push_back(&ement2);
-	osShip.push_back(&ement2);
+	osShip.push_back(&ement2);*/
 
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
@@ -266,7 +266,7 @@ void run_phy_enviro(gpRender gr){
 					}
 					break;
 
-				case SDLK_p:
+				/*case SDLK_p:
 					if(e.type == SDL_KEYDOWN){
 						ement.setCurrHp(0);
 					}
@@ -276,13 +276,13 @@ void run_phy_enviro(gpRender gr){
 					if(e.type == SDL_KEYDOWN){
 						ement2.setCurrHp(0);
 					}
-					break;
+					break;*/
 			}
 		}
 		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
-		planet1ent.updatePosition();
+		planet1ent.updatePosition(playerent);
 		updatePosition3(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
