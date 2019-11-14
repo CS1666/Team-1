@@ -26,7 +26,7 @@ public:
 	void setSprite(string s);
 	int getMass();
 	void setMass(int newMass);
-	void updatePosition();
+	void updatePosition(Sprite& playerent);
 	//for now only calculate the gravity contribution from the sun
 	std::vector<float> calulateGravity(Star& sun);
 

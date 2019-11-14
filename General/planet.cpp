@@ -31,10 +31,10 @@ void Planet::initVelocity(Star& star)
 	//float vel = std::sqrt(1000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
 	vx = orbitalVel*cos(angle);
 	vy = orbitalVel*sin(angle);
-	std::cout << angle * 180 / 3.1415926 << std::endl;
-	std::cout << vx << std::endl;
-	std::cout << vy << std::endl;
-	std::cout << "oribital velocity " << orbitalVel<< std::endl;
+	//std::cout << angle * 180 / 3.1415926 << std::endl;
+	//std::cout << vx << std::endl;
+	//std::cout << vy << std::endl;
+	//std::cout << "oribital velocity " << orbitalVel<< std::endl;
 }
 
 int Planet::getRadius()
@@ -77,7 +77,7 @@ void Planet::setMass(int newMass)
 	mass = newMass;	
 }
 
-void Planet::updatePosition()
+void Planet::updatePosition(Sprite& playerent)
 {
 	std::vector<float> gravs = calulateGravity(sun);
 	fx = gravs[0];
@@ -90,6 +90,12 @@ void Planet::updatePosition()
 	vy += fy*TimeData::get_timestep();
 	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
 	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
+
+	if(check_collision(this->getDrawBox(), playerent.getDrawBox()))
+	{
+		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
+		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
+	}
 	std::cout << "planet X: " << this->getTrueX() << std::endl;
 	std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
@@ -113,4 +119,3 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 	float gravY = grav*sin(pointAngle);
 	return {gravX, gravY};
 }
-

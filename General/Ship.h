@@ -7,6 +7,7 @@
 #include "Projectile.h"
 #include <queue>
 #include "gpRender.h"
+#include "../Physics/Audio.h"
 
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
@@ -55,6 +56,7 @@ class Ship : public Sprite
         float direction;
 
         Ship();
+        Ship(const Ship& ship);
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass);
@@ -67,6 +69,8 @@ class Ship : public Sprite
 
         void setSpeedX(float speed);
         void setSpeedY(float speed);
+        float getSpeedX();
+        float getSpeedY();
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);

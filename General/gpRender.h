@@ -1,9 +1,11 @@
+#pragma once
 #include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
 #include "Sprite.h"
-#pragma once
+#include "../General/Ship.h"
+
 
 
 class gpRender{
@@ -23,6 +25,7 @@ class gpRender{
 
 
 		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
+		void renderOnScreenEntity(std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
 
 		//Renders background on screen (camera?)
 		//void renderBackground(std::);
@@ -47,9 +50,10 @@ class gpRender{
 		int getImageWidth();
 		int getImageHeight();
 		
+		void pushSprite(Sprite* ent);
+		void checkForDeath();
 
-
-
+		std::vector<Sprite*> get_osSprite();
 	private:
 		SDL_Renderer* gRenderer;
 		SDL_Window* gWindow;
@@ -64,5 +68,6 @@ class gpRender{
 		int image_width;
 		int image_height;
 		SDL_Texture *maze_wall;
-		
+		std::vector<Sprite*> osEntity;
+
 };
