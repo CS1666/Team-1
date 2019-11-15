@@ -417,8 +417,13 @@ void run_demo(gpRender gr){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 				fixed = true;bgzonelayer1;
 			}
+			
+			
+			SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
+			SDL_Rect mapRect = {1080, 0, 200, 200};
 
-			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
+			SDL_RenderCopy(gr.getRender(), mapTex, nullptr, &mapRect);
 			Audio::set_solar(solar);
 		}
 		
