@@ -55,13 +55,13 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 			break;
 		case 2:
 		{
-			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/Asteroid.png", "Assets/Objects/planetmid.png","Assets/Objects/planetnear.png");
 			return sunAsset;
 		}
 			break;
 		case 3:
 		{
-			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetmid.png", "Assets/Objects/planetmid.png","Assets/Objects/planetnear.png");
 			return sunAsset;
 		}
 			break;
@@ -102,11 +102,18 @@ void run_demo(gpRender gr){
 
 
 	bool fixed = false;
+	bool something = true;
 	//call tuple stuff
 	int sunHeight = std::get<0>(sunAsset);
 	int sunWidth = std::get<1>(sunAsset); 
 	std::string z = std::get<2>(sunAsset);
+	std::string q = std::get<3>(sunAsset);
+	std::string u = std::get<4>(sunAsset);
+	std::string o = std::get<5>(sunAsset);
 
+	// Star setStar;
+	// setStar.setType(z);
+	//Star starent;
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
@@ -119,18 +126,17 @@ void run_demo(gpRender gr){
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
 	
-	
+	//SDL_Texture* tex2 = gr.loadImage(z);
+	//if(something == true){
 	SDL_Texture* tex2 = gr.loadImage(z);
-	//SDL_Rect db2 = {800,400,332,315};
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
-
 	NSDL_Circ dc2 = {db2};
-
 	Star starent(db2, tex2, dc2);
-
+	osSprite.push_back(&starent);
+	//}
 	osSprite.push_back(&starent);
 
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
 
@@ -138,7 +144,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet1ent);
 
-	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Texture* tex4 = gr.loadImage(u);
 
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
@@ -147,7 +153,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet2ent);
 
-	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Texture* tex5 = gr.loadImage(o);
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc5 = {db5};
 
@@ -155,7 +161,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet3ent);
 
-	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Texture* tex6 = gr.loadImage(o);
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
 
@@ -163,7 +169,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet4ent);
 
-	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex7 = gr.loadImage(q);
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
 	NSDL_Circ dc7 = {db7};
 	
@@ -171,7 +177,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet5ent);
 
-	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Texture* tex8 = gr.loadImage(u);
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
 	NSDL_Circ dc8 = {db8};
 	
