@@ -65,7 +65,9 @@
 	int Sprite::getY(){
 		return drawBox.y;
 	}
-	
+	int Sprite::getMass(){
+		return mass;
+	}
 	float Sprite::getTrueX()
 	{
 		return Sprite::x;

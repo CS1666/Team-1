@@ -6,14 +6,14 @@ using namespace std;
 
 
 
-Planet::Planet(): Sprite() {orbitalVel = 100;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(dBox, aTex, dCirc), mass{mass} {renderOrder = 2;orbitalVel = 100;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass, Star &sun, float vel): Sprite(dBox, aTex, dCirc), mass{mass}, orbitalVel{vel}{initVelocity(sun);renderOrder = 2;};
+Planet::Planet(): Sprite() {orbitalVel = 100;mass = 10;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 10;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = 10;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = 10;};
 
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass} {renderOrder = 2;orbitalVel = 100;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int mass, Star &sun, float vel): Sprite(dBox, aTex), mass{mass}, orbitalVel{vel}{initVelocity(sun);renderOrder = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 10;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = 10;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);setMass(20);};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;
@@ -67,17 +67,12 @@ void Planet::setSprite(string s)
 	sprite = s;
 }
 
-int Planet::getMass()
-{
-	return mass;	
-}
-
 void Planet::setMass(int newMass)
 {
 	mass = newMass;	
 }
 
-void Planet::updatePosition()
+void Planet::updatePosition(Sprite& playerent)
 {
 	std::vector<float> gravs = calulateGravity(sun);
 	fx = gravs[0];
@@ -90,6 +85,12 @@ void Planet::updatePosition()
 	vy += fy*TimeData::get_timestep();
 	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
 	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
+
+	if(check_collision(this->getDrawBox(), playerent.getDrawBox()))
+	{
+		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
+		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
+	}
 	std::cout << "planet X: " << this->getTrueX() << std::endl;
 	std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
@@ -107,6 +108,7 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 		pointAngle += 3.1415926;
 	}
 	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
+
 	float grav = (orbitalVel*orbitalVel)/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
 	//grav *= TimeData::get_timestep()*TimeData::get_timestep();
 	float gravX = grav*cos(pointAngle);

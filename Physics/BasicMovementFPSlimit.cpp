@@ -4,7 +4,7 @@
 
 #define PI 3.14159265
 
-constexpr double ACCEL = 1.0;
+constexpr double ACCEL = 30.0;
 constexpr double ROTATION_ACCEL = 7200.0;
 constexpr float MAX_SPEED = 6;
 constexpr float MAX_DELTAV = 1;
@@ -340,7 +340,7 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 			|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
 			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
-			ent.setX(ent.getTrueX() - speedX);
+			ent.setX(ent.getTrueX() - momentumShift[0]);
 		}
 
 		ent.setY(ent.getTrueY() + speedY);
@@ -349,7 +349,7 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 			|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
 			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
 
-			ent.setY(ent.getTrueY() - speedY);
+			ent.setY(ent.getTrueY() - momentumShift[1]);
 		}
 	}else{
 		ent.setSpeedX(speedX);
