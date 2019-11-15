@@ -4,8 +4,10 @@
 void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
+
+    	pair<int, int> radarOut = radar(*ship);
       
-        radar(*ship);
+        std::cout << radarOut.first << ", " << radarOut.second << std::endl;
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
@@ -49,8 +51,8 @@ void AI::followPlayer(AIShip* ship){
 
 void AI::defendPosition(AIShip* ship){
     pair<int,int> shipDetected=radar(*ship);
-    cout<<shipDetected.first<<endl;
-    cout<<shipDetected.second<<endl;
+   // cout<<shipDetected.first<<endl;
+    //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
 	ship->attackShip(shipDetected,nullptr);//should be a laser texture

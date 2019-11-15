@@ -66,7 +66,6 @@ void run_phy_enviro(gpRender gr){
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = false;
-	
 	//gpRender object that is used to render object onto screen
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -78,7 +77,6 @@ void run_phy_enviro(gpRender gr){
 	osSprite.push_back(&playerent);
 	osShip.push_back(&playerent);
 	
-
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
@@ -86,25 +84,20 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
-
-	std::vector <std::pair<int, int>> randCoords = randNumP();
-
+	//std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,1, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,10, starent, 100);
 	osSprite.push_back(&planet1ent);
-
+	std::cout<< "mass " << starent.getMass() << std::endl;
 	//Space Station Initialization-
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png"); //placeholder img
 	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SpaceStation ss_ent(db4, tex_ss);
 	//osSprite.push_back(&ss_ent);
 	osSprite.push_back(&ss_ent);
-	
-	//planet1ent.initVelocity(starent);
-
 	
 	/*//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -188,8 +181,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
-	
-	
+
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -368,18 +360,21 @@ void run_phy_enviro(gpRender gr){
 		/*
 		if(is_space_station_in_range){
 		//we display the E png to show that space station can be accessed
-				SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderPresent(gr.getRender());
+			if(in_space_station_menu){
+				SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
 				SDL_RenderPresent(gr.getRender());
-				if(in_space_station_menu){
-					SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
-					SDL_RenderPresent(gr.getRender());
-				}
+			}
 				
 		}
 		*/
 
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
-		
+		if(playerent.getCurrHp() <=0 )
+		{
+			gameon = false;
+		}
 		
 	}
 	Audio::close();
