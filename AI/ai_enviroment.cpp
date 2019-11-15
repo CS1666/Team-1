@@ -115,6 +115,8 @@ void run_ai_enviro(gpRender gr){
 	sector.setSize({1280, 720});
 	sector.setStars({star});
 	osSprite.push_back(&starent);
+
+	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
 
 
