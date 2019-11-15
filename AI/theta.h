@@ -42,5 +42,3 @@
             bool isOutofBound(Point s, int xdif, int ydif);
             std::vector<Point> defineNeighbors(Point s);
     };
-
-

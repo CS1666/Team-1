@@ -1,0 +1,4 @@
+Build Instructions:
+compile code with "make rebuild"
+run code with "./main.o" 
+"./main.o" supports to arguments a, l, and p for AI, Level gen, and Physics environments respectively

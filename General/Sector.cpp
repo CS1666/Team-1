@@ -11,6 +11,11 @@ void Sector::setStars(vector<Star> newStars)
 	__stars = newStars;
 }
 
+void Sector::setShips(vector<Ship *> newShips)
+{
+	__ships = newShips;
+}
+
 void Sector::setSize(vector<int> newSize)
 {
 	__size = newSize;
@@ -34,12 +39,36 @@ vector<vector<int> > Sector::getState()
 
 	}
 
-	for (Ship ship : __ships)
+	if (!__ships.empty())
 	{
-		pair<int, int> size = ship.getSize();
-		pair<int, int> position = ship.getPosition();
+		for (Ship *ship : __ships)
+		{
+			pair<int, int> size = ship->getSize();
+			double x = ship->getTrueX();
+			double y = ship->getTrueX();
 
-		currentState.push_back({position.first, position.second, size.first, size.second});
+			currentState.push_back({(int)x, (int)y, size.first, size.second});
+		}
+	}
+
+	return currentState;
+}
+
+vector<vector<int> > Sector::getShipState()
+{
+	std::vector<std::vector<int> > currentState;
+
+
+	if (!__ships.empty())
+	{
+		for (Ship *ship : __ships)
+		{
+			pair<int, int> size = ship->getSize();
+			double x = ship->getTrueX();
+			double y = ship->getTrueX();
+
+			currentState.push_back({(int)x, (int)y, size.first, size.second});
+		}
 	}
 
 	return currentState;

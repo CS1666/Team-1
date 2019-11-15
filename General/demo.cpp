@@ -55,13 +55,13 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 			break;
 		case 2:
 		{
-			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(250, 250,  "Assets/Objects/white_dwarf.png","Assets/Objects/Asteroid.png", "Assets/Objects/planetmid.png","Assets/Objects/planetnear.png");
 			return sunAsset;
 		}
 			break;
 		case 3:
 		{
-			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetfar.png", "Assets/Objects/planetmid.png","Assets/Objects/planetmid.png");
+			std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset(300, 300,  "Assets/Objects/yellow_dwarf.png", "Assets/Objects/planetmid.png", "Assets/Objects/planetmid.png","Assets/Objects/planetnear.png");
 			return sunAsset;
 		}
 			break;
@@ -87,26 +87,33 @@ void run_demo(gpRender gr){
 	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
-	std::vector<Sprite*> osSprite; // vector for collision checker
+	std::vector<Sprite*> osSprite; // vector for collision checker and rendering
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
 
 
 	//Audio Initilization
-	Audio::load_chunk("Assets/Objects/thrustSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
-
+	Audio::set_solar(true);
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 
 	bool fixed = false;
+	bool something = true;
 	//call tuple stuff
 	int sunHeight = std::get<0>(sunAsset);
 	int sunWidth = std::get<1>(sunAsset); 
 	std::string z = std::get<2>(sunAsset);
+	std::string q = std::get<3>(sunAsset);
+	std::string u = std::get<4>(sunAsset);
+	std::string o = std::get<5>(sunAsset);
 
+	// Star setStar;
+	// setStar.setType(z);
+	//Star starent;
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
@@ -119,18 +126,17 @@ void run_demo(gpRender gr){
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
 	
-	
+	//SDL_Texture* tex2 = gr.loadImage(z);
+	//if(something == true){
 	SDL_Texture* tex2 = gr.loadImage(z);
-	//SDL_Rect db2 = {800,400,332,315};
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
-
 	NSDL_Circ dc2 = {db2};
-
 	Star starent(db2, tex2, dc2);
-
+	osSprite.push_back(&starent);
+	//}
 	osSprite.push_back(&starent);
 
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
 
@@ -138,7 +144,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet1ent);
 
-	SDL_Texture* tex4 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Texture* tex4 = gr.loadImage(u);
 
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
@@ -147,7 +153,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet2ent);
 
-	SDL_Texture* tex5 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Texture* tex5 = gr.loadImage(o);
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc5 = {db5};
 
@@ -155,7 +161,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet3ent);
 
-	SDL_Texture* tex6 = gr.loadImage("Assets/Objects/planetnear.png");
+	SDL_Texture* tex6 = gr.loadImage(o);
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
 
@@ -163,7 +169,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet4ent);
 
-	SDL_Texture* tex7 = gr.loadImage("Assets/Objects/planetfar.png");
+	SDL_Texture* tex7 = gr.loadImage(q);
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
 	NSDL_Circ dc7 = {db7};
 	
@@ -171,7 +177,7 @@ void run_demo(gpRender gr){
 
 	osSprite.push_back(&planet5ent);
 
-	SDL_Texture* tex8 = gr.loadImage("Assets/Objects/planetmid.png");
+	SDL_Texture* tex8 = gr.loadImage(u);
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
 	NSDL_Circ dc8 = {db8};
 	
@@ -294,6 +300,7 @@ void run_demo(gpRender gr){
 		playerent.setY(startPlayerY);
 		playerent.speed = 0;
 		playerent.deltaV = 0;
+		int side = 0;
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
@@ -342,6 +349,22 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
+				if(playerent.getTrueX() < 0)
+				{
+					side = 2;
+				}
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
+				{
+					side = 0;
+				}
+				else if(playerent.getY() < 0)
+				{
+					side = 1;
+				}
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
+				{
+					side = 3;
+				}
 				
 			}
       
@@ -392,32 +415,44 @@ void run_demo(gpRender gr){
 			}
 			else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
-				fixed = true;
+				fixed = true;bgzonelayer1;
 			}
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			Audio::set_solar(solar);
 		}
 		
-		Ellers_Maze maze;
+		Ellers_Maze maze(side);
 		SDL_RenderClear(gr.getRender());
 		bool mazeCheck = true;
-		int col = 0;
-		int row = 0;
+		int col = maze.getStartRow();
+		int row = maze.getStartCol();
 		int numCols = maze.getRowSize();
 		int numRows = maze.getColSize();
 		int indexSize = 36;
 		SDL_Texture* warpTex = gr.loadImage("Assets/Objects/warpShip.png");
-		SDL_Rect warpRect = {7, 10, 25, 25};
+		int spawnCol = 7 + col * indexSize;
+		int spawnRow = 10 + row * indexSize;
+		int spotCol = -1273 + col * indexSize;;
+		int spotRow = -710 + row * indexSize;
+			
+		SDL_Rect warpRect = {spawnCol, spawnRow, 25, 25};
 		SDL_Texture* spotlightTex = gr.loadImage("Assets/Objects/spotlight.png");
-		SDL_Rect spotlightRect = {-1273, -710, 2560, 1440};
+
+		SDL_Rect spotlightRect = {spotCol, spotRow, 2560, 1440};
+		bool spotlight = true;
 
 		while(mazeCheck && gameon)
 		{	
+
 			SDL_RenderClear(gr.getRender());
 			
 			maze.drawMaze(gr.getWall(), gr.getRender());
 			SDL_RenderCopy(gr.getRender(), warpTex, nullptr, &warpRect);
-			SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
+			if(spotlight)
+			{
+				SDL_RenderCopy(gr.getRender(), spotlightTex, nullptr, &spotlightRect);
+			}
 			SDL_RenderPresent(gr.getRender());
 			
 			while(SDL_PollEvent(&e)) {
@@ -473,6 +508,18 @@ void run_demo(gpRender gr){
 							}
 						}
 						break;
+					case SDLK_c:
+						if(e.type == SDL_KEYDOWN)
+						{
+							if(spotlight)
+							{
+								spotlight = false;
+							}	
+							else
+							{
+								spotlight = true;
+							}
+						}
 				}
 				
 			}

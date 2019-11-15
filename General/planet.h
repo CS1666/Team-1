@@ -24,9 +24,8 @@ public:
 	void setRadius(int r);
 	void setVelocity(int v);
 	void setSprite(string s);
-	int getMass();
 	void setMass(int newMass);
-	void updatePosition();
+	void updatePosition(Sprite& playerent);
 	//for now only calculate the gravity contribution from the sun
 	std::vector<float> calulateGravity(Star& sun);
 
@@ -42,7 +41,6 @@ private:
 	//float totalGrav;
 	string sprite;
 	Star sun;
-	int mass;
 	float planetX = 0;
 	float planetY = 0;
 	float bodyX = 0;
