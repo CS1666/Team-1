@@ -49,8 +49,8 @@ void AI::followPlayer(AIShip* ship){
 
 void AI::defendPosition(AIShip* ship){
     pair<int,int> shipDetected=radar(*ship);
-    cout<<shipDetected.first<<endl;
-    cout<<shipDetected.second<<endl;
+   // cout<<shipDetected.first<<endl;
+    //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
 	ship->attackShip(shipDetected,nullptr);//should be a laser texture
