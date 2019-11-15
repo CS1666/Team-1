@@ -13,6 +13,7 @@
 #include "AIShip.h"
 #include "theta.h"
 #include "../Physics/TimeData.h"
+#include "../General/constants.cpp"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -29,7 +30,7 @@ void run_ai_enviro(gpRender gr){
 
 
 	//Vector used to store all on screen entities
-
+	vector<SDL_Texture*> allTextures=initTextures(gr);
 	std::vector<Sprite*> osSprite;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
@@ -44,7 +45,7 @@ void run_ai_enviro(gpRender gr){
 	//----------------------Player Ship initilization--------------------//
 	
 
-	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Texture* ptex = allTextures.at(TEX_FIGHT_HERO);
 	SDL_Rect pdb = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 
