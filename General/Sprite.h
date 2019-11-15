@@ -56,7 +56,7 @@ class Sprite{
 		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
-		
+		int getMass();
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
 		SDL_Rect* getCollisionBox();
@@ -68,6 +68,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
+
 	protected:
 		SDL_Rect drawBox;
 		SDL_Rect collisionBox;
@@ -83,7 +84,7 @@ class Sprite{
 		// 3 = UI
 		// 4 = black hole
 		int renderOrder;
-
+		int mass = 0;
 		//Velocity variables
 		//Probably should be moved to some physic related object
 		float angle = 0.0;

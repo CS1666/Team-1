@@ -13,6 +13,7 @@ class Ellers_Maze
 public:
 	/*Default Constructor*/
 	Ellers_Maze();
+	Ellers_Maze(int side);
 
 	/*Get if current cell has bottom wall*/
 	bool hasBottom(int row, int col);
@@ -30,8 +31,14 @@ public:
 
 	int getRowSize();
 	int getColSize();
-	
+	int getStartRow();
+	int getStartCol();
+	int getEndRow();
+	int getEndCol();
+	//int getSide();	
+
 	bool isEnd(int row, int col);
+	
 
 private:
 
@@ -51,6 +58,11 @@ private:
 
 	struct cell mazeCells[ROW_SIZE][COL_SIZE];	//Maze structure
 	unsigned int seed;							//Seed for reusing mazes or testing
+	int side;
+	int endRow;
+	int endCol;
+	int startRow;
+	int startCol;
 
 	/*Start of Recursive Backtracking algorithm*/
 	void startCreate();
@@ -58,10 +70,10 @@ private:
 	/*Recursive Backtracking algorithm, fallback*/
 	void recMaze(int i, int j, int prevDir);
 
+	void setStart(int side);
 	void setEnd(int side);
 
-	int rowEnd;
-	int colEnd;
+
 
 
 	/*Eller's Maze*/

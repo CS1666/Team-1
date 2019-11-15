@@ -52,17 +52,19 @@ std::vector<std::pair<int, int>> randNumP(){
 void run_phy_enviro(gpRender gr){
 	//Vector used to store all on screen entities
 	std::vector<Sprite*> osSprite;
+	//Vector used to store all on screen entities
+	std::vector<Ship*> osShip;
 	
 	//load audio for sound
 	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
-	Audio::load_music("Assets/Sound/ambientSpace.wav");
+	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
+	Audio::set_solar(true);
 	bool gameon = false;
 	int titleFrame = 0;
 
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = false;
-	
 	//gpRender object that is used to render object onto screen
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -72,8 +74,8 @@ void run_phy_enviro(gpRender gr){
 	playerent.setMaxHp(100);
 	playerent.setRenderOrder(0);
 	osSprite.push_back(&playerent);
+	osShip.push_back(&playerent);
 	
-
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
@@ -81,16 +83,14 @@ void run_phy_enviro(gpRender gr){
 	Star starent(db2, tex2, dc2);
 
 	osSprite.push_back(&starent);
-
-	std::vector <std::pair<int, int>> randCoords = randNumP();
-
+	//std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,1, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,10, starent, 100);
 	osSprite.push_back(&planet1ent);
-
+	std::cout<< "mass " << starent.getMass() << std::endl;
 	//Space Station Initialization-
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/Asteroid.png"); //placeholder img
 	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -98,21 +98,27 @@ void run_phy_enviro(gpRender gr){
 	//osSprite.push_back(&ss_ent);
 	osSprite.push_back(&ss_ent);
 	
-	//planet1ent.initVelocity(starent);
+	/*//Ship Cruiser initilization
+	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db5 = {500,300,50,50};
+	Ship ement(db5, tex_em);
+	ement.setCurrHp(100);
+	ement.setMaxHp(100);
+	osSprite.push_back(&ement);
+	osShip.push_back(&ement);
 
-	
-	//Ship Cruiser initilization
-	//SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	//SDL_Rect db3 = {400,300,225,300};
-	//Sprite emyent(db3, tex3);
+	SDL_Rect db6 = {400,500,50,50};
+	Ship ement2(db6, tex_em);
+	ement2.setCurrHp(100);
+	ement2.setMaxHp(100);
+	osSprite.push_back(&ement2);
+	osShip.push_back(&ement2);*/
 
-	//osSprite.push_back(&emyent);
-	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
-	
+
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -157,6 +163,15 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
+	bool is_space_station_in_range = false;
+	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
+	SDL_Rect e_rect = {50, 50, 100, 100};
+	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
+	SDL_Rect ss_UI_rect = { 200, 200, 200, 200};
+	bool in_space_station_menu = false;
+
+	gameon = false;
+
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -178,11 +193,44 @@ void run_phy_enviro(gpRender gr){
 			
 		}
 	}
-
+	
 	//Game Loop
 	while(gameon) {
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
+
+		for(std::size_t i = 0; i != osShip.size(); i++){
+			if(osShip.at(i)->getCurrHp() <= 0){
+				for(std::size_t j = 0; j != osSprite.size(); j++){
+					if((Sprite*)osShip.at(i) == osSprite.at(j)){
+						osShip.erase(osShip.begin() + (i--));
+						osSprite.erase(osSprite.begin() + j);
+					}
+				}
+			}
+		}
+
+		//Handle spacestation proximity code
+		//Prox code = just increase the size of the ship collision box and do a collision check
+		//physics function
+		if(!is_space_station_in_range){
+			if(check_proximity(playerent, ss_ent, 3)){
+				//then we set the is_space_station_in_range flag to true
+				is_space_station_in_range = true;
+				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			}
+		} else {
+			//we display the E png to show that space station can be accessed
+				
+				//SDL_RenderPresent(gr.getRender());
+			//we need to check if our ship has left the range of the space station
+			if(!check_proximity(playerent, ss_ent, 3)){
+				//then we set the is_space_station_in_range flag to true
+				is_space_station_in_range = false;
+				in_space_station_menu = false;
+				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			}
+		}
 		
 		//Handles all incoming Key events
 		while(SDL_PollEvent(&e)) {
@@ -197,13 +245,41 @@ void run_phy_enviro(gpRender gr){
 						animate = false;
 					}
 					break;
+				
+				case SDLK_e:
+					if(is_space_station_in_range){
+					if(s.type == SDL_KEYDOWN){
+						//SDL_RenderClear(gr.getRender());
+						//gameon = false;
+						if(!in_space_station_menu){
+							in_space_station_menu = true;
+							SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
+							SDL_RenderPresent(gr.getRender());
+						} else {
+							//in_space_station_menu = false;
+						}
+					}
+					}
+					break;
+
+				/*case SDLK_p:
+					if(e.type == SDL_KEYDOWN){
+						ement.setCurrHp(0);
+					}
+					break;
+
+				case SDLK_o:
+					if(e.type == SDL_KEYDOWN){
+						ement2.setCurrHp(0);
+					}
+					break;*/
 			}
 		}
 		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
-		planet1ent.updatePosition();
-		updatePosition2(playerent, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		planet1ent.updatePosition(playerent);
+		updatePosition3(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
@@ -250,7 +326,23 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
+
+		if(is_space_station_in_range){
+		//we display the E png to show that space station can be accessed
+			SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderPresent(gr.getRender());
+			if(in_space_station_menu){
+				SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
+				SDL_RenderPresent(gr.getRender());
+			}
+				
+		}
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		if(playerent.getCurrHp() <=0 )
+		{
+			gameon = false;
+		}
+		
 	}
 	Audio::close();
 }
