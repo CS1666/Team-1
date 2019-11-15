@@ -1,5 +1,6 @@
 #pragma once
 #include "../General/Sprite.h"
+#include "../General/planet.h"
 #include <iostream>
 #include <vector>
 #include <string>
