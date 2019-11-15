@@ -116,6 +116,8 @@ void run_ai_enviro(gpRender gr){
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	sector.setStars({star});
 	osSprite.push_back(&starent);
+
+	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
 
 
@@ -176,6 +178,7 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	bool render = true;
 	while(gameon) {
+		ai.createShipState(sector);
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();

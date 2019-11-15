@@ -4,8 +4,10 @@
 void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
+
+    	pair<int, int> radarOut = radar(*ship);
       
-        radar(*ship);
+        std::cout << radarOut.first << ", " << radarOut.second << std::endl;
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
