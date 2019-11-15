@@ -14,7 +14,6 @@ class Star : public Sprite
 		string type;
 		vector<int> position;
 		string sprite;
-		int mass;
 		vector<int> size;
 
 	public:
@@ -34,7 +33,6 @@ class Star : public Sprite
 		void setType(string t);
 		void setPosition(vector<int> newPos);
 		void setSprite(string s);
-		int getMass();
 		void setMass(int newMass);
 		vector<int> getSize();
 		void setSize(vector<int> newSize);
