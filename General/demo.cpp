@@ -221,47 +221,47 @@ void run_demo(gpRender gr){
 	
 	//Sector 1
 	SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector1Rect = {1190,20,15,15};
+	SDL_Rect sector1Rect = {1185,25,15,15};
 	HpBar sector1ent(sector1Rect, sector1Tex, 0);
 	osSprite.push_back(&sector1ent);
 	//Sector 2
 	SDL_Texture* sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector2Rect = {1215,20,15,15};
+	SDL_Rect sector2Rect = {1213,25,15,15};
 	HpBar sector2ent(sector2Rect, sector2Tex, 0);
 	osSprite.push_back(&sector2ent);
 	//Sector 3
 	SDL_Texture* sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector3Rect = {1240,20,15,15};
+	SDL_Rect sector3Rect = {1242,25,15,15};
 	HpBar sector3ent(sector3Rect, sector3Tex, 0);
 	osSprite.push_back(&sector3ent);
 	//Sector 4
 	SDL_Texture* sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector4Rect = {1190,50,15,15};
+	SDL_Rect sector4Rect = {1185,52,15,15};
 	HpBar sector4ent(sector4Rect, sector4Tex, 0);
 	osSprite.push_back(&sector4ent);
 	//Sector 5
 	SDL_Texture* sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");
-	SDL_Rect sector5Rect = {1215,50,15,15};
+	SDL_Rect sector5Rect = {1213,52,15,15};
 	HpBar sector5ent(sector5Rect, sector5Tex, 0);
 	osSprite.push_back(&sector5ent);
 	//Sector 6
 	SDL_Texture* sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector6Rect = {1240,50,15,15};
+	SDL_Rect sector6Rect = {1242,52,15,15};
 	HpBar sector6ent(sector6Rect, sector6Tex, 0);
 	osSprite.push_back(&sector6ent);
 	//Sector 7
 	SDL_Texture* sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector7Rect = {1190,80,15,15};
+	SDL_Rect sector7Rect = {1185,79,15,15};
 	HpBar sector7ent(sector7Rect, sector7Tex, 0);
 	osSprite.push_back(&sector7ent);
 	//Sector 8
 	SDL_Texture* sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector8Rect = {1215,80,15,15};
+	SDL_Rect sector8Rect = {1213,79,15,15};
 	HpBar sector8ent(sector8Rect, sector8Tex, 0);
 	osSprite.push_back(&sector8ent);
 	//Sector 9
 	SDL_Texture* sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector9Rect = {1240,80,15,15};
+	SDL_Rect sector9Rect = {1242,79,15,15};
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	
