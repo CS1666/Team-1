@@ -67,7 +67,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ship_capital_enemy.png");
 	
-	AIShip aiShip(db1, tex1);
+	AIShip aiShip(db1, tex1,true);
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip.setRenderOrder(0);
@@ -81,7 +81,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	AIShip aiShip2(db3,tex3);
+	AIShip aiShip2(db3,tex3,false);
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);

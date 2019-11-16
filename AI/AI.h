@@ -26,7 +26,6 @@ class AI
         Pathfinder* pathfinder;
 	vector<Sprite*> osSprite;
 	vector<SDL_Texture*> allTextures;
-
     public:
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
