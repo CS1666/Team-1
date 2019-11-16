@@ -13,7 +13,7 @@
 #include "AIShip.h"
 #include "theta.h"
 #include "../Physics/TimeData.h"
-#include "../General/constants.cpp"
+#include "../General/Constants.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
