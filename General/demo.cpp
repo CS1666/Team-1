@@ -265,17 +265,6 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	
-	//0=enemy control
-	//1=contested
-	//2=player control
-	std::vector<HpBar> mapSectors;
-	std::vector<int> mapControl;
-	
-	for(int i = 0; i<9; i++){
-		mapControl.push_back(0);
-	}
-	mapSectors[4] = 1;
-	
 
 	/*
 	//Ship Cruiser initilization
