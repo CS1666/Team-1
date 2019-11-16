@@ -221,7 +221,7 @@ void run_demo(gpRender gr){
 	
 	//Sector 1
 	SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector1Rect = {1185,25,15,15};
+	SDL_Rect sector1Rect = {1184,25,15,15};
 	HpBar sector1ent(sector1Rect, sector1Tex, 0);
 	osSprite.push_back(&sector1ent);
 	//Sector 2
@@ -236,7 +236,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&sector3ent);
 	//Sector 4
 	SDL_Texture* sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector4Rect = {1185,52,15,15};
+	SDL_Rect sector4Rect = {1184,52,15,15};
 	HpBar sector4ent(sector4Rect, sector4Tex, 0);
 	osSprite.push_back(&sector4ent);
 	//Sector 5
@@ -251,7 +251,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&sector6ent);
 	//Sector 7
 	SDL_Texture* sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
-	SDL_Rect sector7Rect = {1185,79,15,15};
+	SDL_Rect sector7Rect = {1184,79,15,15};
 	HpBar sector7ent(sector7Rect, sector7Tex, 0);
 	osSprite.push_back(&sector7ent);
 	//Sector 8
