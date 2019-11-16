@@ -15,6 +15,10 @@ class AIShip: public Ship{
 	Projectile attackShip(pair<int,int> otherShip, SDL_Texture* laser);
 	void resetVariables();
 	bool isPathSet();
+	bool isFreeForm(); //can autonomously switch states
+	Uint32 getTime();
+	void switchFreeForm();
+	void setTime(Uint32 startTime);
     private:
 	void calculateNewAngle(pair<int,int> destination);
 	bool rotateToAngle();

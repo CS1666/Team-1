@@ -182,8 +182,22 @@ bool AIShip::rotateToAngle()
     }
     return false;
 }
-
-
+bool AIShip::isFreeForm()
+{
+    return freeForm;
+}
+Uint32 AIShip::getTime()
+{
+    return timeActivated;
+}
+void AIShip::switchFreeForm()
+{
+    freeForm=!freeForm;
+}
+void AIShip::setTime(Uint32 startTime)
+{
+    timeActivated=startTime;
+}
 void AIShip::setGoal(int newGoal)
 {
     curGoal=newGoal;
