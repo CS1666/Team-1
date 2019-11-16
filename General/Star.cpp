@@ -15,7 +15,10 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOr
 	{
 		return gravity;
 	}
-
+	void Star::initMass()
+	{
+		mass = (drawBox.w+drawBox.h)/6.0;
+	}
 
 	vector<int> Star::getPosition()
 	{
