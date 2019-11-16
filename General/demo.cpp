@@ -263,6 +263,8 @@ void run_demo(gpRender gr){
 	// title screen
 	SDL_Texture* titletex = gr.loadImage("Assets/Objects/title1.png");
 	SDL_Texture* titletex2 = gr.loadImage("Assets/Objects/title2.png");
+	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
+	SDL_Rect mapRect = {1080, 0, 200, 200};
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	
@@ -417,8 +419,12 @@ void run_demo(gpRender gr){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 				fixed = true;bgzonelayer1;
 			}
+			
+			
+			
 
-			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
+			SDL_RenderCopy(gr.getRender(), mapTex, nullptr, &mapRect);
 			Audio::set_solar(solar);
 		}
 		
