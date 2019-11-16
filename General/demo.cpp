@@ -213,6 +213,11 @@ void run_demo(gpRender gr){
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
+	
+	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
+	SDL_Rect mapRect = {1080,10,200,200};
+	Sprite mapent(mapRect, mapTex);
+	osSprite.push_back(&mapent);
 
 	/*
 	//Ship Cruiser initilization
@@ -424,7 +429,6 @@ void run_demo(gpRender gr){
 			
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
-			SDL_RenderCopy(gr.getRender(), mapTex, nullptr, &mapRect);
 			Audio::set_solar(solar);
 		}
 		
