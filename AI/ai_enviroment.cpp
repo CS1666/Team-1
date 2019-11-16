@@ -172,9 +172,9 @@ void run_ai_enviro(gpRender gr){
 	ai.setPathfinder(&path);
 	ai.setPlayerShip(&playerShip);
 	ai.setShips(&aiControlled);
+	ai.setSprites(osSprite);
+	ai.setTextures(allTextures);
 
-
-	
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	bool render = true;

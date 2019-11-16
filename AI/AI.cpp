@@ -55,7 +55,9 @@ void AI::defendPosition(AIShip* ship){
     //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	ship->attackShip(shipDetected,nullptr);//should be a laser texture
+	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+	if(proj.getTexture()!=nullptr)
+	    osSprite.push_back(&proj);
     }
    //todo: have different radar range?
 }
@@ -75,6 +77,15 @@ void AI::doNothing(AIShip* ship)
     if(radar(*ship).first!=-1)
 	ship->setGoal(1);
 }
+void AI::setSprites(vector<Sprite*>& sprites)
+{
+    osSprite=sprites;
+}
+void AI::setTextures(vector<SDL_Texture*>& textures)
+{
+    allTextures=textures;
+}
+
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
