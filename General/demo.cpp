@@ -215,7 +215,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&hpent);
 	
 	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
-	SDL_Rect mapRect = {1080,10,200,200};
+	SDL_Rect mapRect = {1080,10,100,100};
 	Sprite mapent(mapRect, mapTex);
 	osSprite.push_back(&mapent);
 
