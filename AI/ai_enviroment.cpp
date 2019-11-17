@@ -13,6 +13,7 @@
 #include "AIShip.h"
 #include "theta.h"
 #include "../Physics/TimeData.h"
+#include "../General/Constants.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
@@ -29,7 +30,7 @@ void run_ai_enviro(gpRender gr){
 
 
 	//Vector used to store all on screen entities
-
+	vector<SDL_Texture*> allTextures=initTextures(gr);
 	std::vector<Sprite*> osSprite;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
@@ -44,7 +45,7 @@ void run_ai_enviro(gpRender gr){
 	//----------------------Player Ship initilization--------------------//
 	
 
-	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Texture* ptex = allTextures.at(TEX_FIGHT_HERO);
 	SDL_Rect pdb = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 
 
@@ -66,7 +67,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ship_capital_enemy.png");
 	
-	AIShip aiShip(db1, tex1);
+	AIShip aiShip(db1, tex1,true);
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip.setRenderOrder(0);
@@ -80,7 +81,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	AIShip aiShip2(db3,tex3);
+	AIShip aiShip2(db3,tex3,false);
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
@@ -116,6 +117,8 @@ void run_ai_enviro(gpRender gr){
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	sector.setStars({star});
 	osSprite.push_back(&starent);
+
+	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
 
 
@@ -169,13 +172,14 @@ void run_ai_enviro(gpRender gr){
 	ai.setPathfinder(&path);
 	ai.setPlayerShip(&playerShip);
 	ai.setShips(&aiControlled);
+	ai.setSprites(osSprite);
+	ai.setTextures(allTextures);
 
-
-	
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	bool render = true;
 	while(gameon) {
+		ai.createShipState(sector);
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();

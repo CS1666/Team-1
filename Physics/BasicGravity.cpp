@@ -45,6 +45,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 		bodyY = bodyent->getTrueY() + bodyent->getH()/2.0;
 		if(bodyent->getRenderOrder() ==2)
 		{
+			std::cout<< "mass: " << (bodyent)->getMass() << std::endl;
 			//make fix this
 			pointSlope = (bodyY - playerY)/(bodyX - playerX);
 			pointAngle = atan(pointSlope);
@@ -53,7 +54,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 				pointAngle += 3.1415926;
 			}
 			std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
-			float grav = 100000/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
+			float grav = 1000*bodyent->getMass()/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
 			std::cout << "grav: " << grav << std::endl;
 			gravX += grav*cos(pointAngle);
 			gravY += grav*sin(pointAngle);
@@ -61,54 +62,5 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 	}
 	 
 	return {gravX, gravY};
-}
-
-void updatePositionGrav(Sprite &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
-
-	speedX += deltaX;
-	speedY += deltaY;
-	
-	if(speedX >MAX_SPEED)
-	{
-		speedX = MAX_SPEED;
-	}
-	else if(speedX < -MAX_SPEED)
-	{
-		speedX = -MAX_SPEED;
-	}
-
-	if(speedY >MAX_SPEED)
-	{
-		speedY = MAX_SPEED;
-	}
-	else if(speedY < -MAX_SPEED)
-	{
-		speedY = -MAX_SPEED;
-	}
-	
-	
-	
-	ent.setX(ent.getX() + (int)speedX);
-	//std::cout << "Things work up until here?" << std::endl;
-	if(ent.getX() < 0 
-		|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
-
-		ent.setX(ent.getX() - (int)speedX);
-	}
-	ent.setY(ent.getY() + (int)speedY);
-	if(ent.getY() < 0 
-		|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-		|| ent.check_all_collisions(ent.getDrawBox(), osSprite)){
-
-		ent.setY(ent.getY() - (int)speedY);
-	}
-
-	std::cout << "x: " << ent.getX()  << std::endl;	
-	std::cout << "y: " << ent.getY()  << std::endl;
-	std::cout << "x speed: " << speedX  << std::endl;	
-	std::cout << "y speed: " << speedY  << std::endl;
-
-	
 }
 

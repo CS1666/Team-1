@@ -2,9 +2,20 @@
 #include "AIShip.h"
 
 AIShip::AIShip() : Ship() {};
-AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
+AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0) {
 	renderOrder = 1;
 	pathset = false;
+	if(ally)
+	{
+	    isAlly=true;
+	    freeForm=false;
+	}
+	else
+	{
+	    isAlly=false;
+	    freeForm=true;
+	}
+	isUser=false;
 };
 
 //ai follows path assigned to it by ai class
@@ -171,8 +182,22 @@ bool AIShip::rotateToAngle()
     }
     return false;
 }
-
-
+bool AIShip::isFreeForm()
+{
+    return freeForm;
+}
+Uint32 AIShip::getTime()
+{
+    return timeActivated;
+}
+void AIShip::switchFreeForm()
+{
+    freeForm=!freeForm;
+}
+void AIShip::setTime(Uint32 startTime)
+{
+    timeActivated=startTime;
+}
 void AIShip::setGoal(int newGoal)
 {
     curGoal=newGoal;
