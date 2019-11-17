@@ -98,7 +98,7 @@ void run_phy_enviro(gpRender gr){
 	//osSprite.push_back(&ss_ent);
 	osSprite.push_back(&ss_ent);
 	
-	/*//Ship Cruiser initilization
+	//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db5 = {500,300,50,50};
 	Ship ement(db5, tex_em);
@@ -107,7 +107,7 @@ void run_phy_enviro(gpRender gr){
 	osSprite.push_back(&ement);
 	osShip.push_back(&ement);
 
-	SDL_Rect db6 = {400,500,50,50};
+	/*SDL_Rect db6 = {400,500,50,50};
 	Ship ement2(db6, tex_em);
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
