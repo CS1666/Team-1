@@ -307,8 +307,8 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 	ent.setSpeedX(speedX);
 	ent.setSpeedY(speedY);
 
-	ent.setX(ent.getTrueX() + speedX);
 	int coll = check_all_collisions3(ent.getDrawBox(), osSprite);
+
 	if(ent.getTrueX() < 0 || (ent.getX() + ent.getW() > ZONE_WIDTH) || coll != -1){
 		
 		if(coll == -1){
@@ -320,18 +320,17 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 			std::cout << "Push y: " << momentumShift[1] << std::endl;
 
 			speedX = momentumShift[0];
-			speedY = momentumShift[1];
 			
+			ent.setSpeedX(speedX);
+			std::cout << "Speed X: " << ent.getSpeedX() << std::endl;
 			ent.setX(ent.getTrueX() + speedX);
-			float diff = abs(ent.getSpeedX() - speedX);
-			if(ent.getSpeedX() > 0){
-				ent.setX(ent.getTrueX() - diff);
-			}else if(ent.getSpeedX() < 0){
-				ent.setX(ent.getTrueX() + diff);
-			}
+			
 		}
+	}else{
+		ent.setX(ent.getTrueX() + speedX);
 	}
-	ent.setY(ent.getTrueY() + speedY);
+
+	
 	if(ent.getTrueY() < 0 || (ent.getY() + ent.getH() > ZONE_WIDTH) || coll != -1){
 		
 		if(coll == -1){
@@ -342,20 +341,16 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 			std::cout << "Push x: " << momentumShift[0] << std::endl;
 			std::cout << "Push y: " << momentumShift[1] << std::endl;
 
-			speedX = momentumShift[0];
 			speedY = momentumShift[1];
-			
+
+			ent.setSpeedY(speedY);
+			std::cout << "Speed Y: " << ent.getSpeedY() << std::endl;
 			ent.setY(ent.getTrueY() + speedY);
-			std::cout << "Y Speed: " << ent.getSpeedY() << std::endl;
-			float diff = abs(ent.getSpeedY() - speedY);
-			std::cout << "Difference: " << diff << std::endl;
-			if(ent.getSpeedY() > 0){
-				ent.setY(ent.getTrueY() - diff);
-			}else if(ent.getSpeedY() < 0){
-				ent.setY(ent.getTrueY() + diff);
-			}
+			
 		}
 			
+	}else{
+		ent.setY(ent.getTrueY() + speedY);
 	}
 
 }
