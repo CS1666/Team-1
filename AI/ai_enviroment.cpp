@@ -13,12 +13,14 @@
 #include "AIShip.h"
 #include "theta.h"
 #include "../Physics/TimeData.h"
+#include "../General/Constants.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
-constexpr int ZONE_WIDTH = 1280; 
-constexpr int ZONE_HEIGHT = 720;
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
+
 
 
 vector<Sprite*> initilizeSprites(){
@@ -28,13 +30,13 @@ void run_ai_enviro(gpRender gr){
 
 
 	//Vector used to store all on screen entities
-
+	vector<SDL_Texture*> allTextures=initTextures(gr);
 	std::vector<Sprite*> osSprite;
 	//note: maybe merge positions and osSprite?
 	vector<vector<int>> positions;
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-	bool fixed = true;
+	bool fixed = false;
 	//gpRender object that is used to render object onto screen
 
 	//Ship object init
@@ -43,9 +45,9 @@ void run_ai_enviro(gpRender gr){
 	//----------------------Player Ship initilization--------------------//
 	
 
-	SDL_Texture* ptex = gr.loadImage("Assets/Objects/ship_player.png");
-	
-	SDL_Rect pdb = {250,250,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SDL_Texture* ptex = allTextures.at(TEX_FIGHT_HERO);
+	SDL_Rect pdb = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
+
 
 	Hero playerShip(pdb, ptex);
 	playerShip.setPosition(pair<int,int>(250,250));
@@ -65,7 +67,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ship_capital_enemy.png");
 	
-	AIShip aiShip(db1, tex1);
+	AIShip aiShip(db1, tex1,true);
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip.setRenderOrder(0);
@@ -79,7 +81,7 @@ void run_ai_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 
-	AIShip aiShip2(db3,tex3);
+	AIShip aiShip2(db3,tex3,false);
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
@@ -102,7 +104,7 @@ void run_ai_enviro(gpRender gr){
 
 	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
-	SDL_Rect db2 = {500,200,300,300};
+	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,300,300};
 	Sprite starent(db2, tex2);
 
 	Star star;
@@ -112,9 +114,11 @@ void run_ai_enviro(gpRender gr){
 
 	Sector sector;
 
-	sector.setSize({1280, 720});
+	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	sector.setStars({star});
 	osSprite.push_back(&starent);
+
+	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
 
 
@@ -168,13 +172,14 @@ void run_ai_enviro(gpRender gr){
 	ai.setPathfinder(&path);
 	ai.setPlayerShip(&playerShip);
 	ai.setShips(&aiControlled);
+	ai.setSprites(osSprite);
+	ai.setTextures(allTextures);
 
-
-	
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
 	bool render = true;
 	while(gameon) {
+		ai.createShipState(sector);
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
@@ -192,8 +197,30 @@ void run_ai_enviro(gpRender gr){
 		//std::cout << "\nShip 1 postion: " << aiShip.getPosition().first <<" " << aiShip.getPosition().second << "\n" << std::endl;
 		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		
-		TimeData::update_move_last_time();
+		
 
+		camera.x = playerShip.getX() - SCREEN_WIDTH/2 + PLAYER_WIDTH/2;
+		camera.y = playerShip.getY() - SCREEN_HEIGHT/2 + PLAYER_HEIGHT/2;
+			
+		if (camera.x < 0){
+			camera.x = 0;
+			fixed = true;
+		}
+		else if (camera.x + SCREEN_WIDTH > ZONE_WIDTH){
+			camera.x = ZONE_WIDTH - SCREEN_WIDTH;
+			fixed = true;
+		}
+		if (camera.y < 0){
+			camera.y = 0;
+
+			fixed = true;
+		}
+		else if (camera.y + SCREEN_HEIGHT > ZONE_HEIGHT){
+			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
+			fixed = true;
+		}
+
+			
 		
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		

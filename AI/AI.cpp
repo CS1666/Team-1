@@ -4,8 +4,10 @@
 void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
+
+    	pair<int, int> radarOut = radar(*ship);
       
-        radar(*ship);
+        std::cout << radarOut.first << ", " << radarOut.second << std::endl;
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
@@ -44,18 +46,28 @@ void AI::followPlayer(AIShip* ship){
         ship->setPath(calculatePath(*ship));
         ship->setDestination(getPlayerShip()->getPosition());
     }
+    if(ship->isFreeForm())
+    {
+	//idk if ships should be able to autonomously leave/enter follow
+    }
 }
 
 
 void AI::defendPosition(AIShip* ship){
     pair<int,int> shipDetected=radar(*ship);
-    cout<<shipDetected.first<<endl;
-    cout<<shipDetected.second<<endl;
+   // cout<<shipDetected.first<<endl;
+    //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	ship->attackShip(shipDetected,nullptr);//should be a laser texture
+	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+	if(proj.getTexture()!=nullptr)
+	    osSprite.push_back(&proj);
     }
    //todo: have different radar range?
+    if(ship->isFreeForm())
+    {
+	//stuff to switch states
+    }
 }
 
 void AI::Attack(AIShip* ship){
@@ -69,10 +81,26 @@ void AI::Flee(AIShip* ship){
 //if something on radar switch goal, else do nothing
 void AI::doNothing(AIShip* ship)
 {
-    //note: should have like a 2 second timer or something before becoming active
     if(radar(*ship).first!=-1)
-	ship->setGoal(1);
+    {
+	if(ship->getTime()==0)
+	    ship->setTime(SDL_GetTicks());
+	//1 second between spotting and activation
+	//note that if player ship leaves radius it'll 
+	//swap goals upon coming back in range
+	else if(SDL_GetTicks()-ship->getTime()>1000)
+	    ship->setGoal(1);
+    }
 }
+void AI::setSprites(vector<Sprite*>& sprites)
+{
+    osSprite=sprites;
+}
+void AI::setTextures(vector<SDL_Texture*>& textures)
+{
+    allTextures=textures;
+}
+
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
