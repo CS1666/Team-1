@@ -4,6 +4,7 @@
 #include <math.h>
 #include "../Physics/TimeData.h"
 #include "../Physics/BasicGravity.h"
+#include "../Physics/Momentum.h"
 
 #define PI 3.14159265
 
@@ -161,6 +162,95 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 
 		setY(getTrueY() - speedY);
 		position.second=(int)getTrueY()-speedY;
+	}
+}
+
+void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT)
+{
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < -MAX_SPEED)
+	{
+		speed = -MAX_SPEED;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
+
+	//std::cout << getVX() << ", " << getVY() <<std::endl;
+	setAngle(getAngle() + rotationSpeed);
+	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
+
+	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	
+	setSpeedX(speedX);
+	setSpeedY(speedY);
+
+	int coll = check_all_collisions_int_ret(getDrawBox(), osSprite);
+
+	if(getTrueX() < 0 || (getX() + getW() > ZONE_WIDTH) || coll != -1){
+		
+		if(coll == -1){
+			setX(getTrueX() - speedX);
+			
+		}else if(coll == 1 || coll == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
+
+			speedX = momentumShift[0];
+			
+			setSpeedX(speedX);
+			std::cout << "Speed X: " << getSpeedX() << std::endl;
+			setX(getTrueX() + speedX);
+			
+		}
+	}else{
+		setX(getTrueX() + speedX);
+	}
+
+	
+	if(getTrueY() < 0 || (getY() + getH() > ZONE_WIDTH) || coll != -1){
+		
+		if(coll == -1){
+			setY(getTrueY() - speedY);
+			
+		}else if(coll == 1 || coll == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
+
+			speedY = momentumShift[1];
+
+			setSpeedY(speedY);
+			std::cout << "Speed Y: " << getSpeedY() << std::endl;
+			setY(getTrueY() + speedY);
+			
+		}
+			
+	}else{
+		setY(getTrueY() + speedY);
 	}
 }
 

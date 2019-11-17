@@ -214,6 +214,21 @@
 		}
 		return isCollision;
 	}
+
+	int Sprite::check_all_collisions_int_ret(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+		bool isCollision = false;
+		int res = -1;
+		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+		for(int i = 1;  i < osSprite.size(); i++){
+			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
+			if(isCollision){
+				if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
+					res = osSprite.at(i)->getRenderOrder();
+				}
+			}
+		}
+		return res;
+	}
 	
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){

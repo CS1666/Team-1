@@ -158,6 +158,28 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			}
 		}
 
+		//check if entity within range of camera (Ships)
+		else if ((entity->getRenderOrder() == 1 || entity->getRenderOrder() == 0) && ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
+			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH()))){
+			
+			SDL_Rect campos = {entity->getX() - camera.x, entity->getY() - camera.y, entity->getW(), entity->getH()};
+
+			SDL_Point center;
+		
+			center.x = entity->getW()/2;
+			center.y = entity->getH()/2;
+			if(entity->getF() < 0){
+				//std::cout << "Render 4" << std::endl;
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
+			}
+			else{
+				//std::cout << "Render 5" << std::endl;
+				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
+			}
+		
+		}
+
 		//check if entity within range of camera (objects with collision AND gravity)
 		else if ((entity->getRenderOrder() == 2 || entity->getRenderOrder() == 0) && ((camera.x - entity->getW() < entity->getX()) && (entity->getX() < camera.x + SCREEN_WIDTH + entity->getW()) && 
 			(camera.y - entity->getH() < entity->getY()) && (entity->getY() < camera.y + SCREEN_HEIGHT + entity->getH()))){
