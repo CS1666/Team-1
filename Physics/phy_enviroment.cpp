@@ -10,6 +10,7 @@
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../General/SpaceStation.h"
+#include "../General/SpaceStationUI.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"
@@ -119,6 +120,23 @@ void run_phy_enviro(gpRender gr){
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
 
+	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
+	SDL_Rect e_rect = {50, 50, 100, 100};
+	SpaceStationUI e_UI(e_rect, e_tex);
+	/* //code for making E render on screen
+	e_UI.set_spriteIndex(osSprite.size());
+	osSprite.push_back(&e_UI);
+	*/
+	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
+	SDL_Rect ss_UI_rect = { 200, 200, 200, 200};
+	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
+	/* //code for making the space station menu render on screen
+	ss_UI.set_spriteIndex(osSprite.size());
+	osSprite.push_back(&ss_UI);
+	*/
+	bool in_space_station_menu = false;
+	bool is_space_station_in_range = false;
+
 	srand(time(0));
 	SDL_Rect bgtile[100];
 	std::vector<std::vector<SDL_Rect*> > bgzonelayer1( ZONE_WIDTH/20 , std::vector<SDL_Rect*> (ZONE_HEIGHT/20, 0));
@@ -163,12 +181,6 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
-	bool is_space_station_in_range = false;
-	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
-	SDL_Rect e_rect = {50, 50, 100, 100};
-	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
-	SDL_Rect ss_UI_rect = { 200, 200, 200, 200};
-	bool in_space_station_menu = false;
 
 	gameon = false;
 
@@ -225,10 +237,16 @@ void run_phy_enviro(gpRender gr){
 				//SDL_RenderPresent(gr.getRender());
 			//we need to check if our ship has left the range of the space station
 			if(!check_proximity(playerent, ss_ent, 3)){
-				//then we set the is_space_station_in_range flag to true
+				
+				if(in_space_station_menu) {
+					osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+				}
+				osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
+				//then we set the is_space_station_in_range flag to false
 				is_space_station_in_range = false;
 				in_space_station_menu = false;
 				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+				
 			}
 		}
 		
@@ -247,18 +265,31 @@ void run_phy_enviro(gpRender gr){
 					break;
 				
 				case SDLK_e:
-					if(is_space_station_in_range){
-					if(s.type == SDL_KEYDOWN){
+					if(e.type == SDL_KEYDOWN){
 						//SDL_RenderClear(gr.getRender());
 						//gameon = false;
-						if(!in_space_station_menu){
+						if(!in_space_station_menu && is_space_station_in_range){
 							in_space_station_menu = true;
-							SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
-							SDL_RenderPresent(gr.getRender());
+							ss_UI.set_spriteIndex(osSprite.size());
+							osSprite.push_back(&ss_UI);
+						} else if(in_space_station_menu && is_space_station_in_range) {
+							//in_space_station_menu = false;
+							in_space_station_menu = false;
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+						}
+					}
+					break;
+
+				case SDLK_r:
+					if(e.type == SDL_KEYDOWN){
+						//SDL_RenderClear(gr.getRender());
+						//gameon = false;
+						if(in_space_station_menu && is_space_station_in_range){
+							in_space_station_menu = false;
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 						} else {
 							//in_space_station_menu = false;
 						}
-					}
 					}
 					break;
 
@@ -326,7 +357,8 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-
+		
+		/*
 		if(is_space_station_in_range){
 		//we display the E png to show that space station can be accessed
 			SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
@@ -337,6 +369,7 @@ void run_phy_enviro(gpRender gr){
 			}
 				
 		}
+		*/
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 		if(playerent.getCurrHp() <=0 )
 		{
