@@ -88,6 +88,8 @@ void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker and rendering
+
+	std::vector<Ship*> osShip; // vector for tracking ships
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
 
@@ -313,6 +315,18 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
+
+			// Deletes 0 hp ships
+			for(std::size_t i = 0; i != osShip.size(); i++){
+				if(osShip.at(i)->getCurrHp() <= 0){
+					for(std::size_t j = 0; j != osSprite.size(); j++){
+						if((Sprite*)osShip.at(i) == osSprite.at(j)){
+							osShip.erase(osShip.begin() + (i--));
+							osSprite.erase(osSprite.begin() + j);
+						}
+					}
+				}
+			}
 
 			//Handles all incoming Key events
 			while(SDL_PollEvent(&e)) {
