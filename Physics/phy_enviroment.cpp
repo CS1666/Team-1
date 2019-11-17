@@ -279,7 +279,7 @@ void run_phy_enviro(gpRender gr){
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
 		planet1ent.updatePosition(playerent);
-		updatePosition2(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
+		updatePosition3(playerent, osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
 		TimeData::update_move_last_time();
 		if (animate){
 			if (TimeData::getTimeSinceAnim() > 100) {
