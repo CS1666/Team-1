@@ -11,6 +11,8 @@
 #include "../General/Ship.h"
 #include "../General/planet.h"
 #include "../General/Star.h"
+#include "../General/SpaceStation.h"
+#include "../General/SpaceStationUI.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"
@@ -88,6 +90,8 @@ void run_demo(gpRender gr){
 	//Vector used to store all on screen entities
 
 	std::vector<Sprite*> osSprite; // vector for collision checker and rendering
+
+	std::vector<Ship*> osShip; // vector for tracking ships
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
 
@@ -213,6 +217,78 @@ void run_demo(gpRender gr){
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
+	
+	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
+	SDL_Rect mapRect = {1170,10,100,100};
+	HpBar mapent(mapRect, mapTex, 0);
+	osSprite.push_back(&mapent);
+
+	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
+	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
+	SpaceStation ss_ent(rect_ss, tex_ss);
+	osSprite.push_back(&ss_ent);
+
+	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
+	SDL_Rect e_rect = {50, 50, 100, 100};
+	SpaceStationUI e_UI(e_rect, e_tex);
+
+	SDL_Texture* r_tex = gr.loadImage("Assets/Objects/R.png");
+	SDL_Rect r_rect = {50, 200, 100, 100};
+	SpaceStationUI r_UI(r_rect, r_tex);
+
+	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
+	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
+	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
+
+	bool in_space_station_menu = false;
+	bool is_space_station_in_range = false;
+	
+	//Sector 1
+	SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector1Rect = {1184,25,15,15};
+	HpBar sector1ent(sector1Rect, sector1Tex, 0);
+	osSprite.push_back(&sector1ent);
+	//Sector 2
+	SDL_Texture* sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector2Rect = {1213,25,15,15};
+	HpBar sector2ent(sector2Rect, sector2Tex, 0);
+	osSprite.push_back(&sector2ent);
+	//Sector 3
+	SDL_Texture* sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector3Rect = {1242,25,15,15};
+	HpBar sector3ent(sector3Rect, sector3Tex, 0);
+	osSprite.push_back(&sector3ent);
+	//Sector 4
+	SDL_Texture* sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector4Rect = {1184,52,15,15};
+	HpBar sector4ent(sector4Rect, sector4Tex, 0);
+	osSprite.push_back(&sector4ent);
+	//Sector 5
+	SDL_Texture* sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");
+	SDL_Rect sector5Rect = {1213,52,15,15};
+	HpBar sector5ent(sector5Rect, sector5Tex, 0);
+	osSprite.push_back(&sector5ent);
+	//Sector 6
+	SDL_Texture* sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector6Rect = {1242,52,15,15};
+	HpBar sector6ent(sector6Rect, sector6Tex, 0);
+	osSprite.push_back(&sector6ent);
+	//Sector 7
+	SDL_Texture* sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector7Rect = {1184,79,15,15};
+	HpBar sector7ent(sector7Rect, sector7Tex, 0);
+	osSprite.push_back(&sector7ent);
+	//Sector 8
+	SDL_Texture* sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector8Rect = {1213,79,15,15};
+	HpBar sector8ent(sector8Rect, sector8Tex, 0);
+	osSprite.push_back(&sector8ent);
+	//Sector 9
+	SDL_Texture* sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Rect sector9Rect = {1242,79,15,15};
+	HpBar sector9ent(sector9Rect, sector9Tex, 0);
+	osSprite.push_back(&sector9ent);
+	
 
 	/*
 	//Ship Cruiser initilization
@@ -311,6 +387,40 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
+			
+			// Checking for if the Space Station is in range of the player ship.
+			if(!is_space_station_in_range){
+				if(check_proximity(playerent, ss_ent, 3)){
+					//then we set the is_space_station_in_range flag to true
+					is_space_station_in_range = true;
+					//we display the E png to show that space station can be accessed
+					e_UI.set_spriteIndex(osSprite.size());
+					osSprite.push_back(&e_UI);
+				}
+			} else {
+				//we need to check if our ship has left the range of the space station
+				if(!check_proximity(playerent, ss_ent, 3)){
+					if(in_space_station_menu) {
+						osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+					}
+					osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
+
+					is_space_station_in_range = false;
+					in_space_station_menu = false;
+				}
+			}
+
+			// Deletes 0 hp ships
+			for(std::size_t i = 0; i != osShip.size(); i++){
+				if(osShip.at(i)->getCurrHp() <= 0){
+					for(std::size_t j = 0; j != osSprite.size(); j++){
+						if((Sprite*)osShip.at(i) == osSprite.at(j)){
+							osShip.erase(osShip.begin() + (i--));
+							osSprite.erase(osSprite.begin() + j);
+						}
+					}
+				}
+			}
 
 			//Handles all incoming Key events
 			while(SDL_PollEvent(&e)) {
@@ -335,8 +445,50 @@ void run_demo(gpRender gr){
 					case SDLK_SPACE:
 						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
 						break;
+					
+					case SDLK_e:
+						if(e.type == SDL_KEYDOWN){
+							if(!in_space_station_menu && is_space_station_in_range){
+								in_space_station_menu = true;
+								ss_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&ss_UI);
+								r_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&r_UI);
+							}
+						}
+						break;
 				}
 			}
+
+			// --- START OF SPACE STATION UI SUB-LOOP ----
+			while(in_space_station_menu && gameon) {
+				while(SDL_PollEvent(&e)) {
+				gameon = handleKeyEvents(e, playerent);	
+				
+					switch(e.key.keysym.sym) {
+						
+						case SDLK_e:
+							if(e.type == SDL_KEYDOWN){
+								if(in_space_station_menu && is_space_station_in_range) {
+									in_space_station_menu = false;
+									osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+								}
+							}
+							break;
+		
+						case SDLK_r:
+							if(e.type == SDL_KEYDOWN){
+								// ---- INSERT MENU OPTION FOR R KEY HERE --- <<<<<
+								
+							}
+							break;
+					}
+				}
+				gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+			}
+			//--- END OF SPACE STATION UI SUB LOOP ---
+
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
@@ -419,11 +571,9 @@ void run_demo(gpRender gr){
 			}
 			
 			
-			SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
-			SDL_Rect mapRect = {1080, 0, 200, 200};
+			
 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
-			SDL_RenderCopy(gr.getRender(), mapTex, nullptr, &mapRect);
 			Audio::set_solar(solar);
 		}
 		
