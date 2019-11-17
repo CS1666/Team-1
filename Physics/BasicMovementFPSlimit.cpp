@@ -277,7 +277,7 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 	{
 		rotationSpeed--;
 	}
-	if(speed >MAX_SPEED)
+	if(speed > MAX_SPEED)
 	{
 		speed = MAX_SPEED;
 	}
@@ -313,6 +313,7 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 		
 		if(coll == -1){
 			ent.setX(ent.getTrueX() - speedX);
+			
 		}else if(coll == 1 || coll == 0){
 			std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
 			std::cout << "Push x: " << momentumShift[0] << std::endl;
@@ -320,6 +321,14 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 
 			speedX = momentumShift[0];
 			speedY = momentumShift[1];
+			
+			ent.setX(ent.getTrueX() + speedX);
+			float diff = abs(ent.getSpeedX() - speedX);
+			if(ent.getSpeedX() > 0){
+				ent.setX(ent.getTrueX() - diff);
+			}else if(ent.getSpeedX() < 0){
+				ent.setX(ent.getTrueX() + diff);
+			}
 		}
 	}
 	ent.setY(ent.getTrueY() + speedY);
@@ -327,6 +336,7 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 		
 		if(coll == -1){
 			ent.setY(ent.getTrueY() - speedY);
+			
 		}else if(coll == 1 || coll == 0){
 			std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
 			std::cout << "Push x: " << momentumShift[0] << std::endl;
@@ -334,7 +344,18 @@ void updatePosition2(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 
 			speedX = momentumShift[0];
 			speedY = momentumShift[1];
+			
+			ent.setY(ent.getTrueY() + speedY);
+			std::cout << "Y Speed: " << ent.getSpeedY() << std::endl;
+			float diff = abs(ent.getSpeedY() - speedY);
+			std::cout << "Difference: " << diff << std::endl;
+			if(ent.getSpeedY() > 0){
+				ent.setY(ent.getTrueY() - diff);
+			}else if(ent.getSpeedY() < 0){
+				ent.setY(ent.getTrueY() + diff);
+			}
 		}
+			
 	}
 
 }
