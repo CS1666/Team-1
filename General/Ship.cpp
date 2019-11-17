@@ -214,7 +214,7 @@ void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*
 		if(coll == -1){
 			setX(getTrueX() - speedX);
 			
-		}else if(coll == 1 || coll == 0){
+		}else if((coll == 1) && renderOrder == 0){
 			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
 			std::cout << "Push x: " << momentumShift[0] << std::endl;
 			std::cout << "Push y: " << momentumShift[1] << std::endl;
@@ -233,10 +233,10 @@ void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*
 	
 	if(getTrueY() < 0 || (getY() + getH() > ZONE_WIDTH) || coll != -1){
 		
-		if(coll == -1){
+		if(coll == -1 || coll == 0){
 			setY(getTrueY() - speedY);
 			
-		}else if(coll == 1 || coll == 0){
+		}else if((coll == 1) && renderOrder == 0){
 			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
 			std::cout << "Push x: " << momentumShift[0] << std::endl;
 			std::cout << "Push y: " << momentumShift[1] << std::endl;
