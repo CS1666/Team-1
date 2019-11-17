@@ -26,6 +26,8 @@ std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> 
 			osShip.at(i)->setSpeedY(otherResY);
 			osShip.at(i)->setX(osShip.at(i)->getTrueX() + (int)otherResX);
 			osShip.at(i)->setY(osShip.at(i)->getTrueY() + (int)otherResY);
+
+			osShip.at(i)->speed = sqrt(pow(otherXspd, 2) + pow(otherYspd, 2));
 		}
 	}
 
