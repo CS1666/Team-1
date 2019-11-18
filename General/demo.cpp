@@ -288,6 +288,8 @@ void run_demo(gpRender gr){
 	SDL_Rect sector9Rect = {1242,79,15,15};
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
+	//current sector
+	int curSector = 5;
 	
 
 	/*
@@ -506,18 +508,22 @@ void run_demo(gpRender gr){
 				if(playerent.getTrueX() < 0)
 				{
 					side = 2;
+					curSector--;
 				}
 				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
 				{
 					side = 0;
+					curSector++;
 				}
 				else if(playerent.getY() < 0)
 				{
 					side = 1;
+					curSector -= 3;
 				}
 				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
 				{
 					side = 3;
+					curSecotr += 3;
 				}
 				
 			}
