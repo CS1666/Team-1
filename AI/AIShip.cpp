@@ -253,9 +253,12 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
     //rotate to that angle
     bool angleChanged=rotateToAngle();
     //if not rotate then we are at angle we can fire at ship
-    if(!angleChanged)
+    //also 2 seconds between shooting a laser
+    if(!angleChanged&&SDL_GetTicks()-timeActivated>2000)
     {
+	cout<<"fired"<<endl;
 	rotationSet=false;
+	timeActivated=SDL_GetTicks();
 	return fireWeapon(laser);
     }
     return Projectile(); //null/empty sprite

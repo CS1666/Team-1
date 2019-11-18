@@ -18,7 +18,7 @@ void AI::executeAIActions(){
                 break;
 
             case(2)://Action 3: Attack Enemy
-                Attack(ship);
+                pursueShip(ship);
                 break;
             case(3)://Action 4: Run away from enemy
                 Flee(ship);
@@ -53,7 +53,8 @@ void AI::followPlayer(AIShip* ship){
 }
 
 
-void AI::defendPosition(AIShip* ship){
+void AI::defendPosition(AIShip* ship)
+{
     pair<int,int> shipDetected=radar(*ship);
     //cout<<shipDetected.first<<endl;
     //cout<<shipDetected.second<<endl;
@@ -67,15 +68,52 @@ void AI::defendPosition(AIShip* ship){
    //todo: have different radar range?
     if(ship->isFreeForm())
     {
-	//stuff to switch states
+	int distance=calculateDistance(ship->getPosition(),shipDetected);
+	//pursue/attack
+	if(distance>200&&distance<400)
+	    ship->setGoal(2);
+    }
+}
+//pathfind until close enough then rotate to attack
+void AI::pursueShip(AIShip* ship)
+{
+    pair<int,int> shipDetected=radar(*ship);
+    if(shipDetected.first!=-1)
+    {
+	if(!ship->isPathSet())
+	{
+	    ship->setPath(calculatePath(*ship));
+	}
+	//calculate a destination where it will be close enough
+	//kinda simplistic calculations, can probably be in its own function
+	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
+   	if(ship->getPathComplete())
+    	{
+	    int distance=calculateDistance(ship->getPosition(),shipDetected);
+	    //still too far, continue pursuit
+	    if(distance>100)
+	    {
+		ship->setPath(calculatePath(*ship));
+		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
+	    }
+	    //rotate and fire
+	    else
+	    {
+		Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+        	if(proj.getTexture()!=nullptr)
+            	    osSprite.push_back(new Projectile(proj));
+	    }
+    	}
+    }
+    if(ship->isFreeForm())
+    {
+	if(shipDetected.first==-1)
+	    ship->setGoal(1);
     }
 }
 
-void AI::Attack(AIShip* ship){
-
-}
-
-void AI::Flee(AIShip* ship){
+void AI::Flee(AIShip* ship)
+{
 
 }
 
@@ -90,7 +128,10 @@ void AI::doNothing(AIShip* ship)
 	//note that if player ship leaves radius it'll 
 	//swap goals upon coming back in range
 	else if(SDL_GetTicks()-ship->getTime()>1000)
+	{
+	    cout<<"alert: ship activated"<<endl;
 	    ship->setGoal(1);
+	}
     }
 }
 void AI::setSprites(vector<Sprite*>& sprites)
@@ -105,6 +146,16 @@ void AI::setTextures(vector<SDL_Texture*>& textures)
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
+}
+pair<int,int> AI::generateCoordinate(pair<int,int> start, pair<int,int> stop, int typeGen)
+{
+    pair<int, int> val;
+    if(typeGen==0)
+    {
+	val.first=(stop.first-start.first)%100;
+        val.second=(stop.second-start.second)%100;
+    }
+    return val;
 }
 
 void AI::setShipPath(AIShip *shipToPath)
