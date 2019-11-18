@@ -16,11 +16,6 @@ void Sector::setShips(vector<Ship *> newShips)
 	__ships = newShips;
 }
 
-vector<Ship *> Sector::getShips()
-{
-	return __ships;
-}
-
 void Sector::setSize(vector<int> newSize)
 {
 	__size = newSize;

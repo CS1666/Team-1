@@ -20,7 +20,7 @@ class Sector
 		void setStars(vector<Star> newStars);
 		vector<Star> getStars();
 		void setShips(vector<Ship *> newShips);
-		vector<Ship *> getShips();
+		vector<Ship> getShips();
 		void setSize(vector<int> newSize);
 		vector<int> getSize();
 		vector<vector<int> > getState();

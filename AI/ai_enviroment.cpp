@@ -164,8 +164,7 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	ai.createMapState(sector);
-	//ai.createShipState(sector);
-	ai.setCurrentSector(sector);
+	ai.createShipState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
 
 	Pathfinder path(mesh, 10);
@@ -180,7 +179,7 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	bool render = true;
 	while(gameon) {
-		//ai.createShipState(sector);
+		ai.createShipState(sector);
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
