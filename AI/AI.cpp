@@ -5,9 +5,9 @@ void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
 
-    	pair<int, int> radarOut = radar(*ship);
+    	//pair<int, int> radarOut = radar(*ship);
       
-        std::cout << radarOut.first << ", " << radarOut.second << std::endl;
+        //std::cout << radarOut.first << ", " << radarOut.second << std::endl;
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
@@ -55,8 +55,8 @@ void AI::followPlayer(AIShip* ship){
 
 void AI::defendPosition(AIShip* ship){
     pair<int,int> shipDetected=radar(*ship);
-   // cout<<shipDetected.first<<endl;
-    //cout<<shipDetected.second<<endl;
+   	cout<<shipDetected.first<<endl;
+    cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
 	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
@@ -265,139 +265,73 @@ void AI::orderShip(AIShip theShip, Ship player)
     }
 }
 
-	pair<int, int> AI::radar(AIShip aiship)
-	{
-		const double pi = 3.14152965358979323846;
-		pair<int, int> enemyPosition = make_pair(-1, -1);
-		pair<int, int> shipPosition = aiship.getPosition();
-		pair<int, int> shipSize = aiship.getSize();
 
-		int radarSize =  100;
+void AI::setCurrentSector(Sector newSector)
+{
+	sector = newSector;
+}
 
-		for (double theta = 0; theta < 2.0*pi; theta += 1.0/16.0 * pi)
+pair<int, int> AI::radar(AIShip aiShip)
+{
+	int radarSize = 200;
+
+	pair<int, int> closestEnemyPosition = make_pair(-1, -1);
+
+	double closestEnemyDistance = -1;
+
+	vector<Ship*> ships = sector.getShips();
+
+	pair<int, int> radarPosition = aiShip.getPosition();
+
+
+		//std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
+
+		//int i = 0;
+
+		for (Ship* ship : ships)
 		{
-			double m = tan(theta);
 
-			double b = shipPosition.second / (m*shipPosition.first);
+			//i++;
 
-			if (theta >= 0 && theta < 1.0/2.0*pi)
+			//std::cout << "Ship "<< i << std::endl;
+
+			pair<int, int> shipCheck = ship->getPosition();
+
+			if (shipCheck != radarPosition)
 			{
-				double z = 0;
 
-				for (int x = shipPosition.first; z < radarSize; x+=10)
+				//std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
+
+				double z = sqrt(pow(radarPosition.first - shipCheck.first, 2.0) + pow(radarPosition.second - shipCheck.second, 2.0));
+
+				///std::cout << "Distance "<< z << std::endl;
+
+				if (z < radarSize && closestEnemyPosition.first != -1 &&  closestEnemyPosition.second != -1 && closestEnemyDistance > z)
 				{
-					double y = m * x + b;
-					z = sqrt(pow((shipPosition.first - x), 2.0) + pow((shipPosition.second - y), 2.0));
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition == make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
+					closestEnemyPosition = shipCheck;
+					closestEnemyDistance = z;
+				}
+				else if (z < radarSize && closestEnemyPosition.first == -1 &&  closestEnemyPosition.second == -1)
+				{
+					closestEnemyPosition = shipCheck;
+					closestEnemyDistance = z;
 				}
 
-			}
-			else if (theta > 1.0/2.0*pi && theta <= 1.0*pi)
-			{
-				double z = 0;
-
-				for (int x = shipPosition.first; z < radarSize; x-=10)
-				{
-					double y = m * x + b;
-					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
-
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-
-			}
-			else if (theta > 1.0 && theta < 3.0/2.0*pi)
-			{
-				double z = 0;
-
-				for (int x = shipPosition.first; z < radarSize; x-=10)
-				{
-					double y = m * x + b;
-					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
-
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-			}
-			else if (theta > 3/2*pi && theta < 2*pi)
-			{
-				double z = 0;
-
-				for (int x = shipPosition.first; z < radarSize; x+=10)
-				{
-					double y = m * x + b;
-					z = (pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
-
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-			}
+			}	
 
 		}
 
-		return enemyPosition;
+		return closestEnemyPosition;
 
 	}
 
-	bool AI::checkBounds(int x, int y)
+
+bool AI::checkBounds(int x, int y)
+{
+	if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
 	{
-		if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
-		{
-			return true;
-		}
-
-		return false;
+		return true;
 	}
+
+	return false;
+}
