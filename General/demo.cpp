@@ -523,7 +523,7 @@ void run_demo(gpRender gr){
 				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT && (curSector != 7 || curSector != 8 || curSector != 9))
 				{
 					side = 3;
-					curSecotr += 3;
+					curSector += 3;
 				}
 				else
 				{
