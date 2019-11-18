@@ -10,8 +10,8 @@ typedef std::queue<Point>* Path;
 typedef std::vector<std::vector<bool> > Mesh;
 
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
-constexpr int ZONE_WIDTH = 1280; 
-constexpr int ZONE_HEIGHT = 720;
+constexpr int ZONE_WIDTH = 3840; 
+constexpr int ZONE_HEIGHT = 2160;
 
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
@@ -48,13 +48,13 @@ Path Pathfinder::pathfind(Point start, Point goal)
     {
         
         // Get the point with the LOWEST expected cost
-        ////std::cout << "Before pop" << std::endl;
+        //std::cout << "Before pop" << std::endl;
         Point s = open->pop();
         //std::cout << "After pop" << std::endl;
         //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
         if (s == goal||counter++==MAX_DEPTH)
         {   
-            ////std::cout << "reconstructing" << std::endl;
+            //std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
         }
 

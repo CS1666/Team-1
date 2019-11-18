@@ -171,52 +171,31 @@ bool check_proximity(Sprite &aSprite, Sprite &bSprite, int sz) {
 	return true;
 }
 
-bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+int check_all_collisions3(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
+	int res = -1;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
-		if(osSprite.at(i)->getRenderOrder() != 1 && osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
-			//so, one of these should result in collison if they are the same box
-			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
-			//std::cout << "Is last command Illegal?" << std::endl;
-			//std::cout << "Checked collisions: " << i << std::endl;
+		isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
+		if(isCollision){
+			if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
+				res = osSprite.at(i)->getRenderOrder();
+			}
 		}
+	}
+	return res;
+}
+
+bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+	bool isCollision = false;
+	int res = -1;
+	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+	for(int i = 1;  i < osSprite.size(); i++){
+		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4)
+			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
 	}
 	return isCollision;
 }
-
-std::vector<float> calculateMomentumConserv(Ship &playerent, std::vector<Ship*> &osShip){
-	float playerXspd = playerent.getSpeedX();
-	float playerYspd = playerent.getSpeedY();
-	float otherXspd;
-	float otherYspd;
-	float playerResX = 0;
-	float playerResY = 0;
-	float otherResX = 0;
-	float otherResY = 0;
-	bool isCollision = false;
-	for(int i = 1; i < osShip.size(); i++){
-		isCollision = check_collision2(playerent.getDrawBox(), osShip.at(i)->getDrawBox());
-		if(isCollision == true){
-			otherXspd = osShip.at(i)->getSpeedX();
-			otherYspd = osShip.at(i)->getSpeedY();
-			playerResX = (playerXspd + otherXspd)/2;
-			playerResY = (playerYspd + otherYspd)/2;
-			otherResX = (playerXspd + otherXspd)/2;
-			otherResY = (playerYspd + otherYspd)/2;
-
-			osShip.at(i)->setSpeedX(otherResX);
-			osShip.at(i)->setSpeedY(otherResY);
-			osShip.at(i)->setX(osShip.at(i)->getTrueX() + (int)otherResX);
-			osShip.at(i)->setY(osShip.at(i)->getTrueY() + (int)otherResY);
-		}
-	}
-
-	return {playerResX, playerResY};
-}
-
-
-
 
 void updatePosition(Ship &ent, std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT){
 	//needs to be changed to update all objects in the list
@@ -298,7 +277,7 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 	{
 		rotationSpeed--;
 	}
-	if(speed >MAX_SPEED)
+	if(speed > MAX_SPEED)
 	{
 		speed = MAX_SPEED;
 	}
@@ -324,53 +303,54 @@ void updatePosition3(Ship &ent, std::vector<Sprite*> &osSprite, std::vector<Ship
 	std::vector<float> gravPulls = calculateGravityPull(ent, osSprite);
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
-	std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
-	if(momentumShift[0] != 0|| momentumShift[1] != 0){
-		std::cout << "Push x: " << momentumShift[0] << std::endl;
-		std::cout << "Push y: " << momentumShift[1] << std::endl;
+	
+	ent.setSpeedX(speedX);
+	ent.setSpeedY(speedY);
 
-		speedX = momentumShift[0];
-		speedY = momentumShift[1];
+	int coll = check_all_collisions3(ent.getDrawBox(), osSprite);
 
-		ent.setX(ent.getTrueX() + speedX);
-		speedX = 0;
-		if(ent.getTrueX() < 0 
+	if(ent.getTrueX() < 0 || (ent.getX() + ent.getW() > ZONE_WIDTH) || coll != -1){
+		
+		if(coll == -1){
+			ent.setX(ent.getTrueX() - speedX);
+			
+		}else if(coll == 1 || coll == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
 
-
-			|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
-
-			ent.setX(ent.getTrueX() - momentumShift[0]);
-		}
-
-		ent.setY(ent.getTrueY() + speedY);
-		speedY = 0;
-		if(ent.getY() < 0 
-			|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
-
-			ent.setY(ent.getTrueY() - momentumShift[1]);
+			speedX = momentumShift[0];
+			
+			ent.setSpeedX(speedX);
+			std::cout << "Speed X: " << ent.getSpeedX() << std::endl;
+			ent.setX(ent.getTrueX() + speedX);
+			
 		}
 	}else{
-		ent.setSpeedX(speedX);
-		ent.setSpeedY(speedY);
-
 		ent.setX(ent.getTrueX() + speedX);
-		if(ent.getTrueX() < 0 
+	}
 
-
-			|| (ent.getX() + ent.getW() > ZONE_WIDTH) 
-			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
-
-			ent.setX(ent.getTrueX() - speedX);
-		}
-		ent.setY(ent.getTrueY() + speedY);
-		if(ent.getY() < 0 
-			|| (ent.getY() + ent.getH() > ZONE_HEIGHT) 
-			|| check_all_collisions2(ent.getDrawBox(), osSprite)){
-
+	
+	if(ent.getTrueY() < 0 || (ent.getY() + ent.getH() > ZONE_WIDTH) || coll != -1){
+		
+		if(coll == -1){
 			ent.setY(ent.getTrueY() - speedY);
+			
+		}else if(coll == 1 || coll == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(ent, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
+
+			speedY = momentumShift[1];
+
+			ent.setSpeedY(speedY);
+			std::cout << "Speed Y: " << ent.getSpeedY() << std::endl;
+			ent.setY(ent.getTrueY() + speedY);
+			
 		}
+			
+	}else{
+		ent.setY(ent.getTrueY() + speedY);
 	}
 
 }
