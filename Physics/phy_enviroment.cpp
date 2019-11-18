@@ -10,6 +10,7 @@
 #include "../General/Ship.h"
 #include "../General/Star.h"
 #include "../General/SpaceStation.h"
+#include "../General/SpaceStationUI.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"
@@ -65,7 +66,6 @@ void run_phy_enviro(gpRender gr){
 	//Camera Initilization
 	SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	bool fixed = false;
-	
 	//gpRender object that is used to render object onto screen
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
@@ -77,35 +77,29 @@ void run_phy_enviro(gpRender gr){
 	osSprite.push_back(&playerent);
 	osShip.push_back(&playerent);
 	
-
 	//Red giant Initilzation-
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {800,400,332,315};
 	NSDL_Circ dc2 = {db2};
 	Star starent(db2, tex2, dc2);
-
+	starent.initMass();
 	osSprite.push_back(&starent);
-
-	std::vector <std::pair<int, int>> randCoords = randNumP();
-
+	//std::vector <std::pair<int, int>> randCoords = randNumP();
 
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,1, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,15, starent, 100);
 	osSprite.push_back(&planet1ent);
-
+	std::cout<< "mass " << starent.getMass() << std::endl;
 	//Space Station Initialization-
-	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/Asteroid.png"); //placeholder img
+	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png"); //placeholder img
 	SDL_Rect db4 = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SpaceStation ss_ent(db4, tex_ss);
 	//osSprite.push_back(&ss_ent);
 	osSprite.push_back(&ss_ent);
 	
-	//planet1ent.initVelocity(starent);
-
-	
-	/*//Ship Cruiser initilization
+	//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db5 = {500,300,50,50};
 	Ship ement(db5, tex_em);
@@ -114,7 +108,7 @@ void run_phy_enviro(gpRender gr){
 	osSprite.push_back(&ement);
 	osShip.push_back(&ement);
 
-	SDL_Rect db6 = {400,500,50,50};
+	/*SDL_Rect db6 = {400,500,50,50};
 	Ship ement2(db6, tex_em);
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
@@ -125,6 +119,30 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
+
+	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
+	SDL_Rect e_rect = {50, 50, 100, 100};
+	SpaceStationUI e_UI(e_rect, e_tex);
+	/* //code for making E render on screen
+	e_UI.set_spriteIndex(osSprite.size());
+	osSprite.push_back(&e_UI);
+	*/
+	SDL_Texture* r_tex = gr.loadImage("Assets/Objects/R.png");
+	SDL_Rect r_rect = {50, 200, 100, 100};
+	SpaceStationUI r_UI(r_rect, r_tex);
+	/* //code for making R render on screen
+	r_UI.set_spriteIndex(osSprite.size());
+	osSprite.push_back(&r_UI);
+	*/
+	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
+	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
+	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
+	/* //code for making the space station menu render on screen
+	ss_UI.set_spriteIndex(osSprite.size());
+	osSprite.push_back(&ss_UI);
+	*/
+	bool in_space_station_menu = false;
+	bool is_space_station_in_range = false;
 
 	srand(time(0));
 	SDL_Rect bgtile[100];
@@ -170,12 +188,9 @@ void run_phy_enviro(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	Audio::play_music();
-	bool is_space_station_in_range = false;
-	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
-	SDL_Rect e_rect = {50, 50, 100, 100};
-	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
-	SDL_Rect ss_UI_rect = { 200, 200, 200, 200};
-	bool in_space_station_menu = false;
+
+	gameon = false;
+
 	while(!gameon){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
@@ -221,6 +236,8 @@ void run_phy_enviro(gpRender gr){
 			if(check_proximity(playerent, ss_ent, 3)){
 				//then we set the is_space_station_in_range flag to true
 				is_space_station_in_range = true;
+				e_UI.set_spriteIndex(osSprite.size());
+				osSprite.push_back(&e_UI);
 				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
 			}
 		} else {
@@ -229,10 +246,16 @@ void run_phy_enviro(gpRender gr){
 				//SDL_RenderPresent(gr.getRender());
 			//we need to check if our ship has left the range of the space station
 			if(!check_proximity(playerent, ss_ent, 3)){
-				//then we set the is_space_station_in_range flag to true
+				
+				if(in_space_station_menu) {
+					osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+				}
+				osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
+				//then we set the is_space_station_in_range flag to false
 				is_space_station_in_range = false;
 				in_space_station_menu = false;
 				//SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+				
 			}
 		}
 		
@@ -251,18 +274,38 @@ void run_phy_enviro(gpRender gr){
 					break;
 				
 				case SDLK_e:
-					if(is_space_station_in_range){
-					if(s.type == SDL_KEYDOWN){
+					if(e.type == SDL_KEYDOWN){
 						//SDL_RenderClear(gr.getRender());
 						//gameon = false;
-						if(!in_space_station_menu){
+						if(!in_space_station_menu && is_space_station_in_range){
 							in_space_station_menu = true;
-							SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
-							SDL_RenderPresent(gr.getRender());
+							ss_UI.set_spriteIndex(osSprite.size());
+							osSprite.push_back(&ss_UI);
+							r_UI.set_spriteIndex(osSprite.size());
+							osSprite.push_back(&r_UI);
+						} else if(in_space_station_menu && is_space_station_in_range) {
+							/*
+							//in_space_station_menu = false;
+							in_space_station_menu = false;
+							osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+							*/
+						}
+					}
+					break;
+
+				case SDLK_r:
+					if(e.type == SDL_KEYDOWN){
+						/*
+						//SDL_RenderClear(gr.getRender());
+						//gameon = false;
+						if(in_space_station_menu && is_space_station_in_range){
+							in_space_station_menu = false;
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 						} else {
 							//in_space_station_menu = false;
 						}
-					}
+						*/
 					}
 					break;
 
@@ -279,6 +322,57 @@ void run_phy_enviro(gpRender gr){
 					break;*/
 			}
 		}
+
+		// --- START OF SPACE STATION UI SUB-LOOP ----
+		while(in_space_station_menu) {
+			while(SDL_PollEvent(&e)) {
+			gameon = handleKeyEvents(e, playerent);	
+			
+			switch(e.key.keysym.sym) {
+				
+				case SDLK_e:
+					if(e.type == SDL_KEYDOWN){
+						//SDL_RenderClear(gr.getRender());
+						//gameon = false;
+						if(!in_space_station_menu && is_space_station_in_range){
+							/*
+							in_space_station_menu = true;
+							ss_UI.set_spriteIndex(osSprite.size());
+							osSprite.push_back(&ss_UI);
+							*/
+						} else if(in_space_station_menu && is_space_station_in_range) {
+							//in_space_station_menu = false;
+							in_space_station_menu = false;
+							osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+						}
+					}
+					break;
+
+				case SDLK_r:
+					if(e.type == SDL_KEYDOWN){
+						// ---- INSERT MENU OPTION FOR R KEY HERE --- <<<<<
+						
+					}
+					break;
+
+				/*case SDLK_p:
+					if(e.type == SDL_KEYDOWN){
+						ement.setCurrHp(0);
+					}
+					break;
+
+				case SDLK_o:
+					if(e.type == SDL_KEYDOWN){
+						ement2.setCurrHp(0);
+					}
+					break;*/
+			}
+			}
+			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+		}
+		//--- END OF SPACE STATION UI SUB LOOP ---
+
 		hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 		hpent.changeBar(playerent);
 		std::cout << hpent.getW() << endl;
@@ -330,19 +424,24 @@ void run_phy_enviro(gpRender gr){
 			camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 			fixed = true;
 		}
-
+		
+		/*
 		if(is_space_station_in_range){
 		//we display the E png to show that space station can be accessed
-				SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderCopy(gr.getRender(), e_tex, nullptr, &e_rect);
+			SDL_RenderPresent(gr.getRender());
+			if(in_space_station_menu){
+				SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
 				SDL_RenderPresent(gr.getRender());
-				if(in_space_station_menu){
-					SDL_RenderCopy(gr.getRender(), ss_UI_tex, nullptr, &ss_UI_rect);
-					SDL_RenderPresent(gr.getRender());
-				}
+			}
 				
 		}
+		*/
 		gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
-		
+		if(playerent.getCurrHp() <=0 )
+		{
+			gameon = false;
+		}
 		
 	}
 	Audio::close();

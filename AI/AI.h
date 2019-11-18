@@ -10,7 +10,7 @@
 #include "AIShip.h"
 #include "../General/Sector.h"
 #include "theta.h"
-
+#include "../General/Constants.h"
 #include <math.h>
 
 //#include "Physics/BasicMovementFPSlimit.h"
@@ -24,12 +24,17 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-
+        vector<Sprite*> osSprite;
+        vector<SDL_Texture*> allTextures;
+        Sector sector;
     public:
+        void setCurrentSector(Sector newSector);
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
+        void setSprites(vector<Sprite*>& sprites);
+        void setTextures(vector<SDL_Texture*>& textures);
         void lineOfSight();
         bool createMapState(Sector currentSector);
         bool createShipState(Sector currentSector);
@@ -48,7 +53,8 @@ class AI
         void Flee(AIShip* ship);
 	void doNothing(AIShip* ship);
 
-        pair<int, int> radar(AIShip aiship);
+        pair<int, int> oldRadar(AIShip aiship);
+        pair<int, int> radar(AIShip aiShip);
         bool checkBounds(int x, int y);
 
 };
