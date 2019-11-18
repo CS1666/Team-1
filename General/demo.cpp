@@ -572,7 +572,12 @@ void run_demo(gpRender gr){
 			
 			
 			
-
+			for(std::size_t i = 0; i != osSprite.size(); i++){
+				if(osSprite.at(i)->shouldRemove())
+				{
+					osSprite.erase(osSprite.begin()+i);
+				}
+			}
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 		}
