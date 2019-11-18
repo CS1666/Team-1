@@ -370,6 +370,8 @@ void run_demo(gpRender gr){
 	int startPlayerX = playerent.getX();
 	int startPlayerY = playerent.getY();
 	
+	std::vector<int> toErase;
+
 	while(gameon)
 	{
 		playerent.setX(startPlayerX);
@@ -572,7 +574,17 @@ void run_demo(gpRender gr){
 			
 			
 			
-
+			for(std::size_t i = 0; i != osSprite.size(); i++){
+				if(osSprite.at(i)->shouldRemove())
+				{
+					toErase.push_back(i);
+				}
+			}
+			for(auto i : toErase)
+			{
+				osSprite.erase(osSprite.begin()+i);
+			}
+			toErase.clear();
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 		}
