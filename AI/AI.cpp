@@ -7,7 +7,7 @@ void AI::executeAIActions(){
 
     	pair<int, int> radarOut = radar(*ship);
       
-        std::cout << radarOut.first << ", " << radarOut.second << std::endl;
+        //std::cout << radarOut.first << ", " << radarOut.second << std::endl;
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
@@ -55,13 +55,14 @@ void AI::followPlayer(AIShip* ship){
 
 void AI::defendPosition(AIShip* ship){
     pair<int,int> shipDetected=radar(*ship);
-   // cout<<shipDetected.first<<endl;
+    //cout<<shipDetected.first<<endl;
     //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
 	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+	//cout<<"Texture "<<proj.getTexture()<<endl;
 	if(proj.getTexture()!=nullptr)
-	    osSprite.push_back(&proj);
+	    osSprite.push_back(new Projectile(proj));
     }
    //todo: have different radar range?
     if(ship->isFreeForm())

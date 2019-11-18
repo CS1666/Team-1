@@ -15,6 +15,8 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	    isAlly=false;
 	    freeForm=true;
 	}
+	maxVelocity=10;
+	maxRotation=10;
 	isUser=false;
 };
 
@@ -125,8 +127,8 @@ void AIShip::calculateNewAngle(pair<int,int> destination)
     //most of this initialization is currently still in follow path, but we want to use updateMovement so idk
     int x_coord=destination.first;
     int y_coord=destination.second;
-    int cur_x=position.first;
-    int cur_y=position.second;
+    int cur_x=getX();
+    int cur_y=getY();
     double xSlope=x_coord-cur_x;
     double ySlope=y_coord-cur_y;
     newAngle= atan2(-ySlope,xSlope);
@@ -229,8 +231,6 @@ void AIShip::resetVariables()
     xVelocity=0;
     yVelocity=0;
     rotation=0;
-    maxVelocity=10;
-    maxRotation=10;
     rotationSet=false;
 }
 void AIShip::setPath(queue<pair<int,int>>* thePath)
@@ -244,6 +244,7 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 {
     //first calculate the angle to rotate to
+    rotationSet=false;
     if(!rotationSet)
     {
 	calculateNewAngle(otherShip);
