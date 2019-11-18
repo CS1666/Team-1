@@ -24,9 +24,11 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-	vector<Sprite*> osSprite;
-	vector<SDL_Texture*> allTextures;
+    	vector<Sprite*> osSprite;
+    	vector<SDL_Texture*> allTextures;
+        Sector sector;
     public:
+        void setCurrentSector(Sector newSector);
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
@@ -43,7 +45,6 @@ class AI
         Hero* getPlayerShip();
         void executeAIActions();
         int calculateDistance(pair<int,int> start, pair<int,int>stop);
-
 
         void followPlayer(AIShip* ship);
         void defendPosition(AIShip* ship);
