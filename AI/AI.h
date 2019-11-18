@@ -26,6 +26,7 @@ class AI
         Pathfinder* pathfinder;
 	vector<Sprite*> osSprite;
 	vector<SDL_Texture*> allTextures;
+	pair<int,int> sectorSize; //width, height
     public:
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
@@ -48,11 +49,12 @@ class AI
 	//2 = flee
 	//3 = ?
 	pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
-
+	pair<int,int> getSectorSize();
+	void setSectorSize(pair<int,int> sector);
         void followPlayer(AIShip* ship);
         void defendPosition(AIShip* ship);
         void pursueShip(AIShip* ship);
-        void Flee(AIShip* ship);
+        void fleeToCorner(AIShip* ship);
 	void doNothing(AIShip* ship);
 
         pair<int, int> radar(AIShip aiship);
