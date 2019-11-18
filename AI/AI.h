@@ -27,7 +27,9 @@ class AI
 	vector<Sprite*> osSprite;
 	vector<SDL_Texture*> allTextures;
 	pair<int,int> sectorSize; //width, height
+        Sector sector;
     public:
+        void setCurrentSector(Sector newSector);
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
