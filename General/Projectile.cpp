@@ -14,18 +14,18 @@ void Projectile::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 	float speedY = 10*sin((getAngle() - 90.0)*PI/180);
 	
 	setX(getTrueX() + speedX);
-	/*if(getTrueX() < 0 
+	if(getTrueX() < 0 
 
 		|| (getX() + getW() > ZONE_WIDTH)
 		|| check_all_collisions(getDrawBox(), osSprite)){
-
-		setX(getTrueX() - speedX);
-	}*/
+		remove = true;
+	}
 	setY(getTrueY() + speedY);
-	/*if(getY() < 0 
+	if(getY() < 0 
 		|| (getY() + getH() > ZONE_HEIGHT)
 		|| check_all_collisions(getDrawBox(), osSprite)){
+		remove = true;
 
-		setY(getTrueY() - speedY);
-	}*/
+		
+	}
 }
