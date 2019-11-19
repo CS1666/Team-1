@@ -92,11 +92,11 @@ void Sector::setNumEnemy(int nume){
 	num_enemy = nume;
 }
 
-void Sector::setSpaceStation(SpaceStation nss){
+void Sector::setSpaceStation(SpaceStation* nss){
 	ss = nss;
 }
 
-SpaceStation Sector::getSpaceStation(){
+SpaceStation* Sector::getSpaceStation(){
 	return ss;
 }
 
@@ -133,8 +133,12 @@ vector<pair<int,int>> Sector::getEnemySpawn(int spawnloc){
 
 
 vector<pair<int,int>> Sector::getAllySpawn(){
+	std::cout << "1" << std::endl;
+	vector<int> sspos = ss->getPosition();
+	std::cout << "2" <<  std::endl;
+	std::cout << sspos[0] <<  std::endl;
+	std::cout << sspos[1] <<  std::endl;
 
-	vector<int> sspos = ss.getPosition();
 	//                            left                               top                                     right										bottom
 	return {pair<int,int>(sspos[0] - 100, sspos[1]), pair<int,int>(sspos[0], sspos[1] - 100),  pair<int,int>(sspos[0] + 100, sspos[1]), pair<int,int>(sspos[0],  sspos[1] + 100) };
 }

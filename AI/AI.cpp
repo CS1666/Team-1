@@ -482,7 +482,6 @@ void AI::createShip(bool isAlly){
 
     //Create New Ally Ship
     if(isAlly){
-
         if(sector->getNumAlly() < SHIP_SECTOR_LIMIT){
             sector->setNumAlly(sector->getNumAlly() + 1);
             pair<int,int> asp = ChooseAllySpawn();
@@ -490,15 +489,14 @@ void AI::createShip(bool isAlly){
             if(asp.first != -1 && asp.second != -1){
                 SDL_Rect db = {asp.first,asp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
                 SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ALLY);
-    
                 AIShip* newShip = new AIShip(db, tex,true);
                 newShip->setPosition(asp);
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
                 newShip->setF(-1);
                 newShip->setGoal(0);
-    
                 osSprite->push_back(newShip);
+                ships->push_back(newShip);
 
             }
             else{
@@ -564,15 +562,16 @@ pair<int,int> AI::ChooseEnemySpawn(){
 }
 
 pair<int,int> AI::ChooseAllySpawn(){
+    std::cout << "1" << std::endl;
     vector<pair<int,int>> as = sector->getAllySpawn();
-
+    std::cout << "2" << std::endl;
     for(pair<int,int> spawn : as){
-
+        std::cout << "3" << std::endl;
         if(!occupied(spawn)){
             return spawn;
         }
     }
-
+    std::cout << "4" << std::endl;
     return pair<int,int>(-1,-1);
 }
 

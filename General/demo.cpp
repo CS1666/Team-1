@@ -230,6 +230,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
 	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SpaceStation ss_ent(rect_ss, tex_ss);
+	ss_ent.setPosition(std::vector<int>{SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200 });
 	osSprite.push_back(&ss_ent);
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
@@ -363,6 +364,7 @@ void run_demo(gpRender gr){
 	
 
 	sector.setShips({&playerent});
+	sector.setSpaceStation(&ss_ent);
 
 	
 
@@ -387,6 +389,7 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
+
 	Audio::play_music();
 	
 	while(!gameon){
@@ -527,7 +530,7 @@ void run_demo(gpRender gr){
 		
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
-								// ---- INSERT MENU OPTION FOR R KEY HERE --- <<<<<
+								ai.createShip(true);
 								
 							}
 							break;

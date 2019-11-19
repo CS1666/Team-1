@@ -16,7 +16,7 @@ class Sector
 		vector<Star *> __stars;
 		vector<Ship *> __ships;
 		vector<int> __size;
-		SpaceStation ss;
+		SpaceStation* ss;
 		int num_ally;
 		int num_enemy;
 		
@@ -34,8 +34,8 @@ class Sector
 		int getNumEnemy();
 		void setNumAlly(int numa);
 		void setNumEnemy(int nume);
-		void setSpaceStation(SpaceStation nss);
-		SpaceStation getSpaceStation();
+		void setSpaceStation(SpaceStation* nss);
+		SpaceStation* getSpaceStation();
 		vector<pair<int,int>> getEnemySpawn(int spawnloc);
 		vector<pair<int,int>> getAllySpawn();
 };
