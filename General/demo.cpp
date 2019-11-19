@@ -19,6 +19,8 @@
 #include "../General/gpRender.h"
 #include "../Level_Generation/Ellers_Maze.h"
 #include "demo.h"
+#include "../AI/AI.h"
+#include "../General/Sector.h"
 
 std::vector<std::pair<int, int>> randNum(){
 
@@ -94,7 +96,7 @@ void run_demo(gpRender gr){
 	std::vector<Ship*> osShip; // vector for tracking ships
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
-
+	vector<SDL_Texture*> allTextures=initTextures(gr);
 
 	//Audio Initilization
 	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
@@ -136,9 +138,11 @@ void run_demo(gpRender gr){
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 	NSDL_Circ dc2 = {db2};
 	Star starent(db2, tex2, dc2);
+	starent.setSize({sunHeight,sunWidth});
+	starent.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
 	osSprite.push_back(&starent);
 	//}
-	osSprite.push_back(&starent);
+	
 
 	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
@@ -226,6 +230,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
 	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
 	SpaceStation ss_ent(rect_ss, tex_ss);
+	ss_ent.setPosition(std::vector<int>{SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200 });
 	osSprite.push_back(&ss_ent);
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
@@ -344,6 +349,47 @@ void run_demo(gpRender gr){
 	SDL_Rect title = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 	SDL_Event s;
 	
+	vector<AIShip*> aiControlled;
+
+	AI ai;
+
+	Sector sector;
+
+	
+	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
+
+	sector.setStars({&starent});
+	
+	osSprite.push_back(&starent);
+	
+
+	sector.setShips({&playerent});
+	sector.setSpaceStation(&ss_ent);
+
+	
+
+
+	ai.createMapState(&sector);
+	
+	ai.setCurrentSector(&sector);
+
+
+	vector<vector<bool> > mesh = ai.getMapState();
+
+	pair<int,int> sectorSize;
+
+	sectorSize.first=ZONE_WIDTH;
+	
+	sectorSize.second=ZONE_HEIGHT;
+	ai.setSectorSize(sectorSize);
+	Pathfinder path(mesh, 10);
+
+	ai.setPathfinder(&path);
+	ai.setPlayerShip(&playerent);
+	ai.setShips(&aiControlled);
+	ai.setSprites(&osSprite);
+	ai.setTextures(&allTextures);
+
 	Audio::play_music();
 	
 	while(!gameon){
@@ -391,7 +437,8 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-			
+			ai.createShip(false);
+			ai.executeAIActions();
 			// Checking for if the Space Station is in range of the player ship.
 			if(!is_space_station_in_range){
 				if(check_proximity(playerent, ss_ent, 3)){
@@ -483,7 +530,7 @@ void run_demo(gpRender gr){
 		
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
-								// ---- INSERT MENU OPTION FOR R KEY HERE --- <<<<<
+								ai.createShip(true);
 								
 							}
 							break;
