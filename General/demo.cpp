@@ -269,7 +269,7 @@ void run_demo(gpRender gr){
 	HpBar sector4ent(sector4Rect, sector4Tex, 0);
 	osSprite.push_back(&sector4ent);
 	//Sector 5
-	SDL_Texture* sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");
+	SDL_Texture* sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");//contestedControl
 	SDL_Rect sector5Rect = {1213,52,15,15};
 	HpBar sector5ent(sector5Rect, sector5Tex, 0);
 	osSprite.push_back(&sector5ent);
@@ -632,7 +632,7 @@ void run_demo(gpRender gr){
 					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
 				}
 				else if(curSector == 5){
-					sector5Tex = gr.loadImage("Assets/Objects/contestedSector.png");
+					sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");
 					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
 					curSectorMap = sector5ent2;
 					osSprite.push_back(&curSectorMap);
