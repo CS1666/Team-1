@@ -62,7 +62,7 @@
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
 		collisionBox.x = (int)Sprite::x;
-		collisionCirc.setX((int)Sprite::x);
+		collisionCirc.setX((int)(Sprite::x+drawBox.w/2.0));
 	}
 	int Sprite::getX(){
 			return drawBox.x;
@@ -71,7 +71,7 @@
 		Sprite::y = y;
 		drawBox.y = (int)Sprite::y;
 		collisionBox.y = (int)Sprite::y;
-		collisionCirc.setY((int)Sprite::y);
+		collisionCirc.setY((int)(Sprite::y+drawBox.h/2.0));
 	}
 	int Sprite::getY(){
 		return drawBox.y;
@@ -202,8 +202,8 @@
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 			}
-			/*else
-				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());*/
+			else
+				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}
@@ -217,9 +217,9 @@
 		for (int i = 1; i < osSprite.size(); i++) {
 			//so, one of these should result in collison if they are the same box
 			if (osSprite.at(i)->isCircEnt())
-				isCollision = check_collision(a, osSprite.at(i)->getCollisionCirc());
+				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 			else
-				isCollision = check_collision(osSprite.at(i)->getDrawBox(), a);
+				isCollision |= check_collision(osSprite.at(i)->getDrawBox(), a);
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}
