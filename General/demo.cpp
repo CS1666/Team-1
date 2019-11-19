@@ -586,10 +586,10 @@ void run_demo(gpRender gr){
 			frames++;
 			if(frames/6 > 2){
 				frames = 0;
-				&(mapSectors[curSector-1]) =  gr.loadImage("Assets/Objects/currentSector.png");
+				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/currentSector.png");
 			}
 			else{
-				&(mapSectors[curSector-1]) =  gr.loadImage("Assets/Objects/enemySector.png"); //will be changed based on number of enemy's alive in sector
+				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/enemySector.png"); //will be changed based on number of enemy's alive in sector
 			}
 			
 			
