@@ -528,9 +528,18 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-			for( auto ent : sector.getPlanets())
+			if(sector.getPlanets().size() > 0)
 			{
-				ent->updatePosition(playerent);
+				for( auto ent : sector.getPlanets())
+				{
+					ent->updatePosition(playerent);
+				}
+			}
+			else
+			{
+				planet1ent.updatePosition(playerent);	
+				planet2ent.updatePosition(playerent);	
+				planet4ent.updatePosition(playerent);	
 			}
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
