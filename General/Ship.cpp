@@ -238,7 +238,15 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 	return laser;
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 0;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
+
+	renderOrder = 0;
+	isAlly = true;
+
+
+
+
+};
 
 
 //General wrapper function to handle Key evenets
