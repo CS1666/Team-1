@@ -5,6 +5,9 @@
 #include <vector>
 #include "Star.h"
 #include "Ship.h"
+#include "planet.h"
+#include "asteroid.cpp"
+#include "BlackHole.h"
 #include "SpaceStation.h"
 
 using namespace std;
@@ -15,6 +18,9 @@ class Sector
 
 		vector<Star *> __stars;
 		vector<Ship *> __ships;
+		vector<Planet *> __planets;
+		vector<Asteroid *> __asteroids;
+		vector<BlackHole *> __blackholes;
 		vector<int> __size;
 		SpaceStation* ss;
 		int num_ally = 0;
@@ -22,9 +28,19 @@ class Sector
 		
 
 	public:
+		void setPlanets(vector<Planet *> newPlanets);
+		vector<Planet *> getPlanets();
+		void addPlanet(Planet* newPlanet);
+		void setAsteroids(vector<Asteroid *> newAsteroids);
+		vector<Asteroid *> getAsteroids();
+		void addAsteroid(Asteroid* newAsteroid);
+		void setBlackHoles(vector<BlackHole *> newBlackHoles);
+		vector<BlackHole *> getBlackHoles();
+		void addBlackHole(BlackHole* newBlackHole);
 		void setStars(vector<Star *> newStars);
 		vector<Star *> getStars();
 		void setShips(vector<Ship *> newShips);
+		void addShips(Ship* newShip);
 		void setSize(vector<int> newSize);
 		vector<int> getSize();
 		vector<vector<int> > getState();
