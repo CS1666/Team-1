@@ -59,7 +59,7 @@ class AI
         void fleeToCorner(AIShip* ship);
 	void doNothing(AIShip* ship);
 
-        pair<int, int> radar(AIShip aiship);
+        pair<int, int> radar(AIShip& aiship);
         bool checkBounds(int x, int y);
 
 };
