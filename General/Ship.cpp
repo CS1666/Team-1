@@ -171,7 +171,10 @@ void Ship::updateHull(int newHull)
 
 pair<int,int> Ship::getPosition()
 {
-	return position;
+	pair<int,int> temp;
+	temp.first=getX();
+	temp.second=getY();
+	return temp;
 }
 
 

@@ -86,7 +86,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
 	aiShip2.setF(-1);
-	aiShip2.setGoal(1);
+	aiShip2.setGoal(-1);
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	osSprite.push_back(&aiShip2);
 	//Ship testship(db3,tex3);
@@ -164,9 +164,13 @@ void run_ai_enviro(gpRender gr){
 	AI ai;
 
 	ai.createMapState(sector);
-	ai.createShipState(sector);
+	ai.setCurrentSector(sector);
+	//ai.createShipState(sector);
 	vector<vector<bool> > mesh = ai.getMapState();
-
+	pair<int,int> sectorSize;
+	sectorSize.first=ZONE_WIDTH;
+	sectorSize.second=ZONE_HEIGHT;
+	ai.setSectorSize(sectorSize);
 	Pathfinder path(mesh, 10);
 
 	ai.setPathfinder(&path);
@@ -179,7 +183,7 @@ void run_ai_enviro(gpRender gr){
 	//Game Loop
 	bool render = true;
 	while(gameon) {
-		ai.createShipState(sector);
+		//ai.createShipState(sector);
 		SDL_RenderClear(gr.getRender());
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
