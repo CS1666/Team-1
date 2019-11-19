@@ -545,7 +545,8 @@ void run_demo(gpRender gr){
 
 
 			for(auto ent : osSprite) {
-				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+				if(!ent->getIsAI())
+					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
 
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
