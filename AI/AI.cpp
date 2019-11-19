@@ -391,7 +391,7 @@ void AI::setCurrentSector(Sector newSector)
 	sector = newSector;
 }
 
-pair<int, int> AI::radar(AIShip aiShip)
+pair<int, int> AI::radar(AIShip& aiShip)
 {
 	int radarSize = 200;
 
@@ -404,7 +404,7 @@ pair<int, int> AI::radar(AIShip aiShip)
 	pair<int, int> radarPosition = aiShip.getPosition();
 
 
-		//std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
+//		std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
 
 		//int i = 0;
 
@@ -420,7 +420,7 @@ pair<int, int> AI::radar(AIShip aiShip)
 			if (shipCheck != radarPosition)
 			{
 
-				//std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
+//				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
 
 				double z = sqrt(pow(radarPosition.first - shipCheck.first, 2.0) + pow(radarPosition.second - shipCheck.second, 2.0));
 

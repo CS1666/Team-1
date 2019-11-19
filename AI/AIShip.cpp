@@ -15,6 +15,8 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	    isAlly=false;
 	    freeForm=true;
 	}
+	setX(dBox.x);
+	setY(dBox.y);
 	maxVelocity=10;
 	maxRotation=10;
 	isUser=false;
@@ -30,8 +32,8 @@ void AIShip::followPath()
 			pair<int,int> coords=path->front();
 			int x_coord=coords.first;
 			int y_coord=coords.second;
-			int cur_x=position.first;
-			int cur_y=position.second;
+			int cur_x=getX();
+			int cur_y=getY();
 			double xSlope=x_coord-cur_x;
 			double ySlope=y_coord-cur_y;
 			//get angle of destination
@@ -105,8 +107,6 @@ void AIShip::followPath()
 			    }
 			    setX(cur_x);
 			    setY(cur_y);
-			    position.first=cur_x;
-			    position.second=cur_y;
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
