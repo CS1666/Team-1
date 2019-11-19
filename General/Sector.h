@@ -17,8 +17,8 @@ class Sector
 		vector<Ship *> __ships;
 		vector<int> __size;
 		SpaceStation* ss;
-		int num_ally;
-		int num_enemy;
+		int num_ally = 0;
+		int num_enemy = 0;
 		
 
 	public:
