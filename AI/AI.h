@@ -24,18 +24,23 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-	vector<Sprite*> osSprite;
-	vector<SDL_Texture*> allTextures;
-	pair<int,int> sectorSize; //width, height
+	      vector<Sprite*>* osSprite;
+	      vector<SDL_Texture*>* allTextures;
+	    pair<int,int> sectorSize; //width, height
         Sector sector;
+        pair<int,int> ChooseEnemySpawn();
+        pair<int,int> ChooseAllySpawn();
+        
+  
+
     public:
         void setCurrentSector(Sector newSector);
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
-	void setSprites(vector<Sprite*>& sprites);
-	void setTextures(vector<SDL_Texture*>& textures);
+	      void setSprites(vector<Sprite*>* sprites);
+	      void setTextures(vector<SDL_Texture*>* textures);
         void lineOfSight();
         bool createMapState(Sector currentSector);
         bool createShipState(Sector currentSector);
@@ -50,16 +55,18 @@ class AI
 	//1 = pursue
 	//2 = flee
 	//3 = ?
-	pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
-	pair<int,int> getSectorSize();
-	void setSectorSize(pair<int,int> sector);
-        void followPlayer(AIShip* ship);
-        void defendPosition(AIShip* ship);
-        void pursueShip(AIShip* ship);
-        void fleeToCorner(AIShip* ship);
-	void doNothing(AIShip* ship);
-
-        pair<int, int> radar(AIShip& aiship);
-        bool checkBounds(int x, int y);
+	   pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
+	   pair<int,int> getSectorSize();
+	   void setSectorSize(pair<int,int> sector);
+       void followPlayer(AIShip* ship);
+       void defendPosition(AIShip* ship);
+       void pursueShip(AIShip* ship);
+       void fleeToCorner(AIShip* ship);
+	   void doNothing(AIShip* ship);
+       pair<int, int> radar(AIShip& aiship);
+       bool checkBounds(int x, int y);
+       void createShip(bool isAlly);
+       bool occupied(pair<int,int> spawn);
+       
 
 };

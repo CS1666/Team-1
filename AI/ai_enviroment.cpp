@@ -23,9 +23,6 @@ constexpr int ZONE_HEIGHT = 2160;
 
 
 
-vector<Sprite*> initilizeSprites(){
-
-}
 void run_ai_enviro(gpRender gr){
 
 
@@ -88,7 +85,7 @@ void run_ai_enviro(gpRender gr){
 	aiShip2.setF(-1);
 	aiShip2.setGoal(1);
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
-	osSprite.push_back(&aiShip2);
+	//osSprite.push_back(&aiShip2);
 	//Ship testship(db3,tex3);
 	//load a laser to be reused
 	SDL_Texture* laser=gr.loadImage("Assets/Objects/laser.png");
@@ -96,7 +93,7 @@ void run_ai_enviro(gpRender gr){
 	vector<AIShip*> aiControlled;
 	
 	aiControlled.push_back(&aiShip);
-	aiControlled.push_back(&aiShip2);
+	//aiControlled.push_back(&aiShip2);
 	
 //	cout<<"push back ok"<<endl;
 
@@ -176,8 +173,8 @@ void run_ai_enviro(gpRender gr){
 	ai.setPathfinder(&path);
 	ai.setPlayerShip(&playerShip);
 	ai.setShips(&aiControlled);
-	ai.setSprites(osSprite);
-	ai.setTextures(allTextures);
+	ai.setSprites(&osSprite);
+	ai.setTextures(&allTextures);
 
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
@@ -188,6 +185,7 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
+		ai.createShip(false);
 		ai.executeAIActions();
 
 		//DOESN"T WORK AT THIS TIME
@@ -199,7 +197,9 @@ void run_ai_enviro(gpRender gr){
 		}
 		//updatePosition(aient, osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 		//std::cout << "\nShip 1 postion: " << aiShip.getPosition().first <<" " << aiShip.getPosition().second << "\n" << std::endl;
-		playerShip.updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		for(auto ent : osSprite) {
+				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+		}
 		
 		
 

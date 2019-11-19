@@ -1,6 +1,7 @@
 
 #include "Sector.h"
 
+
 vector<Star> Sector::getStars()
 {
 	return __stars;
@@ -77,4 +78,64 @@ vector<vector<int> > Sector::getShipState()
 	}
 
 	return currentState;
+}
+
+int  Sector::getNumAlly(){
+	return num_ally;
+}
+int  Sector::getNumEnemy(){
+	return num_enemy;
+}
+void Sector::setNumAlly(int numa){
+	num_ally = numa;
+}
+void Sector::setNumEnemy(int nume){
+	num_enemy = nume;
+}
+
+void Sector::setSpaceStation(SpaceStation nss){
+	ss = nss;
+}
+
+SpaceStation Sector::getSpaceStation(){
+	return ss;
+}
+
+vector<pair<int,int>> Sector::getEnemySpawn(int spawnloc){
+
+	switch(spawnloc){
+
+		//top
+		case 0:
+
+			return {pair<int,int>((3840/2) - 25 , 50), pair<int,int>((3840/2) + 50 , 50), pair<int,int>((3840/2) - 100 , 50)};
+
+		//left
+		case 1:
+
+			return {pair<int,int>(3840 - 50 , (2160/2) - 25), pair<int,int>(3840 - 50 , (2160/2) + 50), pair<int,int>(3840 - 50 , (2160/2) - 100)};
+
+		//bottom
+		case 2:
+
+			return {pair<int,int>((3840/2) - 25 , 2160 - 50), pair<int,int>((3840/2) + 50 , 2160 - 50), pair<int,int>((3840/2) - 100, 2160 - 50)};
+
+		//right
+		case 3:
+
+			return {pair<int,int>(50 , (2160/2) - 25), pair<int,int>(50 , (2160/2)+ 50), pair<int,int>(50, (2160/2) - 100)};
+
+	}
+
+
+
+
+}
+
+
+vector<pair<int,int>> Sector::getAllySpawn(){
+
+	vector<int> sspos = ss.getPosition();
+	//                            left                               top                                     right										bottom
+	return {pair<int,int>(sspos[0] - 100, sspos[1]), pair<int,int>(sspos[0], sspos[1] - 100),  pair<int,int>(sspos[0] + 100, sspos[1]), pair<int,int>(sspos[0],  sspos[1] + 100) };
 }

@@ -60,10 +60,10 @@ void AI::defendPosition(AIShip* ship)
     //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+	Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
 	//cout<<"Texture "<<proj.getTexture()<<endl;
-	if(proj.getTexture()!=nullptr)
-	    osSprite.push_back(&proj);
+	if(proj->getTexture()!=nullptr)
+	    osSprite->push_back(proj);
     }
    //todo: have different radar range?
     if(ship->isFreeForm())
@@ -108,9 +108,9 @@ void AI::pursueShip(AIShip* ship)
 	    //rotate and fire
 	    else
 	    {
-		Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
+		Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
         	if(proj.getTexture()!=nullptr)
-            	    osSprite.push_back(&proj);
+            	    osSprite->push_back(&proj);
 	    }
     	}
     }
@@ -161,11 +161,11 @@ void AI::doNothing(AIShip* ship)
 	}
     }
 }
-void AI::setSprites(vector<Sprite*>& sprites)
+void AI::setSprites(vector<Sprite*>* sprites)
 {
     osSprite=sprites;
 }
-void AI::setTextures(vector<SDL_Texture*>& textures)
+void AI::setTextures(vector<SDL_Texture*>* textures)
 {
     allTextures=textures;
 }
@@ -469,3 +469,125 @@ bool AI::checkBounds(int x, int y)
 
 	return false;
 }
+
+void AI::createShip(bool isAlly){
+
+    //Create New Ally Ship
+    if(isAlly){
+
+        if(sector.getNumAlly() < SHIP_SECTOR_LIMIT){
+            sector.setNumAlly(sector.getNumAlly() + 1);
+            pair<int,int> asp = ChooseAllySpawn();
+
+            if(asp.first != -1 && asp.second != -1){
+                SDL_Rect db = {asp.first,asp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
+                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ALLY);
+    
+                AIShip* newShip = new AIShip(db, tex,true);
+                newShip->setPosition(asp);
+                newShip->setDestination(playerShip->getPosition());
+                newShip->setRenderOrder(0);
+                newShip->setF(-1);
+                newShip->setGoal(0);
+    
+                osSprite->push_back(newShip);
+
+            }
+            else{
+                std::cout << "Cannot spawn Ally" << std::endl;
+            }
+            
+        }
+    }
+    else{//Create New Enemy Ship
+
+        if(sector.getNumEnemy() < SHIP_SECTOR_LIMIT){
+            sector.setNumEnemy(sector.getNumEnemy() + 1);
+            pair<int,int> esp = ChooseEnemySpawn();
+            if(esp.first != -1 && esp.second != -1){
+                
+                SDL_Rect db = {esp.first,esp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
+                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ENEMY);
+    
+                AIShip* newShip = new  AIShip(db, tex,false);
+                newShip->setPosition(esp);
+                newShip->setDestination(playerShip->getPosition());
+                newShip->setRenderOrder(0);
+                newShip->setF(-1);
+                newShip->setGoal(1);
+                newShip->setCurrHp(100);
+                newShip->setMaxHp(100);
+    
+                osSprite->push_back(newShip);
+                ships->push_back(newShip);
+                std::cout << "Spawned Enemy" << std::endl;
+
+            }
+
+            else{
+                std::cout << "Cannot spawn Enemy" << std::endl;
+            }
+            
+        }
+
+    }
+
+
+}
+
+
+
+pair<int,int> AI::ChooseEnemySpawn(){
+    int decidedspawn = 3; //note: function will determine which spawn to choose
+
+    vector<pair<int,int>> es = sector.getEnemySpawn(decidedspawn);
+
+    for(pair<int,int> spawn : es){
+
+        if(!occupied(spawn)){
+            return spawn;
+        }
+    }
+
+
+
+    return pair<int,int>(-1,-1);
+
+}
+
+pair<int,int> AI::ChooseAllySpawn(){
+    vector<pair<int,int>> as = sector.getAllySpawn();
+
+    for(pair<int,int> spawn : as){
+
+        if(!occupied(spawn)){
+            return spawn;
+        }
+    }
+
+    return pair<int,int>(-1,-1);
+}
+
+
+bool AI::occupied(pair<int,int> spawn){
+
+    for(Sprite* s: *osSprite){
+        int spx = s->getX();
+        int spy = s->getY();
+        int spw = s->getW();
+        int sph = s->getH();
+        bool lbc = (spx >= spawn.first && spx <=  spawn.first + 50);
+        bool rbc = ((spx + spw)  >= spawn.first && (spx + spw)  <=  spawn.first + 50);
+        bool tbc = (spy >= spawn.second && spy <=  spawn.second + 50);
+        bool bbc = ((spy + sph)  >= spawn.second && (spy + sph)  <=  spawn.second + 50);
+
+        if((lbc || rbc) && (tbc || bbc)){
+            return true;
+        }
+    }
+
+
+    return false;
+}
+
+
