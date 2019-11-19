@@ -600,7 +600,7 @@ void run_demo(gpRender gr){
 				}
 				else if(curSector == 5){
 					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
 					osSprite.push_back(&sector5ent2);
 				}
 				else if(curSector == 6){
@@ -631,7 +631,7 @@ void run_demo(gpRender gr){
 				}
 				else if(curSector == 5){
 					sector5Tex = gr.loadImage("Assets/Objects/enemySector.png");
-					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
 					osSprite.push_back(&sector5ent2);
 				}
 				else if(curSector == 6){
