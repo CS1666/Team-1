@@ -11,19 +11,25 @@ void AI::executeAIActions(){
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
+                cout<<"Following Player"<<endl;
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
+                cout<<"Defending Positon"<<endl;
                 defendPosition(ship);
                 break;
 
             case(2)://Action 3: Attack Enemy
-                Attack(ship);
+                cout<<"Attack Enemy"<<endl;
+                pursueShip(ship);
                 break;
             case(3)://Action 4: Run away from enemy
-                Flee(ship);
+                cout<<"Flee"<<endl;
+
+                fleeToCorner(ship);
                 break;
             default://If not assigned goal do nothing
+                cout<<"Do nothing"<<endl;
                 doNothing(ship);
                 break;
 
@@ -46,40 +52,202 @@ void AI::followPlayer(AIShip* ship){
         ship->setPath(calculatePath(*ship));
         ship->setDestination(getPlayerShip()->getPosition());
     }
+    if(ship->isFreeForm())
+    {
+
+	//idk if ships should be able to autonomously leave/enter follow
+    }
 }
 
 
-void AI::defendPosition(AIShip* ship){
+void AI::defendPosition(AIShip* ship)
+{
     pair<int,int> shipDetected=radar(*ship);
-   	cout<<shipDetected.first<<endl;
-    cout<<shipDetected.second<<endl;
+    //cout<<shipDetected.first<<endl;
+    //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	ship->attackShip(shipDetected,nullptr);//should be a laser texture
+	Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
+	//cout<<"Texture "<<proj.getTexture()<<endl;
+	if(proj->getTexture()!=nullptr)
+	    osSprite->push_back(proj);
     }
    //todo: have different radar range?
+    if(ship->isFreeForm())
+    {
+	int distance=calculateDistance(ship->getPosition(),shipDetected);
+	//pursue/attack
+	if(distance>150&&distance<450)
+	{
+	    //cout<<"begin pursuit"<<endl;
+	    ship->setGoal(2);
+	}
+	//too low HP
+        if(ship->getCurrHp()<ship->getMaxHp()/5)
+            ship->setGoal(3);
+    }
 }
-
-void AI::Attack(AIShip* ship){
-
+//pathfind until close enough then rotate to attack
+void AI::pursueShip(AIShip* ship)
+{
+    pair<int,int> shipDetected=radar(*ship);
+    if(shipDetected.first!=-1)
+    {
+	if(!ship->isPathSet())
+	{
+	    ship->setPath(calculatePath(*ship));
+	}
+	//calculate a destination where it will be close enough
+	//kinda simplistic calculations, can probably be in its own function
+	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
+	cout<<ship->getDestination().first<<endl;
+	cout<<ship->getDestination().second<<endl;
+	ship->followPath();
+   	if(ship->getPathComplete())
+    	{
+	    int distance=calculateDistance(ship->getPosition(),shipDetected);
+	    //still too far, continue pursuit
+	    if(distance>350)
+	    {
+		ship->setPath(calculatePath(*ship));
+		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
+	    }
+	    //rotate and fire
+	    else
+	    {
+            ship->setGoal(1);
+		//Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
+        	//if(proj.getTexture()!=nullptr)
+            	   // osSprite->push_back(&proj);
+	    }
+    	}
+    }
+    if(ship->isFreeForm())
+    {
+	//ship went out of radar
+	if(shipDetected.first==-1)
+	    ship->setGoal(1);
+	//too low HP
+	if(ship->getCurrHp()<ship->getMaxHp()/5)
+	    ship->setGoal(3);
+    }
 }
+//run to a corner when low on HP
+void AI::fleeToCorner(AIShip* ship)
+{
+    if(!ship->isPathSet()){
+        ship->setPath(calculatePath(*ship));
+    }
+    ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
+    ship->followPath();
+    if(ship->getPathComplete())
+    {
+        ship->setPath(calculatePath(*ship));
+        ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
+    }
+    //note: don't really want to have a transition out of here...
+    if(ship->isFreeForm())
+    {
 
-void AI::Flee(AIShip* ship){
-
+    }
 }
 
 //if something on radar switch goal, else do nothing
 void AI::doNothing(AIShip* ship)
 {
-    //note: should have like a 2 second timer or something before becoming active
     if(radar(*ship).first!=-1)
-	ship->setGoal(1);
+    {
+	if(ship->getTime()==0)
+	    ship->setTime(SDL_GetTicks());
+	//1 second between spotting and activation
+	//note that if player ship leaves radius it'll 
+	//swap goals upon coming back in range
+	else if(SDL_GetTicks()-ship->getTime()>1000)
+	{
+	    cout<<"alert: ship activated"<<endl;
+	    ship->setGoal(1);
+	}
+    }
 }
+void AI::setSprites(vector<Sprite*>* sprites)
+{
+    osSprite=sprites;
+}
+void AI::setTextures(vector<SDL_Texture*>* textures)
+{
+    allTextures=textures;
+}
+
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
 }
-
+pair<int,int> AI::generateCoordinate(pair<int,int> start, pair<int,int> stop, int typeGen)
+{
+    pair<int, int> val;
+    if(typeGen==0)
+    {
+	int xDiff=stop.first-start.first;
+	int yDiff=stop.second-start.second;
+	if(xDiff>0)
+	    val.first=stop.first+50;
+	else
+	    val.first=stop.first-50;
+	if(yDiff>0)
+            val.second=stop.second+50;
+	else
+	    val.second=stop.second-50;
+    }
+    else if(typeGen==1)
+    {
+	//get the corners
+	pair<int,int> topRight;
+	topRight.first=0;
+	topRight.second=0;
+	pair<int,int> topLeft;
+	topLeft.first=sectorSize.first;
+	topLeft.second=0;
+	pair<int,int> botRight;
+	botRight.first=0;
+	botRight.second=sectorSize.second;
+	pair<int,int> botLeft;
+	botLeft.first=sectorSize.first;
+	botRight.second=sectorSize.second;
+	//calc distance of pairs with ship
+	int trShip=calculateDistance(start,topRight);
+	int tlShip=calculateDistance(start,topLeft);
+	int brShip=calculateDistance(start,botRight);
+	int blShip=calculateDistance(start,botLeft);
+	//calc distance of pairs with hero/player
+	int trHero=calculateDistance(stop,topRight);
+	int tlHero=calculateDistance(stop,topLeft);
+	int brHero=calculateDistance(stop,botRight);
+	int blHero=calculateDistance(stop,botLeft);
+	//find differences between, get biggest difference
+	int trDiff=trHero-trShip;
+	int tlDiff=tlHero-tlShip;
+	int brDiff=brHero-brShip;
+	int blDiff=blHero-blShip;
+	//set coordinate to be biggest one
+	if(trDiff>=tlDiff && trDiff>=brDiff && trDiff>=blDiff)
+	    val=topRight;
+	else if(tlDiff>=trDiff && tlDiff>=brDiff && tlDiff>=blDiff)
+	    val=topLeft;
+	else if(brDiff>=trDiff && brDiff>=tlDiff && brDiff>=blDiff)
+	    val=botRight;
+	else
+	    val=botLeft;
+    }
+    return val;
+}
+void AI::setSectorSize(pair<int,int> sector)
+{
+    sectorSize=sector;
+}
+pair<int,int> AI::getSectorSize()
+{
+    return sectorSize;
+}
 void AI::setShipPath(AIShip *shipToPath)
 {
 
@@ -105,28 +273,25 @@ void AI::lineOfSight()
 
 }
 
-bool AI::createMapState(Sector currentSector)
+bool AI::createMapState(Sector* currentSector)
 {
     // Buffer in pixels
     const int buffer = 50;
-
     // Gets sector size and sets mesh size to be the size of the sector
-    vector<int> sectorSize = currentSector.getSize();
-
+    vector<int> sectorSize = currentSector->getSize();
     // Gets the positions and sizes of everything within the sector
-    vector<vector<int> > currentState = currentSector.getState();
-
+    vector<vector<int> > currentState = currentSector->getState();
+    std::cout << "8" << std::endl;
       // Creates a new map state with everything equal to zero
     vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-
     // Puts 1's at the edges of objecys within the sector + the size of the buffer
+    std::cout << "9" << std::endl;
     for (vector<int> object : currentState)
     {
-
         for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
         {
             for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
-            {
+            {   
                 if (x >= 0 && x < newStoredMapState.size() && y >=0 && y < newStoredMapState[0].size())
                 {
                     newStoredMapState[x][y] = 1;
@@ -135,50 +300,11 @@ bool AI::createMapState(Sector currentSector)
             }
         }
     }
+    std::cout << "10" << std::endl;
     
     if(checkMapState(newStoredMapState))
     {
         storedMapState=newStoredMapState;
-        return true;
-    }
-    return false;
-
-}
-
-bool AI::createShipState(Sector currentSector)
-{
-    // Buffer in pixels
-    const int buffer = 50;
-
-    // Gets sector size and sets mesh size to be the size of the sector
-    vector<int> sectorSize = currentSector.getSize();
-
-    // Gets the positions and sizes of everything within the sector
-    vector<vector<int> > currentState = currentSector.getShipState();
-
-      // Creates a new map state with everything equal to zero
-    vector<vector<bool> > newStoredShipState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-
-    // Puts 1's at the edges of objecys within the sector + the size of the buffer
-    for (vector<int> object : currentState)
-    {
-
-        for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
-        {
-            for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
-            {
-                if (x >= 0 && x < newStoredShipState.size() && y >=0 && y < newStoredShipState[0].size())
-                {
-                    newStoredShipState[x][y] = 1;
-                }
-
-            }
-        }
-    }
-    
-    if(checkMapState(newStoredShipState))
-    {
-        storedShipState=newStoredShipState;
         return true;
     }
     return false;
@@ -211,8 +337,8 @@ queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
-    //cout<<curPos.first<<endl;
-    //cout<<curPos.second<<endl;
+    cout<<"First: "<<curPos.first<<endl;
+    cout<<"Second: " << curPos.second<<endl;
     queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest);
     return pth;
 }
@@ -230,160 +356,35 @@ void AI::setPathfinder(Pathfinder* npf){
     pathfinder = npf;
 }
 
-	void AI::orderShip(AIShip theShip, Ship player)
-	{
-	    if(theShip.getGoal()==0)//follow player
-	    {
-	    theShip.setDestination(player.getPosition());
-	    //do pathfinding here? idk
-	    }
-	}
+void AI::orderShip(AIShip theShip, Ship player)
+{
+    if(theShip.getGoal()==0)//follow player
+    {
+    theShip.setDestination(player.getPosition());
+    //do pathfinding here? idk
+    }
+}
 
-	pair<int, int> AI::oldRadar(AIShip aiship)
-	{
-		const double pi = 3.14152965358979323846;
-		pair<int, int> enemyPosition = make_pair(-1, -1);
-		pair<int, int> shipPosition = aiship.getPosition();
-		pair<int, int> shipSize = aiship.getSize();
 
-		int radarSize =  100;
+void AI::setCurrentSector(Sector* newSector)
+{
+	sector = newSector;
+}
 
-		for (double theta = 0; theta < 2.0*pi; theta += 1.0/16.0 * pi)
-		{
-			double m = tan(theta);
+pair<int, int> AI::radar(AIShip& aiShip)
+{
+	int radarSize = 450;
 
-			double b = shipPosition.second / (m*shipPosition.first);
+	pair<int, int> closestEnemyPosition = make_pair(-1, -1);
 
-			if (theta >= 0 && theta < 1.0/2.0*pi)
-			{
-				double z = 0;
+	double closestEnemyDistance = -1;
 
-				for (int x = shipPosition.first; z < radarSize; x+=10)
-				{
-					double y = m * x + b;
-					z = sqrt(pow((shipPosition.first - x), 2.0) + pow((shipPosition.second - y), 2.0));
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition == make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
+	vector<Ship*> ships = sector->getShips();
 
-			}
-			else if (theta > 1.0/2.0*pi && theta <= 1.0*pi)
-			{
-				double z = 0;
+	pair<int, int> radarPosition = aiShip.getPosition();
 
-				for (int x = shipPosition.first; z < radarSize; x-=10)
-				{
-					double y = m * x + b;
-					z = sqrt(pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
 
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-
-			}
-			else if (theta > 1.0 && theta < 3.0/2.0*pi)
-			{
-				double z = 0;
-
-				for (int x = shipPosition.first; z < radarSize; x-=10)
-				{
-					double y = m * x + b;
-					z = sqrt(pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
-
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-			}
-			else if (theta > 3/2*pi && theta < 2*pi)
-			{
-				double z = 0;
-
-				for (int x = shipPosition.first; z < radarSize; x+=10)
-				{
-					double y = m * x + b;
-					z = sqrt(pow(shipPosition.first - x, 2.0) + pow(shipPosition.second - y, 2.0));
-
-					if (checkBounds(int(x), int(y)) && storedShipState[int(x)][int(y)] == 1)
-					{
-						if (enemyPosition != make_pair(-1, -1))
-						{
-							double closestEnemy = sqrt(pow((enemyPosition.first - x), 2.0) + pow((enemyPosition.second - y), 2.0));
-							if (z < closestEnemy)
-							{
-								enemyPosition = make_pair(int(x), int(y));
-							}
-						}
-						else
-						{
-							enemyPosition = make_pair(int(x), int(y));
-						}
-					}
-				}
-			}
-
-		}
-
-		return enemyPosition;
-
-	}
-
-	void AI::setCurrentSector(Sector newSector)
-	{
-		sector = newSector;
-	}
-
-	pair<int, int> AI::radar(AIShip aiShip)
-	{
-		int radarSize = 200;
-
-		pair<int, int> closestEnemyPosition = make_pair(-1, -1);
-
-		double closestEnemyDistance = -1;
-
-		vector<Ship*> ships = sector.getShips();
-
-		pair<int, int> radarPosition = aiShip.getPosition();
-
-		//std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
+//		std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
 
 		//int i = 0;
 
@@ -396,10 +397,10 @@ void AI::setPathfinder(Pathfinder* npf){
 
 			pair<int, int> shipCheck = ship->getPosition();
 
-			if (shipCheck != radarPosition)
+			if (shipCheck != radarPosition /*&& ship->getIsAlly() != aiShip.getIsAlly()*/)
 			{
 
-				//std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
+//				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
 
 				double z = sqrt(pow(radarPosition.first - shipCheck.first, 2.0) + pow(radarPosition.second - shipCheck.second, 2.0));
 
@@ -415,7 +416,7 @@ void AI::setPathfinder(Pathfinder* npf){
 					closestEnemyPosition = shipCheck;
 					closestEnemyDistance = z;
 				}
-				
+
 			}	
 
 		}
@@ -424,21 +425,137 @@ void AI::setPathfinder(Pathfinder* npf){
 
 	}
 
-	bool AI::checkBounds(int x, int y)
-	{
-		if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
-		{
-			return true;
-		}
 
-		return false;
+bool AI::checkBounds(int x, int y)
+{
+	if (x >= 0 && x < storedMapState.size() && y >= 0 && y < storedMapState[0].size())
+	{
+		return true;
 	}
 
-	void AI::setSprites(vector<Sprite*>& sprites)
-	{
-		osSprite = sprites;
-	}
-	void AI::setTextures(vector<SDL_Texture*>& textures)
-	{
-		allTextures = textures;
-	}
+	return false;
+}
+
+void AI::createShip(bool isAlly){
+
+    //Create New Ally Ship
+    if(isAlly){
+        if(sector->getNumAlly() < SHIP_SECTOR_LIMIT){
+            sector->setNumAlly(sector->getNumAlly() + 1);
+            pair<int,int> asp = ChooseAllySpawn();
+
+            if(asp.first != -1 && asp.second != -1){
+                SDL_Rect db = {asp.first,asp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
+                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ALLY);
+                AIShip* newShip = new AIShip(db, tex,true);
+                newShip->setPosition(asp);
+                newShip->setDestination(playerShip->getPosition());
+                newShip->setRenderOrder(0);
+                newShip->setF(-1);
+                newShip->setGoal(0);
+                newShip->setCurrHp(100);
+                newShip->setMaxHp(100);
+                osSprite->push_back(newShip);
+                ships->push_back(newShip);
+
+
+            }
+            else{
+                std::cout << "Cannot spawn Ally" << std::endl;
+            }
+            
+        }
+    }
+    else{//Create New Enemy Ship
+
+        if(sector->getNumEnemy() < SHIP_SECTOR_LIMIT){
+            sector->setNumEnemy(sector->getNumEnemy() + 1);
+            pair<int,int> esp = ChooseEnemySpawn();
+            if(esp.first != -1 && esp.second != -1){
+                
+                SDL_Rect db = {esp.first,esp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
+                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ENEMY);
+    
+                AIShip* newShip = new  AIShip(db, tex,false);
+                newShip->setPosition(esp);
+                newShip->setDestination(playerShip->getPosition());
+                newShip->setRenderOrder(0);
+                newShip->setF(-1);
+                newShip->setGoal(2);
+                newShip->setCurrHp(100);
+                newShip->setMaxHp(100);
+    
+                osSprite->push_back(newShip);
+                ships->push_back(newShip);
+                std::cout << "Spawned Enemy" << std::endl;
+
+            }
+
+            else{
+                std::cout << "Cannot spawn Enemy" << std::endl;
+            }
+            
+        }
+
+    }
+
+
+}
+
+
+
+pair<int,int> AI::ChooseEnemySpawn(){
+    int decidedspawn = 3; //note: function will determine which spawn to choose
+
+    vector<pair<int,int>> es = sector->getEnemySpawn(decidedspawn);
+
+    for(pair<int,int> spawn : es){
+
+        if(!occupied(spawn)){
+            return spawn;
+        }
+    }
+
+
+
+    return pair<int,int>(-1,-1);
+
+}
+
+pair<int,int> AI::ChooseAllySpawn(){
+    //std::cout << "1" << std::endl;
+    vector<pair<int,int>> as = sector->getAllySpawn();
+    //std::cout << "2" << std::endl;
+    for(pair<int,int> spawn : as){
+        //std::cout << "3" << std::endl;
+        if(!occupied(spawn)){
+            return spawn;
+        }
+    }
+    //std::cout << "4" << std::endl;
+    return pair<int,int>(-1,-1);
+}
+
+
+bool AI::occupied(pair<int,int> spawn){
+
+    for(Sprite* s: *osSprite){
+        int spx = s->getX();
+        int spy = s->getY();
+        int spw = s->getW();
+        int sph = s->getH();
+        bool lbc = (spx >= spawn.first && spx <=  spawn.first + 50);
+        bool rbc = ((spx + spw)  >= spawn.first && (spx + spw)  <=  spawn.first + 50);
+        bool tbc = (spy >= spawn.second && spy <=  spawn.second + 50);
+        bool bbc = ((spy + sph)  >= spawn.second && (spy + sph)  <=  spawn.second + 50);
+
+        if((lbc || rbc) && (tbc || bbc)){
+            return true;
+        }
+    }
+
+
+    return false;
+}
+
+
