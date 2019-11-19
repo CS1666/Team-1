@@ -15,6 +15,7 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	    isAlly=false;
 	    freeForm=true;
 	}
+	isAI = true;
 	setX(dBox.x);
 	setY(dBox.y);
 	maxVelocity=10;
@@ -52,66 +53,93 @@ void AIShip::followPath()
 			//cout<<"cur angle: "<<angle<<endl;
 			bool angleChanged=rotateToAngle();
 			//entity.setAngle(122);
-		//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
+			//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
 	        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
 			//note: since we don't have updateMovement implemented, most
 			//of the stuff here can probably be removed/handled by that
 			//simulate turning, acceleration of ship
 			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
-			{
+			{	
+				//cout<<"Here 1 "<<cur_y<<endl;
 			    if(cur_x-maxVelocity>x_coord)
 			    {
-				if(maxVelocity>xVelocity)
-				    cur_x-=xVelocity++;
-				else
-				    cur_x-=xVelocity;
+			    	//cout<<"Here 2 "<<cur_y<<endl;
+					if(maxVelocity>xVelocity){
+						//cout<<"Here 3 "<<cur_y<<endl;
+					    cur_x-=xVelocity++;
+					}
+					else{
+						//cout<<"Here 4 "<<cur_y<<endl;
+					    cur_x-=xVelocity;
+					}
 			    }
 			    else if(cur_x>x_coord)
 			    {
-				cur_x=x_coord; //skipped
-				rotationSet=false;
+			    	///cout<<"Here 5 "<<cur_y<<endl;
+					cur_x=x_coord; //skipped
+					rotationSet=false;
 			    }
 			    else if(cur_x+maxVelocity<x_coord)
 			    {
-				if(maxVelocity>xVelocity)
-				    cur_x+=xVelocity++;
-				else
-				    cur_x+=xVelocity;
+			    	//cout<<"Here 6 "<<cur_y<<endl;
+					if(maxVelocity>xVelocity){
+						//cout<<"Here 7 "<<cur_y<<endl;
+					    cur_x+=xVelocity++;
+					}
+					else{
+						//cout<<"Here 8 "<<cur_y<<endl;
+					    cur_x+=xVelocity;
+					}
 			    }
 			    else if(cur_x<x_coord)
 			    {
-				cur_x=x_coord; //skipped
-				rotationSet=false;
+			    	//cout<<"Here 9 "<<cur_y<<endl;
+					cur_x=x_coord; //skipped
+					rotationSet=false;
 			    }
 			    if(cur_y-maxVelocity>y_coord)
 			    {
-				if(maxVelocity>yVelocity)
-				    cur_y-=yVelocity++;
-				else
-				    cur_y-=yVelocity;
+			    	//cout<<"Here 10 "<<cur_y<<endl;
+					if(maxVelocity>yVelocity){
+						//cout<<"Here 11 "<<cur_y<<endl;
+					    cur_y-=yVelocity++;
+					}
+					else{
+						//cout<<"Here 12 "<<cur_y<<endl;
+					    cur_y-=yVelocity;
+					}
 			    }
 			    else if(cur_y>y_coord)
 			    {
-				cur_y=y_coord; //skipped
-				rotationSet=false;
+			    	//cout<<"Here 13 "<<cur_y<<endl;
+					cur_y=y_coord; //skipped
+					rotationSet=false;
 			    }
 			    else if(cur_y+maxVelocity<y_coord)
 			    {
-				if(maxVelocity>yVelocity)
-				    cur_y+=yVelocity++;
-				else
-				    cur_y+=yVelocity;
+			    	//cout<<"Here 13"<<cur_y<<endl;
+					if(maxVelocity>yVelocity){
+						//cout<<"Here 14 "<<cur_y<<endl;
+					    cur_y+=yVelocity++;
+					}
+					else{
+						//cout<<"Here 15 "<<cur_y<<endl;
+					    cur_y+=yVelocity;
+					}
 			    }
 			    else if(cur_y<y_coord)
 			    {
-				cur_y=y_coord; //skipped
-				rotationSet=false;
+			    	//cout<<"Here 16 "<<cur_y<<endl;
+					cur_y=y_coord; //skipped
+					rotationSet=false;
 			    }
+			    //cout<<"Here 17 "<<cur_y<<endl;
 			    setX(cur_x);
 			    setY(cur_y);
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
+				//cout<<"Here 18 "<<cur_y<<endl;
 			    path->pop();
 			    rotationSet=false;
 			}
