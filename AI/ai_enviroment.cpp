@@ -102,18 +102,17 @@ void run_ai_enviro(gpRender gr){
 	//--------------------Red giant Initilzation-----------------------
 	SDL_Texture* tex2 = gr.loadImage("Assets/Objects/red_giant.png");
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,300,300};
-	Sprite starent(db2, tex2);
 
-	Star star;
+	Star star(db2, tex2);
 
 	star.setSize({300, 300});
-	star.setPosition({500, 200});
+	star.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
 
 	Sector sector;
 
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
-	sector.setStars({star});
-	osSprite.push_back(&starent);
+	sector.setStars({&star});
+	osSprite.push_back(&star);
 
 	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
@@ -160,9 +159,9 @@ void run_ai_enviro(gpRender gr){
 
 	AI ai;
 
-	ai.createMapState(sector);
-	ai.setCurrentSector(sector);
-	//ai.createShipState(sector);
+	ai.createMapState(&sector);
+	ai.setCurrentSector(&sector);
+	//ai.createShipState(&sector);
 	vector<vector<bool> > mesh = ai.getMapState();
 	pair<int,int> sectorSize;
 	sectorSize.first=ZONE_WIDTH;

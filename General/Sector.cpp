@@ -2,12 +2,12 @@
 #include "Sector.h"
 
 
-vector<Star> Sector::getStars()
+vector<Star* > Sector::getStars()
 {
 	return __stars;
 }
 
-void Sector::setStars(vector<Star> newStars)
+void Sector::setStars(vector<Star*> newStars)
 {
 	__stars = newStars;
 }
@@ -35,18 +35,18 @@ vector<int> Sector::getSize()
 vector<vector<int> > Sector::getState()
 {
 	std::vector<std::vector<int> > currentState;
-
-	for (Star star : __stars)
+	
+	for (Star* star : __stars)
 	{
-		vector<int> size = star.getSize();
-		vector<int> position = star.getPosition();
-
+		
+		vector<int> size = star->getSize();
+		vector<int> position = star->getPosition();
 		currentState.push_back({position[0], position[1], size[0], size[1]});
-
 	}
 
 	if (!__ships.empty())
 	{
+
 		for (Ship *ship : __ships)
 		{
 			pair<int, int> size = ship->getSize();
@@ -56,7 +56,6 @@ vector<vector<int> > Sector::getState()
 			currentState.push_back({(int)x, (int)y, size.first, size.second});
 		}
 	}
-
 	return currentState;
 }
 

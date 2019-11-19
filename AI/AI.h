@@ -27,14 +27,14 @@ class AI
 	      vector<Sprite*>* osSprite;
 	      vector<SDL_Texture*>* allTextures;
 	    pair<int,int> sectorSize; //width, height
-        Sector sector;
+        Sector* sector;
         pair<int,int> ChooseEnemySpawn();
         pair<int,int> ChooseAllySpawn();
         
   
 
     public:
-        void setCurrentSector(Sector newSector);
+        void setCurrentSector(Sector* newSector);
         void setShips(vector<AIShip*>* newShips);
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
@@ -42,8 +42,8 @@ class AI
 	      void setSprites(vector<Sprite*>* sprites);
 	      void setTextures(vector<SDL_Texture*>* textures);
         void lineOfSight();
-        bool createMapState(Sector currentSector);
-        bool createShipState(Sector currentSector);
+        bool createMapState(Sector* currentSector);
+        bool createShipState(Sector* currentSector);
         queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
         void setPlayerShip(Hero* playerShip);

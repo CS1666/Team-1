@@ -13,7 +13,7 @@ class Sector
 {
 	private:
 
-		vector<Star> __stars;
+		vector<Star *> __stars;
 		vector<Ship *> __ships;
 		vector<int> __size;
 		SpaceStation ss;
@@ -22,8 +22,8 @@ class Sector
 		
 
 	public:
-		void setStars(vector<Star> newStars);
-		vector<Star> getStars();
+		void setStars(vector<Star *> newStars);
+		vector<Star *> getStars();
 		void setShips(vector<Ship *> newShips);
 		void setSize(vector<int> newSize);
 		vector<int> getSize();
