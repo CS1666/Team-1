@@ -51,6 +51,9 @@
 	{
 		return type == 3;
 	}
+	bool Sprite::getIsAI(){
+		return isAI;
+	}
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
@@ -251,6 +254,10 @@
 	}
 
 
+	bool Sprite::shouldRemove()
+	{
+		return remove;
+	}
 
 
 

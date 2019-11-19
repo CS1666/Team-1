@@ -79,6 +79,11 @@ string Ship::getSprite()
 	return sprite;
 }
 
+bool Ship::getIsAlly()
+{
+	return isAlly;
+}
+
 void Ship::checkPhysics()
 {
 
@@ -104,7 +109,8 @@ float Ship::getSpeedY(){
 //integrate BasicMovementFPSlimit.cpp
 void Ship::setPosition(pair<int,int> newPosition)
 {
-	position = newPosition;
+	setX(newPosition.first);
+	setY(newPosition.second);
 }
 
 void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT)
@@ -148,20 +154,14 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 	setX(getTrueX() + speedX);
-
-	position.first=(int)getTrueX()+speedX;
 	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
-		position.first=(int)getTrueX()-speedX;
 	}
 	setY(getTrueY() + speedY);
-
-	position.second=(int)getTrueY()+speedY;
 	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setY(getTrueY() - speedY);
-		position.second=(int)getTrueY()-speedY;
 	}
 }
 
@@ -261,7 +261,10 @@ void Ship::updateHull(int newHull)
 
 pair<int,int> Ship::getPosition()
 {
-	return position;
+	pair<int,int> temp;
+	temp.first=getX();
+	temp.second=getY();
+	return temp;
 }
 
 
