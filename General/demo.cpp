@@ -584,6 +584,7 @@ void run_demo(gpRender gr){
       
 			
 			frames++;
+			HpBar curSectorMap(sector5Rect, sector5Tex, 0);
 			if(frames/6 > 2){
 				frames = 0;
 				if(curSector == 1){
@@ -594,16 +595,15 @@ void run_demo(gpRender gr){
 				}
 				else if(curSector == 3){
 					sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
-					HpBar sector7ent(sector7Rect, sector7Tex, 0);
-					osSprite.push_back(&sector7ent);
 				}
 				else if(curSector == 4){
 					sector4Tex = gr.loadImage("Assets/Objects/currentSector.png");
 				}
 				else if(curSector == 5){
 					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-					sector5ent = new HpBar(sector5Rect, sector5Tex, 0);
-					osSprite.push_back(&sector5ent);
+					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
+					curSectorMap = sector5ent2;
+					osSprite.push_back(&curSectorMap);
 				}
 				else if(curSector == 6){
 					sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
@@ -633,8 +633,9 @@ void run_demo(gpRender gr){
 				}
 				else if(curSector == 5){
 					sector5Tex = gr.loadImage("Assets/Objects/contestedSector.png");
-					sector5ent = new HpBar(sector5Rect, sector5Tex, 0);
-					osSprite.push_back(&sector5ent);
+					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
+					curSectorMap = sector5ent2;
+					osSprite.push_back(&curSectorMap);
 				}
 				else if(curSector == 6){
 					sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
