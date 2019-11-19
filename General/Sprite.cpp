@@ -61,6 +61,8 @@
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
+		collisionBox.x = (int)Sprite::x;
+		collisionCirc.setX((int)Sprite::x);
 	}
 	int Sprite::getX(){
 			return drawBox.x;
@@ -68,6 +70,8 @@
 	void Sprite::setY(float y){
 		Sprite::y = y;
 		drawBox.y = (int)Sprite::y;
+		collisionBox.y = (int)Sprite::y;
+		collisionCirc.setY((int)Sprite::y);
 	}
 	int Sprite::getY(){
 		return drawBox.y;
