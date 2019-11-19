@@ -11,19 +11,26 @@ void AI::executeAIActions(){
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
+                cout<<"Following Player"<<endl;
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
+                cout<<"Defending Positon"<<endl;
                 defendPosition(ship);
                 break;
 
             case(2)://Action 3: Attack Enemy
+                cout<<"Attack Enemy"<<endl;
                 pursueShip(ship);
                 break;
             case(3)://Action 4: Run away from enemy
+                cout<<"Flee"<<endl;
+
                 fleeToCorner(ship);
                 break;
             default://If not assigned goal do nothing
+                cout<<"Do nothing"<<endl;
+
                 doNothing(ship);
                 break;
 
@@ -379,8 +386,8 @@ queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
-    //cout<<curPos.first<<endl;
-    //cout<<curPos.second<<endl;
+    cout<<"First: "<<curPos.first<<endl;
+    cout<<"Second: " << curPos.second<<endl;
     queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest);
     return pth;
 }
@@ -495,8 +502,11 @@ void AI::createShip(bool isAlly){
                 newShip->setRenderOrder(0);
                 newShip->setF(-1);
                 newShip->setGoal(0);
+                newShip->setCurrHp(100);
+                newShip->setMaxHp(100);
                 osSprite->push_back(newShip);
                 ships->push_back(newShip);
+
 
             }
             else{

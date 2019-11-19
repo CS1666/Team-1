@@ -109,7 +109,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         }
         //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
-    ////std::cout << "Stuck 4" << std::endl;
+    std::cout << "Stuck 4" << std::endl;
     return Path();
 }
 
