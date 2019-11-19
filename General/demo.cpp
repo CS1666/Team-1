@@ -296,6 +296,8 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 5;
 	
+	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
+	
 
 	/*
 	//Ship Cruiser initilization
