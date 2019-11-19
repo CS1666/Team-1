@@ -46,8 +46,6 @@ class Ship : public Sprite
         pair<int,int> position;
        
 
-
-
     public:
         float speed = 0;
         float deltaV = 0;
