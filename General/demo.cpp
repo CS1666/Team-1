@@ -630,7 +630,7 @@ void run_demo(gpRender gr){
 					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
 				}
 				else if(curSector == 5){
-					sector5Tex = gr.loadImage("Assets/Objects/contestedControl.png");
+					sector5Tex = gr.loadImage("Assets/Objects/enemyControl.png");
 					HpBar sector5ent2(sector5Rect, sector5Tex, 0);
 					osSprite.push_back(&sector5ent2);
 				}
