@@ -63,15 +63,18 @@ void AI::defendPosition(AIShip* ship)
 	Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
 	//cout<<"Texture "<<proj.getTexture()<<endl;
 	if(proj.getTexture()!=nullptr)
-	    osSprite.push_back(new Projectile(proj));
+	    osSprite.push_back(&proj);
     }
    //todo: have different radar range?
     if(ship->isFreeForm())
     {
 	int distance=calculateDistance(ship->getPosition(),shipDetected);
 	//pursue/attack
-	if(distance>200&&distance<400)
-	    ship->setGoal(2);
+	if(distance>150&&distance<200)
+	{
+	    //cout<<"begin pursuit"<<endl;
+	    //ship->setGoal(2);
+	}
 	//too low HP
         if(ship->getCurrHp()<ship->getMaxHp()/5)
             ship->setGoal(3);
@@ -90,11 +93,14 @@ void AI::pursueShip(AIShip* ship)
 	//calculate a destination where it will be close enough
 	//kinda simplistic calculations, can probably be in its own function
 	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
+	//cout<<ship->getDestination().first<<endl;
+	//cout<<ship->getDestination().second<<endl;
+	ship->followPath();
    	if(ship->getPathComplete())
     	{
 	    int distance=calculateDistance(ship->getPosition(),shipDetected);
 	    //still too far, continue pursuit
-	    if(distance>100)
+	    if(distance>20)
 	    {
 		ship->setPath(calculatePath(*ship));
 		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
@@ -104,7 +110,7 @@ void AI::pursueShip(AIShip* ship)
 	    {
 		Projectile proj=ship->attackShip(shipDetected, allTextures.at(TEX_LASER));
         	if(proj.getTexture()!=nullptr)
-            	    osSprite.push_back(new Projectile(proj));
+            	    osSprite.push_back(&proj);
 	    }
     	}
     }
@@ -173,8 +179,16 @@ pair<int,int> AI::generateCoordinate(pair<int,int> start, pair<int,int> stop, in
     pair<int, int> val;
     if(typeGen==0)
     {
-	val.first=(stop.first-start.first)%100;
-        val.second=(stop.second-start.second)%100;
+	int xDiff=stop.first-start.first;
+	int yDiff=stop.second-start.second;
+	if(xDiff>0)
+	    val.first=stop.first+50;
+	else
+	    val.first=stop.first-50;
+	if(yDiff>0)
+            val.second=stop.second+50;
+	else
+	    val.second=stop.second-50;
     }
     else if(typeGen==1)
     {
@@ -391,7 +405,7 @@ void AI::setCurrentSector(Sector newSector)
 	sector = newSector;
 }
 
-pair<int, int> AI::radar(AIShip aiShip)
+pair<int, int> AI::radar(AIShip& aiShip)
 {
 	int radarSize = 200;
 
@@ -404,7 +418,7 @@ pair<int, int> AI::radar(AIShip aiShip)
 	pair<int, int> radarPosition = aiShip.getPosition();
 
 
-		//std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
+//		std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
 
 		//int i = 0;
 
@@ -420,7 +434,7 @@ pair<int, int> AI::radar(AIShip aiShip)
 			if (shipCheck != radarPosition)
 			{
 
-				//std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
+//				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
 
 				double z = sqrt(pow(radarPosition.first - shipCheck.first, 2.0) + pow(radarPosition.second - shipCheck.second, 2.0));
 
