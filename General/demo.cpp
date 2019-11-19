@@ -586,10 +586,62 @@ void run_demo(gpRender gr){
 			frames++;
 			if(frames/6 > 2){
 				frames = 0;
-				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/currentSector.png");
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
 			}
 			else{
-				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/enemySector.png"); //will be changed based on number of enemy's alive in sector
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/contestedSector.png");
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
 			}
 			
 			
