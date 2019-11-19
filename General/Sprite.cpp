@@ -236,7 +236,10 @@
 	}
 
 
-
+	bool Sprite::shouldRemove()
+	{
+		return remove;
+	}
 
 
 

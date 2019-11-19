@@ -24,8 +24,9 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-        vector<Sprite*> osSprite;
-        vector<SDL_Texture*> allTextures;
+	vector<Sprite*> osSprite;
+	vector<SDL_Texture*> allTextures;
+	pair<int,int> sectorSize; //width, height
         Sector sector;
     public:
         void setCurrentSector(Sector newSector);
@@ -33,8 +34,8 @@ class AI
         bool checkMapState(vector<vector<bool> > newState); //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
-        void setSprites(vector<Sprite*>& sprites);
-        void setTextures(vector<SDL_Texture*>& textures);
+	void setSprites(vector<Sprite*>& sprites);
+	void setTextures(vector<SDL_Texture*>& textures);
         void lineOfSight();
         bool createMapState(Sector currentSector);
         bool createShipState(Sector currentSector);
@@ -45,16 +46,20 @@ class AI
         Hero* getPlayerShip();
         void executeAIActions();
         int calculateDistance(pair<int,int> start, pair<int,int>stop);
-
-
+	//generates coordinates based on the three parameters
+	//1 = pursue
+	//2 = flee
+	//3 = ?
+	pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
+	pair<int,int> getSectorSize();
+	void setSectorSize(pair<int,int> sector);
         void followPlayer(AIShip* ship);
         void defendPosition(AIShip* ship);
-        void Attack(AIShip* ship);
-        void Flee(AIShip* ship);
+        void pursueShip(AIShip* ship);
+        void fleeToCorner(AIShip* ship);
 	void doNothing(AIShip* ship);
 
-        pair<int, int> oldRadar(AIShip aiship);
-        pair<int, int> radar(AIShip aiShip);
+        pair<int, int> radar(AIShip& aiship);
         bool checkBounds(int x, int y);
 
 };

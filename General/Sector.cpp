@@ -11,14 +11,14 @@ void Sector::setStars(vector<Star> newStars)
 	__stars = newStars;
 }
 
-void Sector::setShips(vector<Ship *> newShips)
-{
-	__ships = newShips;
-}
-
 vector<Ship *> Sector::getShips()
 {
 	return __ships;
+}
+
+void Sector::setShips(vector<Ship *> newShips)
+{
+	__ships = newShips;
 }
 
 void Sector::setSize(vector<int> newSize)

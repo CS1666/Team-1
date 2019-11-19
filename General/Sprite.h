@@ -68,7 +68,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
-
+		bool shouldRemove();
 	protected:
 		SDL_Rect drawBox;
 		SDL_Rect collisionBox;
@@ -77,6 +77,7 @@ class Sprite{
 		int animFrame;
 		int type = 0;
 		float x,y;
+		bool remove = false;
 		// set renderOrder for all objects
 		// 0 = player ship
 		// 1 = objects with collision but no gravity (all other ships + space station)
