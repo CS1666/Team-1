@@ -160,7 +160,7 @@ void run_demo(gpRender gr){
 	// osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage(o);
-	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2300	,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
 	Planet planet4ent(db6, tex6, dc6,starent);
 	osSprite.push_back(&planet4ent);

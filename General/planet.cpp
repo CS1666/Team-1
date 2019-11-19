@@ -28,10 +28,10 @@ void Planet::initVelocity(Star& star)
 	{
 		pointAngle += 3.1415926;
 	}
-	angle += 1.57079632679;
-	orbitalVel = std::sqrt(400000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
-	vx = orbitalVel*cos(angle);
-	vy = orbitalVel*sin(angle);
+	pointAngle += 1.57079632679;
+	orbitalVel = std::sqrt(1000000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
+	vx = orbitalVel*cos(pointAngle);
+	vy = orbitalVel*sin(pointAngle);
 	//std::cout << angle * 180 / 3.1415926 << std::endl;
 	//std::cout << vx << std::endl;
 	//std::cout << vy << std::endl;
