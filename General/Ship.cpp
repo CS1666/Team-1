@@ -78,6 +78,11 @@ string Ship::getSprite()
 	return sprite;
 }
 
+bool Ship::getIsAlly()
+{
+	return isAlly;
+}
+
 void Ship::checkPhysics()
 {
 

@@ -281,9 +281,11 @@ bool AI::createMapState(Sector* currentSector)
     vector<int> sectorSize = currentSector->getSize();
     // Gets the positions and sizes of everything within the sector
     vector<vector<int> > currentState = currentSector->getState();
+    std::cout << "8" << std::endl;
       // Creates a new map state with everything equal to zero
     vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
     // Puts 1's at the edges of objecys within the sector + the size of the buffer
+    std::cout << "9" << std::endl;
     for (vector<int> object : currentState)
     {
         for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
@@ -298,6 +300,7 @@ bool AI::createMapState(Sector* currentSector)
             }
         }
     }
+    std::cout << "10" << std::endl;
     
     if(checkMapState(newStoredMapState))
     {
@@ -394,7 +397,7 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			pair<int, int> shipCheck = ship->getPosition();
 
-			if (shipCheck != radarPosition)
+			if (shipCheck != radarPosition && ship->getIsAlly() != aiShip.getIsAlly())
 			{
 
 //				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;

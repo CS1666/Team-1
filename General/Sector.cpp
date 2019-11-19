@@ -78,17 +78,21 @@ vector<int> Sector::getSize()
 
 vector<vector<int> > Sector::getState()
 {
+	std::cout << "11" << std::endl;
 	std::vector<std::vector<int> > currentState;
-	
-	for (Star* star : __stars)
+	if (!__stars.empty())
 	{
-		
-		vector<int> size = star->getSize();
-		vector<int> position = star->getPosition();
-		currentState.push_back({position[0], position[1], size[0], size[1]});
+		for (Star* star : __stars)
+		{
+			
+			vector<int> size = star->getSize();
+			vector<int> position = star->getPosition();
+			currentState.push_back({position[0], position[1], size[0], size[1]});
+		}
 	}
 	/*
 	std::cout << "1" << std::endl;
+	
 	if (!__ships.empty())
 	{
 std::cout << "2" << std::endl;
@@ -97,13 +101,12 @@ std::cout << "2" << std::endl;
 			std::cout << "3" << std::endl;
 			pair<int, int> size = ship->getSize();
 			std::cout << "4" << std::endl;
-			int x = (int)ship->getTrueX();
+			pair<int, int> position = ship->getPosition();
 			std::cout << "5" << std::endl;
-			int y = (int)ship->getTrueY();
 
 			std::cout << "6" << std::endl;
 
-			currentState.push_back({x, y, size.first, size.second});
+			currentState.push_back({position.first, position.second, size.first, size.second});
 
 			std::cout << "7" << std::endl;
 		}
