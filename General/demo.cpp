@@ -432,7 +432,7 @@ void run_demo(gpRender gr){
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
-		
+		int frames = 0;
 
 		//Game Loop
 		while(gameon && solar)
@@ -582,6 +582,17 @@ void run_demo(gpRender gr){
 				
 			}
       
+			
+			frames++;
+			if(frames/6 > 2){
+				frames = 0;
+				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/currentSector.png");
+			}
+			else{
+				mapSectors[curSector-1] =  gr.loadImage("Assets/Objects/enemySector.png"); //will be changed based on number of enemy's alive in sector
+			}
+			
+			
 			TimeData::update_move_last_time();
 
 			if (animate){
