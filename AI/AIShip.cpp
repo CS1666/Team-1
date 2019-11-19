@@ -20,6 +20,8 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	maxVelocity=10;
 	maxRotation=10;
 	isUser=false;
+	maxHp=50;
+	currHp=50;
 };
 
 //ai follows path assigned to it by ai class
@@ -129,6 +131,10 @@ void AIShip::calculateNewAngle(pair<int,int> destination)
     int y_coord=destination.second;
     int cur_x=getX();
     int cur_y=getY();
+    //cout<<"curx: "<<cur_x<<endl;
+    //cout<<"cury: "<<cur_y<<endl;
+    //cout<<"destx: "<<x_coord<<endl;
+    //cout<<"desty: "<<y_coord<<endl;
     double xSlope=x_coord-cur_x;
     double ySlope=y_coord-cur_y;
     newAngle= atan2(-ySlope,xSlope);
