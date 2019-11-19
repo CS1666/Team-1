@@ -1,9 +1,9 @@
 #include "Star.h"
 Star::Star(): Sprite() {mass = 100;};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;mass = 100;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;initMass();};
 Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;mass = m;};
 //to be deprecated
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;mass = 100;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;initMass();};
 Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;mass = m;};
 
 	int Star::getRadius()
@@ -17,7 +17,7 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOr
 	}
 	void Star::initMass()
 	{
-		mass = (drawBox.w+drawBox.h)/6.0;
+		mass = (drawBox.w*drawBox.h)/1000;
 	}
 
 	vector<int> Star::getPosition()

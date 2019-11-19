@@ -51,6 +51,10 @@
 	{
 		return type == 3;
 	}
+	bool Sprite::isPlanet()
+	{
+		return type == 4;
+	}
 	bool Sprite::getIsAI(){
 		return isAI;
 	}
