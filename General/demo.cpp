@@ -144,13 +144,13 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3);
+	Planet planet1ent(db3, tex3, dc3,starent);
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage(u);
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
-	Planet planet2ent(db4, tex4, dc4);
+	Planet planet2ent(db4, tex4, dc4,starent);
 	osSprite.push_back(&planet2ent);
 
 	// SDL_Texture* tex5 = gr.loadImage(o);
@@ -162,7 +162,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex6 = gr.loadImage(o);
 	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
-	Planet planet4ent(db6, tex6, dc6);
+	Planet planet4ent(db6, tex6, dc6,starent);
 	osSprite.push_back(&planet4ent);
 
 	// SDL_Texture* tex7 = gr.loadImage(q);
@@ -528,7 +528,10 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-
+			for( auto ent : sector.getPlanets())
+			{
+				ent->updatePosition(playerent);
+			}
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				
