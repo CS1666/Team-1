@@ -3,17 +3,18 @@
 #include <ctime>
 #include <stdexcept>
 
-
 p_queue::p_queue(int width, int heigth){
     container = new std::vector<std::pair<Point,double>>();
-    indirection = std::unordered_map<Point, int, CantorHash>();
+    std::vector<int> x(heigth, -1);
+    indirection = std::vector<std::vector<int>>(width, x);
 }
 
 p_queue& p_queue::operator=(p_queue& a){
 
     std::vector<std::pair<Point,double>>* npq = new std::vector<std::pair<Point,double>>;
 
-    std::unordered_map<Point, int, CantorHash> nin =  std::unordered_map<Point, int, CantorHash>();
+    std::vector<int> x(indirection[0].size(), -1);
+    std::vector<std::vector<int>> nin =  std::vector<std::vector<int>>(indirection.size(), x);
 
     npq = a.container;
 
@@ -30,10 +31,7 @@ bool p_queue::lessPriority(std::pair<Point, double> &p1, std::pair<Point, double
     return std::abs(p1.second) > std::abs(p2.second);
 }
 
-void p_queue::clear(){
-    container->clear();
-    indirection.clear();
-}
+
 void p_queue::push_up_heap(int index){
     
     if(index != 0){
@@ -97,8 +95,8 @@ void p_queue::swap_nodes(int a, int b){
     Point pa = container->begin()[a].first;
     Point pb = container->begin()[b].first;
 
-    indirection[pa] = b;
-    indirection[pb] = a;
+    indirection[pa.first][pa.second] = b;
+    indirection[pb.first][pb.second] = a;
 
 }
 void p_queue::insert(Point& x, double p)
@@ -107,7 +105,7 @@ void p_queue::insert(Point& x, double p)
 
     //Addes element to bottom of heap and adds to indirection
     container->push_back(elem);
-    indirection[x] = (container->size() - 1);
+    indirection[x.first][x.second] = (container->size() - 1);
 
     //Begins heapify process
     push_up_heap(container->size() - 1); 
@@ -123,7 +121,7 @@ Point& p_queue::pop()
       swap_nodes(0, container->size() - 1);
       result = container->back();
       container->pop_back();
-      indirection[result.first] = -1;
+      indirection[result.first.first][result.first.second] = -1;
 
       push_down_heap(0);
       
@@ -132,7 +130,7 @@ Point& p_queue::pop()
 
       result = container->back();
       container->pop_back();
-      indirection[result.first] = -1;
+      indirection[result.first.first][result.first.second] = -1;
 
     }
 
@@ -143,7 +141,7 @@ void p_queue::ndelete(Point& P){
     //std::cout << "Deleting 1" << std::endl;
     if(contains(P)){
         //std::cout << "Deleting 2" << std::endl;
-        int index = indirection[P];
+        int index = indirection[P.first][P.second];
         swap_nodes(index, container->size() - 1);
         pop();
         push_down_heap(index);
@@ -170,15 +168,8 @@ bool p_queue::contains(Point& key)
     if(container->empty()){
         return false;
     }
-
-    try{
-        indirection.at(key);
-    }
-    catch(const std::out_of_range& oor){
-        return false;
-    }
     
-    if(indirection[key] == -1){
+    else if(indirection[key.first][key.second] == -1){
         return false;
     }
 

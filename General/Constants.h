@@ -11,7 +11,6 @@
 #define CRUISER_HEIGHT 100
 #define CAPITAL_WIDTH 150
 #define CAPITAL_HEIGHT 150
-#define SHIP_SECTOR_LIMIT 3
 //GLOBAL TEXTURE VALUES
 //TO USE: CALL textures.at(TEX_FIGHT_HERO) to get the hero fighter
 //0-8 ARE TEXTURES FOR SHIPS
@@ -37,10 +36,5 @@
 #define TEX_STATION 14
 #define TEX_LASER 15
 
-
 //INIT TEXTURES INTO A VECTOR
 std::vector<SDL_Texture*> initTextures(gpRender& gr);
-
-
-//ENEMY SPAWN ZONES
-

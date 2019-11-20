@@ -46,6 +46,8 @@ class Ship : public Sprite
         pair<int,int> position;
        
 
+
+
     public:
         float speed = 0;
         float deltaV = 0;
@@ -93,10 +95,6 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
-
-        //allied status
-        void setIsAlly(bool alliedStatus);
-        bool getIsAlly();
 };
 
 class Hero: public Ship{        

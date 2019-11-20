@@ -4,9 +4,8 @@
 #include <limits>
 #include <queue>
 #include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include "CantorHash.h"
+#include <map>
+#include <set>
 #include "p_queue.h"
 
 // The pathfinder needs to keep its own state so thought i'd make it a class
@@ -22,7 +21,7 @@
             typedef std::queue<Point>* Path;
             typedef std::vector<std::vector<bool> > Mesh;
             // Give a 2D vector to represent the collision mesh, and an integer vision radius
-            Pathfinder(Mesh  &m, int v);
+            Pathfinder(Mesh  &m, int v): visionRange(v), mesh(m) {}
             Path pathfind(Point start, Point goal);
             void update_mesh(Mesh &m);
 
@@ -30,10 +29,10 @@
         private:
             int visionRange;
             Mesh &mesh;
-            std::unordered_map<Point, double, CantorHash> gScore;
-            std::unordered_map<Point, Point, CantorHash> parent;
+            std::map<Point, double> gScore;
+            std::map<Point, Point> parent;
             p_queue* open;
-            std::unordered_set<Point, CantorHash> closed;
+            std::set<Point> closed;
             int heuristic(Point p1, Point p2);
             int distance(Point p1, Point p2);
             bool line_of_sight(Point p1, Point p2);

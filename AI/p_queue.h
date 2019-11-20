@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iterator>
 #include <unordered_map>
-#include "CantorHash.h"
 
 
 // Priority queue with random access
@@ -28,14 +27,13 @@ class p_queue
         bool contains(Point& key);
         bool compPoints(Point& a, Point& b);
         int getSize();
-        void clear();
         std::vector<std::pair<Point,double>>* getContainer();
 
       
 
     private:
         std::vector<std::pair<Point, double>>* container;
-        std::unordered_map<Point, int, CantorHash> indirection;
+        std::vector<std::vector<int>> indirection;
 
         std::pair<Point, int> getLeftNode(int currindex);
         std::pair<Point, int> getRightNode(int currindex);
