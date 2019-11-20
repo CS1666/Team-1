@@ -35,33 +35,3 @@ std::vector<float> calculateMomentumConserv(Ship &shipOne, std::vector<Ship*> &o
 
 	return {shipOneResX, shipOneResY};
 }
-
-void shipCollisionHandler(Ship &ship1, Ship &ship2){
-	// get speeds from the 2 colliding ships
-	float ship1Xspd = ship1.getSpeedX();
-	float ship2Xspd = ship2.getSpeedX();
-	float ship1Yspd = ship1.getSpeedY();
-	float ship2Yspd = ship2.getSpeedY();
-
-	// get new x and y for the colliding ships
-	float ship1RexX = (ship1Xspd + ship2Xspd)/2;
-	float ship1RexY = (ship1Yspd + ship2Yspd)/2;
-
-	float ship2RexX = (ship1Xspd + ship2Xspd)/2;
-	float ship2RexY = (ship1Yspd + ship2Yspd)/2;
-	std::cout << "speed ship 2 X: " << ship2RexX << std::endl;
-	std::cout << "speed ship 2 Y: " << ship2RexY << std::endl;
-	
-	// set the new speed for the colliding ships
-	ship1.setSpeedX(ship1RexX);
-	ship2.setSpeedX(ship2RexX);
-
-	ship1.setSpeedY(ship1RexY);
-	ship2.setSpeedY(ship2RexY);
-
-	// move the colliding ships
-	ship2.setX(ship2.getTrueX() + ship2RexX);
-	
-	ship2.setY(ship2.getTrueY() + ship2RexY);
-
-}
