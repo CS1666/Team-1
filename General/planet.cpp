@@ -89,12 +89,12 @@ void Planet::updatePosition(Sprite& playerent)
 
 	if(check_collision(playerent.getDrawBox(),this->getCollisionCirc()))
 	{
-		std::cout<<"planet collision" << std::endl;
+		//std::cout<<"planet collision" << std::endl;
 		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
 		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
 	}
-	std::cout << "planet X: " << this->getTrueX() << std::endl;
-	std::cout << "planet Y: " << this->getTrueY() << std::endl;
+	//std::cout << "planet X: " << this->getTrueX() << std::endl;
+	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
 //for now only calculate the gravity contribution from the sun
 std::vector<float> Planet::calulateGravity(Star& sun)
@@ -109,7 +109,7 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 	{
 		pointAngle += 3.1415926;
 	}
-	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
+	//std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
 
 	float grav = (orbitalVel*orbitalVel)/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
 	//grav *= TimeData::get_timestep()*TimeData::get_timestep();
