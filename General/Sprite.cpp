@@ -6,19 +6,19 @@
 	//------------------------------------Constructors-----------------------------------------------
 	Sprite::Sprite(): drawBox{0,0,0,0},  collisionCirc{}, assetTex{nullptr}, x{0}, y{0}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{-1},  x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{anim}, x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, int anim): drawBox{dBox}, collisionBox{}, collisionCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{-1}, x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{-1} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{anim},  x{(float)dBox.x}, y{(float)dBox.y}{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, SDL_Rect cBox, int anim): drawBox{dBox}, collisionBox{cBox}, collisionCirc{}, assetTex{aTex}, animFrame{anim} , x{(float)dBox.x}, y{(float)dBox.y}{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ -1 },  x{ (float)dBox.x }, y{ (float)dBox.y }{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ -1 }, x{ (float)dBox.x }, y{ (float)dBox.y }{};
 
-	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int anim) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ anim },  x{ (float)dBox.x }, y{ (float)dBox.y }{};
+	Sprite::Sprite(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int anim) : drawBox{ dBox }, collisionBox{}, collisionCirc{dCirc}, assetTex{ aTex }, animFrame{ anim }, x{ (float)dBox.x }, y{ (float)dBox.y }{};
 
-	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, collisionBox{spr.collisionBox}, collisionCirc{spr.collisionCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame},  x{spr.x}, y{spr.y}{};
+	Sprite::Sprite(const Sprite &spr): drawBox{spr.drawBox}, collisionBox{spr.collisionBox}, collisionCirc{spr.collisionCirc}, assetTex{spr.assetTex}, animFrame{spr.animFrame} , x{spr.x}, y{spr.y}{};
 
 	//------------------------------------Destructor--------------------------------------------------
 	Sprite::~Sprite(){
@@ -249,45 +249,6 @@
 
 	
 	
-	bool Sprite::getAnimate(){
-		return animate;
-	}
-
-	void Sprite::setAnimate(bool toggle){
-		animate = toggle;
-	}
-
-	void Sprite::updateAnimation(){
-		if (SDL_GetTicks() - getAnimLastTime() > 100) {
-			int animation = getF();
-			bool cycle = false;
-			if (animation <= 1){
-				cycle = true;
-			}
-			else if(animation == 3){
-				cycle = false;
-			}
-			
-			if (cycle){
-				animation++;
-			}
-			else{
-				animation--;
-			}
-			
-			setAnimLastTime();
-			setF(animation);
-		}
-	}
-
-	Uint32 Sprite::getAnimLastTime(){
-		return animLastTime;
-	}
-		
-	void Sprite::setAnimLastTime(){
-		animLastTime = SDL_GetTicks();
-	}
-
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){
 		return &drawBox;

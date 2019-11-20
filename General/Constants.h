@@ -20,7 +20,6 @@
 //14 is space station (one of them)
 //15 is the laser projectile
 //ADD MORE AS REQUIRED HERE AND IN initTextures
-//#define TEX_SHIPS 0
 #define TEX_FIGHT_HERO 0
 #define TEX_FIGHT_ALLY 1
 #define TEX_FIGHT_ENEMY 2
@@ -34,7 +33,6 @@
 #define TEX_SUN_RED 10
 #define TEX_SUN_WHITE 11
 #define TEX_SUN_YELLOW 12
-//#define TEX_ASTEROIDS 5
 #define TEX_ASTEROID 13
 #define TEX_STATION 14
 #define TEX_LASER 15
