@@ -1,78 +1,68 @@
-#include <iostream>
-#include <string>
-#include <tuple>
+#include "../General/asteroid.h"
 using namespace std;
 
-class Asteroid
+
+Asteroid::Asteroid(): Sprite() {};
+Asteroid::Asteroid(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;};
+
+int Asteroid::getRadius()
 {
-	private:
-		int radius;
-		int velocity;
-		float direction;
-		tuple<int, int> position;
-		string sprite;
-		long mass;
+	return radius;
+}
 
-	public:
-		int getRadius()
-		{
-			return radius;
-		}
+int Asteroid::getVelocity()
+{
+	return velocity;
+}
 
-		int getVelocity()
-		{
-			return velocity;
-		}
+float Asteroid::getDirection()
+{
+	return direction;
+}
 
-		float getDirection()
-		{
-			return direction;
-		}
-	
-		long getMass()
-		{
-			return mass;	
-		}
+long Asteroid::getMass()
+{
+	return mass;	
+}
 
-		tuple<int, int> getPosition()
-		{
-			return position;
-		}
+pair<int, int> Asteroid::getPosition()
+{
+	return position;
+}
 
-		string getSprite()
-		{
-			return sprite;
-		}
+string Asteroid::getSprite()
+{
+	return sprite;
+}
 
-		void setRadius(int r)
-		{
-			radius = r;
-		}
+void Asteroid::setRadius(int r)
+{
+	radius = r;
+}
 
-		void setVelocity(int v)
-		{
-			velocity = v;
-		}
+void Asteroid::setVelocity(int v)
+{
+	velocity = v;
+}
 
-		void setDirection(float d)
-		{
-			direction = d;
-		}
+void Asteroid::setDirection(float d)
+{
+	direction = d;
+}
 
-		void setPosition(tuple<int, int> newPos)
-		{
-			position = newPos;
-		}
+void Asteroid::setPosition(pair<int, int> newPos)
+{
+	position = newPos;
+}
 
-		void setSprite(string s)
-		{
-			sprite = s;
-		}
-	
-		void setMass(long m)
-		{
-			mass = m;	
-		}
-		
+void Asteroid::setSprite(string s)
+{
+	sprite = s;
+}
 
-};
+void Asteroid::setMass(long m)
+{
+	mass = m;	
+}
+
+
