@@ -141,7 +141,7 @@ void run_demo(gpRender gr){
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc5 = {db5};
 
-	Planet planet3ent(db5, tex5, dc5);
+	Planet planet3ent(db5, tex5, dc5,starent);
 
 	osSprite.push_back(&planet3ent);
 	sector.addPlanet(&planet3ent);
@@ -159,7 +159,7 @@ void run_demo(gpRender gr){
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
 	NSDL_Circ dc7 = {db7};
 	
-	Planet planet5ent(db7, tex7, dc7);
+	Planet planet5ent(db7, tex7, dc7,starent);
 
 	osSprite.push_back(&planet5ent);
 	sector.addPlanet(&planet5ent);
@@ -168,34 +168,34 @@ void run_demo(gpRender gr){
 	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
 	NSDL_Circ dc8 = {db8};
 	
-	Planet planet6ent(db8, tex8, dc8);
+	Planet planet6ent(db8, tex8, dc8,starent);
 
 	osSprite.push_back(&planet6ent);
 	sector.addPlanet(&planet6ent);
 
 	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,200,200};
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,35,35};
 	Asteroid asteroid1ent(db9, tex9);
 
 	osSprite.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
 
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,200,200};
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,35,35};
 	Asteroid asteroid2ent(db10, tex10);
 	sector.addAsteroid(&asteroid2ent);
 
 	osSprite.push_back(&asteroid2ent);
 
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,200,200};
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,35,35};
 	Asteroid asteroid3ent(db11, tex11);
 	sector.addAsteroid(&asteroid3ent);
 
 	osSprite.push_back(&asteroid3ent);
 
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,200,200};
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,35,35};
 	Asteroid asteroid4ent(db12, tex12);
 	sector.addAsteroid(&asteroid4ent);
 
