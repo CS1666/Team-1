@@ -37,6 +37,7 @@ class Ship : public Sprite
 
         float max_deltaV = 1;
 
+        Uint32 fireLastTime = SDL_GetTicks();
         bool damageTaken;
         bool rotationSet;
         bool isUser;
@@ -95,6 +96,8 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
+        Uint32 getFireLastTime();
+		void setFireLastTime();
 
         //allied status
         void setIsAlly(bool alliedStatus);
@@ -110,8 +113,17 @@ class Hero: public Ship{
                 void handleKeyDownEvent(SDL_Event e);
 };
 
-class Fighter: public Ship{};
+class Fighter: public Ship{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Cruiser: public Ship{};
+class Cruiser: public Ship{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Capital: public Ship{};
+class Capital: public Ship{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex);
+};

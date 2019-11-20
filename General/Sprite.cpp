@@ -245,6 +245,45 @@
 		return isCollision;
 	}
 
+	bool Sprite::getAnimate(){
+		return animate;
+	}
+
+	void Sprite::setAnimate(bool toggle){
+		animate = toggle;
+	}
+
+	void Sprite::updateAnimation(){
+		if (SDL_GetTicks() - getAnimLastTime() > 100) {
+			int animation = getF();
+			bool cycle = false;
+			if (animation <= 1){
+				cycle = true;
+			}
+			else if(animation == 3){
+				cycle = false;
+			}
+
+			if (cycle){
+				animation++;
+			}
+			else{
+				animation--;
+			}
+
+			setAnimLastTime();
+			setF(animation);
+		}
+	}
+
+	Uint32 Sprite::getAnimLastTime(){
+		return animLastTime;
+	}
+
+	void Sprite::setAnimLastTime(){
+		animLastTime = SDL_GetTicks();
+	}
+
 
 
 	
