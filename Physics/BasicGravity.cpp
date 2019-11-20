@@ -43,7 +43,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 	{	
 		bodyX = bodyent->getTrueX() + bodyent->getW()/2.0;
 		bodyY = bodyent->getTrueY() + bodyent->getH()/2.0;
-		if(bodyent->getRenderOrder() ==2)
+		if(bodyent->getRenderOrder() ==2 )
 		{
 			//std::cout<< "mass: " << (bodyent)->getMass() << std::endl;
 			//make fix this
@@ -56,6 +56,10 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 			//std::cout << "angle: " << pointAngle * 180/ 3.14<< std::endl;
 			float grav = 1000*bodyent->getMass()/((bodyX-playerX)*(bodyX-playerX)*1.0 + (bodyY-playerY)*(bodyY-playerY)*1.0);
 			//std::cout << "grav: " << grav << std::endl;
+			if(grav > 1.5)
+			{
+				grav = 1.5;
+			}
 			gravX += grav*cos(pointAngle);
 			gravY += grav*sin(pointAngle);
 		}
