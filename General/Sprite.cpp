@@ -32,11 +32,15 @@
 	{
 		Sprite::x = (float)x;
 		drawBox.x = (int)Sprite::x;
+		collisionBox.x = (int)Sprite::x;
+		collisionCirc.setX((int)(Sprite::x+drawBox.w/2.0));
 	}
 	void Sprite::setY(int y)
 	{
 		Sprite::y = (float)y;
 		drawBox.y = (int)Sprite::y;
+		collisionBox.y = (int)Sprite::y;
+		collisionCirc.setY((int)(Sprite::y+drawBox.w/2.0));
 	}
 
 	bool Sprite::isShip()
@@ -50,10 +54,6 @@
 	bool Sprite::isUI()
 	{
 		return type == 3;
-	}
-	bool Sprite::isPlanet()
-	{
-		return type == 4;
 	}
 	bool Sprite::getIsAI(){
 		return isAI;
@@ -71,7 +71,7 @@
 		Sprite::y = y;
 		drawBox.y = (int)Sprite::y;
 		collisionBox.y = (int)Sprite::y;
-		collisionCirc.setY((int)(Sprite::y+drawBox.h/2.0));
+		collisionCirc.setY((int)(Sprite::y+drawBox.w/2.0));
 	}
 	int Sprite::getY(){
 		return drawBox.y;
@@ -218,15 +218,36 @@
 		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 		for (int i = 1; i < osSprite.size(); i++) {
 			//so, one of these should result in collison if they are the same box
-			if (osSprite.at(i)->isCircEnt())
-				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
-			else
-				isCollision |= check_collision(osSprite.at(i)->getDrawBox(), a);
+			if (osSprite.at(i)->isCircEnt()){
+				isCollision = check_collision(a, osSprite.at(i)->getCollisionCirc());
+			}
+			
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}
 		return isCollision;
 	}
+
+	bool Sprite::check_all_collisions_ships(SDL_Rect* a, std::vector<Sprite*> &osSprite){
+		bool isCollision = false;
+		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
+		for (int i = 1; i < osSprite.size(); i++) {
+			//so, one of these should result in collison if they are the same box
+			if (osSprite.at(i)->isCircEnt()){
+				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
+			}
+			/*else
+				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());*/
+			//std::cout << "Is last command Illegal?" << std::endl;
+			//std::cout << "Checked collisions: " << i << std::endl;
+		}
+		
+		return isCollision;
+	}
+
+
+
+	
 	
 	//--------------------------Functions Related to Drawing a Rectangle-----------------------------------------
 	SDL_Rect* Sprite::getDrawBox(){
