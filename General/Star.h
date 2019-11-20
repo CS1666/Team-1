@@ -11,10 +11,8 @@ class Star : public Sprite
 	private:
 		int radius;
 		int gravity;
-		string type;
 		vector<int> position;
 		string sprite;
-		int mass;
 		vector<int> size;
 
 	public:
@@ -24,6 +22,7 @@ class Star : public Sprite
 		//to be deprecated
 		Star(SDL_Rect dBox, SDL_Texture* aTex);
 		Star(SDL_Rect dBox, SDL_Texture* aTex, int mass);
+		void initMass();
 		int getRadius();
 		int getGravity();
 		string getType();
@@ -34,7 +33,6 @@ class Star : public Sprite
 		void setType(string t);
 		void setPosition(vector<int> newPos);
 		void setSprite(string s);
-		int getMass();
 		void setMass(int newMass);
 		vector<int> getSize();
 		void setSize(vector<int> newSize);

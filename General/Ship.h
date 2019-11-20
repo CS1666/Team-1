@@ -7,42 +7,44 @@
 #include "Projectile.h"
 #include <queue>
 #include "gpRender.h"
+#include "../Physics/Audio.h"
 
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
 
 class Ship : public Sprite
 {
-    private:
-        int hull;
-        string sprite;
-        pair<int,int> position;
-        int xVelocity;
-	int yVelocity;
-        float maxRotation;
-        int weaponType;
-        bool damageTaken;
-	bool rotationSet;
-	float curRotation;
-	float rotation;
-        int maxVelocity;
+    protected:
+
         string currKey;
 
-        int mass;
-        pair<int, int> size;
+        int hull;
+        int weaponType;
 
-        float speedX;
-        float speedY;
+        int maxVelocity;
+        int xVelocity;
+        int yVelocity;
         int currHp;
         int maxHp;
+        int mass;
+       
 
-        //ai
-        std::queue<pair<int,int>>* path;
-        pair<int,int> destination;
+        float curRotation;
+        float rotation;
+        float maxRotation;
+        float speedX;
+        float speedY;
+        float newAngle;
+
+        Uint32 fireLastTime;
+        bool damageTaken;
+        bool rotationSet;
         bool isUser;
         bool isAlly;
-        bool pathComplete;
-	int curGoal; //'modes' of ai: follow, defend, attack, flee = {0,1,2,3} for now
+
+        string sprite;
+        pair<int, int> size;
+        pair<int,int> position;
 
     public:
         float speed = 0;
@@ -52,6 +54,7 @@ class Ship : public Sprite
         float direction;
 
         Ship();
+        Ship(const Ship& ship);
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim);
         Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass);
@@ -64,6 +67,8 @@ class Ship : public Sprite
 
         void setSpeedX(float speed);
         void setSpeedY(float speed);
+        float getSpeedX();
+        float getSpeedY();
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
@@ -72,8 +77,8 @@ class Ship : public Sprite
         void setSize(pair<int,int> newSize);
         pair<int,int> getSize();
 
-	void setGoal(int newGoal);
-	int getGoal();
+	    void setGoal(int newGoal);
+	    int getGoal();
         void setPath(queue<pair<int, int>>* thePath);
         //ai follows path assigned to it by ai class
         void followPath(Sprite& entity);
@@ -87,20 +92,30 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
-        
+        Uint32 getFireLastTime();
+		void setFireLastTime();
 };
 
 class Hero: public Ship{        
-        public:
-                Hero(SDL_Rect dBox, SDL_Texture* aTex);
-                
-                bool handleKeyEvents(SDL_Event e);
-                void handleKeyUpEvent(SDL_Event e);
-                void handleKeyDownEvent(SDL_Event e);
+    public:
+            Hero(SDL_Rect dBox, SDL_Texture* aTex);
+            
+            bool handleKeyEvents(SDL_Event e);
+            void handleKeyUpEvent(SDL_Event e);
+            void handleKeyDownEvent(SDL_Event e);
 };
 
-class Fighter: public Ship{};
+class Fighter: public Ship{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Cruiser: public Ship{};
+class Cruiser: public Ship{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Capital: public Ship{};
+class Capital: public Ship{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex);
+};

@@ -48,6 +48,12 @@ class Sprite{
 		void setF(int anim);
 		int getF();
 
+		void updateAnimation();
+		bool getAnimate();
+		void setAnimate(bool toggle);
+		Uint32 getAnimLastTime();
+		void setAnimLastTime();
+
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
 		virtual void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
@@ -56,7 +62,8 @@ class Sprite{
 		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
-		
+		int getMass();
+		bool getIsAI();
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
 		SDL_Rect* getCollisionBox();
@@ -68,14 +75,19 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
+		bool shouldRemove();
 	protected:
 		SDL_Rect drawBox;
 		SDL_Rect collisionBox;
 		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
+		bool animate = false;
+		Uint32 animLastTime = SDL_GetTicks();
 		int type = 0;
 		float x,y;
+		bool remove = false;
+		bool isAI = false;
 		// set renderOrder for all objects
 		// 0 = player ship
 		// 1 = objects with collision but no gravity (all other ships + space station)
@@ -83,7 +95,7 @@ class Sprite{
 		// 3 = UI
 		// 4 = black hole
 		int renderOrder;
-
+		int mass = 0;
 		//Velocity variables
 		//Probably should be moved to some physic related object
 		float angle = 0.0;
