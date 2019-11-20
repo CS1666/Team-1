@@ -4,7 +4,6 @@
 #include <math.h>
 #include "../Physics/TimeData.h"
 #include "../Physics/BasicGravity.h"
-#include "../Physics/Momentum.h"
 
 #define PI 3.14159265
 
@@ -57,11 +56,11 @@ Ship::Ship(const Ship& ship){
 
 };
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
 Ship::~Ship()
 {
@@ -87,10 +86,6 @@ bool Ship::getIsAlly()
 void Ship::checkPhysics()
 {
 
-}
-
-void Ship::setMaxDelta(float new_accel){
-	max_deltaV = new_accel;
 }
 
 void Ship::setSpeedX(float speed)
@@ -169,75 +164,6 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	}
 }
 
-void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT)
-{
-	speed += deltaV;
-	rotationSpeed += rotationRate;
-	if (rotationSpeed < 0)
-	{
-		rotationSpeed++;
-	}
-	else if (rotationSpeed > 0)
-	{
-		rotationSpeed--;
-	}
-	if(speed >MAX_SPEED)
-	{
-		speed = MAX_SPEED;
-	}
-	else if(speed < -MAX_SPEED)
-	{
-		speed = -MAX_SPEED;
-	}
-	if(rotationSpeed > MAX_ROTATIONSPEED)
-	{
-		rotationSpeed = MAX_ROTATIONSPEED;
-	}
-	else if(rotationSpeed < -MAX_ROTATIONSPEED)
-	{
-		rotationSpeed = -MAX_ROTATIONSPEED;
-	}
-
-	//std::cout << getVX() << ", " << getVY() <<std::endl;
-	setAngle(getAngle() + rotationSpeed);
-	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
-	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
-	// Try to move Horizontally
-
-	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
-	speedX = speedX+gravPulls[0];
-	speedY = speedY+gravPulls[1];
-	
-	setSpeedX(speedX);
-	setSpeedY(speedY);
-
-	
-	if(getTrueX() < 0 || (getX() + getW() > ZONE_WIDTH) || check_all_collisions_ships(getDrawBox(), osSprite)){
-		setX(getTrueX() - speedX);
-	}	
-			
-	
-	if(getTrueY() < 0 || (getY() + getH() > ZONE_WIDTH) || check_all_collisions_ships(getDrawBox(), osSprite)){
-		setY(getTrueY() - speedY);
-	}
-			
-	for(int i = 1; i < osShip.size(); i++){
-		if(this != osShip.at(i)){
-			if(check_collision(getDrawBox(), osShip.at(i)->getDrawBox())){
-				deltaV = 0;
-				setMaxDelta(0);
-				shipCollisionHandler(*this, *osShip.at(i));
-			}else{
-				setMaxDelta(1);
-			}
-		}
-	}
-
-	setX(getTrueX() + speedX);
-	setY(getTrueY() + speedY);
-		
-}
-
 void Ship::updateHull(int newHull)
 {
 	hull = newHull;
@@ -300,11 +226,8 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 
 
 	//std::cout << "Firing Angle: " << getAngle() << std::endl;
-
-
 	int X = getTrueX()  +  (getW()/2.0) + (getW()/2.0)*1.5*sin(getAngle()*0.0174533 );
 	int Y = getTrueY()  + (getH()/2.0) + (getH()/2.0)*1.5*-cos(getAngle()*0.0174533 );
-
 	//std::cout << "Ship X: " << getTrueX() << std::endl;
 	//std::cout << "Ship Y: " << getTrueY() << std::endl;
 	//std::cout << "Laser X: " << X << std::endl;
@@ -321,7 +244,6 @@ Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
 	isAlly = true;
 
 };
-
 
 
 //General wrapper function to handle Key evenets
@@ -411,13 +333,13 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 			break;
 	}
 	
-	if(deltaV > max_deltaV)
+	if(deltaV > MAX_DELTAV)
 	{
-		deltaV = max_deltaV;
+		deltaV = MAX_DELTAV;
 	}
-	else if(deltaV < -max_deltaV)
+	else if(deltaV < -MAX_DELTAV)
 	{
-		deltaV = -max_deltaV;
+		deltaV = -MAX_DELTAV;
 	}
 	if(rotationRate > MAX_ROTATIONRATE)
 	{
