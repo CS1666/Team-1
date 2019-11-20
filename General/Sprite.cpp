@@ -131,6 +131,8 @@
 
 	bool Sprite::check_collision(SDL_Rect* a, SDL_Rect* b) {
 		// Check vertical overlap
+		if (a == b)
+			return false;
 		if (a->y + a->h <= b->y)
 			return false;
 		if (a->y >= b->y + b->h)
@@ -202,8 +204,8 @@
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 			}
-			/*else
-				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());*/
+			else
+				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 			//std::cout << "Is last command Illegal?" << std::endl;
 			//std::cout << "Checked collisions: " << i << std::endl;
 		}

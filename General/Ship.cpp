@@ -300,8 +300,8 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 
 
 	//std::cout << "Firing Angle: " << getAngle() << std::endl;
-	int X = getTrueX() + (getH()/2);//*cos(getAngle());
-	int Y = getTrueY()+ (getW()/2);//*sin(getAngle());
+	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)**sin(getAngle()*.0174533);
+	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*.0174533);
 	//std::cout << "Ship X: " << getTrueX() << std::endl;
 	//std::cout << "Ship Y: " << getTrueY() << std::endl;
 	//std::cout << "Laser X: " << X << std::endl;
