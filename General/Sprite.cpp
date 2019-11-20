@@ -131,6 +131,8 @@
 
 	bool Sprite::check_collision(SDL_Rect* a, SDL_Rect* b) {
 		// Check vertical overlap
+		if (a == b)
+			return false;
 		if (a->y + a->h <= b->y)
 			return false;
 		if (a->y >= b->y + b->h)
