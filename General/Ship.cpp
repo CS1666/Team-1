@@ -243,9 +243,6 @@ Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {
 	renderOrder = 0;
 	isAlly = true;
 
-
-
-
 };
 
 

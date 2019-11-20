@@ -460,6 +460,7 @@ void AI::createShip(bool isAlly){
                 newShip->setMaxHp(100);
                 osSprite->push_back(newShip);
                 ships->push_back(newShip);
+                sector->addShips(newShip);
 
 
             }
