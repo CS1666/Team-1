@@ -48,12 +48,6 @@ class Sprite{
 		void setF(int anim);
 		int getF();
 
-		void updateAnimation();
-		bool getAnimate();
-		void setAnimate(bool toggle);
-		Uint32 getAnimLastTime();
-		void setAnimLastTime();
-
 		int getRenderOrder();
 		void setRenderOrder(int new_order);
 		virtual void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
@@ -84,8 +78,6 @@ class Sprite{
 		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
 		int animFrame;
-		bool animate = false;
-		Uint32 animLastTime = SDL_GetTicks();
 		int type = 0;
 		float x,y;
 		bool remove = false;

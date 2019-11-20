@@ -115,11 +115,10 @@ void AI::pursueShip(AIShip* ship)
 	    //rotate and fire
 	    else
 	    {
-
-		Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
-        	if(proj.getTexture()!=nullptr && (SDL_GetTicks() - ship->getFireLastTime() > 200))
-            	    osSprite->push_back(&proj);
-
+            ship->setGoal(1);
+		//Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
+        	//if(proj.getTexture()!=nullptr)
+            	   // osSprite->push_back(&proj);
 	    }
     	}
     }
