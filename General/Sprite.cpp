@@ -32,11 +32,15 @@
 	{
 		Sprite::x = (float)x;
 		drawBox.x = (int)Sprite::x;
+		collisionBox.x = (int)Sprite::x;
+		collisionCirc.setX((int)(Sprite::x+drawBox.w/2.0));
 	}
 	void Sprite::setY(int y)
 	{
 		Sprite::y = (float)y;
 		drawBox.y = (int)Sprite::y;
+		collisionBox.y = (int)Sprite::y;
+		collisionCirc.setY((int)(Sprite::y+drawBox.w/2.0));
 	}
 
 	bool Sprite::isShip()
@@ -57,6 +61,8 @@
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
+		collisionBox.x = (int)Sprite::x;
+		collisionCirc.setX((int)(Sprite::x+drawBox.w/2.0));
 	}
 	int Sprite::getX(){
 			return drawBox.x;
@@ -64,6 +70,8 @@
 	void Sprite::setY(float y){
 		Sprite::y = y;
 		drawBox.y = (int)Sprite::y;
+		collisionBox.y = (int)Sprite::y;
+		collisionCirc.setY((int)(Sprite::y+drawBox.w/2.0));
 	}
 	int Sprite::getY(){
 		return drawBox.y;
