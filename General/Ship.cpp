@@ -57,11 +57,11 @@ Ship::Ship(const Ship& ship){
 
 };
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
 
 Ship::~Ship()
 {
@@ -82,10 +82,6 @@ string Ship::getSprite()
 void Ship::checkPhysics()
 {
 
-}
-
-void Ship::setMaxDelta(float new_accel){
-	max_deltaV = new_accel;
 }
 
 void Ship::setSpeedX(float speed)
@@ -211,31 +207,51 @@ void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 
-	
-	if(getTrueX() < 0 || (getX() + getW() > ZONE_WIDTH) || check_all_collisions_ships(getDrawBox(), osSprite)){
-		setX(getTrueX() - speedX);
-	}	
+	int coll = check_all_collisions_int_ret(getDrawBox(), osSprite);
+
+	if(getTrueX() < 0 || (getX() + getW() > ZONE_WIDTH) || coll != -1){
+		
+		if(coll == -1){
+			setX(getTrueX() - speedX);
 			
-	
-	if(getTrueY() < 0 || (getY() + getH() > ZONE_WIDTH) || check_all_collisions_ships(getDrawBox(), osSprite)){
-		setY(getTrueY() - speedY);
-	}
+		}else if((coll == 1) && renderOrder == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
+
+			speedX = momentumShift[0];
 			
-	for(int i = 1; i < osShip.size(); i++){
-		if(this != osShip.at(i)){
-			if(check_collision(getDrawBox(), osShip.at(i)->getDrawBox())){
-				deltaV = 0;
-				setMaxDelta(0);
-				shipCollisionHandler(*this, *osShip.at(i));
-			}else{
-				setMaxDelta(1);
-			}
+			setSpeedX(speedX);
+			std::cout << "Speed X: " << getSpeedX() << std::endl;
+			setX(getTrueX() + speedX);
+			
 		}
+	}else{
+		setX(getTrueX() + speedX);
 	}
 
-	setX(getTrueX() + speedX);
-	setY(getTrueY() + speedY);
+	
+	if(getTrueY() < 0 || (getY() + getH() > ZONE_WIDTH) || coll != -1){
 		
+		if(coll == -1 || coll == 0){
+			setY(getTrueY() - speedY);
+			
+		}else if((coll == 1) && renderOrder == 0){
+			std::vector<float> momentumShift = calculateMomentumConserv(*this, osShip);
+			std::cout << "Push x: " << momentumShift[0] << std::endl;
+			std::cout << "Push y: " << momentumShift[1] << std::endl;
+
+			speedY = momentumShift[1];
+
+			setSpeedY(speedY);
+			std::cout << "Speed Y: " << getSpeedY() << std::endl;
+			setY(getTrueY() + speedY);
+			
+		}
+			
+	}else{
+		setY(getTrueY() + speedY);
+	}
 }
 
 void Ship::updateHull(int newHull)
@@ -297,7 +313,7 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 
 
 	//std::cout << "Firing Angle: " << getAngle() << std::endl;
-	int X = getTrueX() + (getH()/2);//*cos(getAngle());
+	int X = getTrueX() + (getW()/2);//*cos(getAngle());
 	int Y = getTrueY()+ (getW()/2);//*sin(getAngle());
 	//std::cout << "Ship X: " << getTrueX() << std::endl;
 	//std::cout << "Ship Y: " << getTrueY() << std::endl;
@@ -399,13 +415,13 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 			break;
 	}
 	
-	if(deltaV > max_deltaV)
+	if(deltaV > MAX_DELTAV)
 	{
-		deltaV = max_deltaV;
+		deltaV = MAX_DELTAV;
 	}
-	else if(deltaV < -max_deltaV)
+	else if(deltaV < -MAX_DELTAV)
 	{
-		deltaV = -max_deltaV;
+		deltaV = -MAX_DELTAV;
 	}
 	if(rotationRate > MAX_ROTATIONRATE)
 	{

@@ -129,7 +129,6 @@ void run_demo(gpRender gr){
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
-	osShip.push_back(&playerent);
 	
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
@@ -291,16 +290,12 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&sector9ent);
 	
 
-	
+	/*
 	//Ship Cruiser initilization
-	SDL_Texture* tex13 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db13 = {400,300,50,50};
-	Ship emyent(db13, tex13);
-	emyent.setCurrHp(100);
-	emyent.setMaxHp(100);
-	osSprite.push_back(&emyent);
-	osShip.push_back(&emyent);
-	
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db3 = {400,300,225,300};
+	Sprite emyent(db3, tex3);
+	*/
 
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
@@ -501,15 +496,6 @@ void run_demo(gpRender gr){
 			for(auto ent : osSprite) {
 				ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-
-			/*for(auto ent : osSprite) {
-				if(!ent->getIsAI() && !ent->isShip())
-					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
-			}
-
-			for(auto ent : osShip) {
-				ent->updateMovementShips(osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
-			}*/
 
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
