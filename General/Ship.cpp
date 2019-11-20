@@ -56,11 +56,11 @@ Ship::Ship(const Ship& ship){
 
 };
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex), fireLastTime{SDL_GetTicks()} {weaponType = 1; renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim), fireLastTime{SDL_GetTicks()} {weaponType = 1; renderOrder = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), fireLastTime{SDL_GetTicks()}, mass{mass} {weaponType = 1; renderOrder = 1;};
 
 Ship::~Ship()
 {
@@ -185,7 +185,10 @@ int Ship::getCurrHp()
 
 void Ship::setCurrHp(int newCurrHp)
 {
-    currHp = newCurrHp;    
+    currHp = newCurrHp;
+	if (currHp <= 0){
+		remove = true;
+	}
 }
 
 int Ship::getMaxHp()
@@ -216,24 +219,24 @@ int Ship::getMass()
 
 Projectile Ship::fireWeapon(SDL_Texture* texture)
 {
-  //float speedX = speed*cos((getAngle() - 90.0)*PI/180);
-	//float speedY = speed*sin((getAngle() - 90.0)*PI/180);
-
-
-	//std::cout << "Firing Angle: " << getAngle() << std::endl;
-	int X = getTrueX() + (getW()/2);//*cos(getAngle());
-	int Y = getTrueY()+ (getW()/2);//*sin(getAngle());
-	//std::cout << "Ship X: " << getTrueX() << std::endl;
-	//std::cout << "Ship Y: " << getTrueY() << std::endl;
-	//std::cout << "Laser X: " << X << std::endl;
-	//std::cout << "Laser Y: " << Y << std::endl;
+	int X = getTrueX() +  (getW()/2.0) + (getW()/2.0)*1.5*sin(getAngle()*0.0174533 );
+	int Y = getTrueY() + (getH()/2.0) + (getH()/2.0)*1.5*-cos(getAngle()*0.0174533 );
 	SDL_Rect ldb = {X, Y, 2, 10};
-	Projectile laser(ldb, texture);
+	Projectile laser(ldb, texture, weaponType);
 	laser.setAngle(getAngle());
+	setFireLastTime();
 	return laser;
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {renderOrder = 0;};
+Uint32 Ship::getFireLastTime(){
+		return fireLastTime;
+}
+	
+void Ship::setFireLastTime(){
+	fireLastTime = SDL_GetTicks();
+}
+
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 0;};
 
 
 //General wrapper function to handle Key evenets
@@ -256,7 +259,9 @@ bool Hero::handleKeyEvents(SDL_Event e){
 void Hero::handleKeyUpEvent(SDL_Event e){
 	if(e.type == SDL_KEYUP){
 		switch(e.key.keysym.sym){
-			
+			case SDLK_w:
+				setAnimate(false);
+				setF(0);
 
 			case SDLK_s:
 							
@@ -282,6 +287,7 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		case SDLK_w:
 			
 			deltaV += (ACCEL * TimeData::get_timestep());
+			setAnimate(true);
 			Audio::play_thrust_sound();
 			break;
 
@@ -340,3 +346,9 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 		rotationRate = -MAX_ROTATIONRATE;
 	}
 }
+
+Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 1;} ;
+
+Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 3;} ;
+
+Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 4;} ;

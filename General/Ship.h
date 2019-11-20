@@ -36,6 +36,7 @@ class Ship : public Sprite
         float speedY;
         float newAngle;
 
+        Uint32 fireLastTime;
         bool damageTaken;
         bool rotationSet;
         bool isUser;
@@ -44,9 +45,6 @@ class Ship : public Sprite
         string sprite;
         pair<int, int> size;
         pair<int,int> position;
-       
-
-
 
     public:
         float speed = 0;
@@ -94,19 +92,30 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
+        Uint32 getFireLastTime();
+		void setFireLastTime();
 };
 
 class Hero: public Ship{        
-        public:
-                Hero(SDL_Rect dBox, SDL_Texture* aTex);
-                
-                bool handleKeyEvents(SDL_Event e);
-                void handleKeyUpEvent(SDL_Event e);
-                void handleKeyDownEvent(SDL_Event e);
+    public:
+            Hero(SDL_Rect dBox, SDL_Texture* aTex);
+            
+            bool handleKeyEvents(SDL_Event e);
+            void handleKeyUpEvent(SDL_Event e);
+            void handleKeyDownEvent(SDL_Event e);
 };
 
-class Fighter: public Ship{};
+class Fighter: public Ship{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Cruiser: public Ship{};
+class Cruiser: public Ship{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Capital: public Ship{};
+class Capital: public Ship{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex);
+};
