@@ -86,8 +86,8 @@ void run_demo(gpRender gr){
 	
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
-	int seed2 = sunSeed + 100;
-	srand(seed.getSeed());
+	//int seed2 = time(0) + 100;
+	srand(sunSeed);
 	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
@@ -117,6 +117,9 @@ void run_demo(gpRender gr){
 	std::string u = std::get<4>(sunAsset);
 	std::string o = std::get<5>(sunAsset);
 
+	// Star setStar;
+	// setStar.setType(z);
+	//Star starent;
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
@@ -128,6 +131,7 @@ void run_demo(gpRender gr){
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
+	osShip.push_back(&playerent);
 	
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
@@ -144,57 +148,74 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,starent);
+
+	Planet planet1ent(db3, tex3, dc3);
+
 	osSprite.push_back(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage(u);
+
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
-	Planet planet2ent(db4, tex4, dc4,starent);
+
+	Planet planet2ent(db4, tex4, dc4);
+
 	osSprite.push_back(&planet2ent);
 
-	// SDL_Texture* tex5 = gr.loadImage(o);
-	// SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
-	// NSDL_Circ dc5 = {db5};
-	// Planet planet3ent(db5, tex5, dc5);
-	// osSprite.push_back(&planet3ent);
+	SDL_Texture* tex5 = gr.loadImage(o);
+	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc5 = {db5};
+
+	Planet planet3ent(db5, tex5, dc5);
+
+	osSprite.push_back(&planet3ent);
 
 	SDL_Texture* tex6 = gr.loadImage(o);
-	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2300	,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
-	Planet planet4ent(db6, tex6, dc6,starent);
+
+	Planet planet4ent(db6, tex6, dc6);
+
 	osSprite.push_back(&planet4ent);
 
-	// SDL_Texture* tex7 = gr.loadImage(q);
-	// SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
-	// NSDL_Circ dc7 = {db7};
-	// Planet planet5ent(db7, tex7, dc7);
-	// osSprite.push_back(&planet5ent);
+	SDL_Texture* tex7 = gr.loadImage(q);
+	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
+	NSDL_Circ dc7 = {db7};
+	
+	Planet planet5ent(db7, tex7, dc7);
 
-	// SDL_Texture* tex8 = gr.loadImage(u);
-	// SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
-	// NSDL_Circ dc8 = {db8};
-	// Sprite planet6ent(db8, tex8, dc8);
-	// osSprite.push_back(&planet6ent);
+	osSprite.push_back(&planet5ent);
 
-	// SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,200,200};
-	// Sprite asteroid1ent(db9, tex9);
-	// osSprite.push_back(&asteroid1ent);	
+	SDL_Texture* tex8 = gr.loadImage(u);
+	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
+	NSDL_Circ dc8 = {db8};
+	
+	Sprite planet6ent(db8, tex8, dc8);
 
-	// SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,200,200};
-	// Sprite asteroid2ent(db10, tex10);
-	// osSprite.push_back(&asteroid2ent);
+	osSprite.push_back(&planet6ent);
 
-	// SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,200,200};
-	// Sprite asteroid3ent(db11, tex11);
-	// osSprite.push_back(&asteroid3ent);
+	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,200,200};
+	Sprite asteroid1ent(db9, tex9);
+
+	osSprite.push_back(&asteroid1ent);	
+
+	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,200,200};
+	Sprite asteroid2ent(db10, tex10);
+
+	osSprite.push_back(&asteroid2ent);
+
+	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,200,200};
+	Sprite asteroid3ent(db11, tex11);
+
+	osSprite.push_back(&asteroid3ent);
 
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,200,200};
 	Sprite asteroid4ent(db12, tex12);
+
 	osSprite.push_back(&asteroid4ent);
 	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
@@ -277,12 +298,16 @@ void run_demo(gpRender gr){
 	int curSector = 5;
 	
 
-	/*
+	
 	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	Sprite emyent(db3, tex3);
-	*/
+	SDL_Texture* tex13 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
+	SDL_Rect db13 = {400,300,50,50};
+	Ship emyent(db13, tex13);
+	emyent.setCurrHp(100);
+	emyent.setMaxHp(100);
+	osSprite.push_back(&emyent);
+	osShip.push_back(&emyent);
+	
 
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
@@ -528,19 +553,16 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-			if(sector.getPlanets().size() > 0)
-			{
-				for( auto ent : sector.getPlanets())
-				{
-					ent->updatePosition(playerent);
-				}
+
+			/*for(auto ent : osSprite) {
+				if(!ent->getIsAI() && !ent->isShip())
+					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-			else
-			{
-				planet1ent.updatePosition(playerent);	
-				planet2ent.updatePosition(playerent);	
-				planet4ent.updatePosition(playerent);	
-			}
+
+			for(auto ent : osShip) {
+				ent->updateMovementShips(osSprite, osShip, ZONE_WIDTH, ZONE_HEIGHT);
+			}*/
+
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				

@@ -28,13 +28,14 @@ class Ship : public Sprite
         int maxHp;
         int mass;
        
-
         float curRotation;
         float rotation;
         float maxRotation;
         float speedX;
         float speedY;
         float newAngle;
+
+        float max_deltaV = 1;
 
         bool damageTaken;
         bool rotationSet;
@@ -65,6 +66,7 @@ class Ship : public Sprite
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
 
+        void setMaxDelta(float new_accel);
         void setSpeedX(float speed);
         void setSpeedY(float speed);
         float getSpeedX();

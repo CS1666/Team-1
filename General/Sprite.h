@@ -56,7 +56,7 @@ class Sprite{
 		bool check_collision(NSDL_Circ* a, NSDL_Circ* b);
 		bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		bool check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite);
-		int check_all_collisions_int_ret(SDL_Rect* a, std::vector<Sprite*> &osSprite);
+		bool check_all_collisions_ships(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		int getMass();
 		bool getIsAI();
 		//Methods that deal with Rectangle drawn entities
@@ -70,7 +70,6 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
-		bool isPlanet();
 		bool shouldRemove();
 	protected:
 		SDL_Rect drawBox;
