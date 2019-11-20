@@ -30,7 +30,6 @@ void AI::executeAIActions(){
                 break;
             default://If not assigned goal do nothing
                 cout<<"Do nothing"<<endl;
-
                 doNothing(ship);
                 break;
 
@@ -55,6 +54,7 @@ void AI::followPlayer(AIShip* ship){
     }
     if(ship->isFreeForm())
     {
+
 	//idk if ships should be able to autonomously leave/enter follow
     }
 }
@@ -77,10 +77,10 @@ void AI::defendPosition(AIShip* ship)
     {
 	int distance=calculateDistance(ship->getPosition(),shipDetected);
 	//pursue/attack
-	if(distance>150&&distance<200)
+	if(distance>150&&distance<450)
 	{
 	    //cout<<"begin pursuit"<<endl;
-	    //ship->setGoal(2);
+	    ship->setGoal(2);
 	}
 	//too low HP
         if(ship->getCurrHp()<ship->getMaxHp()/5)
@@ -100,14 +100,14 @@ void AI::pursueShip(AIShip* ship)
 	//calculate a destination where it will be close enough
 	//kinda simplistic calculations, can probably be in its own function
 	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
-	//cout<<ship->getDestination().first<<endl;
-	//cout<<ship->getDestination().second<<endl;
+	cout<<ship->getDestination().first<<endl;
+	cout<<ship->getDestination().second<<endl;
 	ship->followPath();
    	if(ship->getPathComplete())
     	{
 	    int distance=calculateDistance(ship->getPosition(),shipDetected);
 	    //still too far, continue pursuit
-	    if(distance>20)
+	    if(distance>350)
 	    {
 		ship->setPath(calculatePath(*ship));
 		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
@@ -115,9 +115,11 @@ void AI::pursueShip(AIShip* ship)
 	    //rotate and fire
 	    else
 	    {
+
 		Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
         	if(proj.getTexture()!=nullptr && (SDL_GetTicks() - ship->getFireLastTime() > 200))
             	    osSprite->push_back(&proj);
+
 	    }
     	}
     }
@@ -276,84 +278,34 @@ bool AI::createMapState(Sector* currentSector)
 {
     // Buffer in pixels
     const int buffer = 50;
-    std::cout << "1" << std::endl;
     // Gets sector size and sets mesh size to be the size of the sector
     vector<int> sectorSize = currentSector->getSize();
-    std::cout << "2" << std::endl;
     // Gets the positions and sizes of everything within the sector
     vector<vector<int> > currentState = currentSector->getState();
-    std::cout << "3" << std::endl;
+    std::cout << "8" << std::endl;
       // Creates a new map state with everything equal to zero
     vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-    std::cout << "4" << std::endl;
     // Puts 1's at the edges of objecys within the sector + the size of the buffer
+    std::cout << "9" << std::endl;
     for (vector<int> object : currentState)
     {
-        std::cout << "5" << std::endl;
         for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
         {
-            std::cout << "6" << std::endl;
             for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
             {   
-                std::cout << "7" << std::endl;
                 if (x >= 0 && x < newStoredMapState.size() && y >=0 && y < newStoredMapState[0].size())
                 {
-                    std::cout << "8" << std::endl;
                     newStoredMapState[x][y] = 1;
                 }
 
             }
         }
     }
+    std::cout << "10" << std::endl;
     
     if(checkMapState(newStoredMapState))
     {
         storedMapState=newStoredMapState;
-        return true;
-    }
-    return false;
-
-}
-
-bool AI::createShipState(Sector* currentSector)
-{
-    // Buffer in pixels
-    const int buffer = 50;
-   
-    // Gets sector size and sets mesh size to be the size of the sector
-    vector<int> sectorSize = currentSector->getSize();
-
-   
-    // Gets the positions and sizes of everything within the sector
-    vector<vector<int> > currentState = currentSector->getShipState();
-
-      // Creates a new map state with everything equal to zero
-    vector<vector<bool> > newStoredShipState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-
-  
-    // Puts 1's at the edges of objecys within the sector + the size of the buffer
-    for (vector<int> object : currentState)
-    {
-        
-        for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
-        {      
-   
-            for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
-            {   
-             
-                if (x >= 0 && x < newStoredShipState.size() && y >=0 && y < newStoredShipState[0].size())
-                {
-       
-                    newStoredShipState[x][y] = 1;
-                }
-
-            }
-        }
-    }
-    
-    if(checkMapState(newStoredShipState))
-    {
-        storedShipState=newStoredShipState;
         return true;
     }
     return false;
@@ -422,7 +374,7 @@ void AI::setCurrentSector(Sector* newSector)
 
 pair<int, int> AI::radar(AIShip& aiShip)
 {
-	int radarSize = 200;
+	int radarSize = 450;
 
 	pair<int, int> closestEnemyPosition = make_pair(-1, -1);
 
@@ -446,7 +398,10 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			pair<int, int> shipCheck = ship->getPosition();
 
-			if (shipCheck != radarPosition)
+            std::cout << "Check ship location "<< ship->getIsAlly() << ", " << aiShip.getIsAlly() << std::endl;
+
+			if (shipCheck != radarPosition && ship->getIsAlly() != aiShip.getIsAlly())
+
 			{
 
 //				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
@@ -506,6 +461,7 @@ void AI::createShip(bool isAlly){
                 newShip->setMaxHp(100);
                 osSprite->push_back(newShip);
                 ships->push_back(newShip);
+                sector->addShips(newShip);
 
 
             }
@@ -530,7 +486,7 @@ void AI::createShip(bool isAlly){
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
                 newShip->setF(-1);
-                newShip->setGoal(1);
+                newShip->setGoal(2);
                 newShip->setCurrHp(100);
                 newShip->setMaxHp(100);
     
@@ -572,16 +528,16 @@ pair<int,int> AI::ChooseEnemySpawn(){
 }
 
 pair<int,int> AI::ChooseAllySpawn(){
-    std::cout << "1" << std::endl;
+    //std::cout << "1" << std::endl;
     vector<pair<int,int>> as = sector->getAllySpawn();
-    std::cout << "2" << std::endl;
+    //std::cout << "2" << std::endl;
     for(pair<int,int> spawn : as){
-        std::cout << "3" << std::endl;
+        //std::cout << "3" << std::endl;
         if(!occupied(spawn)){
             return spawn;
         }
     }
-    std::cout << "4" << std::endl;
+    //std::cout << "4" << std::endl;
     return pair<int,int>(-1,-1);
 }
 

@@ -1,19 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "../General/Sprite.h"
-#include "../Physics/BasicMovementFPSlimit.h"
-#include "../General/gpRender.h"
 #include "ai_enviroment.h"
-#include "AI.h"
-#include "../General/Ship.h"
-#include "../General/Sector.h"
-#include "AIShip.h"
-#include "theta.h"
-#include "../Physics/TimeData.h"
-#include "../General/Constants.h"
 using namespace std;
 
 constexpr int PLAYER_WIDTH = 50;

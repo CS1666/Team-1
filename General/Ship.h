@@ -28,7 +28,6 @@ class Ship : public Sprite
         int maxHp;
         int mass;
        
-
         float curRotation;
         float rotation;
         float maxRotation;
@@ -37,6 +36,9 @@ class Ship : public Sprite
         float newAngle;
 
         Uint32 fireLastTime;
+
+        float max_deltaV = 1;
+
         bool damageTaken;
         bool rotationSet;
         bool isUser;
@@ -45,6 +47,7 @@ class Ship : public Sprite
         string sprite;
         pair<int, int> size;
         pair<int,int> position;
+
 
     public:
         float speed = 0;
@@ -65,11 +68,13 @@ class Ship : public Sprite
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
 
+        void setMaxDelta(float new_accel);
         void setSpeedX(float speed);
         void setSpeedY(float speed);
         float getSpeedX();
         float getSpeedY();
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+        void updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
@@ -92,8 +97,15 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
+
         Uint32 getFireLastTime();
 		void setFireLastTime();
+
+
+        //allied status
+        void setIsAlly(bool alliedStatus);
+        bool getIsAlly();
+
 };
 
 class Hero: public Ship{        
