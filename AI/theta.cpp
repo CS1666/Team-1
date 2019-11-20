@@ -12,25 +12,36 @@ typedef std::vector<std::vector<bool> > Mesh;
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
+Pathfinder::Pathfinder(Mesh  &m, int v) : visionRange(v), mesh(m){
+    gScore = std::unordered_map<Point, double, CantorHash>();
+    parent = std::unordered_map<Point, Point, CantorHash>();
+    closed = std::unordered_set<Point, CantorHash>();
+    open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
+    
 
+}
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal)
 {
+
+
+    gScore.clear();
+    parent.clear();
+    closed.clear();
+    open->clear();
+    
     ////std::cout << "Path finding" << std::endl;
     // gScore is our cost map for each point
-    gScore = std::map<Point, double>();
     gScore.insert(std::pair<Point, double>(start, 0));
     //std::cout<<start.first<<std::endl;
     //std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
-    parent = std::map<Point, Point>();
     parent.insert(std::pair<Point, Point>(start, start));
     //std::cout<<parent[start].first<<std::endl;
     //std::cout<<parent[start].second<<std::endl;
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
     ////std::cout << "Before p_queue" << std::endl;
-    open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
     ////std::cout << "After p_queue" << std::endl;
 
     ////std::cout << "Before insert" << std::endl;
@@ -39,7 +50,6 @@ Path Pathfinder::pathfind(Point start, Point goal)
 
     
     // Closed is the closed set unsurprisingly
-    closed = std::set<Point>();
 
     int i = 0;
     int counter=0;
@@ -99,7 +109,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
         }
         //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
-    ////std::cout << "Stuck 4" << std::endl;
+    std::cout << "Stuck 4" << std::endl;
     return Path();
 }
 
