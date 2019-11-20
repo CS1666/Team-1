@@ -473,7 +473,9 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
+							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						}
 						break;
 					
 					case SDLK_e:
@@ -526,6 +528,8 @@ void run_demo(gpRender gr){
 			for(auto ent : osSprite) {
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+				if(ent->getRenderOrder() == 0 && ent->getAnimate())
+					ent->updateAnimation();
 			}
 			if(sector.getPlanets().size() > 0)
 			{
@@ -573,7 +577,7 @@ void run_demo(gpRender gr){
       
 			TimeData::update_move_last_time();
 
-			if (animate){
+			/*if (animate){
 				if (TimeData::getTimeSinceAnim() > 100) {
 					if (animation <= 1){
 						cycle = true;
@@ -596,7 +600,7 @@ void run_demo(gpRender gr){
 			else{
 				animation = 0;
 				playerent.setF(animation);
-			}
+			}*/
 
 			//Renders all renderable objects onto the screen
 
