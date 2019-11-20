@@ -1,26 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <tuple>
-#include <string>
-#include <algorithm>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "../General/Sprite.h"
-#include "../General/HpBar.h"
-#include "../General/Ship.h"
-#include "../General/planet.h"
-#include "../General/Star.h"
-#include "../General/SpaceStation.h"
-#include "../General/SpaceStationUI.h"
-#include "../Physics/BasicMovementFPSlimit.h"
-#include "../Physics/TimeData.h"
-#include "../Physics/Audio.h"
-#include "../General/gpRender.h"
-#include "../Level_Generation/Ellers_Maze.h"
 #include "demo.h"
-#include "../AI/AI.h"
-#include "../General/Sector.h"
 
 std::vector<std::pair<int, int>> randNum(){
 
@@ -83,7 +61,9 @@ constexpr int ZONE_WIDTH = 3840;
 constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
-	
+	Sector sector;
+	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
+
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
 	int seed2 = sunSeed + 100;
@@ -128,6 +108,7 @@ void run_demo(gpRender gr){
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
+	sector.addShips(&playerent);
 	
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
@@ -139,62 +120,85 @@ void run_demo(gpRender gr){
 	starent.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
 	osSprite.push_back(&starent);
 	//}
-	
+	sector.addStars(&starent);
 
 	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3);
+	Planet planet1ent(db3, tex3, dc3,starent);
 	osSprite.push_back(&planet1ent);
+	sector.addPlanet(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage(u);
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
-	Planet planet2ent(db4, tex4, dc4);
+	Planet planet2ent(db4, tex4, dc4,starent);
 	osSprite.push_back(&planet2ent);
+	sector.addPlanet(&planet2ent);
 
-	// SDL_Texture* tex5 = gr.loadImage(o);
-	// SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
-	// NSDL_Circ dc5 = {db5};
-	// Planet planet3ent(db5, tex5, dc5);
-	// osSprite.push_back(&planet3ent);
+
+	SDL_Texture* tex5 = gr.loadImage(o);
+	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
+	NSDL_Circ dc5 = {db5};
+
+	Planet planet3ent(db5, tex5, dc5,starent);
+
+	osSprite.push_back(&planet3ent);
+	sector.addPlanet(&planet3ent);
+
 
 	SDL_Texture* tex6 = gr.loadImage(o);
-	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2300	,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
-	Planet planet4ent(db6, tex6, dc6);
+	Planet planet4ent(db6, tex6, dc6,starent);
 	osSprite.push_back(&planet4ent);
+	sector.addPlanet(&planet4ent);
 
-	// SDL_Texture* tex7 = gr.loadImage(q);
-	// SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
-	// NSDL_Circ dc7 = {db7};
-	// Planet planet5ent(db7, tex7, dc7);
-	// osSprite.push_back(&planet5ent);
 
-	// SDL_Texture* tex8 = gr.loadImage(u);
-	// SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
-	// NSDL_Circ dc8 = {db8};
-	// Sprite planet6ent(db8, tex8, dc8);
-	// osSprite.push_back(&planet6ent);
+	SDL_Texture* tex7 = gr.loadImage(q);
+	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
+	NSDL_Circ dc7 = {db7};
+	
+	Planet planet5ent(db7, tex7, dc7,starent);
 
-	// SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,200,200};
-	// Sprite asteroid1ent(db9, tex9);
-	// osSprite.push_back(&asteroid1ent);	
+	osSprite.push_back(&planet5ent);
+	sector.addPlanet(&planet5ent);
 
-	// SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,200,200};
-	// Sprite asteroid2ent(db10, tex10);
-	// osSprite.push_back(&asteroid2ent);
+	SDL_Texture* tex8 = gr.loadImage(u);
+	SDL_Rect db8 = {randCoords[5].first + 1800,randCoords[5].second + 500,200,200};
+	NSDL_Circ dc8 = {db8};
+	
+	Planet planet6ent(db8, tex8, dc8,starent);
 
-	// SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	// SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,200,200};
-	// Sprite asteroid3ent(db11, tex11);
-	// osSprite.push_back(&asteroid3ent);
+	osSprite.push_back(&planet6ent);
+	sector.addPlanet(&planet6ent);
+
+	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,35,35};
+	Asteroid asteroid1ent(db9, tex9);
+
+	osSprite.push_back(&asteroid1ent);
+	sector.addAsteroid(&asteroid1ent);	
+
+	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,35,35};
+	Asteroid asteroid2ent(db10, tex10);
+	sector.addAsteroid(&asteroid2ent);
+
+	osSprite.push_back(&asteroid2ent);
+
+	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,35,35};
+	Asteroid asteroid3ent(db11, tex11);
+	sector.addAsteroid(&asteroid3ent);
+
+	osSprite.push_back(&asteroid3ent);
 
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,200,200};
-	Sprite asteroid4ent(db12, tex12);
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,35,35};
+	Asteroid asteroid4ent(db12, tex12);
+	sector.addAsteroid(&asteroid4ent);
+
 	osSprite.push_back(&asteroid4ent);
 	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
@@ -333,14 +337,9 @@ void run_demo(gpRender gr){
 
 	AI ai;
 
-	Sector sector;
-
 	
-	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 
-	sector.setStars({&starent});
-	
-	osSprite.push_back(&starent);
+
 	
 
 	sector.setShips({&playerent});
@@ -528,7 +527,19 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-
+			if(sector.getPlanets().size() > 0)
+			{
+				for( auto ent : sector.getPlanets())
+				{
+					ent->updatePosition(playerent);
+				}
+			}
+			else
+			{
+				planet1ent.updatePosition(playerent);	
+				planet2ent.updatePosition(playerent);	
+				planet4ent.updatePosition(playerent);	
+			}
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				
