@@ -280,14 +280,6 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 5;
 	
-
-	/*
-	//Ship Cruiser initilization
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
-	SDL_Rect db3 = {400,300,225,300};
-	Sprite emyent(db3, tex3);
-	*/
-
 	SDL_Texture* ltex = gr.loadImage("Assets/Objects/laser.png");
 
 
@@ -344,9 +336,6 @@ void run_demo(gpRender gr){
 
 	sector.setShips({&playerent});
 	sector.setSpaceStation(&ss_ent);
-
-	
-
 
 	ai.createMapState(&sector);
 	
@@ -441,7 +430,7 @@ void run_demo(gpRender gr){
 			}
 
 			// Deletes 0 hp ships
-			for(std::size_t i = 0; i != osShip.size(); i++){
+			/*for(std::size_t i = 0; i != osShip.size(); i++){
 				if(osShip.at(i)->getCurrHp() <= 0){
 					for(std::size_t j = 0; j != osSprite.size(); j++){
 						if((Sprite*)osShip.at(i) == osSprite.at(j)){
@@ -450,7 +439,7 @@ void run_demo(gpRender gr){
 						}
 					}
 				}
-			}
+			}*/
 
 			//Handles all incoming Key events
 			while(SDL_PollEvent(&e)) {
@@ -473,7 +462,9 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
+							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));	
+						}				
 						break;
 					
 					case SDLK_e:
@@ -526,6 +517,9 @@ void run_demo(gpRender gr){
 			for(auto ent : osSprite) {
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+				//temporarily just for player ship until animation sprites implemented for other objects
+				if(ent->getRenderOrder() == 0 && ent->getAnimate())
+					ent->updateAnimation();
 			}
 			if(sector.getPlanets().size() > 0)
 			{
@@ -573,7 +567,7 @@ void run_demo(gpRender gr){
       
 			TimeData::update_move_last_time();
 
-			if (animate){
+			/*if (animate){
 				if (TimeData::getTimeSinceAnim() > 100) {
 					if (animation <= 1){
 						cycle = true;
@@ -596,7 +590,7 @@ void run_demo(gpRender gr){
 			else{
 				animation = 0;
 				playerent.setF(animation);
-			}
+			}*/
 
 			//Renders all renderable objects onto the screen
 
