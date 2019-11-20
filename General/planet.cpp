@@ -93,8 +93,8 @@ void Planet::updatePosition(Sprite& playerent)
 		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
 		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
 	}
-	//std::cout << "planet X: " << this->getTrueX() << std::endl;
-	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
+	std::cout << "planet X: " << this->getTrueX() << std::endl;
+	std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
 //for now only calculate the gravity contribution from the sun
 std::vector<float> Planet::calulateGravity(Star& sun)
