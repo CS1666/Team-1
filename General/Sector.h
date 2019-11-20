@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Star.h"
-#include "Ship.h"
-#include "planet.h"
-#include "asteroid.cpp"
-#include "BlackHole.h"
-#include "SpaceStation.h"
+#include "../General/Star.h"
+#include "../General/Ship.h"
+#include "../General/planet.h"
+#include "../General/asteroid.h"
+#include "../General/BlackHole.h"
+#include "../General/SpaceStation.h"
 
-using namespace std;
+
 
 class Sector
 {
@@ -39,7 +39,9 @@ class Sector
 		void addBlackHole(BlackHole* newBlackHole);
 		void setStars(vector<Star *> newStars);
 		vector<Star *> getStars();
+		void addStars(Star* newStar);
 		void setShips(vector<Ship *> newShips);
+
 		void addShips(Ship* newShip);
 		void setSize(vector<int> newSize);
 		vector<int> getSize();
