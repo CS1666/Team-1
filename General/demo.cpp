@@ -66,8 +66,8 @@ void run_demo(gpRender gr){
 
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
-	//int seed2 = time(0) + 100;
-	srand(sunSeed);
+	int seed2 = sunSeed + 100;
+	srand(seed.getSeed());
 	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
 
@@ -97,9 +97,6 @@ void run_demo(gpRender gr){
 	std::string u = std::get<4>(sunAsset);
 	std::string o = std::get<5>(sunAsset);
 
-	// Star setStar;
-	// setStar.setType(z);
-	//Star starent;
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
@@ -128,21 +125,17 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
-
-	Planet planet1ent(db3, tex3, dc3);
-
+	Planet planet1ent(db3, tex3, dc3,starent);
 	osSprite.push_back(&planet1ent);
 	sector.addPlanet(&planet1ent);
 
 	SDL_Texture* tex4 = gr.loadImage(u);
-
 	SDL_Rect db4 = {randCoords[1].first + rand()%100 + ZONE_WIDTH/4,randCoords[1].second+ 400,200,200};
 	NSDL_Circ dc4 = {db4};
-
-	Planet planet2ent(db4, tex4, dc4);
-
+	Planet planet2ent(db4, tex4, dc4,starent);
 	osSprite.push_back(&planet2ent);
 	sector.addPlanet(&planet2ent);
+
 
 	SDL_Texture* tex5 = gr.loadImage(o);
 	SDL_Rect db5 = {randCoords[2].first +rand()%100 + ZONE_WIDTH/3,randCoords[2].second+ rand()%100 + ZONE_HEIGHT/3,200,200};
@@ -153,14 +146,14 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet3ent);
 	sector.addPlanet(&planet3ent);
 
+
 	SDL_Texture* tex6 = gr.loadImage(o);
-	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2500,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
+	SDL_Rect db6 = {randCoords[3].first +rand()%200 + 2300	,randCoords[3].second+rand()%100 + ZONE_HEIGHT/3,200,200};
 	NSDL_Circ dc6 = {db6};
-
-	Planet planet4ent(db6, tex6, dc6);
-
+	Planet planet4ent(db6, tex6, dc6,starent);
 	osSprite.push_back(&planet4ent);
 	sector.addPlanet(&planet4ent);
+
 
 	SDL_Texture* tex7 = gr.loadImage(q);
 	SDL_Rect db7 = {randCoords[4].first + 2000,randCoords[4].second,200,200};
@@ -534,7 +527,19 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 			}
-
+			if(sector.getPlanets().size() > 0)
+			{
+				for( auto ent : sector.getPlanets())
+				{
+					ent->updatePosition(playerent);
+				}
+			}
+			else
+			{
+				planet1ent.updatePosition(playerent);	
+				planet2ent.updatePosition(playerent);	
+				planet4ent.updatePosition(playerent);	
+			}
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				

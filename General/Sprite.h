@@ -69,6 +69,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
+		bool isPlanet();
 		bool shouldRemove();
 	protected:
 		SDL_Rect drawBox;
