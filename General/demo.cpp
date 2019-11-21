@@ -550,26 +550,53 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
-				if(playerent.getTrueX() < 0 && (curSector != 1 && curSector != 4 && curSector != 7))
+				if(playerent.getTrueX() < 0)
 				{
-					side = 2;
-					curSector--;
+					if(curSector != 1 && curSector != 4 && curSector != 7)
+					{
+						side = 2;
+						curSector--;
+					}
+					else
+					{
+						//set x = 0	
+					}
 				}
-				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH && (curSector != 3 && curSector != 6 && curSector != 9))
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
 				{
-					side = 0;
-					curSector++;
+					if(curSector != 3 && curSector != 6 && curSector != 9)
+					{
+						side = 0;
+						curSector++;
+					}
+					else
+					{
+						//set x = ZONE_WIDTH	
+					}
 				}
-				else if(playerent.getY() < 0 && (curSector != 1 && curSector != 2 && curSector != 3))
+				else if(playerent.getY() < 0)
 				{
-					side = 1;
-					curSector -= 3;
+					if(curSector != 1 && curSector != 2 && curSector != 3)
+					{
+						side = 1;
+						curSector -= 3;
+					}
+					else
+					{
+						//set y = 0
+					}
 				}
-				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT && (curSector != 7 && curSector != 8 && curSector != 9))
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
 				{
-					side = 3;
-					curSector += 3;
-				}
+					if(curSector != 7 && curSector != 8 && curSector != 9)
+					{
+						side = 3;
+						curSector += 3;
+					}
+					else{
+						//set y = ZONE_HEIGHT
+					}
+				}	
 				else
 				{
 					solar = true;
