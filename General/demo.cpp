@@ -574,7 +574,7 @@ void run_demo(gpRender gr){
 					else
 					{
 						//set x = ZONE_WIDTH	
-						playerent.setX(ZONE_WIDTH);
+						playerent.setX(ZONE_WIDTH - PLAYER_WIDTH);
 						solar = true;
 					}
 				}
@@ -602,7 +602,7 @@ void run_demo(gpRender gr){
 					else
 					{
 						//set y = ZONE_HEIGHT
-						playerent.setY(ZONE_HEIGHT);
+						playerent.setY(ZONE_HEIGHT - PLAYER_WIDTH);
 						solar = true;
 					}
 				}	
