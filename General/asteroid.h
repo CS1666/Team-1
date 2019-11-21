@@ -18,8 +18,8 @@ class Asteroid : public Sprite
 		std::pair<int, int> position;
 		std::string sprite;
 		long mass;
-		float veloX = ((float(rand()) / float(RAND_MAX)) * (2)) - 1;
-		float veloY = ((float(rand()) / float(RAND_MAX)) * (2)) - 1;
+		float veloX = (float(rand()) / float(RAND_MAX)) - .5;
+		float veloY = (float(rand()) / float(RAND_MAX)) - .5;
 		
 	public:
 		Asteroid();
