@@ -58,6 +58,9 @@
 	bool Sprite::getIsAI(){
 		return isAI;
 	}
+	bool Sprite::getIsAsteroid(){
+		return isAst;
+	}
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;

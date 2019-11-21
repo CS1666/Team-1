@@ -65,6 +65,7 @@ class Sprite{
 		bool check_all_collisions_ships(SDL_Rect* a, std::vector<Sprite*> &osSprite);
 		int getMass();
 		bool getIsAI();
+		bool getIsAsteroid();
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
 		SDL_Rect* getCollisionBox();
@@ -90,6 +91,7 @@ class Sprite{
 		float x,y;
 		bool remove = false;
 		bool isAI = false;
+		bool isAst = false;
 		// set renderOrder for all objects
 		// 0 = player ship
 		// 1 = objects with collision but no gravity (all other ships + space station)
