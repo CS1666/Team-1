@@ -67,10 +67,12 @@ void AI::defendPosition(AIShip* ship)
     //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
-	//cout<<"Texture "<<proj.getTexture()<<endl;
-	if(proj->getTexture()!=nullptr)
-	    osSprite->push_back(proj);
+	if(SDL_GetTicks() - ship->getFireLastTime() > 200){
+        Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
+        //cout<<"Texture "<<proj.getTexture()<<endl;
+        if(proj->getTexture()!=nullptr)
+            osSprite->push_back(proj);
+        }
     }
    //todo: have different radar range?
     if(ship->isFreeForm())
@@ -281,9 +283,11 @@ bool AI::createMapState(Sector* currentSector)
     vector<int> sectorSize = currentSector->getSize();
     // Gets the positions and sizes of everything within the sector
     vector<vector<int> > currentState = currentSector->getState();
+    std::cout << "8" << std::endl;
       // Creates a new map state with everything equal to zero
     vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
     // Puts 1's at the edges of objecys within the sector + the size of the buffer
+    std::cout << "9" << std::endl;
     for (vector<int> object : currentState)
     {
         for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
@@ -298,55 +302,11 @@ bool AI::createMapState(Sector* currentSector)
             }
         }
     }
+    std::cout << "10" << std::endl;
     
     if(checkMapState(newStoredMapState))
     {
         storedMapState=newStoredMapState;
-        return true;
-    }
-    return false;
-
-}
-
-bool AI::createShipState(Sector* currentSector)
-{
-    // Buffer in pixels
-    const int buffer = 50;
-   
-    // Gets sector size and sets mesh size to be the size of the sector
-    vector<int> sectorSize = currentSector->getSize();
-
-   
-    // Gets the positions and sizes of everything within the sector
-    vector<vector<int> > currentState = currentSector->getShipState();
-
-      // Creates a new map state with everything equal to zero
-    vector<vector<bool> > newStoredShipState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-
-  
-    // Puts 1's at the edges of objecys within the sector + the size of the buffer
-    for (vector<int> object : currentState)
-    {
-        
-        for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
-        {      
-   
-            for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
-            {   
-             
-                if (x >= 0 && x < newStoredShipState.size() && y >=0 && y < newStoredShipState[0].size())
-                {
-       
-                    newStoredShipState[x][y] = 1;
-                }
-
-            }
-        }
-    }
-    
-    if(checkMapState(newStoredShipState))
-    {
-        storedShipState=newStoredShipState;
         return true;
     }
     return false;
@@ -439,7 +399,10 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			pair<int, int> shipCheck = ship->getPosition();
 
-			if (shipCheck != radarPosition)
+            std::cout << "Check ship location "<< ship->getIsAlly() << ", " << aiShip.getIsAlly() << std::endl;
+
+			if (shipCheck != radarPosition && ship->getIsAlly() != aiShip.getIsAlly())
+
 			{
 
 //				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
@@ -499,6 +462,7 @@ void AI::createShip(bool isAlly){
                 newShip->setMaxHp(100);
                 osSprite->push_back(newShip);
                 ships->push_back(newShip);
+                sector->addShips(newShip);
 
 
             }

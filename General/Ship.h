@@ -28,7 +28,6 @@ class Ship : public Sprite
         int maxHp;
         int mass;
        
-
         float curRotation;
         float rotation;
         float maxRotation;
@@ -36,6 +35,9 @@ class Ship : public Sprite
         float speedY;
         float newAngle;
 
+        float max_deltaV = 1;
+
+        Uint32 fireLastTime = SDL_GetTicks();
         bool damageTaken;
         bool rotationSet;
         bool isUser;
@@ -65,11 +67,13 @@ class Ship : public Sprite
         void checkPhysics();
         //integrate BasicMovementFPSlimit.cpp
 
+        void setMaxDelta(float new_accel);
         void setSpeedX(float speed);
         void setSpeedY(float speed);
         float getSpeedX();
         float getSpeedY();
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+        void updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
         pair<int,int> getPosition();
@@ -92,6 +96,12 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
+        Uint32 getFireLastTime();
+		void setFireLastTime();
+
+        //allied status
+        void setIsAlly(bool alliedStatus);
+        bool getIsAlly();
 };
 
 class Hero: public Ship{        
@@ -103,8 +113,17 @@ class Hero: public Ship{
                 void handleKeyDownEvent(SDL_Event e);
 };
 
-class Fighter: public Ship{};
+class Fighter: public Ship{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Cruiser: public Ship{};
+class Cruiser: public Ship{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex);
+};
 
-class Capital: public Ship{};
+class Capital: public Ship{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex);
+};
