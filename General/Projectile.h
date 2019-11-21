@@ -21,7 +21,10 @@ class Projectile : public Sprite
 
     public:
         Projectile();
-        Projectile(SDL_Rect dBox, SDL_Texture* aTex);
+        Projectile(SDL_Rect dBox, SDL_Texture* aTex, int damage);
         Projectile(const Projectile &spr);
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+        int getDamage();
+        bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
+        bool isProjectile();
 };
