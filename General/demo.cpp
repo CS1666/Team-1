@@ -561,6 +561,7 @@ void run_demo(gpRender gr){
 					{
 						//set x = 0
 						playerent.setX(0);
+						solar = true;
 					}
 				}
 				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
@@ -574,6 +575,7 @@ void run_demo(gpRender gr){
 					{
 						//set x = ZONE_WIDTH	
 						playerent.setX(ZONE_WIDTH);
+						solar = true;
 					}
 				}
 				else if(playerent.getY() < 0)
@@ -587,6 +589,7 @@ void run_demo(gpRender gr){
 					{
 						//set y = 0
 						playerent.setY(0);
+						solar = true;
 					}
 				}
 				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
@@ -596,9 +599,11 @@ void run_demo(gpRender gr){
 						side = 3;
 						curSector += 3;
 					}
-					else{
+					else
+					{
 						//set y = ZONE_HEIGHT
 						playerent.setY(ZONE_HEIGHT);
+						solar = true;
 					}
 				}	
 				else
