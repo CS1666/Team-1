@@ -4,6 +4,8 @@
 #include <string>
 #include <tuple>
 #include "../General/Sprite.h"
+#include "../Physics/BasicGravity.h"
+#include "../Physics/Momentum.h"
 #include <SDL.h>
 
 
@@ -16,7 +18,9 @@ class Asteroid : public Sprite
 		std::pair<int, int> position;
 		std::string sprite;
 		long mass;
-
+		float veloX = ((float(rand()) / float(RAND_MAX)) * (2)) - 1;
+		float veloY = ((float(rand()) / float(RAND_MAX)) * (2)) - 1;
+		
 	public:
 		Asteroid();
 		Asteroid(SDL_Rect dBox, SDL_Texture* aTex);
@@ -32,5 +36,11 @@ class Asteroid : public Sprite
 		void setPosition(std::pair<int, int> newPos);
 		void setSprite(std::string s);
 		void setMass(long m);
+		float getVeloX();
+		float getVeloY();
+		void setVeloX(float vX);
+		void setVeloY(float vY);
+		void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+		void collision_checker(SDL_Rect* a, std::vector<Sprite*> &osSprite, int mode);
 
 };
