@@ -7,14 +7,14 @@ using namespace std;
 
 
 Planet::Planet(): Sprite() {orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;initVelocity(sun);};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;type = 4;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;initVelocity(sun);};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;type = 2;};
 
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;type = 4;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;type = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;

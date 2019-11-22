@@ -129,7 +129,7 @@ void handleKeyDownEvent(SDL_Event e, Ship &ent){
 }
 
 //tis is te simple collision check from the examples
-bool check_collision2(SDL_Rect* a, SDL_Rect* b) {
+bool check_collision(SDL_Rect* a, SDL_Rect* b) {
 	// Check vertical overlap
 	if (a->y + a->h <= b->y)
 		return false;
@@ -176,7 +176,7 @@ int check_all_collisions3(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	int res = -1;
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
-		isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
+		isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 		if(isCollision){
 			if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4){
 				res = osSprite.at(i)->getRenderOrder();
@@ -192,7 +192,7 @@ bool check_all_collisions2(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
 	for(int i = 1;  i < osSprite.size(); i++){
 		if(osSprite.at(i)->getRenderOrder() != 3 && osSprite.at(i)->getRenderOrder() != 4)
-			isCollision |= check_collision2(a, osSprite.at(i)->getDrawBox());
+			isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 	}
 	return isCollision;
 }
