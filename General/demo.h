@@ -15,6 +15,7 @@
 #include "../General/Star.h"
 #include "../General/SpaceStation.h"
 #include "../General/SpaceStationUI.h"
+#include "../General/asteroid.h"
 #include "../Physics/BasicMovementFPSlimit.h"
 #include "../Physics/TimeData.h"
 #include "../Physics/Audio.h"

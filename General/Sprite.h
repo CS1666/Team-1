@@ -78,6 +78,7 @@ class Sprite{
 		bool isCelestialBody();
 		bool isUI();
 		
+		
 		bool shouldRemove();
 	protected:
 		SDL_Rect drawBox;
