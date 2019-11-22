@@ -57,11 +57,11 @@ Ship::Ship(const Ship& ship){
 
 };
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {weaponType = 1; renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {weaponType = 1; renderOrder = 1; type = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {weaponType = 1; renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {weaponType = 1; renderOrder = 1; type = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {weaponType = 1; renderOrder = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {weaponType = 1; renderOrder = 1; type = 1;};
 
 Ship::~Ship()
 {

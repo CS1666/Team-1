@@ -203,6 +203,18 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
+	SDL_Rect db13 = {400,400,70,70};
+	Asteroid asteroid5ent(db13, tex11);
+	sector.addAsteroid(&asteroid5ent);
+	osSprite.push_back(&asteroid5ent);
+	osAst.push_back(&asteroid5ent);
+
+	SDL_Rect db14 = {300,400,70,70};
+	Asteroid asteroid6ent(db14, tex11, 2, 0);
+	sector.addAsteroid(&asteroid6ent);
+	osSprite.push_back(&asteroid6ent);
+	osAst.push_back(&asteroid6ent);
+
 	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
@@ -536,12 +548,8 @@ void run_demo(gpRender gr){
 
 	
 			for(int i = 0; i != osAst.size(); i++){
-				for(int j = i + 1; j != osAst.size(); j++){
-					if(check_collision(osAst.at(i)->getDrawBox(), osAst.at(j)->getDrawBox())){
-						collision_ast(*osAst.at(i), *osAst.at(j));
-					}
-				}
-				osAst.at(i)->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+				
+				osAst.at(i)->updateAsteroids(osSprite, osAst, i);
 			}
 
 			if(sector.getPlanets().size() > 0)
