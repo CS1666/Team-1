@@ -295,6 +295,8 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 5;
 	
+	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
+
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -423,7 +425,7 @@ void run_demo(gpRender gr){
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
-		
+		int frames = 0;
 
 		//Game Loop
 		while(gameon && solar)
@@ -569,26 +571,62 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
-				if(playerent.getTrueX() < 0 && (curSector != 1 && curSector != 4 && curSector != 7))
+				if(playerent.getTrueX() < 0)
 				{
-					side = 2;
-					curSector--;
+					if(curSector != 1 && curSector != 4 && curSector != 7)
+					{
+						side = 2;
+						curSector--;
+					}
+					else
+					{
+						//set x = 0
+						playerent.setX(0);
+						solar = true;
+					}
 				}
-				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH && (curSector != 3 && curSector != 6 && curSector != 9))
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
 				{
-					side = 0;
-					curSector++;
+					if(curSector != 3 && curSector != 6 && curSector != 9)
+					{
+						side = 0;
+						curSector++;
+					}
+					else
+					{
+						//set x = ZONE_WIDTH	
+						playerent.setX(ZONE_WIDTH - PLAYER_WIDTH);
+						solar = true;
+					}
 				}
-				else if(playerent.getY() < 0 && (curSector != 1 && curSector != 2 && curSector != 3))
+				else if(playerent.getY() < 0)
 				{
-					side = 1;
-					curSector -= 3;
+					if(curSector != 1 && curSector != 2 && curSector != 3)
+					{
+						side = 1;
+						curSector -= 3;
+					}
+					else
+					{
+						//set y = 0
+						playerent.setY(0);
+						solar = true;
+					}
 				}
-				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT && (curSector != 7 && curSector != 8 && curSector != 9))
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
 				{
-					side = 3;
-					curSector += 3;
-				}
+					if(curSector != 7 && curSector != 8 && curSector != 9)
+					{
+						side = 3;
+						curSector += 3;
+					}
+					else
+					{
+						//set y = ZONE_HEIGHT
+						playerent.setY(ZONE_HEIGHT - PLAYER_WIDTH);
+						solar = true;
+					}
+				}	
 				else
 				{
 					solar = true;
@@ -596,6 +634,73 @@ void run_demo(gpRender gr){
 				
 			}
       
+			
+			frames++;
+			if(frames > 120){
+				frames = 0;
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
+					osSprite.push_back(&sector5ent2);
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+			}
+			else if(frames > 60){
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/enemySector.png");
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
+					osSprite.push_back(&sector5ent2);
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+			}
+			
+			
 			TimeData::update_move_last_time();
 
 			/*if (animate){
