@@ -21,7 +21,7 @@ class Asteroid : public Sprite
 		long mass;
 		float veloX = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		float veloY = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
-		int temp;
+		float rotation = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		
 	public:
 		Asteroid();

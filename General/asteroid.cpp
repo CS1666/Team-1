@@ -114,7 +114,7 @@ void Asteroid::updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Aster
 			collision_ast(*this, *osAst.at(j));
 		}
 	}
-
+	setAngle(getAngle()+rotation);
 	setVeloX(veloX);
 	setVeloY(veloY);
 	setX(getTrueX() + veloX);
