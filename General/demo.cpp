@@ -103,6 +103,9 @@ void run_demo(gpRender gr){
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Texture* fighter_tex = gr.loadImage("Assets/Objects/ship_fighter_hero.png");
+	SDL_Texture* cruiser_tex = gr.loadImage("Assets/Objects/ship_cruiser_hero.png");
+	SDL_Texture* capital_tex = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	//Ship playerent(db, tex, 0);
 	Hero playerent(db, tex);
@@ -553,18 +556,21 @@ void run_demo(gpRender gr){
 						case SDLK_t:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT T option here
+								playerent.setTexture(fighter_tex);
 								
 							}
 							break;
 						case SDLK_y:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT Y option here
+								playerent.setTexture(cruiser_tex);
 								
 							}
 							break;
 						case SDLK_u:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT U option here
+								playerent.setTexture(capital_tex);
 								
 							}
 							break;
