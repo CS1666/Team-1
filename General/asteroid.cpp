@@ -89,6 +89,14 @@ void Asteroid::setVeloY(float vY){
 	veloY = vY;
 }
 
+void Asteroid::setHP(long new_hp){
+	hp = new_hp
+}
+
+long Asteroid::getHP(){
+	return hp;	
+}
+
 void Asteroid::updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Asteroid*> &osAst, int i)
 {	
 	
@@ -139,7 +147,10 @@ void Asteroid::collision_ast(Asteroid &ast1, Asteroid &ast2){
 
 	float m1 = (dpNorm1 * (ast1.getMass() - ast2.getMass()) + 2.0f * ast2.getMass() * dpNorm2)/(ast1.getMass() + ast2.getMass());
 	float m2 = (dpNorm2 * (ast2.getMass() - ast1.getMass()) + 2.0f * ast1.getMass() * dpNorm1)/(ast1.getMass() + ast2.getMass());
-
+	
+	ast1.setHP(ast1.getHP() - m2);
+	ast2.setHP(ast2.getHP() - m1);
+	
 	ast1.setVeloX(tx * dpTan1 + nx * m1);
 	ast1.setVeloY(ty * dpTan1 + ny * m1);
 	ast2.setVeloX(tx * dpTan2 + nx * m2);
