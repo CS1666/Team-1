@@ -237,8 +237,20 @@ void run_demo(gpRender gr){
 	SpaceStationUI e_UI(e_rect, e_tex);
 
 	SDL_Texture* r_tex = gr.loadImage("Assets/Objects/R.png");
-	SDL_Rect r_rect = {50, 200, 100, 100};
+	SDL_Rect r_rect = {50, 170, 100, 100};
 	SpaceStationUI r_UI(r_rect, r_tex);
+
+	SDL_Texture* t_tex = gr.loadImage("Assets/Objects/T.png");
+	SDL_Rect t_rect = {50, 290, 100, 100};
+	SpaceStationUI t_UI(t_rect, t_tex);
+
+	SDL_Texture* y_tex = gr.loadImage("Assets/Objects/Y.png");
+	SDL_Rect y_rect = {50, 410, 100, 100};
+	SpaceStationUI y_UI(y_rect, y_tex);
+
+	SDL_Texture* u_tex = gr.loadImage("Assets/Objects/U.png");
+	SDL_Rect u_rect = {50, 530, 100, 100};
+	SpaceStationUI u_UI(u_rect, u_tex);
 
 	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
 	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
@@ -500,6 +512,12 @@ void run_demo(gpRender gr){
 								osSprite.push_back(&ss_UI);
 								r_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&r_UI);
+								t_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&t_UI);
+								y_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&y_UI);
+								u_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&u_UI);
 							}
 						}
 						break;
@@ -517,6 +535,9 @@ void run_demo(gpRender gr){
 							if(e.type == SDL_KEYDOWN){
 								if(in_space_station_menu && is_space_station_in_range) {
 									in_space_station_menu = false;
+									osSprite.erase(osSprite.begin() + u_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + y_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 								}
@@ -526,6 +547,24 @@ void run_demo(gpRender gr){
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
 								ai.createShip(true);
+								
+							}
+							break;
+						case SDLK_t:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT T option here
+								
+							}
+							break;
+						case SDLK_y:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT Y option here
+								
+							}
+							break;
+						case SDLK_u:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT U option here
 								
 							}
 							break;
