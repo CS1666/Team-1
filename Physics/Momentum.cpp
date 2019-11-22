@@ -66,28 +66,4 @@ void shipCollisionHandler(Ship &ship1, Ship &ship2){
 
 }
 
-void collision_ast(Asteroid &ast1, Asteroid &ast2){		
-			
-	float distance = sqrtf((ast1.getTrueX() - ast2.getTrueX())*(ast1.getTrueX() - ast2.getTrueX()) + (ast1.getTrueY() - ast2.getTrueY())*(ast1.getTrueY() - ast2.getTrueY()));
-	float nx = (ast2.getTrueX() - ast1.getTrueX()) / distance;
-	float ny = (ast2.getTrueY() - ast1.getTrueY()) / distance;
 
-	float tx = -ny;
-	float ty = nx;
-
-	float dpTan1 = ast1.getVeloX() * tx + ast1.getVeloY() * ty;
-	float dpTan2 = ast2.getVeloX() * tx + ast2.getVeloY() * ty;
-
-	float dpNorm1 = ast1.getVeloX() * nx + ast1.getVeloY() * ny;
-	float dpNorm2 = ast2.getVeloX() * nx + ast2.getVeloY() * ny;
-
-	float m1 = (dpNorm1 * (ast1.getMass() - ast2.getMass()) + 2.0f * ast2.getMass() * dpNorm2)/(ast1.getMass() + ast2.getMass());
-	float m2 = (dpNorm2 * (ast2.getMass() - ast1.getMass()) + 2.0f * ast1.getMass() * dpNorm1)/(ast1.getMass() + ast2.getMass());
-
-	ast1.setVeloX(tx * dpTan1 + nx * m1);
-	ast1.setVeloY(ty * dpTan1 + ny * m1);
-	ast2.setVeloX(tx * dpTan2 + nx * m2);
-	ast2.setVeloY(ty * dpTan2 + ny * m2);
-	
-						
-}
