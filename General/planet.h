@@ -12,6 +12,7 @@ class Planet : public Sprite
 public:
 	Planet();
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
+	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass, Star &sun, float vel);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex);

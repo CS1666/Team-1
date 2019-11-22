@@ -11,6 +11,7 @@
 #define CRUISER_HEIGHT 100
 #define CAPITAL_WIDTH 150
 #define CAPITAL_HEIGHT 150
+#define SHIP_SECTOR_LIMIT 3
 //GLOBAL TEXTURE VALUES
 //TO USE: CALL textures.at(TEX_FIGHT_HERO) to get the hero fighter
 //0-8 ARE TEXTURES FOR SHIPS
@@ -19,6 +20,7 @@
 //14 is space station (one of them)
 //15 is the laser projectile
 //ADD MORE AS REQUIRED HERE AND IN initTextures
+//#define TEX_SHIPS 0
 #define TEX_FIGHT_HERO 0
 #define TEX_FIGHT_ALLY 1
 #define TEX_FIGHT_ENEMY 2
@@ -32,9 +34,15 @@
 #define TEX_SUN_RED 10
 #define TEX_SUN_WHITE 11
 #define TEX_SUN_YELLOW 12
+//#define TEX_ASTEROIDS 5
 #define TEX_ASTEROID 13
 #define TEX_STATION 14
 #define TEX_LASER 15
 
+
 //INIT TEXTURES INTO A VECTOR
 std::vector<SDL_Texture*> initTextures(gpRender& gr);
+
+
+//ENEMY SPAWN ZONES
+

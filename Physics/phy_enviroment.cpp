@@ -89,7 +89,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,15, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,starent);
 	osSprite.push_back(&planet1ent);
 	std::cout<< "mass " << starent.getMass() << std::endl;
 	//Space Station Initialization-
@@ -99,7 +99,7 @@ void run_phy_enviro(gpRender gr){
 	//osSprite.push_back(&ss_ent);
 	osSprite.push_back(&ss_ent);
 	
-	/*//Ship Cruiser initilization
+	//Ship Cruiser initilization
 	SDL_Texture* tex_em = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
 	SDL_Rect db5 = {500,300,50,50};
 	Ship ement(db5, tex_em);
@@ -108,7 +108,7 @@ void run_phy_enviro(gpRender gr){
 	osSprite.push_back(&ement);
 	osShip.push_back(&ement);
 
-	SDL_Rect db6 = {400,500,50,50};
+	/*SDL_Rect db6 = {400,500,50,50};
 	Ship ement2(db6, tex_em);
 	ement2.setCurrHp(100);
 	ement2.setMaxHp(100);
