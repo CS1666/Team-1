@@ -19,6 +19,7 @@ class Asteroid : public Sprite
 		std::pair<int, int> position;
 		std::string sprite;
 		long mass;
+		long hp;
 		float veloX = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		float veloY = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		float rotation = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
@@ -47,7 +48,8 @@ class Asteroid : public Sprite
 		void setVeloY(float vY);
 		void updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Asteroid*> &osAst, int i);
 		void collision_ast(Asteroid &ast1, Asteroid &ast2);
-
+		void setHP();
+		void getHP();
 	
 		
 };
