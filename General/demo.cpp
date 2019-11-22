@@ -73,7 +73,9 @@ void run_demo(gpRender gr){
 
 	std::vector<Sprite*> osSprite; // vector for collision checker and rendering
 
-	std::vector<Ship*> osShip; // vector for tracking ships
+	std::vector<Ship*> osShip; // vector for tracking ships for deletion
+
+	std::vector<Asteroid*> osAst; // vector for tracking for collision
 	//tuple to control the sun and subsequent spawns
 	std::tuple<int, int, std::string, std::string, std::string, std::string> sunAsset = callAsset();
 	vector<SDL_Texture*> allTextures=initTextures(gr);
@@ -174,32 +176,33 @@ void run_demo(gpRender gr){
 	sector.addPlanet(&planet6ent);
 
 	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,35,35};
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,70,70};
 	Asteroid asteroid1ent(db9, tex9);
-
 	osSprite.push_back(&asteroid1ent);
+	osAst.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
 
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,35,35};
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,70,70};
 	Asteroid asteroid2ent(db10, tex10);
 	sector.addAsteroid(&asteroid2ent);
-
 	osSprite.push_back(&asteroid2ent);
+	osAst.push_back(&asteroid2ent);
 
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,35,35};
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,70,70};
 	Asteroid asteroid3ent(db11, tex11);
 	sector.addAsteroid(&asteroid3ent);
-
 	osSprite.push_back(&asteroid3ent);
+	osAst.push_back(&asteroid3ent);
 
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,35,35};
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,70,70};
 	Asteroid asteroid4ent(db12, tex12);
 	sector.addAsteroid(&asteroid4ent);
-
 	osSprite.push_back(&asteroid4ent);
+	osAst.push_back(&asteroid4ent);
+
 	
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
@@ -280,7 +283,6 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 5;
 	
-
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -526,11 +528,22 @@ void run_demo(gpRender gr){
 
 
 			for(auto ent : osSprite) {
-				if(!ent->getIsAI())
+				if(!ent->getIsAI() && !ent->getIsAsteroid())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 				if(ent->getRenderOrder() == 0 && ent->getAnimate())
 					ent->updateAnimation();
 			}
+
+	
+			for(int i = 0; i != osAst.size(); i++){
+				for(int j = i + 1; j != osAst.size(); j++){
+					if(check_collision(osAst.at(i)->getDrawBox(), osAst.at(j)->getDrawBox())){
+						collision_ast(*osAst.at(i), *osAst.at(j));
+					}
+				}
+				osAst.at(i)->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+			}
+
 			if(sector.getPlanets().size() > 0)
 			{
 				for( auto ent : sector.getPlanets())
