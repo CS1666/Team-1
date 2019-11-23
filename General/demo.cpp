@@ -427,16 +427,44 @@ void run_demo(gpRender gr){
 
 	int startPlayerX = playerent.getX();
 	int startPlayerY = playerent.getY();
+	int side = -1;
 	
 	std::vector<int> toErase;
 
 	while(gameon)
 	{
-		playerent.setX(startPlayerX);
-		playerent.setY(startPlayerY);
+		switch(side)
+		{
+			case 0:
+				//enter from left edge
+				playerent.setX(8);
+				playerent.setY(ZONE_HEIGHT - 200);
+				break;
+			case 1:
+				//enter from bottom edge
+				playerent.setX(ZONE_WIDTH/2);
+				playerent.setY(ZONE_HEIGHT - (8 + playerent.getH()));
+				break;
+			case 2:
+				//enter from right edge
+				playerent.setX(ZONE_WIDTH - (8 + playerent.getW()));
+				playerent.setY(ZONE_HEIGHT - 200);
+				break;
+			case 3:
+				//enter from top edge
+				playerent.setX(ZONE_WIDTH/2);
+				playerent.setY(8);
+				break;
+			default:
+				
+				playerent.setX(startPlayerX);
+				playerent.setY(startPlayerY);
+				break;
+	
+		}
 		playerent.speed = 0;
 		playerent.deltaV = 0;
-		int side = 0;
+		
 		
 		SDL_RenderClear(gr.getRender());
 		bool solar = true;
@@ -852,6 +880,7 @@ void run_demo(gpRender gr){
 					case SDLK_m:
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
+							side = -1;
 							seed.setSeed();
 						}
 						break;
