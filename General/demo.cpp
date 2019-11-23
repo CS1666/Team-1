@@ -832,9 +832,9 @@ void run_demo(gpRender gr){
 					toErase.push_back(i);
 				}
 			}
-			for(auto i : toErase)
+			for(int i = toErase.size()-1; i >= 0 ; i--)
 			{
-				osSprite.erase(osSprite.begin()+i);
+				osSprite.erase(osSprite.begin()+toErase.at(i));
 			}
 			toErase.clear();
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
