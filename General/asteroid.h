@@ -18,8 +18,8 @@ class Asteroid : public Sprite
 		float direction;
 		std::pair<int, int> position;
 		std::string sprite;
-		long mass;
-		long hp;
+		float mass = ((float)getW() - 30)/5 + 1;
+		float hp = 10 * mass;
 		float veloX = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		float veloY = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
 		float rotation = ((float(rand()) / float(RAND_MAX)) * 2) - 1;
@@ -33,7 +33,7 @@ class Asteroid : public Sprite
 		int getRadius();
 		int getVelocity();
 		float getDirection();
-		long getMass();
+		float getMass();
 		std::pair<int, int> getPosition();
 		std::string getSprite();
 		void setRadius(int r);
@@ -41,15 +41,16 @@ class Asteroid : public Sprite
 		void setDirection(float d);
 		void setPosition(std::pair<int, int> newPos);
 		void setSprite(std::string s);
-		void setMass(long m);
+		void setMass(float m);
 		float getVeloX();
 		float getVeloY();
 		void setVeloX(float vX);
 		void setVeloY(float vY);
-		void updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Asteroid*> &osAst, int i);
+		void updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Asteroid*> &osAst, Ship &playerent, int i);
 		void collision_ast(Asteroid &ast1, Asteroid &ast2);
-		void setHP();
-		void getHP();
+		void collision_hero(Asteroid &ast, Ship &player);
+		void setHP(float new_hp);
+		float getHP();
 	
 		
 };
