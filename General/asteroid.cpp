@@ -97,19 +97,18 @@ void Asteroid::updateAsteroids(std::vector<Sprite*> &osSprite, std::vector<Aster
 		if(!osSprite.at(k)->getIsAsteroid() && !osSprite.at(k)->isUI()){
 			if(check_collision(getDrawBox(), osSprite.at(k)->getDrawBox())){	
 				if(osSprite.at(k)->isCelestialBody()){
-					for(int n = 0; n != osSprite.size(); n++){
+					for(int n = 0; n != osSprite.size() && !remove; n++){
 						if((Sprite*)this == osSprite.at(n)){
 							osAst.erase(osAst.begin() + i);
-							osSprite.erase(osSprite.begin() + n);
+							remove = true;
 						}
 					}
 				}
 			}
 		}
 	}
-
 	// asteroids checking collision against each other
-	for(int j = i + 1; j != osAst.size(); j++){
+	for(int j = i + 1; j < osAst.size(); j++){
 		if(check_collision(getDrawBox(), osAst.at(j)->getDrawBox())){
 			collision_ast(*this, *osAst.at(j));
 		}

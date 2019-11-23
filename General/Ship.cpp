@@ -298,8 +298,8 @@ int Ship::getMass()
 
 Projectile Ship::fireWeapon(SDL_Texture* texture)
 {
-	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*.0174533);
-	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*.0174533);
+	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*1.1*.0174533);
+	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*1.1*.0174533);
 	SDL_Rect ldb = {X, Y, 2, 10};
 	Projectile laser(ldb, texture, weaponType);	
 	laser.setAngle(getAngle());
