@@ -504,8 +504,7 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-			ai.createShip(false);
-			ai.executeAIActions();
+			
 			
 			if(galaxy.getInControl(curSector - 1))
 			{
