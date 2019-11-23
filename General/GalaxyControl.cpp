@@ -35,6 +35,7 @@
 		{
 			return true;
 		}
+		return false;
 	}
 
 	bool GalaxyControl::getLoseGame()
@@ -43,6 +44,7 @@
 		{
 			return true;
 		}
+		return false;
 
 	}
 
