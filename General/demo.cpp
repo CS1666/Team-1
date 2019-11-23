@@ -627,9 +627,9 @@ void run_demo(gpRender gr){
 			}
 
 	
-			for(int i = 0; i != osAst.size(); i++){
-				
+			for(int i = osAst.size()-1; i >= 0; i--){
 				osAst.at(i)->updateAsteroids(osSprite, osAst, i);
+				
 			}
 
 			if(sector.getPlanets().size() > 0)
@@ -840,7 +840,6 @@ void run_demo(gpRender gr){
 					toErase.push_back(i);
 				}
 			}
-			std::cout << "size " <<  toErase.size() << std::endl;
 			bool modified = false;
 			for(int i = toErase.size()-1; i >= 0 ; i--)
 			{
