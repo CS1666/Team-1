@@ -133,9 +133,9 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	{
 		speed = MAX_SPEED;
 	}
-	else if(speed < -MAX_SPEED)
+	else if(speed < 0)
 	{
-		speed = -MAX_SPEED;
+		speed = 0;
 	}
 	if(rotationSpeed > MAX_ROTATIONSPEED)
 	{

@@ -13,6 +13,7 @@
 #include "../General/Ship.h"
 #include "../General/planet.h"
 #include "../General/Star.h"
+#include "../General/Blackhole.h"
 #include "../General/SpaceStation.h"
 #include "../General/SpaceStationUI.h"
 #include "../General/asteroid.h"
