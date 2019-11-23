@@ -896,6 +896,12 @@ void run_demo(gpRender gr){
 			toErase.clear();
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
+			
+			if(galaxy.getWinGame())
+			{
+				gameon = false;
+				cout << "Winner\n";
+			}
 		}
 		
 		Ellers_Maze maze(side);
