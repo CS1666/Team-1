@@ -1,10 +1,10 @@
 #include "Star.h"
-Star::Star(): Sprite(), type{2} {};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass): Sprite(dBox, aTex, dCirc), mass{mass}{renderOrder = 2;};
+Star::Star(): Sprite() {mass = 100;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;initMass();type = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;mass = m;type = 2;};
 //to be deprecated
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass{mass}{renderOrder = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;initMass();type = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;mass = m;type = 2;};
 
 	int Star::getRadius()
 	{
@@ -15,10 +15,9 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass
 	{
 		return gravity;
 	}
-
-	string Star::getType()
+	void Star::initMass()
 	{
-		return type;
+		mass = (drawBox.w*drawBox.h)/1000;
 	}
 
 	vector<int> Star::getPosition()
@@ -41,10 +40,6 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass
 		gravity = g;
 	}
 
-	void Star::setType(string t)
-	{
-		type = t;
-	}
 
 	void Star::setPosition(vector<int> newPos)
 	{
@@ -54,10 +49,6 @@ Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int mass): Sprite(dBox, aTex), mass
 	void Star::setSprite(string s)
 	{
 		sprite = s;
-	}
-		
-	int Star::getMass(){
-		return mass;	
 	}
 
 	void Star::setMass(int newMass){
