@@ -829,18 +829,24 @@ void run_demo(gpRender gr){
 				fixed = true;bgzonelayer1;
 			}
 			
+			if(playerent.getCurrHp() <= 0)
+			{
+				gameon = false;
+			}
 			
-			
-			/*for(std::size_t i = 0; i != osSprite.size(); i++){
+			for(std::size_t i = 0; i != osSprite.size(); i++){
 				if(osSprite.at(i)->shouldRemove())
 				{
 					toErase.push_back(i);
 				}
 			}
+			std::cout << "size " <<  toErase.size() << std::endl;
+			bool modified = false;
 			for(int i = toErase.size()-1; i >= 0 ; i--)
 			{
 				osSprite.erase(osSprite.begin()+toErase.at(i));
-			}*/
+				modified = true;
+			}
 			toErase.clear();
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
