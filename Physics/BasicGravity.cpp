@@ -60,7 +60,7 @@ std::vector<float> calculateGravityPull(Sprite &playerent,  std::vector<Sprite*>
 			{
 				grav = 1.5;
 			}
-			std::cout << "grav: " << grav << std::endl;
+			//std::cout << "grav: " << grav << std::endl;
 			gravX += grav*cos(pointAngle);
 			gravY += grav*sin(pointAngle);
 		}
