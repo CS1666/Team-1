@@ -287,7 +287,10 @@
 		animLastTime = SDL_GetTicks();
 	}
 
-
+	bool Sprite::isHole()
+	{
+		return type == -1;
+	}
 
 	
 	

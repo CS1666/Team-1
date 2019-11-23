@@ -124,6 +124,11 @@ void run_demo(gpRender gr){
 	starent.setSize({sunHeight,sunWidth});
 	starent.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
 	osSprite.push_back(&starent);
+	/*
+	//make sure that the black hole is fairly large like at least 2x the sunwidth and height
+	Blackhole hole(db2, gr.loadImage("Assets/Objects/hole.png"),dc2);
+	osSprite.push_back(&hole);
+	*/
 	//}
 	sector.addStars(&starent);
 
