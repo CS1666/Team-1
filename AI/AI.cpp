@@ -67,10 +67,12 @@ void AI::defendPosition(AIShip* ship)
     //cout<<shipDetected.second<<endl;
     if(shipDetected.first!=-1)
     {
-	Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
-	//cout<<"Texture "<<proj.getTexture()<<endl;
-	if(proj->getTexture()!=nullptr)
-	    osSprite->push_back(proj);
+	if(SDL_GetTicks() - ship->getFireLastTime() > 200){
+        Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
+        //cout<<"Texture "<<proj.getTexture()<<endl;
+        if(proj->getTexture()!=nullptr)
+            osSprite->push_back(proj);
+        }
     }
    //todo: have different radar range?
     if(ship->isFreeForm())

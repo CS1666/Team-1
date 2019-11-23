@@ -13,7 +13,7 @@ std::vector<float> calculateMomentumConserv(Ship &shipOne, std::vector<Ship*> &o
 	bool isCollision = false;
 	for(int i = 1; i < osShip.size(); i++){
 		if(&shipOne != osShip.at(i)){
-			isCollision = check_collision2(shipOne.getDrawBox(), osShip.at(i)->getDrawBox());
+			isCollision = check_collision(shipOne.getDrawBox(), osShip.at(i)->getDrawBox());
 			std::cout << "Collision: " << isCollision << std::endl;
 			if(isCollision == true){
 				shipTwoXspd = osShip.at(i)->getSpeedX();
@@ -65,3 +65,5 @@ void shipCollisionHandler(Ship &ship1, Ship &ship2){
 	ship2.setY(ship2.getTrueY() + ship2RexY);
 
 }
+
+
