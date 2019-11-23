@@ -63,6 +63,7 @@ constexpr int ZONE_HEIGHT = 2160;
 void run_demo(gpRender gr){
 	Sector sector;
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
+	GalaxyControl galaxy;
 
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
@@ -270,6 +271,8 @@ void run_demo(gpRender gr){
 	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
 	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
 	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
+	
+	SDL_Texture * tex_ess = gr.loadImage("Assets/Objects/enemyStation.png");
 
 	bool in_space_station_menu = false;
 	bool is_space_station_in_range = false;
@@ -320,7 +323,7 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	//current sector
-	int curSector = 5;
+	int curSector = 8;
 	
 	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 
@@ -476,9 +479,23 @@ void run_demo(gpRender gr){
 		}
 		playerent.speed = 0;
 		playerent.deltaV = 0;
+		int numEnemy = 0;
 		
 		
 		SDL_RenderClear(gr.getRender());
+		
+		if(galaxy.getInControl(curSector - 1))
+		{
+			
+			ss_ent.setTexture(tex_ss);
+			
+		}
+		else if(!galaxy.getInControl(curSector - 1))
+		{
+			numEnemy = 3;
+			ss_ent.setTexture(tex_ess);
+		}
+
 		bool solar = true;
 		int frames = 0;
 
@@ -489,27 +506,37 @@ void run_demo(gpRender gr){
 			TimeData::update_timestep();
 			ai.createShip(false);
 			ai.executeAIActions();
-			// Checking for if the Space Station is in range of the player ship.
-			if(!is_space_station_in_range){
-				if(check_proximity(playerent, ss_ent, 3)){
-					//then we set the is_space_station_in_range flag to true
-					is_space_station_in_range = true;
-					//we display the E png to show that space station can be accessed
-					e_UI.set_spriteIndex(osSprite.size());
-					osSprite.push_back(&e_UI);
-				}
-			} else {
-				//we need to check if our ship has left the range of the space station
-				if(!check_proximity(playerent, ss_ent, 3)){
-					if(in_space_station_menu) {
-						osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+			
+			if(galaxy.getInControl(curSector - 1))
+			{
+				// Checking for if the Space Station is in range of the player ship.
+				if(!is_space_station_in_range){
+					if(check_proximity(playerent, ss_ent, 3)){
+						//then we set the is_space_station_in_range flag to true
+						is_space_station_in_range = true;
+						//we display the E png to show that space station can be accessed
+						e_UI.set_spriteIndex(osSprite.size());
+						osSprite.push_back(&e_UI);
 					}
-					osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
+				} else {
+					//we need to check if our ship has left the range of the space station
+					if(!check_proximity(playerent, ss_ent, 3)){
+						if(in_space_station_menu) {
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+						}
+						osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
 
-					is_space_station_in_range = false;
-					in_space_station_menu = false;
+						is_space_station_in_range = false;
+						in_space_station_menu = false;
+					}
 				}
 			}
+			else if(!galaxy.getInControl(curSector - 1))
+			{
+				ai.createShip(false);
+				
+			}
+			ai.executeAIActions();
 
 			// Deletes 0 hp ships
 			for(std::size_t i = 0; i != osShip.size(); i++){
@@ -844,6 +871,19 @@ void run_demo(gpRender gr){
 			for(std::size_t i = 0; i != osSprite.size(); i++){
 				if(osSprite.at(i)->shouldRemove())
 				{
+					if(osSprite.at(i)->isShip())
+					{
+						if(!dynamic_cast<Ship*>(osSprite.at(i))->getIsAlly())
+						{
+							numEnemy--;
+							if(numEnemy <= 0)
+							{
+								galaxy.playerWinZone(curSector - 1);
+								ss_ent.setTexture(tex_ss);
+							}
+							
+						}	
+					}
 					toErase.push_back(i);
 				}
 			}
