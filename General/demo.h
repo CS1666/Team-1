@@ -24,4 +24,5 @@
 #include "../Level_Generation/Ellers_Maze.h"
 #include "../AI/AI.h"
 #include "../General/Sector.h"
+#include "../General/GalaxyControl.h"
 void run_demo(gpRender gr);
