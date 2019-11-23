@@ -183,41 +183,48 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet6ent);
 	sector.addPlanet(&planet6ent);
 
+	int astSize = rand() % 50 + 30;
+
 	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,70,70};
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,astSize,astSize};
 	Asteroid asteroid1ent(db9, tex9);
 	osSprite.push_back(&asteroid1ent);
 	osAst.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,70,70};
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,astSize,astSize};
 	Asteroid asteroid2ent(db10, tex10);
 	sector.addAsteroid(&asteroid2ent);
 	osSprite.push_back(&asteroid2ent);
 	osAst.push_back(&asteroid2ent);
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,70,70};
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000, astSize,astSize};
 	Asteroid asteroid3ent(db11, tex11);
 	sector.addAsteroid(&asteroid3ent);
 	osSprite.push_back(&asteroid3ent);
 	osAst.push_back(&asteroid3ent);
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,70,70};
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000, astSize,astSize};
 	Asteroid asteroid4ent(db12, tex12);
 	sector.addAsteroid(&asteroid4ent);
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
-	SDL_Rect db13 = {400,400,70,70};
+	astSize = rand() % 50 + 30;
+	SDL_Rect db13 = {400,500, astSize,astSize};
 	Asteroid asteroid5ent(db13, tex11);
 	sector.addAsteroid(&asteroid5ent);
 	osSprite.push_back(&asteroid5ent);
 	osAst.push_back(&asteroid5ent);
 
-	SDL_Rect db14 = {300,400,70,70};
+	astSize = rand() % 50 + 30;
+	SDL_Rect db14 = {300,500,astSize,astSize};
 	Asteroid asteroid6ent(db14, tex11, 2, 0);
 	sector.addAsteroid(&asteroid6ent);
 	osSprite.push_back(&asteroid6ent);
@@ -628,7 +635,7 @@ void run_demo(gpRender gr){
 
 	
 			for(int i = osAst.size()-1; i >= 0; i--){
-				osAst.at(i)->updateAsteroids(osSprite, osAst, i);
+				osAst.at(i)->updateAsteroids(osSprite, osAst, playerent, i);
 				
 			}
 
