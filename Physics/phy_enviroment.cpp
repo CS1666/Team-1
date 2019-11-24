@@ -89,7 +89,7 @@ void run_phy_enviro(gpRender gr){
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/planetfar.png");
 	SDL_Rect db3 = {1600,400,200,200};
 	NSDL_Circ dc3 = {db3};
-	Planet planet1ent(db3, tex3, dc3,15, starent, 100);
+	Planet planet1ent(db3, tex3, dc3,starent);
 	osSprite.push_back(&planet1ent);
 	std::cout<< "mass " << starent.getMass() << std::endl;
 	//Space Station Initialization-

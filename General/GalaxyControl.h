@@ -2,6 +2,8 @@ class GalaxyControl
 {
 
 public:
+	GalaxyControl();
+	
 	int getEnemyCount();
 
 	int getPlayerCount();
@@ -22,5 +24,5 @@ private:
 
 	int enemy_contr_count;
 	int player_contr_count;
-	bool inControl[7];
+	bool inControl[9];
 };

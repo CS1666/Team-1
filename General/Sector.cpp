@@ -1,6 +1,50 @@
-
+using namespace std;
 #include "Sector.h"
 
+void Sector::setPlanets(vector<Planet *> newPlanets)
+{
+	__planets = newPlanets;
+}
+
+vector<Planet *> Sector::getPlanets()
+{
+	return __planets;
+}
+
+void Sector::addPlanet(Planet* newPlanet)
+{
+	__planets.push_back(newPlanet);
+}
+
+void Sector::setAsteroids(vector<Asteroid *> newAsteroids)
+{
+	__asteroids = newAsteroids;
+}
+
+vector<Asteroid *> Sector::getAsteroids()
+{
+	return __asteroids;
+}
+
+void Sector::addAsteroid(Asteroid* newAsteroid)
+{
+	__asteroids.push_back(newAsteroid);
+}
+
+void Sector::setBlackHoles(vector<BlackHole *> newBlackHoles)
+{
+	__blackholes = newBlackHoles;
+}
+
+vector<BlackHole *> Sector::getBlackHoles()
+{
+	return __blackholes;
+}
+
+void Sector::addBlackHole(BlackHole* newBlackHole)
+{
+	__blackholes.push_back(newBlackHole);
+}
 
 vector<Star* > Sector::getStars()
 {
@@ -12,6 +56,9 @@ void Sector::setStars(vector<Star*> newStars)
 	__stars = newStars;
 }
 
+void Sector::addStars(Star* newStar){
+	__stars.push_back(newStar);
+}
 vector<Ship *> Sector::getShips()
 {
 	return __ships;
@@ -20,6 +67,10 @@ vector<Ship *> Sector::getShips()
 void Sector::setShips(vector<Ship *> newShips)
 {
 	__ships = newShips;
+}
+
+void Sector::addShips(Ship* newShip){
+	__ships.push_back(newShip);
 }
 
 void Sector::setSize(vector<int> newSize)
@@ -34,48 +85,55 @@ vector<int> Sector::getSize()
 
 vector<vector<int> > Sector::getState()
 {
+	std::cout << "11" << std::endl;
 	std::vector<std::vector<int> > currentState;
+	if (!__stars.empty())
+	{
+		for (Star* star : __stars)
+		{
+			
+			vector<int> size = star->getSize();
+			vector<int> position = star->getPosition();
+			currentState.push_back({position[0], position[1], size[0], size[1]});
+		}
+	}
 	
-	for (Star* star : __stars)
-	{
-		
-		vector<int> size = star->getSize();
-		vector<int> position = star->getPosition();
-		currentState.push_back({position[0], position[1], size[0], size[1]});
-	}
-
-	if (!__ships.empty())
-	{
-
-		for (Ship *ship : __ships)
-		{
-			pair<int, int> size = ship->getSize();
-			double x = ship->getTrueX();
-			double y = ship->getTrueX();
-
-			currentState.push_back({(int)x, (int)y, size.first, size.second});
-		}
-	}
-	return currentState;
-}
-
-vector<vector<int> > Sector::getShipState()
-{
-	std::vector<std::vector<int> > currentState;
-
-
 	if (!__ships.empty())
 	{
 		for (Ship *ship : __ships)
 		{
 			pair<int, int> size = ship->getSize();
-			double x = ship->getTrueX();
-			double y = ship->getTrueX();
+			pair<int, int> position = ship->getPosition();
+			currentState.push_back({position.first, position.second, size.first, size.second});
 
-			currentState.push_back({(int)x, (int)y, size.first, size.second});
 		}
 	}
 
+
+	if (!__planets.empty())
+	{
+		for (Planet *planet : __planets)
+		{
+			pair<int, int> size = pair<int,int>(planet->getW(), planet->getH());
+			pair<int, int> position = pair<int,int>(planet->getX(), planet->getY());
+			currentState.push_back({position.first, position.second, size.first, size.second});
+
+		}
+	}
+
+	if (!__asteroids.empty())
+	{
+		for (Asteroid *asteroid : __asteroids)
+		{
+			pair<int, int> size = pair<int,int>(asteroid->getW(), asteroid->getH());
+			pair<int, int> position = pair<int,int>(asteroid->getX(), asteroid->getY());
+			currentState.push_back({position.first, position.second, size.first, size.second});
+
+		}
+	}
+
+	//caused seg fault at this point
+	//currentState.push_back({ss->getX(), ss->getY(), ss->getW(), ss->getH()});
 	return currentState;
 }
 
