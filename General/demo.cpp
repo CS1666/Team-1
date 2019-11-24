@@ -247,6 +247,7 @@ void run_demo(gpRender gr){
 	SpaceStation ss_ent(rect_ss, tex_ss);
 	ss_ent.setPosition(std::vector<int>{SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200 });
 	osSprite.push_back(&ss_ent);
+	sector.setSpaceStation(&ss_ent);
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
 	SDL_Rect e_rect = {50, 50, 100, 100};
