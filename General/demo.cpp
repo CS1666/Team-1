@@ -63,6 +63,7 @@ constexpr int ZONE_HEIGHT = 2160;
 void run_demo(gpRender gr){
 	Sector sector;
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
+	GalaxyControl galaxy;
 
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
@@ -103,6 +104,9 @@ void run_demo(gpRender gr){
 
 	//Player Entity Initilizaiton
 	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Texture* fighter_tex = gr.loadImage("Assets/Objects/ship_fighter_hero.png");
+	SDL_Texture* cruiser_tex = gr.loadImage("Assets/Objects/ship_cruiser_hero.png");
+	SDL_Texture* capital_tex = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	//Ship playerent(db, tex, 0);
 	Hero playerent(db, tex);
@@ -121,6 +125,11 @@ void run_demo(gpRender gr){
 	starent.setSize({sunHeight,sunWidth});
 	starent.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
 	osSprite.push_back(&starent);
+	/*
+	//make sure that the black hole is fairly large like at least 2x the sunwidth and height
+	Blackhole hole(db2, gr.loadImage("Assets/Objects/hole.png"),dc2);
+	osSprite.push_back(&hole);
+	*/
 	//}
 	sector.addStars(&starent);
 
@@ -175,41 +184,48 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet6ent);
 	sector.addPlanet(&planet6ent);
 
+	int astSize = rand() % 50 + 30;
+
 	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,70,70};
+	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,astSize,astSize};
 	Asteroid asteroid1ent(db9, tex9);
 	osSprite.push_back(&asteroid1ent);
 	osAst.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,70,70};
+	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,astSize,astSize};
 	Asteroid asteroid2ent(db10, tex10);
 	sector.addAsteroid(&asteroid2ent);
 	osSprite.push_back(&asteroid2ent);
 	osAst.push_back(&asteroid2ent);
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000,70,70};
+	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000, astSize,astSize};
 	Asteroid asteroid3ent(db11, tex11);
 	sector.addAsteroid(&asteroid3ent);
 	osSprite.push_back(&asteroid3ent);
 	osAst.push_back(&asteroid3ent);
 
+	astSize = rand() % 50 + 30;
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
-	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000,70,70};
+	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000, astSize,astSize};
 	Asteroid asteroid4ent(db12, tex12);
 	sector.addAsteroid(&asteroid4ent);
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
-	SDL_Rect db13 = {400,400,70,70};
+	astSize = rand() % 50 + 30;
+	SDL_Rect db13 = {400,500, astSize,astSize};
 	Asteroid asteroid5ent(db13, tex11);
 	sector.addAsteroid(&asteroid5ent);
 	osSprite.push_back(&asteroid5ent);
 	osAst.push_back(&asteroid5ent);
 
-	SDL_Rect db14 = {300,400,70,70};
+	astSize = rand() % 50 + 30;
+	SDL_Rect db14 = {300,500,astSize,astSize};
 	Asteroid asteroid6ent(db14, tex11, 2, 0);
 	sector.addAsteroid(&asteroid6ent);
 	osSprite.push_back(&asteroid6ent);
@@ -237,12 +253,26 @@ void run_demo(gpRender gr){
 	SpaceStationUI e_UI(e_rect, e_tex);
 
 	SDL_Texture* r_tex = gr.loadImage("Assets/Objects/R.png");
-	SDL_Rect r_rect = {50, 200, 100, 100};
+	SDL_Rect r_rect = {50, 170, 100, 100};
 	SpaceStationUI r_UI(r_rect, r_tex);
+
+	SDL_Texture* t_tex = gr.loadImage("Assets/Objects/T.png");
+	SDL_Rect t_rect = {50, 290, 100, 100};
+	SpaceStationUI t_UI(t_rect, t_tex);
+
+	SDL_Texture* y_tex = gr.loadImage("Assets/Objects/Y.png");
+	SDL_Rect y_rect = {50, 410, 100, 100};
+	SpaceStationUI y_UI(y_rect, y_tex);
+
+	SDL_Texture* u_tex = gr.loadImage("Assets/Objects/U.png");
+	SDL_Rect u_rect = {50, 530, 100, 100};
+	SpaceStationUI u_UI(u_rect, u_tex);
 
 	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
 	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
 	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
+	
+	SDL_Texture * tex_ess = gr.loadImage("Assets/Objects/enemyStation.png");
 
 	bool in_space_station_menu = false;
 	bool is_space_station_in_range = false;
@@ -293,8 +323,10 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	//current sector
-	int curSector = 5;
+	int curSector = 8;
 	
+	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
+
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
@@ -410,49 +442,100 @@ void run_demo(gpRender gr){
 
 	int startPlayerX = playerent.getX();
 	int startPlayerY = playerent.getY();
+	int side = -1;
 	
 	std::vector<int> toErase;
 
 	while(gameon)
 	{
-		playerent.setX(startPlayerX);
-		playerent.setY(startPlayerY);
+		switch(side)
+		{
+			case 0:
+				//enter from left edge
+				playerent.setX(8);
+				playerent.setY(ZONE_HEIGHT - 200);
+				break;
+			case 1:
+				//enter from bottom edge
+				playerent.setX(ZONE_WIDTH/2);
+				playerent.setY(ZONE_HEIGHT - (8 + playerent.getH()));
+				break;
+			case 2:
+				//enter from right edge
+				playerent.setX(ZONE_WIDTH - (8 + playerent.getW()));
+				playerent.setY(ZONE_HEIGHT - 200);
+				break;
+			case 3:
+				//enter from top edge
+				playerent.setX(ZONE_WIDTH/2);
+				playerent.setY(8);
+				break;
+			default:
+				
+				playerent.setX(startPlayerX);
+				playerent.setY(startPlayerY);
+				break;
+	
+		}
 		playerent.speed = 0;
 		playerent.deltaV = 0;
-		int side = 0;
+		int numEnemy = 0;
+		
 		
 		SDL_RenderClear(gr.getRender());
-		bool solar = true;
 		
+		if(galaxy.getInControl(curSector - 1))
+		{
+			
+			ss_ent.setTexture(tex_ss);
+			
+		}
+		else if(!galaxy.getInControl(curSector - 1))
+		{
+			numEnemy = 3;
+			ss_ent.setTexture(tex_ess);
+		}
+
+		bool solar = true;
+		int frames = 0;
 
 		//Game Loop
 		while(gameon && solar)
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-			ai.createShip(false);
-			ai.executeAIActions();
-			// Checking for if the Space Station is in range of the player ship.
-			if(!is_space_station_in_range){
-				if(check_proximity(playerent, ss_ent, 3)){
-					//then we set the is_space_station_in_range flag to true
-					is_space_station_in_range = true;
-					//we display the E png to show that space station can be accessed
-					e_UI.set_spriteIndex(osSprite.size());
-					osSprite.push_back(&e_UI);
-				}
-			} else {
-				//we need to check if our ship has left the range of the space station
-				if(!check_proximity(playerent, ss_ent, 3)){
-					if(in_space_station_menu) {
-						osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+			
+			
+			if(galaxy.getInControl(curSector - 1))
+			{
+				// Checking for if the Space Station is in range of the player ship.
+				if(!is_space_station_in_range){
+					if(check_proximity(playerent, ss_ent, 3)){
+						//then we set the is_space_station_in_range flag to true
+						is_space_station_in_range = true;
+						//we display the E png to show that space station can be accessed
+						e_UI.set_spriteIndex(osSprite.size());
+						osSprite.push_back(&e_UI);
 					}
-					osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
+				} else {
+					//we need to check if our ship has left the range of the space station
+					if(!check_proximity(playerent, ss_ent, 3)){
+						if(in_space_station_menu) {
+							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+						}
+						osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
 
-					is_space_station_in_range = false;
-					in_space_station_menu = false;
+						is_space_station_in_range = false;
+						in_space_station_menu = false;
+					}
 				}
 			}
+			else if(!galaxy.getInControl(curSector - 1))
+			{
+				ai.createShip(false);
+				
+			}
+			ai.executeAIActions();
 
 			// Deletes 0 hp ships
 			for(std::size_t i = 0; i != osShip.size(); i++){
@@ -500,6 +583,12 @@ void run_demo(gpRender gr){
 								osSprite.push_back(&ss_UI);
 								r_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&r_UI);
+								t_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&t_UI);
+								y_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&y_UI);
+								u_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&u_UI);
 							}
 						}
 						break;
@@ -517,6 +606,9 @@ void run_demo(gpRender gr){
 							if(e.type == SDL_KEYDOWN){
 								if(in_space_station_menu && is_space_station_in_range) {
 									in_space_station_menu = false;
+									osSprite.erase(osSprite.begin() + u_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + y_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 								}
@@ -526,6 +618,27 @@ void run_demo(gpRender gr){
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
 								ai.createShip(true);
+								
+							}
+							break;
+						case SDLK_t:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT T option here
+								playerent.setTexture(fighter_tex);
+								
+							}
+							break;
+						case SDLK_y:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT Y option here
+								playerent.setTexture(cruiser_tex);
+								
+							}
+							break;
+						case SDLK_u:
+							if(e.type == SDL_KEYDOWN){
+								//INSERT U option here
+								playerent.setTexture(capital_tex);
 								
 							}
 							break;
@@ -547,9 +660,9 @@ void run_demo(gpRender gr){
 			}
 
 	
-			for(int i = 0; i != osAst.size(); i++){
+			for(int i = osAst.size()-1; i >= 0; i--){
+				osAst.at(i)->updateAsteroids(osSprite, osAst, playerent, i);
 				
-				osAst.at(i)->updateAsteroids(osSprite, osAst, i);
 			}
 
 			if(sector.getPlanets().size() > 0)
@@ -569,26 +682,62 @@ void run_demo(gpRender gr){
 			{
 				
 				solar = false;
-				if(playerent.getTrueX() < 0 && (curSector != 1 && curSector != 4 && curSector != 7))
+				if(playerent.getTrueX() < 0)
 				{
-					side = 2;
-					curSector--;
+					if(curSector != 1 && curSector != 4 && curSector != 7)
+					{
+						side = 2;
+						curSector--;
+					}
+					else
+					{
+						//set x = 0
+						playerent.setX(0);
+						solar = true;
+					}
 				}
-				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH && (curSector != 3 && curSector != 6 && curSector != 9))
+				else if(playerent.getX() + playerent.getW() > ZONE_WIDTH)
 				{
-					side = 0;
-					curSector++;
+					if(curSector != 3 && curSector != 6 && curSector != 9)
+					{
+						side = 0;
+						curSector++;
+					}
+					else
+					{
+						//set x = ZONE_WIDTH	
+						playerent.setX(ZONE_WIDTH - PLAYER_WIDTH);
+						solar = true;
+					}
 				}
-				else if(playerent.getY() < 0 && (curSector != 1 && curSector != 2 && curSector != 3))
+				else if(playerent.getY() < 0)
 				{
-					side = 1;
-					curSector -= 3;
+					if(curSector != 1 && curSector != 2 && curSector != 3)
+					{
+						side = 1;
+						curSector -= 3;
+					}
+					else
+					{
+						//set y = 0
+						playerent.setY(0);
+						solar = true;
+					}
 				}
-				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT && (curSector != 7 && curSector != 8 && curSector != 9))
+				else if(playerent.getY() + playerent.getH() > ZONE_HEIGHT)
 				{
-					side = 3;
-					curSector += 3;
-				}
+					if(curSector != 7 && curSector != 8 && curSector != 9)
+					{
+						side = 3;
+						curSector += 3;
+					}
+					else
+					{
+						//set y = ZONE_HEIGHT
+						playerent.setY(ZONE_HEIGHT - PLAYER_WIDTH);
+						solar = true;
+					}
+				}	
 				else
 				{
 					solar = true;
@@ -596,6 +745,73 @@ void run_demo(gpRender gr){
 				
 			}
       
+			
+			frames++;
+			if(frames > 120){
+				frames = 0;
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
+					osSprite.push_back(&sector5ent2);
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
+				}
+			}
+			else if(frames > 60){
+				if(curSector == 1){
+					sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 2){
+					sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 3){
+					sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 4){
+					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 5){
+					sector5Tex = gr.loadImage("Assets/Objects/enemySector.png");
+					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
+					osSprite.push_back(&sector5ent2);
+				}
+				else if(curSector == 6){
+					sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 7){
+					sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 8){
+					sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+				else if(curSector == 9){
+					sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				}
+			}
+			
+			
 			TimeData::update_move_last_time();
 
 			/*if (animate){
@@ -646,21 +862,45 @@ void run_demo(gpRender gr){
 				fixed = true;bgzonelayer1;
 			}
 			
-			
+			if(playerent.getCurrHp() <= 0)
+			{
+				gameon = false;
+			}
 			
 			for(std::size_t i = 0; i != osSprite.size(); i++){
 				if(osSprite.at(i)->shouldRemove())
 				{
+					if(osSprite.at(i)->isShip())
+					{
+						if(!dynamic_cast<Ship*>(osSprite.at(i))->getIsAlly())
+						{
+							numEnemy--;
+							if(numEnemy <= 0)
+							{
+								galaxy.playerWinZone(curSector - 1);
+								ss_ent.setTexture(tex_ss);
+							}
+							
+						}	
+					}
 					toErase.push_back(i);
 				}
 			}
-			for(auto i : toErase)
+			bool modified = false;
+			for(int i = toErase.size()-1; i >= 0 ; i--)
 			{
-				osSprite.erase(osSprite.begin()+i);
+				osSprite.erase(osSprite.begin()+toErase.at(i));
+				modified = true;
 			}
 			toErase.clear();
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
+			
+			if(galaxy.getWinGame())
+			{
+				gameon = false;
+				cout << "Winner\n";
+			}
 		}
 		
 		Ellers_Maze maze(side);
@@ -702,6 +942,7 @@ void run_demo(gpRender gr){
 					case SDLK_m:
 						if(e.type == SDL_KEYDOWN){
 							mazeCheck = false;
+							side = -1;
 							seed.setSeed();
 						}
 						break;
