@@ -77,7 +77,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
-		
+		bool isHole();
 		
 		bool shouldRemove();
 	protected:
