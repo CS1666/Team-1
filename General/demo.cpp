@@ -751,14 +751,17 @@ void run_demo(gpRender gr){
       
 			
 			frames++;
+			HpBar updateSectorMap;
 			if(frames > 120){
 				frames = 0;
 				curTex = gr.loadImage("Assets/Objects/currentSector.png");
-				osSprite.push_back(HpBar(mapSectorRects[curSector-1], curTex, 0));
+				updateSectorMap = HpBar(mapSectorRects[curSector-1], curTex, 0)
+				osSprite.push_back(&updateSectorMap);
 			}
 			else if(frames > 60){
 				curTex = mapSectorTexs[curSector-1];
-				osSprite.push_back(HpBar(mapSectorRects[curSector-1], curTex, 0));
+				updateSectorMap = HpBar(mapSectorRects[curSector-1], curTex, 0)
+				osSprite.push_back(&updateSectorMap);
 			}
 			
 			
