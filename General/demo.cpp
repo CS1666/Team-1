@@ -237,7 +237,7 @@ void run_demo(gpRender gr){
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
 	osSprite.push_back(&hpent);
 	
-	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
+	//SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
 	//SDL_Rect mapRect = {1170,10,100,100};
 	//HpBar mapent(mapRect, mapTex, 0);
 	//osSprite.push_back(&mapent);
