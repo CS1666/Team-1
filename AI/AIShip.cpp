@@ -278,7 +278,6 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 {
     //first calculate the angle to rotate to
-    rotationSet=false;
     if(!rotationSet)
     {
 	calculateNewAngle(otherShip);
