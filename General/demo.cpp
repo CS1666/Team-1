@@ -238,9 +238,9 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&hpent);
 	
 	SDL_Texture* mapTex = gr.loadImage("Assets/Objects/map.png");
-	SDL_Rect mapRect = {1170,10,100,100};
-	HpBar mapent(mapRect, mapTex, 0);
-	osSprite.push_back(&mapent);
+	//SDL_Rect mapRect = {1170,10,100,100};
+	//HpBar mapent(mapRect, mapTex, 0);
+	//osSprite.push_back(&mapent);
 
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
 	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
