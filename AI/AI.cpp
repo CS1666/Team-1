@@ -375,7 +375,7 @@ void AI::setCurrentSector(Sector* newSector)
 
 pair<int, int> AI::radar(AIShip& aiShip)
 {
-	int radarSize = 450;
+	int radarSize = 1000;
 
 	pair<int, int> closestEnemyPosition = make_pair(-1, -1);
 
