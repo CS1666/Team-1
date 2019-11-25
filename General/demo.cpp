@@ -323,10 +323,12 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	//current sector
-	int curSector = 8;
+	int curSector = 5;
 	
 	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
-
+	SDL_Texture* curTex = mapSectors[curSector-1];
+	
+	
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
