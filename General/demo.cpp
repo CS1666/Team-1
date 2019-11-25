@@ -502,6 +502,7 @@ void run_demo(gpRender gr){
 
 		bool solar = true;
 		int frames = 0;
+		HpBar updateSectorMap;
 
 		//Game Loop
 		while(gameon && solar)
@@ -751,7 +752,7 @@ void run_demo(gpRender gr){
       
 			
 			frames++;
-			HpBar updateSectorMap;
+			
 			if(frames > 60){
 				frames = 0;
 				curTex = gr.loadImage("Assets/Objects/currentSector.png");
