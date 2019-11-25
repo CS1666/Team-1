@@ -26,6 +26,7 @@
 //13 is asteroid
 //14 is space station (one of them)
 //15 is the laser projectile
+//16-20 are orders UI
 //ADD MORE AS REQUIRED HERE AND IN initTextures
 //#define TEX_SHIPS 0
 #define TEX_FIGHT_HERO 0
@@ -45,7 +46,11 @@
 #define TEX_ASTEROID 13
 #define TEX_STATION 14
 #define TEX_LASER 15
-
+#define TEX_ORDER_ORDER 16
+#define TEX_ORDER_FOLLOW 17
+#define TEX_ORDER_DEFEND 18
+#define TEX_ORDER_ATTACK 19
+#define TEX_ORDER_AUTO 20
 
 //INIT TEXTURES INTO A VECTOR
 std::vector<SDL_Texture*> initTextures(gpRender& gr);

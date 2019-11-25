@@ -64,7 +64,6 @@ void run_demo(gpRender gr){
 	Sector sector;
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	GalaxyControl galaxy;
-
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
 	int seed2 = sunSeed + 100;
