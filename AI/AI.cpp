@@ -112,7 +112,7 @@ void AI::pursueShip(AIShip* ship)
     	{
 	    int distance=calculateDistance(ship->getPosition(),shipDetected);
 	    //still too far, continue pursuit
-	    if(distance>350)
+	    if(distance>DISTANCE_PURSUE)
 	    {
 		ship->setPath(calculatePath(*ship));
 		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
@@ -174,7 +174,7 @@ void AI::roamAround(AIShip* ship)
         ship->setDestination(generateCoordinate(ship->getPosition(),ship->getPosition(),2));
     }
     if(ship->isFreeForm())
-    {
+    {   //if detect ship go to attack
 	if(radar(*ship).first!=-1)
 	    ship->setGoal(2);
     }
@@ -273,19 +273,19 @@ pair<int,int> AI::generateCoordinate(pair<int,int> start, pair<int,int> stop, in
     else if(typeGen==2)
     {
 	//determine the max/min ranges for x/y
-	int xMax=min(50,sectorSize.first-stop.first);
-	int xMin=max(-50,0-stop.first);
-	int yMax=min(50,sectorSize.second-stop.second);
-	int yMin=max(-50,0-stop.second);
+	int xMax=min(DISTANCE_ROAM_X,sectorSize.first-stop.first);
+	int xMin=max(-1*DISTANCE_ROAM_X,0-stop.first);
+	int yMax=min(DISTANCE_ROAM_Y,sectorSize.second-stop.second);
+	int yMin=max(-1*DISTANCE_ROAM_Y,0-stop.second);
 	//rng if add or subtract, set coord to be rand between 0, bound
 	if(rand()%2==0)
 	    val.first=stop.first+rand()%xMax;
 	else
-	    val.first=stop.first+rand()%xMin;
+	    val.first=stop.first-rand()%xMin;
 	if(rand()%2==0)
 	    val.second=stop.second+rand()%yMax;
 	else
-	    val.second=stop.second+rand()%yMin;
+	    val.second=stop.second-rand()%yMin;
     }
     return val;
 }

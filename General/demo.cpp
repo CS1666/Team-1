@@ -581,6 +581,7 @@ void run_demo(gpRender gr){
                                                 {
                                                     if(!ship->isFreeForm())
                                                         ship->switchFreeForm();
+						    ship->setGoal(4);
                                                 }
                                             }
                                             break;
@@ -614,7 +615,7 @@ void run_demo(gpRender gr){
                                                 {
                                                     if(ship->isFreeForm())
                                                         ship->switchFreeForm();
-                                                    ship->setGoal(4); //flee is 3
+                                                    ship->setGoal(2); //flee is 3
                                                 }
                                             }
                                             break;
