@@ -131,7 +131,7 @@ void AI::pursueShip(AIShip* ship)
     {
 	//ship went out of radar
 	if(shipDetected.first==-1)
-	    ship->setGoal(1);
+	    ship->setGoal(4);
 	//too low HP
 	if(ship->getCurrHp()<ship->getMaxHp()/5)
 	    ship->setGoal(3);
@@ -152,9 +152,11 @@ void AI::fleeToCorner(AIShip* ship)
         ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
     }
     //note: don't really want to have a transition out of here...
+    //and we currently can't since no way for aiships to regen hp for now
     if(ship->isFreeForm())
     {
-
+	if(ship->getCurrHp()>ship->getMaxHp()/3)
+            ship->setGoal(4);
     }
 }
 //roam around and switch state if find another ship
