@@ -749,6 +749,7 @@ void run_demo(gpRender gr){
       
 			
 			frames++;
+			//curTex = mapSectors[curSector-1];
 			if(frames > 120){
 				frames = 0;
 				if(curSector == 1){
