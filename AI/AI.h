@@ -54,19 +54,19 @@ class AI
 	//generates coordinates based on the three parameters
 	//1 = pursue
 	//2 = flee
-	//3 = ?
+	//3 = roam
 	   pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
 	   pair<int,int> getSectorSize();
-	   void setSectorSize(pair<int,int> sector);
-       void followPlayer(AIShip* ship);
-       void defendPosition(AIShip* ship);
-       void pursueShip(AIShip* ship);
-       void fleeToCorner(AIShip* ship);
-	   void doNothing(AIShip* ship);
+	void setSectorSize(pair<int,int> sector);
+	void followPlayer(AIShip* ship);
+	void defendPosition(AIShip* ship);
+	void pursueShip(AIShip* ship);
+	void fleeToCorner(AIShip* ship);
+	void roamAround(AIShip* ship);
+	void doNothing(AIShip* ship);
+	vector<AIShip*>* getShips();
        pair<int, int> radar(AIShip& aiship);
        bool checkBounds(int x, int y);
        void createShip(bool isAlly);
        bool occupied(pair<int,int> spawn);
-       
-
 };
