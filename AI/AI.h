@@ -64,6 +64,7 @@ class AI
 	void fleeToCorner(AIShip* ship);
 	void roamAround(AIShip* ship);
 	void doNothing(AIShip* ship);
+	vector<AIShip*>* getShips();
        pair<int, int> radar(AIShip& aiship);
        bool checkBounds(int x, int y);
        void createShip(bool isAlly);

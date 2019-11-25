@@ -197,6 +197,10 @@ void AI::doNothing(AIShip* ship)
 	}
     }
 }
+vector<AIShip*>* AI::getShips()
+{
+    return ships;
+}
 void AI::setSprites(vector<Sprite*>* sprites)
 {
     osSprite=sprites;
