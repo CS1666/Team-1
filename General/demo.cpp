@@ -325,7 +325,7 @@ void run_demo(gpRender gr){
 	int curSector = 5;
 	
 	SDL_Texture* mapSectorTexs[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
-	SDL_Texture* curTex = mapSectorTexs[curSector-1];
+	SDL_Texture* curTex = gr.loadImage("Assets/Objects/contestedSector.png");
 	SDL_Rect mapSectorRects[] = {sector1Rect, sector2Rect, sector3Rect, sector4Rect, sector5Rect, sector6Rect, sector7Rect, sector8Rect, sector9Rect};
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
@@ -735,9 +735,11 @@ void run_demo(gpRender gr){
 					if(curSector != 1 && curSector != 4 && curSector != 7)
 					{
 						side = 2;
-						curSector--;
-						mapUI[curSector-2] = HpBar(mapSectorRects[curSector-2], mapSectorTexs[curSector-2],0);
+						//set mapUI[curSector-1] = figure out if the sector is under control yet
+						mapUI[curSector-2] = HpBar(mapSectorRects[curSector-2], curTex,0);
 						osSprite.push_back(&(mapUI[curSector-2]));
+						curSector--;
+						
 					}
 					else
 					{
