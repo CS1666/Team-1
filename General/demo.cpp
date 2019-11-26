@@ -511,11 +511,6 @@ void run_demo(gpRender gr){
 			TimeData::update_timestep();
 			
 			
-			sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-	HpBar test(sector5Rect, sector5Tex, 0);
-	osSprite.push_back(&test);
-			
-			
 			if(galaxy.getInControl(curSector - 1))
 			{
 				// Checking for if the Space Station is in range of the player ship.
