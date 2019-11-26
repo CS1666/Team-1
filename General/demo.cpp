@@ -322,7 +322,7 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	//current sector
-	int curSector = 6;
+	int curSector = 5;
 	
 	SDL_Texture* mapSectorTexs[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 	SDL_Texture* curTex = gr.loadImage("Assets/Objects/currentSector.png");
@@ -330,7 +330,7 @@ void run_demo(gpRender gr){
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
 	sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-	HpBar test(mapSectorRects[curSector-1], mapSectorTexs[curSector-1], 0);
+	HpBar test(sector5Rect, sector5Tex, 0);
 	osSprite.push_back(&test);
 	
 	/*
@@ -739,9 +739,32 @@ void run_demo(gpRender gr){
 					{
 						side = 2;
 						//set mapUI[curSector-1] = figure out if the sector is under control yet
-						HpBar temp(mapSectorRects[curSector-2], curTex, 0);
+						if(curSector == 2){
+							sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector2Rect, sector2Tex, 0);
+						}
+						else if(curSector == 3){
+							sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector3Rect, sector3Tex, 0);
+						}
+						else if(curSector == 5){
+							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector5Rect, sector5Tex, 0);
+						}
+						else if(curSector == 6){
+							sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector6Rect, sector6Tex, 0);
+						}
+						else if(curSector == 8){
+							sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector8Rect, sector8Tex, 0);
+						}
+						else if(curSector == 9){
+							sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
+							HpBar temp(sector9Rect, sector9Tex, 0);
+						}
+						osSprite(&temp);
 						curSector--;
-						osSprite.push_back(&temp);
 					}
 					else
 					{
@@ -798,12 +821,7 @@ void run_demo(gpRender gr){
 				}
 				
 			}
-      			
-			/*
-			for(HpBar item : mapUI){
-				osSprite.push_back(&item);
-			}
-			*/
+  
 			
 			/*
 			frames++;
