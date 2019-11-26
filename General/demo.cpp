@@ -322,7 +322,7 @@ void run_demo(gpRender gr){
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
 	//current sector
-	int curSector = 5;
+	int curSector = 6;
 	
 	SDL_Texture* mapSectorTexs[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 	SDL_Texture* curTex = gr.loadImage("Assets/Objects/currentSector.png");
@@ -330,7 +330,7 @@ void run_demo(gpRender gr){
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
 	sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-	HpBar test(sector5Rect, sector5Tex, 0);
+	HpBar test(mapSectorRects[curSector-1], mapSectorTexs[curSector-1], 0);
 	osSprite.push_back(&test);
 	
 	/*
