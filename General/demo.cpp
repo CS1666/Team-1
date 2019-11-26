@@ -742,28 +742,33 @@ void run_demo(gpRender gr){
 						if(curSector == 2){
 							sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector2Rect, sector2Tex, 0);
+							osSprite(&temp);
 						}
 						else if(curSector == 3){
 							sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector3Rect, sector3Tex, 0);
+							osSprite(&temp);
 						}
 						else if(curSector == 5){
 							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector5Rect, sector5Tex, 0);
+							osSprite(&temp);
 						}
 						else if(curSector == 6){
 							sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector6Rect, sector6Tex, 0);
+							osSprite(&temp);
 						}
 						else if(curSector == 8){
 							sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector8Rect, sector8Tex, 0);
+							osSprite(&temp);
 						}
 						else if(curSector == 9){
 							sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector9Rect, sector9Tex, 0);
+							osSprite(&temp);
 						}
-						osSprite(&temp);
 						curSector--;
 					}
 					else
