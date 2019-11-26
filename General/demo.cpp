@@ -753,6 +753,7 @@ void run_demo(gpRender gr){
 							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector5Rect, sector5Tex, 0);
 							osSprite.push_back(&temp);
+							curSector--;
 						}
 						else if(curSector == 6){
 							sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
@@ -769,7 +770,7 @@ void run_demo(gpRender gr){
 							HpBar temp(sector9Rect, sector9Tex, 0);
 							osSprite.push_back(&temp);
 						}
-						curSector--;
+						//curSector--;
 					}
 					else
 					{
