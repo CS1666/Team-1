@@ -329,9 +329,7 @@ void run_demo(gpRender gr){
 	SDL_Rect mapSectorRects[] = {sector1Rect, sector2Rect, sector3Rect, sector4Rect, sector5Rect, sector6Rect, sector7Rect, sector8Rect, sector9Rect};
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
-	sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-	HpBar test(sector5Rect, sector5Tex, 0);
-	osSprite.push_back(&test);
+	
 	
 	/*
 	//Ship Cruiser initilization
@@ -511,6 +509,11 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
+			
+			
+			sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
+	HpBar test(sector5Rect, sector5Tex, 0);
+	osSprite.push_back(&test);
 			
 			
 			if(galaxy.getInControl(curSector - 1))
