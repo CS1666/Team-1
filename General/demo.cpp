@@ -752,7 +752,7 @@ void run_demo(gpRender gr){
 						else if(curSector == 5){
 							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							sector5ent = HpBar(sector5Rect, sector5Tex, 0);
-							//osSprite.push_back(&temp);
+							osSprite.push_back(&sector5ent);
 						}
 						else if(curSector == 6){
 							sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
