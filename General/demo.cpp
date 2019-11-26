@@ -802,12 +802,14 @@ void run_demo(gpRender gr){
 				updateSectorMap = HpBar(mapSectorRects[curSector-1], curTex, 0);
 				mapUI[curSector-1] = updateSectorMap;
 				//osSprite.push_back(&updateSectorMap);
+				osSprite.push_back(&mapUI[curSector-1]);
 			}
 			else if(frames > 30){
 				curTex = mapSectorTexs[curSector-1];
 				updateSectorMap = HpBar(mapSectorRects[curSector-1], curTex, 0);
 				mapUI[curSector-1] = updateSectorMap;
 				//osSprite.push_back(&updateSectorMap);
+				osSprite.push_back(&mapUI[curSector-1]);
 			}
 			osSprite.push_back(&mapUI[curSector-1]);
 			
