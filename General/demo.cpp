@@ -329,6 +329,8 @@ void run_demo(gpRender gr){
 	SDL_Rect mapSectorRects[] = {sector1Rect, sector2Rect, sector3Rect, sector4Rect, sector5Rect, sector6Rect, sector7Rect, sector8Rect, sector9Rect};
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
+	HpBar test(sector5Rect, curTex, 0);
+	osSprite.push_back(&test);
 	
 	
 	/*
@@ -751,10 +753,6 @@ void run_demo(gpRender gr){
 							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
 							HpBar temp(sector5Rect, sector5Tex, 0);
 							osSprite.push_back(&temp);
-							
-							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-							HpBar test(sector5Rect, sector5Tex, 0);
-							osSprite.push_back(&test);
 						}
 						else if(curSector == 6){
 							sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
