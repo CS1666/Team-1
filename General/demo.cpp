@@ -803,7 +803,7 @@ void run_demo(gpRender gr){
 				mapUI[curSector-1] = updateSectorMap;
 				//osSprite.push_back(&updateSectorMap);
 				osSprite.push_back(&mapUI[curSector-1]);
-			}
+			}/*
 			else if(frames > 30){
 				curTex = mapSectorTexs[curSector-1];
 				updateSectorMap = HpBar(mapSectorRects[curSector-1], curTex, 0);
@@ -812,7 +812,7 @@ void run_demo(gpRender gr){
 				osSprite.push_back(&mapUI[curSector-1]);
 			}
 			osSprite.push_back(&mapUI[curSector-1]);
-			
+			*/
 			
 			TimeData::update_move_last_time();
 
