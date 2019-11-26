@@ -330,7 +330,8 @@ void run_demo(gpRender gr){
 	HpBar mapUI[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
 	sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-	osSprite.push_back(&sector5ent);
+	HpBar test(sector5Rect, sector5Tex, 0);
+	osSprite.push_back(&test);
 	
 	/*
 	//Ship Cruiser initilization
