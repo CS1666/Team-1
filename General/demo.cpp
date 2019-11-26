@@ -741,17 +741,17 @@ void run_demo(gpRender gr){
 						//set mapUI[curSector-1] = figure out if the sector is under control yet
 						if(curSector == 2){
 							sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
-							sector2ent = new HpBar(sector2Rect, sector2Tex, 0);
+							sector2ent = HpBar(sector2Rect, sector2Tex, 0);
 							//osSprite.push_back(&temp);
 						}
 						else if(curSector == 3){
 							sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
-							sector3ent = new HpBar(sector3Rect, sector3Tex, 0);
+							sector3ent = HpBar(sector3Rect, sector3Tex, 0);
 							//osSprite.push_back(&temp);
 						}
 						else if(curSector == 5){
 							sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-							sector5ent = new HpBar(sector5Rect, sector5Tex, 0);
+							sector5ent = HpBar(sector5Rect, sector5Tex, 0);
 							//osSprite.push_back(&temp);
 						}
 						else if(curSector == 6){
