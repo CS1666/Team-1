@@ -739,7 +739,7 @@ void run_demo(gpRender gr){
 						HpBar temp(mapSectorRects[curSector-2], curTex, 0);
 						mapUI[curSector-2] = temp;
 						curSector--;
-						ossprite.push_back(&mapUI[curSector-1]);
+						osSprite.push_back(&mapUI[curSector-1]);
 					}
 					else
 					{
