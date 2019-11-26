@@ -740,9 +740,8 @@ void run_demo(gpRender gr){
 						side = 2;
 						//set mapUI[curSector-1] = figure out if the sector is under control yet
 						HpBar temp(mapSectorRects[curSector-2], curTex, 0);
-						mapUI[curSector-2] = temp;
 						curSector--;
-						osSprite.push_back(&mapUI[curSector-1]);
+						osSprite.push_back(&temp);
 					}
 					else
 					{
