@@ -799,7 +799,10 @@ void run_demo(gpRender gr){
 			
 			frames++;
 			if(frames > 120){
+				SDL_Texture* curTex = gr.loadImage("Assets/Objects/currentSector.png");
+				sectorSprites[curSector-1].setTexture(curTex);
 				frames = 0;
+				/*
 				if(curSector == 1){
 					sector1Tex = gr.loadImage("Assets/Objects/currentSector.png");
 				}
@@ -829,8 +832,12 @@ void run_demo(gpRender gr){
 				else if(curSector == 9){
 					sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
 				}
+				*/
 			}
 			else if(frames > 60){
+				SDL_Texture* tempTex = gr.loadImage("Assets/Objects/enemySector.png");
+				mapSprites[curSector-1].setTexture(tempTex);
+				/*
 				if(curSector == 1){
 					sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
 				}
@@ -860,6 +867,7 @@ void run_demo(gpRender gr){
 				else if(curSector == 9){
 					sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
 				}
+				*/
 			}
 			
 			
