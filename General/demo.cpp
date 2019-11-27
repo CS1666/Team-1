@@ -800,7 +800,7 @@ void run_demo(gpRender gr){
 			frames++;
 			if(frames > 120){
 				SDL_Texture* curTex = gr.loadImage("Assets/Objects/currentSector.png");
-				sectorSprites[curSector-1].setTexture(curTex);
+				mapSprites[curSector-1].setTexture(curTex);
 				frames = 0;
 				/*
 				if(curSector == 1){
