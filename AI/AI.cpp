@@ -11,7 +11,7 @@ void AI::executeAIActions(){
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
-                cout<<"Following Player"<<endl;
+                //cout<<"Following Player"<<endl;
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
@@ -49,11 +49,16 @@ void AI::followPlayer(AIShip* ship){
     }
     
     ship->setDestination(getPlayerShip()->getPosition());
-    ship->followPath();
-    if(ship->getPathComplete())
-    {
+    bool recalc = ship->followPath(osSprite);
+
+    if(recalc){
         ship->setPath(calculatePath(*ship));
+    }
+    else if(ship->getPathComplete())
+    {
+        
         ship->setDestination(getPlayerShip()->getPosition());
+        ship->setPath(calculatePath(*ship));
     }
     if(ship->isFreeForm())
     {
@@ -107,7 +112,7 @@ void AI::pursueShip(AIShip* ship)
 	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
 	cout<<ship->getDestination().first<<endl;
 	cout<<ship->getDestination().second<<endl;
-	ship->followPath();
+	ship->followPath(osSprite);
    	if(ship->getPathComplete())
     	{
 	    int distance=calculateDistance(ship->getPosition(),shipDetected);
@@ -145,7 +150,7 @@ void AI::fleeToCorner(AIShip* ship)
         ship->setPath(calculatePath(*ship));
     }
     ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
-    ship->followPath();
+ 
     if(ship->getPathComplete())
     {
         ship->setPath(calculatePath(*ship));
@@ -168,7 +173,7 @@ void AI::roamAround(AIShip* ship)
     ship->setDestination(generateCoordinate(ship->getPosition(),ship->getPosition(),2));
     //wait 2 seconds before go to a new place
     if(SDL_GetTicks()-ship->getTime()>2000)
-	ship->followPath();
+	ship->followPath(osSprite);
     if(ship->getPathComplete())
     {
 	ship->setTime(SDL_GetTicks());
@@ -388,9 +393,8 @@ queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
-    //cout<<"First: "<<curPos.first<<endl;
-    //cout<<"Second: " << curPos.second<<endl;
-    queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest);
+    queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest, &theShip);
+  
     return pth;
 }
 

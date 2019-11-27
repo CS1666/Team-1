@@ -246,6 +246,7 @@ void run_demo(gpRender gr){
 	SpaceStation ss_ent(rect_ss, tex_ss);
 	ss_ent.setPosition(std::vector<int>{SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200 });
 	osSprite.push_back(&ss_ent);
+	sector.setSpaceStation(&ss_ent);
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
 	SDL_Rect e_rect = {50, 50, 100, 100};
@@ -382,10 +383,6 @@ void run_demo(gpRender gr){
 
 	AI ai;
 
-	
-
-
-	
 
 	sector.setShips({&playerent});
 	sector.setSpaceStation(&ss_ent);
@@ -398,7 +395,8 @@ void run_demo(gpRender gr){
 	ai.setCurrentSector(&sector);
 
 
-	vector<vector<bool> > mesh = ai.getMapState();
+	vector<Sprite*>* mesh = sector.getSectEnts();
+	std::cout << "Inital size: "<< mesh->size()  << std::endl;
 
 	pair<int,int> sectorSize;
 
@@ -534,7 +532,7 @@ void run_demo(gpRender gr){
 				ai.createShip(false);
 				
 			}
-			ai.executeAIActions();
+		
 
 			// Deletes 0 hp ships
 			for(std::size_t i = 0; i != osShip.size(); i++){
@@ -694,7 +692,7 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-
+			//auto start = std::chrono::high_resolution_clock::now(); 
 			for(auto ent : osSprite) {
 				if(!ent->getIsAI() && !ent->getIsAsteroid())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
@@ -712,7 +710,7 @@ void run_demo(gpRender gr){
 			{
 				for( auto ent : sector.getPlanets())
 				{
-					ent->updatePosition(playerent);
+					ent->updatePosition(osSprite);
 				}
 			}
 			else
@@ -935,7 +933,17 @@ void run_demo(gpRender gr){
 				osSprite.erase(osSprite.begin()+toErase.at(i));
 				modified = true;
 			}
+			ai.executeAIActions();
 			toErase.clear();
+
+			//auto stop = std::chrono::high_resolution_clock::now(); 
+
+
+			//auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start); 
+  
+			// To get the value of duration use the count() 
+			// member function on the duration object 
+			//cout << duration.count() << endl; 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 			
