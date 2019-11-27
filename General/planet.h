@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Star.h"
 #include <cmath>
+#include <vector>
 #include "../Physics/TimeData.h"
 
 class Planet : public Sprite
@@ -27,6 +28,7 @@ public:
 	void setSprite(string s);
 	void setMass(int newMass);
 	void updatePosition(Sprite& playerent);
+	void updatePosition(std::vector<Sprite*> osSprite);
 	//for now only calculate the gravity contribution from the sun
 	std::vector<float> calulateGravity(Star& sun);
 
