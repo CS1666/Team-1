@@ -384,10 +384,6 @@ void run_demo(gpRender gr){
 
 	AI ai;
 
-	
-
-
-	
 
 	sector.setShips({&playerent});
 	sector.setSpaceStation(&ss_ent);
@@ -400,7 +396,8 @@ void run_demo(gpRender gr){
 	ai.setCurrentSector(&sector);
 
 
-	vector<vector<bool> > mesh = ai.getMapState();
+	vector<Sprite*>* mesh = sector.getSectEnts();
+	std::cout << "Inital size: "<< mesh->size()  << std::endl;
 
 	pair<int,int> sectorSize;
 
@@ -536,7 +533,7 @@ void run_demo(gpRender gr){
 				ai.createShip(false);
 				
 			}
-			ai.executeAIActions();
+		
 
 			// Deletes 0 hp ships
 			for(std::size_t i = 0; i != osShip.size(); i++){
@@ -652,7 +649,7 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-
+			//auto start = std::chrono::high_resolution_clock::now(); 
 			for(auto ent : osSprite) {
 				if(!ent->getIsAI() && !ent->getIsAsteroid())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
@@ -893,7 +890,17 @@ void run_demo(gpRender gr){
 				osSprite.erase(osSprite.begin()+toErase.at(i));
 				modified = true;
 			}
+			ai.executeAIActions();
 			toErase.clear();
+
+			//auto stop = std::chrono::high_resolution_clock::now(); 
+
+
+			//auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start); 
+  
+			// To get the value of duration use the count() 
+			// member function on the duration object 
+			//cout << duration.count() << endl; 
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 			
