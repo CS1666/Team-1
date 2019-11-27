@@ -710,7 +710,7 @@ void run_demo(gpRender gr){
 			{
 				for( auto ent : sector.getPlanets())
 				{
-					ent->updatePosition(playerent);
+					ent->updatePosition(osSprite);
 				}
 			}
 			else
