@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <chrono>
 #include "../General/Sprite.h"
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
@@ -26,4 +27,5 @@
 #include "../General/Sector.h"
 #include "../General/GalaxyControl.h"
 #include "../General/Constants.h"
+
 void run_demo(gpRender gr);

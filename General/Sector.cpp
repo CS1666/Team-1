@@ -1,5 +1,16 @@
-using namespace std;
+
 #include "Sector.h"
+
+using namespace std;
+
+Sector::Sector(){
+	__SectEnts = new vector<Sprite *>();
+}
+
+vector<Sprite *>* Sector::getSectEnts(){
+
+	return __SectEnts;
+}
 
 void Sector::setPlanets(vector<Planet *> newPlanets)
 {
@@ -14,6 +25,7 @@ vector<Planet *> Sector::getPlanets()
 void Sector::addPlanet(Planet* newPlanet)
 {
 	__planets.push_back(newPlanet);
+	__SectEnts->push_back(newPlanet);
 }
 
 void Sector::setAsteroids(vector<Asteroid *> newAsteroids)
@@ -29,6 +41,7 @@ vector<Asteroid *> Sector::getAsteroids()
 void Sector::addAsteroid(Asteroid* newAsteroid)
 {
 	__asteroids.push_back(newAsteroid);
+	__SectEnts->push_back(newAsteroid);
 }
 
 void Sector::setBlackHoles(vector<BlackHole *> newBlackHoles)
@@ -58,6 +71,7 @@ void Sector::setStars(vector<Star*> newStars)
 
 void Sector::addStars(Star* newStar){
 	__stars.push_back(newStar);
+	__SectEnts->push_back(newStar);
 }
 vector<Ship *> Sector::getShips()
 {
@@ -71,6 +85,7 @@ void Sector::setShips(vector<Ship *> newShips)
 
 void Sector::addShips(Ship* newShip){
 	__ships.push_back(newShip);
+	__SectEnts->push_back(newShip);
 }
 
 void Sector::setSize(vector<int> newSize)
@@ -82,6 +97,7 @@ vector<int> Sector::getSize()
 {
 	return __size;
 }
+
 
 vector<vector<int> > Sector::getState()
 {
@@ -152,6 +168,7 @@ void Sector::setNumEnemy(int nume){
 
 void Sector::setSpaceStation(SpaceStation* nss){
 	ss = nss;
+	__SectEnts->push_back(ss);
 }
 
 SpaceStation* Sector::getSpaceStation(){

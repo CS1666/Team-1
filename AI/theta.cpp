@@ -1,18 +1,10 @@
 #include "theta.h"
-#include <vector>
-#include <math.h>
-#include "p_queue.h"
-#include <iostream>
 
-
-typedef std::pair<int,int> Point;
-typedef std::queue<Point>* Path;
-typedef std::vector<std::vector<bool> > Mesh;
 
 constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
-Pathfinder::Pathfinder(Mesh  &m, int v) : visionRange(v), mesh(m){
+Pathfinder::Pathfinder(Mesh  m, int v) : visionRange(v), mesh(m){
     gScore = std::unordered_map<Point, double, CantorHash>();
     parent = std::unordered_map<Point, Point, CantorHash>();
     closed = std::unordered_set<Point, CantorHash>();
@@ -21,7 +13,7 @@ Pathfinder::Pathfinder(Mesh  &m, int v) : visionRange(v), mesh(m){
 
 }
 // Takes 2 points and gives a queue representing a path of points to the destination
-Path Pathfinder::pathfind(Point start, Point goal)
+Path Pathfinder::pathfind(Point start, Point goal, Sprite* currShip)
 {
 
 
@@ -73,7 +65,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
 
         //std::cout << "size:  " << open->getSize() << std::endl;
 
-        std::vector<Point> npath = neighborhood(s);
+        std::vector<Point> npath = neighborhood(s, currShip);
         //std::cout << "--------Begining Neigh--------"<< std::endl;
         for (std::pair<int,int> neighbor : npath)
         {
@@ -115,7 +107,7 @@ Path Pathfinder::pathfind(Point start, Point goal)
 }
 
 // Naive implementation of update_mesh. Will need to modify to not leak tons of memory
-void Pathfinder::update_mesh(Mesh &m) {mesh = m;}
+void Pathfinder::update_mesh(Mesh m) {mesh = m;}
 
 // We're using Euclidean distance for our heuristic for now
 int Pathfinder::heuristic(Point p1, Point p2)
@@ -136,16 +128,16 @@ bool Pathfinder::line_of_sight(Point p1, Point p2)
 
 // Gets the immediate neighbors of s, this is also where we use the mesh for collisions
 // Right now this is a really naive implementation that doesn't account for the ship's collision box
-std::vector<Point> Pathfinder::neighborhood(Point s)
+std::vector<Point> Pathfinder::neighborhood(Point s, Sprite* currShip)
 {
     
     std::vector<Point> result = defineNeighbors(s);
     std::vector<Point> fresult;
     //std::cout << "Bf iter "  << std::endl;                    
-    for(auto itr : result)
+    for(Point itr : result)
     {   
         
-        if (!mesh[itr.first][itr.second])
+        if (isTraversable(itr, currShip))
         {
             
             fresult.push_back(itr);
@@ -154,7 +146,24 @@ std::vector<Point> Pathfinder::neighborhood(Point s)
     }
     return fresult;
 }
+bool Pathfinder::isTraversable(Point s, Sprite* currShips){
+ 
+    SDL_Rect a = SDL_Rect({s.first, s.second, currShips->getW(), currShips->getH()});
 
+    bool isCollision = false;
+        
+        for (Sprite* ent : *mesh) {
+            if(currShips != ent){
+                if (ent->isCircEnt()){
+                    isCollision |= ent->check_collision(&a, ent->getCollisionCirc());
+                }
+                else
+                    isCollision |= ent->check_collision(&a, ent->getDrawBox());
+            }   
+        }
+
+    return !isCollision;
+}
 std::vector<Point> Pathfinder::defineNeighbors(Point s){
 
     std::vector<Point> neighbors;
