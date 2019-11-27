@@ -329,13 +329,14 @@ void run_demo(gpRender gr){
 	SDL_Texture* sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
 	SDL_Rect sector9Rect = {1242,79,15,15};
 	Sprite sector9ent(sector9Rect, sector9Tex);
-	sector9end.isUI();
+	sector9ent.isUI();
 	osSprite.push_back(&sector9ent);
 	//current sector
 	int curSector = 8;
 	
 	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
-
+	Sprite mapSprites[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
+	
 	/*
 	//Ship Cruiser initilization
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_cruiser_enemy.png");
