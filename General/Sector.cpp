@@ -133,7 +133,7 @@ vector<vector<int> > Sector::getState()
 	}
 
 	//caused seg fault at this point
-	//currentState.push_back({ss->getX(), ss->getY(), ss->getW(), ss->getH()});
+	currentState.push_back({ss->getX(), ss->getY(), ss->getW(), ss->getH()});
 	return currentState;
 }
 

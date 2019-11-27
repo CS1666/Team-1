@@ -110,7 +110,8 @@ Path Pathfinder::pathfind(Point start, Point goal)
         //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
     std::cout << "Stuck 4" << std::endl;
-    return Path();
+   
+    return new std::queue<Point>();
 }
 
 // Naive implementation of update_mesh. Will need to modify to not leak tons of memory
