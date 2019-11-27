@@ -111,7 +111,7 @@ void Planet::updatePosition(std::vector<Sprite*> osSprite)
 	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
 	for (auto ent : osSprite)
 	{
-		if(ent->getRenderOrder() == 1)
+		if(dynamic_cast<Ship*>(ent))
 		{
 			if(check_collision(ent->getDrawBox(),this->getCollisionCirc()))
 			{
