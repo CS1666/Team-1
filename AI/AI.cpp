@@ -11,7 +11,7 @@ void AI::executeAIActions(){
 
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
-                cout<<"Following Player"<<endl;
+                //cout<<"Following Player"<<endl;
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
@@ -25,9 +25,12 @@ void AI::executeAIActions(){
                 break;
             case(3)://Action 4: Run away from enemy
                 cout<<"Flee"<<endl;
-
                 fleeToCorner(ship);
                 break;
+	    case(4): //Action 5: roam around for enemies
+		cout<<"Roaming"<<endl;
+		roamAround(ship);
+		break;
             default://If not assigned goal do nothing
                 cout<<"Do nothing"<<endl;
                 doNothing(ship);
@@ -46,11 +49,16 @@ void AI::followPlayer(AIShip* ship){
     }
     
     ship->setDestination(getPlayerShip()->getPosition());
-    ship->followPath();
-    if(ship->getPathComplete())
-    {
+    bool recalc = ship->followPath(osSprite);
+
+    if(recalc){
         ship->setPath(calculatePath(*ship));
+    }
+    else if(ship->getPathComplete())
+    {
+        
         ship->setDestination(getPlayerShip()->getPosition());
+        ship->setPath(calculatePath(*ship));
     }
     if(ship->isFreeForm())
     {
@@ -104,12 +112,12 @@ void AI::pursueShip(AIShip* ship)
 	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
 	cout<<ship->getDestination().first<<endl;
 	cout<<ship->getDestination().second<<endl;
-	ship->followPath();
+	ship->followPath(osSprite);
    	if(ship->getPathComplete())
     	{
 	    int distance=calculateDistance(ship->getPosition(),shipDetected);
 	    //still too far, continue pursuit
-	    if(distance>350)
+	    if(distance>DISTANCE_PURSUE)
 	    {
 		ship->setPath(calculatePath(*ship));
 		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
@@ -118,9 +126,9 @@ void AI::pursueShip(AIShip* ship)
 	    else
 	    {
             ship->setGoal(1);
-		//Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
-        	//if(proj.getTexture()!=nullptr)
-            	   // osSprite->push_back(&proj);
+	//	Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
+        //	if(proj.getTexture()!=nullptr)
+          //  	    osSprite->push_back(&proj);
 	    }
     	}
     }
@@ -128,7 +136,7 @@ void AI::pursueShip(AIShip* ship)
     {
 	//ship went out of radar
 	if(shipDetected.first==-1)
-	    ship->setGoal(1);
+	    ship->setGoal(4);
 	//too low HP
 	if(ship->getCurrHp()<ship->getMaxHp()/5)
 	    ship->setGoal(3);
@@ -137,20 +145,45 @@ void AI::pursueShip(AIShip* ship)
 //run to a corner when low on HP
 void AI::fleeToCorner(AIShip* ship)
 {
+    //note: ally ships will also pick where to go based on player ship
     if(!ship->isPathSet()){
         ship->setPath(calculatePath(*ship));
     }
     ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
-    ship->followPath();
+ 
     if(ship->getPathComplete())
     {
         ship->setPath(calculatePath(*ship));
         ship->setDestination(generateCoordinate(ship->getPosition(),getPlayerShip()->getPosition(),1));
     }
     //note: don't really want to have a transition out of here...
+    //and we currently can't since no way for aiships to regen hp for now
     if(ship->isFreeForm())
     {
-
+	if(ship->getCurrHp()>ship->getMaxHp()/3)
+            ship->setGoal(4);
+    }
+}
+//roam around and switch state if find another ship
+void AI::roamAround(AIShip* ship)
+{
+    if(!ship->isPathSet()){
+        ship->setPath(calculatePath(*ship));
+    }
+    ship->setDestination(generateCoordinate(ship->getPosition(),ship->getPosition(),2));
+    //wait 2 seconds before go to a new place
+    if(SDL_GetTicks()-ship->getTime()>2000)
+	ship->followPath();
+    if(ship->getPathComplete())
+    {
+	ship->setTime(SDL_GetTicks());
+        ship->setPath(calculatePath(*ship));
+        ship->setDestination(generateCoordinate(ship->getPosition(),ship->getPosition(),2));
+    }
+    if(ship->isFreeForm())
+    {   //if detect ship go to attack
+	if(radar(*ship).first!=-1)
+	    ship->setGoal(2);
     }
 }
 
@@ -170,6 +203,10 @@ void AI::doNothing(AIShip* ship)
 	    ship->setGoal(1);
 	}
     }
+}
+vector<AIShip*>* AI::getShips()
+{
+    return ships;
 }
 void AI::setSprites(vector<Sprite*>* sprites)
 {
@@ -239,6 +276,23 @@ pair<int,int> AI::generateCoordinate(pair<int,int> start, pair<int,int> stop, in
 	    val=botRight;
 	else
 	    val=botLeft;
+    }
+    else if(typeGen==2)
+    {
+	//determine the max/min ranges for x/y
+	int xMax=min(DISTANCE_ROAM_X,sectorSize.first-stop.first);
+	int xMin=max(-1*DISTANCE_ROAM_X,0-stop.first);
+	int yMax=min(DISTANCE_ROAM_Y,sectorSize.second-stop.second);
+	int yMin=max(-1*DISTANCE_ROAM_Y,0-stop.second);
+	//rng if add or subtract, set coord to be rand between 0, bound
+	if(rand()%2==0)
+	    val.first=stop.first+rand()%xMax;
+	else
+	    val.first=stop.first-rand()%xMin;
+	if(rand()%2==0)
+	    val.second=stop.second+rand()%yMax;
+	else
+	    val.second=stop.second-rand()%yMin;
     }
     return val;
 }
@@ -339,9 +393,8 @@ queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
-    cout<<"First: "<<curPos.first<<endl;
-    cout<<"Second: " << curPos.second<<endl;
-    queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest);
+    queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest, &theShip);
+  
     return pth;
 }
 

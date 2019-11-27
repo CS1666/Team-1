@@ -201,16 +201,20 @@
 
 	bool Sprite::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 		bool isCollision = false;
-		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-		for (int i = 1; i < osSprite.size(); i++) {
+		//std::cout << "osEntity.size() = " << osSprite.size() << std::endl;
+		for (int i = 0; i < osSprite.size(); i++) {
+			//std::cout << "Checked collisions: " << isCollision << std::endl;
 			//so, one of these should result in collison if they are the same box
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 			}
 			else
 				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
-			//std::cout << "Is last command Illegal?" << std::endl;
-			//std::cout << "Checked collisions: " << i << std::endl;
+
+			//std::cout << "ax: " << a->x << " ay: " << a->y<< std::endl;
+			//std::cout << "bx: " << osSprite.at(i)->getX() << " by: "<<osSprite.at(i)->getY() << std::endl;
+			//std::cout << "Checked collisions: " << isCollision << std::endl;
+			
 		}
 		
 		return isCollision;
@@ -219,7 +223,7 @@
 	bool Sprite::check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite){
 		bool isCollision = false;
 		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-		for (int i = 1; i < osSprite.size(); i++) {
+		for (int i = 0; i < osSprite.size(); i++) {
 			//so, one of these should result in collison if they are the same box
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision = check_collision(a, osSprite.at(i)->getCollisionCirc());
