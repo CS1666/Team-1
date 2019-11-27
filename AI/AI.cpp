@@ -173,7 +173,7 @@ void AI::roamAround(AIShip* ship)
     ship->setDestination(generateCoordinate(ship->getPosition(),ship->getPosition(),2));
     //wait 2 seconds before go to a new place
     if(SDL_GetTicks()-ship->getTime()>2000)
-	ship->followPath();
+	ship->followPath(osSprite);
     if(ship->getPathComplete())
     {
 	ship->setTime(SDL_GetTicks());
