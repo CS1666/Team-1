@@ -58,7 +58,7 @@ void run_ai_enviro(gpRender gr){
 	//cout<<"aiShip texture: "<<aiShip.getTexture()<<endl;
 	osSprite.push_back(&aiShip);
 
-	
+	/**
 	//AI Ship 2 init
 	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -102,7 +102,7 @@ void run_ai_enviro(gpRender gr){
 	sector.setShips({&playerShip, &aiShip, &aiShip2});
 	//----------------------------------------------------------------------
 
-
+**/
 
 //------------------------------------Rendering Background--------------------------------------//
 	srand(time(0));
@@ -136,10 +136,11 @@ void run_ai_enviro(gpRender gr){
 	bggalaxies[2] = rand() % (ZONE_WIDTH - 200);
 	bggalaxies[3] = rand() % (ZONE_HEIGHT - 200);
 
-	//------------------------------------Rendering Background--------------------------------------//
-
 	SDL_Event e;
 	bool gameon = true;
+	//------------------------------------Rendering Background--------------------------------------//
+	/**
+	
 	
 
 	AI ai;
@@ -162,6 +163,7 @@ void run_ai_enviro(gpRender gr){
 
 	//cout<<"pathfinded?"<<endl;
 	//Game Loop
+	**/
 	bool render = true;
 	while(gameon) {
 		//ai.createShipState(sector);
@@ -169,8 +171,8 @@ void run_ai_enviro(gpRender gr){
 		gr.setFrameStart(SDL_GetTicks());
 		TimeData::update_timestep();
 		//position needs to be in booleans?
-		ai.createShip(false);
-		ai.executeAIActions();
+		//ai.createShip(false);
+		//ai.executeAIActions();
 
 		//DOESN"T WORK AT THIS TIME
 		//Handles all incoming Key events
