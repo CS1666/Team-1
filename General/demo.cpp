@@ -64,7 +64,6 @@ void run_demo(gpRender gr){
 	Sector sector;
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	GalaxyControl galaxy;
-
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
 	int seed2 = sunSeed + 100;
@@ -572,7 +571,51 @@ void run_demo(gpRender gr){
 							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
 						}
 						break;
-					
+					case SDLK_0: //allow ally ships to freeform
+					   for(AIShip* ship:*ai.getShips())
+                                            {
+                                                if(ship->getIsAlly())
+                                                {
+                                                    if(!ship->isFreeForm())
+                                                        ship->switchFreeForm();
+						    ship->setGoal(4);
+                                                }
+                                            }
+                                            break;
+
+					case SDLK_1: //order allies to follow
+					    for(AIShip* ship:*ai.getShips())
+					    {
+						if(ship->getIsAlly())
+						{
+						    if(ship->isFreeForm())
+							ship->switchFreeForm();
+						    ship->setGoal(0);
+						}
+					    }
+					    break;
+					case SDLK_2: //order allies to defend
+	  				    for(AIShip* ship:*ai.getShips())
+                                            {
+                                                if(ship->getIsAlly())
+                                                {
+						    if(ship->isFreeForm())
+							ship->switchFreeForm();
+                                                    ship->setGoal(1);
+                                                }
+                                            }
+					    break;
+					case SDLK_3: //order allies to attack
+					    for(AIShip* ship:*ai.getShips())
+                                            {
+                                                if(ship->getIsAlly())
+                                                {
+                                                    if(ship->isFreeForm())
+                                                        ship->switchFreeForm();
+                                                    ship->setGoal(2); //flee is 3
+                                                }
+                                            }
+                                            break;
 					case SDLK_e:
 						if(e.type == SDL_KEYDOWN){
 							if(!in_space_station_menu && is_space_station_in_range){
