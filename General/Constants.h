@@ -12,6 +12,13 @@
 #define CAPITAL_WIDTH 150
 #define CAPITAL_HEIGHT 150
 #define SHIP_SECTOR_LIMIT 3
+#define DISTANCE_PURSUE 300
+#define DISTANCE_ROAM_X 300
+#define DISTANCE_ROAM_Y 150
+#define FORMATION_OFFSET_1X 75
+#define FORMATION_OFFSET_1Y 75
+#define FORMATION_OFFSET_2X 150
+#define FORMATION_OFFSET_2Y 150
 //GLOBAL TEXTURE VALUES
 //TO USE: CALL textures.at(TEX_FIGHT_HERO) to get the hero fighter
 //0-8 ARE TEXTURES FOR SHIPS
@@ -19,6 +26,7 @@
 //13 is asteroid
 //14 is space station (one of them)
 //15 is the laser projectile
+//16-20 are orders UI
 //ADD MORE AS REQUIRED HERE AND IN initTextures
 //#define TEX_SHIPS 0
 #define TEX_FIGHT_HERO 0
@@ -38,7 +46,11 @@
 #define TEX_ASTEROID 13
 #define TEX_STATION 14
 #define TEX_LASER 15
-
+#define TEX_ORDER_ORDER 16
+#define TEX_ORDER_FOLLOW 17
+#define TEX_ORDER_DEFEND 18
+#define TEX_ORDER_ATTACK 19
+#define TEX_ORDER_AUTO 20
 
 //INIT TEXTURES INTO A VECTOR
 std::vector<SDL_Texture*> initTextures(gpRender& gr);
