@@ -67,6 +67,8 @@ void run_demo(gpRender gr){
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
 	int seed2 = sunSeed + 100;
+	int credits = 0;
+	Uint32 creditInterval = 0;
 	srand(seed.getSeed());
 	//std::cout << seed << "," << seed2 << endl;
 	//Vector used to store all on screen entities
@@ -509,7 +511,7 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-			
+	
 			
 			if(galaxy.getInControl(curSector - 1))
 			{
@@ -672,29 +674,38 @@ void run_demo(gpRender gr){
 		
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
-								ai.createShip(true);
+								if(credits > 50){
+									ai.createShip(true);
+									credits -= 50;
+								}
 								
 							}
 							break;
 						case SDLK_t:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT T option here
-								playerent.setTexture(fighter_tex);
-								
+								if(credits > 50){
+									playerent.setTexture(fighter_tex);
+									credits -= 50;
+								}
 							}
 							break;
 						case SDLK_y:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT Y option here
-								playerent.setTexture(cruiser_tex);
-								
+								if(credits > 50){
+									playerent.setTexture(cruiser_tex);
+									credits -= 50;
+								}
 							}
 							break;
 						case SDLK_u:
 							if(e.type == SDL_KEYDOWN){
 								//INSERT U option here
-								playerent.setTexture(capital_tex);
-								
+								if(credits > 50){
+									playerent.setTexture(capital_tex);
+									credits -= 50;
+								}
 							}
 							break;
 					}
@@ -702,6 +713,14 @@ void run_demo(gpRender gr){
 				gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 			}
 			//--- END OF SPACE STATION UI SUB LOOP ---
+
+
+			if(SDL_GetTicks() - creditInterval > 2000){
+				credits += 5;
+				creditInterval = SDL_GetTicks();
+			}
+
+			std::cout << "credits: " << credits << std::endl;
 
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
