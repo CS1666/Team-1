@@ -453,11 +453,16 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			pair<int, int> shipCheck = ship->getPosition();
 
+			pair<int, int> shipSize = ship->getSize();
+
             std::cout << "Check ship location "<< ship->getIsAlly() << ", " << aiShip.getIsAlly() << std::endl;
 
 			if (shipCheck != radarPosition && ship->getIsAlly() != aiShip.getIsAlly())
-
 			{
+
+				shipCheck.first = shipCheck.first + shipSize.first/2;
+
+				shipCheck.second = shipCheck.second + shipSize.second/2;
 
 //				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
 
