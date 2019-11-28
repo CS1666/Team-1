@@ -46,17 +46,6 @@ void AI::executeAIActions(){
     }
 
 }
-
-void AI::followPlayer(AIShip* ship){
-
-    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
-    cout<<distance<<endl;
-    if(distance > 150){
-        followShip(ship);
-    }
-     
-}
-
 void AI::followShip(AIShip* ship){
     if(!ship->isPathSet()){
         ship->setPath(calculatePath(*ship));
@@ -76,6 +65,26 @@ void AI::followShip(AIShip* ship){
     }
 }
 
+void AI::followPlayer(AIShip* ship){
+
+    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
+    cout<<distance<<endl;
+    if(distance > 150){
+        followShip(ship);
+    }
+     
+}
+
+void AI::followEnemy(AIShip* ship){
+    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
+    if(distance > DISTANCE_PURSUE){
+        followShip(ship);
+    }
+    else if(ship->isFreeForm()){
+        ship->setGoal(1);
+    }
+
+}
 
 void AI::defendPosition(AIShip* ship)
 {   
@@ -97,26 +106,17 @@ void AI::defendPosition(AIShip* ship)
         	    ship->setGoal(2);
         	}
             else if(distance>150) {
-                radar(*ship);
+                ship->setHasTarget(false);
             }
         	//too low HP
-            if(ship->getCurrHp()<ship->getMaxHp()/5)
+            if(ship->getCurrHp()<ship->getMaxHp()/5){
+                ship->setHasTarget(false);
                 ship->setGoal(3);
+            }
+                
     }
 }
 
-void AI::findShip(AIShip* ship, int routine){
-    radar(*ship);
-
-   if(ship->getHasTarget()){
-        if(routine == 1)
-            defendPosition(ship);
-
-        if(routine == 2)
-            pursueShip(ship);
-   }
-
-}
 //pathfind until close enough then rotate to attack
 void AI::pursueShip(AIShip* ship)
 {   
@@ -132,21 +132,15 @@ void AI::pursueShip(AIShip* ship)
     if(ship->isFreeForm())
     {
     	//too low HP
-    	if(ship->getCurrHp()<ship->getMaxHp()/5)
-    	    ship->setGoal(3);
+    	if(ship->getCurrHp()<ship->getMaxHp()/5){
+            ship->setHasTarget(false);
+            ship->setGoal(3);
+        }
+            
     }
 }
 
-void AI::followEnemy(AIShip* ship){
-    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
-    if(distance > DISTANCE_PURSUE){
-        followShip(ship);
-    }
-    else{
-        ship->setGoal(1);
-    }
 
-}
 //run to a corner when low on HP
 void AI::fleeToCorner(AIShip* ship)
 {
@@ -165,8 +159,8 @@ void AI::fleeToCorner(AIShip* ship)
     //and we currently can't since no way for aiships to regen hp for now
     if(ship->isFreeForm())
     {
-	if(ship->getCurrHp()>ship->getMaxHp()/3)
-            ship->setGoal(4);
+    	if(ship->getCurrHp()>ship->getMaxHp()/3)
+                ship->setGoal(4);
     }
 }
 //roam around and switch state if find another ship
@@ -362,6 +356,20 @@ void AI::orderShip(AIShip theShip, Ship player)
 void AI::setCurrentSector(Sector* newSector)
 {
 	sector = newSector;
+}
+
+
+void AI::findShip(AIShip* ship, int routine){
+    radar(*ship);
+
+   if(ship->getHasTarget()){
+        if(routine == 1)
+            defendPosition(ship);
+
+        if(routine == 2)
+            pursueShip(ship);
+   }
+
 }
 
 pair<int, int> AI::radar(AIShip& aiShip)
