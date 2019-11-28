@@ -5,37 +5,42 @@ void AI::executeAIActions(){
 
     for(AIShip* ship : *ships){
 
-    	//pair<int, int> radarOut = radar(*ship);
-      
-        //std::cout << radarOut.first << ", " << radarOut.second << std::endl;
-
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
-                //cout<<"Following Player"<<endl;
+                ship->setTargetShip(getPlayerShip());
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
                 cout<<"Defending Positon"<<endl;
-                defendPosition(ship);
+                if(!ship->getHasTarget()){
+                    findShip(ship, 1);
+                }
+                else{
+                    defendPosition(ship);
+                }
                 break;
 
             case(2)://Action 3: Attack Enemy
                 cout<<"Attack Enemy"<<endl;
-                pursueShip(ship);
+                if(!ship->getHasTarget()){
+                    findShip(ship, 2);
+                }
+                else{
+                    pursueShip(ship);
+                }
                 break;
             case(3)://Action 4: Run away from enemy
                 cout<<"Flee"<<endl;
                 fleeToCorner(ship);
                 break;
-	    case(4): //Action 5: roam around for enemies
-		cout<<"Roaming"<<endl;
-		roamAround(ship);
-		break;
+	        case(4): //Action 5: roam around for enemies
+		        cout<<"Roaming"<<endl;
+		        roamAround(ship);
+		        break;
             default://If not assigned goal do nothing
                 cout<<"Do nothing"<<endl;
                 doNothing(ship);
                 break;
-
         }
         
     }
@@ -44,11 +49,20 @@ void AI::executeAIActions(){
 
 void AI::followPlayer(AIShip* ship){
 
+    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
+    cout<<distance<<endl;
+    if(distance > 150){
+        followShip(ship);
+    }
+     
+}
+
+void AI::followShip(AIShip* ship){
     if(!ship->isPathSet()){
         ship->setPath(calculatePath(*ship));
     }
     
-    ship->setDestination(getPlayerShip()->getPosition());
+    ship->setDestination(ship->getTargetShipPos());
     bool recalc = ship->followPath(osSprite);
 
     if(recalc){
@@ -57,90 +71,81 @@ void AI::followPlayer(AIShip* ship){
     else if(ship->getPathComplete())
     {
         
-        ship->setDestination(getPlayerShip()->getPosition());
+        ship->setDestination(ship->getTargetShip()->getPosition());
         ship->setPath(calculatePath(*ship));
-    }
-    if(ship->isFreeForm())
-    {
-
-	//idk if ships should be able to autonomously leave/enter follow
     }
 }
 
 
 void AI::defendPosition(AIShip* ship)
-{
-    pair<int,int> shipDetected=radar(*ship);
-    //cout<<shipDetected.first<<endl;
-    //cout<<shipDetected.second<<endl;
-    if(shipDetected.first!=-1)
-    {
-	if(SDL_GetTicks() - ship->getFireLastTime() > 200){
-        Projectile* proj= new Projectile(ship->attackShip(shipDetected, allTextures->at(TEX_LASER)));
-        //cout<<"Texture "<<proj.getTexture()<<endl;
+{   
+    
+    if(SDL_GetTicks() - ship->getFireLastTime() > 200){
+        Projectile* proj= new Projectile(ship->attackShip(ship->getTargetShipPos(), allTextures->at(TEX_LASER)));
+       
         if(proj->getTexture()!=nullptr)
             osSprite->push_back(proj);
-        }
     }
-   //todo: have different radar range?
+    
+    
     if(ship->isFreeForm())
     {
-	int distance=calculateDistance(ship->getPosition(),shipDetected);
-	//pursue/attack
-	if(distance>150&&distance<450)
-	{
-	    //cout<<"begin pursuit"<<endl;
-	    ship->setGoal(2);
-	}
-	//too low HP
-        if(ship->getCurrHp()<ship->getMaxHp()/5)
-            ship->setGoal(3);
+        	int distance=calculateDistance(ship->getPosition(),ship->getTargetShipPos());
+        	//pursue/attack
+        	if(distance>150&&distance<450)
+        	{
+        	    ship->setGoal(2);
+        	}
+            else if(distance>150) {
+                radar(*ship);
+            }
+        	//too low HP
+            if(ship->getCurrHp()<ship->getMaxHp()/5)
+                ship->setGoal(3);
     }
+}
+
+void AI::findShip(AIShip* ship, int routine){
+    radar(*ship);
+
+   if(ship->getHasTarget()){
+        if(routine == 1)
+            defendPosition(ship);
+
+        if(routine == 2)
+            pursueShip(ship);
+   }
+
 }
 //pathfind until close enough then rotate to attack
 void AI::pursueShip(AIShip* ship)
-{
-    pair<int,int> shipDetected=radar(*ship);
-    if(shipDetected.first!=-1)
-    {
-	if(!ship->isPathSet())
-	{
-	    ship->setPath(calculatePath(*ship));
-	}
-	//calculate a destination where it will be close enough
-	//kinda simplistic calculations, can probably be in its own function
-	ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
-	cout<<ship->getDestination().first<<endl;
-	cout<<ship->getDestination().second<<endl;
-	ship->followPath(osSprite);
-   	if(ship->getPathComplete())
-    	{
-	    int distance=calculateDistance(ship->getPosition(),shipDetected);
-	    //still too far, continue pursuit
-	    if(distance>DISTANCE_PURSUE)
-	    {
-		ship->setPath(calculatePath(*ship));
-		ship->setDestination(generateCoordinate(ship->getPosition(),shipDetected,0));
-	    }
-	    //rotate and fire
-	    else
-	    {
-            ship->setGoal(1);
-	//	Projectile proj=ship->attackShip(shipDetected, allTextures->at(TEX_LASER));
-        //	if(proj.getTexture()!=nullptr)
-          //  	    osSprite->push_back(&proj);
-	    }
-    	}
+{   
+    
+    followEnemy(ship);
+    if(SDL_GetTicks() - ship->getFireLastTime() > 200){
+        Projectile* proj= new Projectile(ship->attackShip(ship->getTargetShipPos(), allTextures->at(TEX_LASER)));
+       
+        if(proj->getTexture()!=nullptr)
+            osSprite->push_back(proj);
     }
+    
     if(ship->isFreeForm())
     {
-	//ship went out of radar
-	if(shipDetected.first==-1)
-	    ship->setGoal(4);
-	//too low HP
-	if(ship->getCurrHp()<ship->getMaxHp()/5)
-	    ship->setGoal(3);
+    	//too low HP
+    	if(ship->getCurrHp()<ship->getMaxHp()/5)
+    	    ship->setGoal(3);
     }
+}
+
+void AI::followEnemy(AIShip* ship){
+    int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
+    if(distance > DISTANCE_PURSUE){
+        followShip(ship);
+    }
+    else{
+        ship->setGoal(1);
+    }
+
 }
 //run to a corner when low on HP
 void AI::fleeToCorner(AIShip* ship)
@@ -309,11 +314,6 @@ void AI::setShipPath(AIShip *shipToPath)
 
 }
 
-/*void AI::updateVertex(vector<int> s, vector<int> neighbor)
-{
-    
-}*/
-
 int AI::calculateDistance(pair<int,int> start, pair<int,int> stop)
 {
     int x = stop.first - start.first;
@@ -324,76 +324,13 @@ int AI::calculateDistance(pair<int,int> start, pair<int,int> stop)
     return z;
 }
 
-void AI::lineOfSight()
-{
 
-}
-
-bool AI::createMapState(Sector* currentSector)
-{
-    // Buffer in pixels
-    const int buffer = 50;
-    // Gets sector size and sets mesh size to be the size of the sector
-    vector<int> sectorSize = currentSector->getSize();
-    // Gets the positions and sizes of everything within the sector
-    vector<vector<int> > currentState = currentSector->getState();
-    std::cout << "8" << std::endl;
-      // Creates a new map state with everything equal to zero
-    vector<vector<bool> > newStoredMapState (sectorSize[0], std::vector<bool>(sectorSize[1], 0));
-    // Puts 1's at the edges of objecys within the sector + the size of the buffer
-    std::cout << "9" << std::endl;
-    for (vector<int> object : currentState)
-    {
-        for (int x = object[0] - buffer; x < object[0] + object[2] + buffer; x++)
-        {
-            for (int y = object[1] - buffer; y < object[1] + object[3] + buffer; y++)
-            {   
-                if (x >= 0 && x < newStoredMapState.size() && y >=0 && y < newStoredMapState[0].size())
-                {
-                    newStoredMapState[x][y] = 1;
-                }
-
-            }
-        }
-    }
-    std::cout << "10" << std::endl;
-    
-    if(checkMapState(newStoredMapState))
-    {
-        storedMapState=newStoredMapState;
-        return true;
-    }
-    return false;
-
-}
-
-vector<vector<bool>> AI::getMapState(){
-    return storedMapState;
-}
-
-//true if different, false if same
-bool AI::checkMapState(vector<vector<bool> > newState)
-{
-   if(storedMapState.empty()){
-        return true;
-   }
-
-   for(int x = 0; x < newState.size(); x++){
-        for(int y = 0; y <newState[x].size(); y++){
-            if(newState[x][y] != storedMapState[x][y]){
-                return true;
-            }
-        }
-    }               
-            
- return false;
-}
 //calculate the path for a ship and destination
 queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
-    
+
     queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest, &theShip);
   
     return pth;
@@ -439,13 +376,14 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 	pair<int, int> radarPosition = aiShip.getPosition();
 
-
+    
 //		std::cout << "Radar ship location "<< radarPosition.first << ", " << radarPosition.second << std::endl;
 
 		//int i = 0;
 
 		for (Ship* ship : ships)
 		{
+
 
 			//i++;
 
@@ -459,19 +397,21 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			{
 
-//				std::cout << "Check ship location "<< shipCheck.first << ", " << shipCheck.second << std::endl;
 
 				double z = sqrt(pow(radarPosition.first - shipCheck.first, 2.0) + pow(radarPosition.second - shipCheck.second, 2.0));
 
-				///std::cout << "Distance "<< z << std::endl;
 
 				if (z < radarSize && closestEnemyPosition.first != -1 &&  closestEnemyPosition.second != -1 && closestEnemyDistance > z)
-				{
+				{   
+                    aiShip.setTargetShip(ship);
+                    aiShip.setHasTarget(true);
 					closestEnemyPosition = shipCheck;
 					closestEnemyDistance = z;
 				}
 				else if (z < radarSize && closestEnemyPosition.first == -1 &&  closestEnemyPosition.second == -1)
-				{
+				{   
+                    aiShip.setTargetShip(ship);
+                    aiShip.setHasTarget(true);
 					closestEnemyPosition = shipCheck;
 					closestEnemyDistance = z;
 				}
