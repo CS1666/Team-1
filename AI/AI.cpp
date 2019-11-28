@@ -393,6 +393,7 @@ queue<pair<int,int>>* AI::calculatePath(AIShip& theShip)
 {
     pair<int,int> curPos=theShip.getPosition();
     pair<int,int> curDest=theShip.getDestination();
+    
     queue<pair<int,int>>* pth = pathfinder->pathfind(curPos,curDest, &theShip);
   
     return pth;
