@@ -277,6 +277,11 @@ void run_demo(gpRender gr){
 	bool in_space_station_menu = false;
 	bool is_space_station_in_range = false;
 	
+	//mapUI
+	SDL_Texture* playerMapTex = gr.loadImage("Assets/Objects/playerSector.png");
+	SDL_Texture* enemyMapTex = gr.loadImage("Assets/Objects/enemySector.png");
+	SDL_Texture* curMapTex = gr.loadImage("Assets/Objects/currentSector.png");
+	
 	//Sector 1
 	SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
 	SDL_Rect sector1Rect = {1184,25,15,15};
@@ -334,7 +339,7 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 8;
 	
-	SDL_Texture* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
+	SDL_Texture* mapTex[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 	Sprite mapSprites[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
 	/*
@@ -507,6 +512,19 @@ void run_demo(gpRender gr){
 			numEnemy = 3;
 			ss_ent.setTexture(tex_ess);
 		}
+		
+		
+		for(int i=0;i<9;i++)
+		{
+			if(galaxy.getInControl(i)){
+				mapSprites[i].setTexture(playerMapTex);
+			}
+			else
+			{
+				mapSprites[i].setTexture(enemyMapTex);	
+			}	
+		}
+		
 
 		bool solar = true;
 		int frames = 0;
