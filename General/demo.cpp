@@ -453,6 +453,11 @@ void run_demo(gpRender gr){
 	
 	std::vector<int> toErase;
 
+	bool run = true;
+	bool computePath = false;
+	bool done = true;
+
+	std::thread ait (aiRoutine, ai, &computePath, &run, &done);
 	while(gameon)
 	{
 		switch(side)
@@ -507,6 +512,9 @@ void run_demo(gpRender gr){
 		int frames = 0;
 
 		//Game Loop
+
+		
+
 		while(gameon && solar)
 		{	
 			gr.setFrameStart(SDL_GetTicks());
@@ -556,6 +564,11 @@ void run_demo(gpRender gr){
 				}
 			}
 
+			if (done){
+				computePath = true;
+				done = false;
+			}
+			
 			//Handles all incoming Key events
 			while(SDL_PollEvent(&e)) {
 
@@ -646,6 +659,7 @@ void run_demo(gpRender gr){
 				}
 			}
 
+			
 			// --- START OF SPACE STATION UI SUB-LOOP ----
 			while(in_space_station_menu && gameon) {
 				while(SDL_PollEvent(&e)) {
@@ -951,7 +965,7 @@ void run_demo(gpRender gr){
 				osSprite.erase(osSprite.begin()+toErase.at(i));
 				modified = true;
 			}
-			ai.executeAIActions();
+			
 			toErase.clear();
 
 			//auto stop = std::chrono::high_resolution_clock::now(); 
@@ -962,6 +976,7 @@ void run_demo(gpRender gr){
 			// To get the value of duration use the count() 
 			// member function on the duration object 
 			//cout << duration.count() << endl; 
+			
 			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 			
@@ -1084,6 +1099,23 @@ void run_demo(gpRender gr){
 		}
 
 		SDL_RenderClear(gr.getRender());
+	}
+	run = false;
+	ait.join();
+
+	
+}
+
+
+void aiRoutine(AI ai, bool* computePath, bool* run, bool* done){
+
+	while(*run){
+
+		if(*computePath){
+			ai.executeAIActions();
+			*computePath = false;
+			*done = true;
+		}
 	}
 	
 }

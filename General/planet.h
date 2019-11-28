@@ -4,6 +4,7 @@
 #include <tuple>
 #include "Sprite.h"
 #include "Star.h"
+#include "Ship.h"
 #include <cmath>
 #include <vector>
 #include "../Physics/TimeData.h"
