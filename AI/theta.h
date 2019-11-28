@@ -14,6 +14,7 @@
 #include "../General/Sprite.h"
 #include <SDL.h>
 
+
 // The pathfinder needs to keep its own state so thought i'd make it a class
 // I think the AI can just instantiate one of these and use it repeatedly
 // To use the pathfinding just instantiate this object and call pathfind() as needed

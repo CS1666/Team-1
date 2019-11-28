@@ -12,6 +12,7 @@
 #include "theta.h"
 #include "../General/Constants.h"
 #include <math.h>
+#include <pthread.h>
 
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
@@ -24,8 +25,8 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-	      vector<Sprite*>* osSprite;
-	      vector<SDL_Texture*>* allTextures;
+	    vector<Sprite*>* osSprite;
+	    vector<SDL_Texture*>* allTextures;
 	    pair<int,int> sectorSize; //width, height
         Sector* sector;
         pair<int,int> ChooseEnemySpawn();
