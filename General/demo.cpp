@@ -388,11 +388,6 @@ void run_demo(gpRender gr){
 
 	sector.setShips({&playerent});
 	sector.setSpaceStation(&ss_ent);
-
-	
-
-
-	ai.createMapState(&sector);
 	
 	ai.setCurrentSector(&sector);
 

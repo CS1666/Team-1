@@ -18,7 +18,7 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	isAI = true;
 	setX(dBox.x);
 	setY(dBox.y);
-	maxVelocity=10;
+	maxVelocity=20;
 	maxRotation=10;
 	isUser=false;
 	maxHp=50;
@@ -424,4 +424,22 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	return fireWeapon(laser);
     }
     return Projectile(); //null/empty sprite
+}
+
+
+void AIShip::setHasTarget(bool nht){
+	hasTarget = nht;
+}
+bool AIShip::getHasTarget(){
+	return hasTarget;
+}
+
+void AIShip::setTargetShip(Ship* ts){
+	targetShip = ts;
+}
+Ship* AIShip::getTargetShip(){
+	return targetShip;
+}
+pair<int, int> AIShip::getTargetShipPos(){
+	return targetShip->getPosition();
 }
