@@ -317,7 +317,7 @@ void Ship::setFireLastTime(){
 	fireLastTime = SDL_GetTicks();
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 0; isAlly = true;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {size = std::make_pair(dBox.w, dBox.h); weaponType = 2; renderOrder = 0; isAlly = true;};
 
 //General wrapper function to handle Key evenets
 bool Hero::handleKeyEvents(SDL_Event e){
