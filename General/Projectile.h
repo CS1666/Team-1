@@ -17,7 +17,7 @@ class Projectile : public Sprite
 	    int yVelocity;
 	    float rotation;
         string currKey;
-        int damage;
+        int damage = 5;
 
     public:
         Projectile();

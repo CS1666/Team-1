@@ -116,7 +116,7 @@ void run_demo(gpRender gr){
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
 	sector.addShips(&playerent);
-	
+	std::cout << "player " << db.x << ", " << db.y << endl;
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
 	SDL_Texture* tex2 = gr.loadImage(z);
@@ -648,6 +648,12 @@ void run_demo(gpRender gr){
 							}
 						}
 						break;
+					case SDLK_r:
+						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
+							osSprite.push_back(new Projectile(playerent.fireWeaponatme(ltex)));					
+						}
+						break;
+
 				}
 			}
 
