@@ -59,7 +59,7 @@ Ship::Ship(const Ship& ship){
 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {weaponType = 1; renderOrder = 1; type = 1;};
 
-Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {weaponType = 1; renderOrder = 1; type = 1;};
+Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim): Sprite(dBox, aTex, anim) {weaponType = 1; renderOrder = 1; type = 1;maxHp=50;currHp=maxHp;};
 
 Ship::Ship(SDL_Rect dBox, SDL_Texture* aTex, int anim, int mass): Sprite(dBox, aTex, anim), mass{mass} {weaponType = 1; renderOrder = 1; type = 1;};
 
@@ -267,9 +267,11 @@ int Ship::getCurrHp()
 void Ship::setCurrHp(int newCurrHp)
 {
     currHp = newCurrHp;
-	if (currHp <= 0){
-		remove = true;
-	}   
+    if(currHp>maxHp)
+	currHp=maxHp;
+    if (currHp <= 0){
+	remove = true;
+    }
 }
 
 int Ship::getMaxHp()
@@ -329,8 +331,16 @@ void Ship::setFireLastTime(){
 	fireLastTime = SDL_GetTicks();
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 1; isAlly = true;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 1; isAlly = true;shipType=0;};
 
+int Hero::getType()
+{
+    return shipType;
+}
+void Hero::upgradeType()
+{
+    shipType++;
+}
 //General wrapper function to handle Key evenets
 bool Hero::handleKeyEvents(SDL_Event e){
 	if (e.type == SDL_QUIT) {
