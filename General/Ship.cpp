@@ -158,6 +158,8 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	setSpeedX(speedX);
 	setSpeedY(speedY);
 	setX(getTrueX() + speedX);
+
+	
 	if(check_all_collisions(getDrawBox(), osSprite)){
 
 		setX(getTrueX() - speedX);
@@ -307,6 +309,18 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 	return laser;
 }
 
+Projectile Ship::fireWeaponatme(SDL_Texture* texture)
+{
+	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*1.1*sin(getAngle()*.0174533);
+	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*1.1*-cos(getAngle()*.0174533);
+	SDL_Rect ldb = {X, Y, 2, 10};
+	Projectile laser(ldb, texture, weaponType);	
+	laser.setAngle(getAngle()+180);
+	setFireLastTime();
+	return laser;
+}
+
+
 Uint32 Ship::getFireLastTime(){
 		return fireLastTime;
 }
@@ -315,7 +329,7 @@ void Ship::setFireLastTime(){
 	fireLastTime = SDL_GetTicks();
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 0; isAlly = true;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 1; isAlly = true;};
 
 //General wrapper function to handle Key evenets
 bool Hero::handleKeyEvents(SDL_Event e){

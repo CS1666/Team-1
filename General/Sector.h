@@ -16,6 +16,7 @@ class Sector
 {
 	private:
 
+		vector <Sprite *>* __SectEnts;
 		vector<Star *> __stars;
 		vector<Ship *> __ships;
 		vector<Planet *> __planets;
@@ -28,26 +29,35 @@ class Sector
 		
 
 	public:
+
+		Sector();
+		vector<Sprite *>* getSectEnts();
 		void setPlanets(vector<Planet *> newPlanets);
 		vector<Planet *> getPlanets();
 		void addPlanet(Planet* newPlanet);
+
 		void setAsteroids(vector<Asteroid *> newAsteroids);
 		vector<Asteroid *> getAsteroids();
 		void addAsteroid(Asteroid* newAsteroid);
+
 		void setBlackHoles(vector<BlackHole *> newBlackHoles);
 		vector<BlackHole *> getBlackHoles();
 		void addBlackHole(BlackHole* newBlackHole);
+
 		void setStars(vector<Star *> newStars);
 		vector<Star *> getStars();
 		void addStars(Star* newStar);
-		void setShips(vector<Ship *> newShips);
 
+		void setShips(vector<Ship *> newShips);
 		void addShips(Ship* newShip);
-		void setSize(vector<int> newSize);
-		vector<int> getSize();
-		vector<vector<int> > getState();
 		vector<vector<int> > getShipState();
 		vector<Ship *> getShips();
+
+		void setSize(vector<int> newSize);
+		vector<int> getSize();
+
+		vector<vector<int> > getState();
+	
 		int getNumAlly();
 		int getNumEnemy();
 		void setNumAlly(int numa);
