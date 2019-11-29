@@ -371,6 +371,7 @@ void run_demo(gpRender gr){
 
 	SDL_Event e;
 	bool gameon = false;
+	bool endGame = false;
 	int animation = 0;
 	bool cycle;
 	bool animate = false;
@@ -410,8 +411,10 @@ void run_demo(gpRender gr){
 	ai.setTextures(&allTextures);
 
 	Audio::play_music();
+
+	bool titleCard = true;
 	
-	while(!gameon){
+	while(!gameon && titleCard){
 		if(titleFrame == 0){
 			SDL_RenderCopy(gr.getRender(), titletex, nullptr, &title);
 			titleFrame++;
@@ -423,7 +426,11 @@ void run_demo(gpRender gr){
 		SDL_Delay(300);
 		// start game when enter key is pressed
 		while(SDL_PollEvent(&s)){	
+
+			titleCard = playerent.handleKeyEvents(s);
+
 			switch(s.key.keysym.sym){ 
+				
 				case SDLK_RETURN:
 					if(s.type == SDL_KEYDOWN){
 						SDL_RenderClear(gr.getRender());
@@ -809,7 +816,7 @@ void run_demo(gpRender gr){
 					else
 					{
 						//set y = ZONE_HEIGHT
-						playerent.setY(ZONE_HEIGHT - PLAYER_WIDTH);
+						playerent.setY(ZONE_HEIGHT - (PLAYER_WIDTH + 2));
 						solar = true;
 					}
 				}	
@@ -940,6 +947,7 @@ void run_demo(gpRender gr){
 			if(playerent.getCurrHp() <= 0)
 			{
 				gameon = false;
+				endGame = true;
 			}
 			
 			for(std::size_t i = 0; i != osSprite.size(); i++){
@@ -985,6 +993,7 @@ void run_demo(gpRender gr){
 			if(galaxy.getWinGame())
 			{
 				gameon = false;
+				endGame = true;
 				cout << "Winner\n";
 			}
 		}
@@ -1105,6 +1114,32 @@ void run_demo(gpRender gr){
 	run = false;
 	ait.join();
 
+	
+	SDL_Rect end_rec = {0, 0, 1280, 720};
+	SDL_Texture* end_tex;
+	if(galaxy.getWinGame())
+	{
+		end_tex = gr.loadImage("Assets/Objects/Win.png");
+	}
+	else
+	{
+		end_tex = gr.loadImage("Assets/Objects/Lose.png");
+	}
+	SDL_RenderCopy(gr.getRender(), end_tex, nullptr, &end_rec);
+	
+	
+	while(endGame)
+	{
+		
+		SDL_RenderPresent(gr.getRender());
+		
+
+		while(SDL_PollEvent(&e)) 
+		{
+			endGame = playerent.handleKeyEvents(e);
+		}
+		SDL_Delay(300);
+	}
 	
 }
 
