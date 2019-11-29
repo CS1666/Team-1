@@ -232,7 +232,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid6ent);
 	osAst.push_back(&asteroid6ent);
 
-	
+	//hp bar
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
@@ -242,6 +242,15 @@ void run_demo(gpRender gr){
 	SDL_Rect mapRect = {1170,10,100,100};
 	HpBar mapent(mapRect, mapTex, 0);
 	osSprite.push_back(&mapent);
+
+	//AI order
+        SDL_Rect orderUI={10,650,200,50};
+        HpBar orderEnt(orderUI,allTextures.at(TEX_ORDER_ORDER),0);
+        osSprite.push_back(&orderEnt);
+	int curAIOrder=0;
+	orderUI={160,650,200,50};
+	HpBar curOrderEnt(orderUI,allTextures.at(TEX_ORDER_FOLLOW),0);
+	osSprite.push_back(&curOrderEnt);
 
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
 	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -541,7 +550,7 @@ void run_demo(gpRender gr){
 			}
 			else if(!galaxy.getInControl(curSector - 1))
 			{
-				ai.createShip(false);
+				ai.createShip(false,curAIOrder);//ai order dont affect enemy
 				
 			}
 		
@@ -598,6 +607,8 @@ void run_demo(gpRender gr){
 						    ship->setGoal(4);
                                                 }
                                             }
+					    curAIOrder=4;
+					    curOrderEnt.setTexture(allTextures.at(TEX_ORDER_AUTO));
                                             break;
 
 					case SDLK_1: //order allies to follow
@@ -610,6 +621,8 @@ void run_demo(gpRender gr){
 						    ship->setGoal(0);
 						}
 					    }
+					    curAIOrder=0;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_FOLLOW));
 					    break;
 					case SDLK_2: //order allies to defend
 	  				    for(AIShip* ship:*ai.getShips())
@@ -621,6 +634,8 @@ void run_demo(gpRender gr){
                                                     ship->setGoal(1);
                                                 }
                                             }
+					    curAIOrder=1;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_DEFEND));
 					    break;
 					case SDLK_3: //order allies to attack
 					    for(AIShip* ship:*ai.getShips())
@@ -632,6 +647,8 @@ void run_demo(gpRender gr){
                                                     ship->setGoal(2); //flee is 3
                                                 }
                                             }
+					    curAIOrder=2;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_ATTACK));
                                             break;
 					case SDLK_e:
 						if(e.type == SDL_KEYDOWN){
@@ -683,7 +700,7 @@ void run_demo(gpRender gr){
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
 								if(credits > 50){
-									ai.createShip(true);
+									ai.createShip(true,curAIOrder);
 									credits -= 50;
 								}
 								
