@@ -70,6 +70,6 @@ class AI
 	   vector<AIShip*>* getShips();
        pair<int, int> radar(AIShip& aiship);
        bool checkBounds(int x, int y);
-       void createShip(bool isAlly);
+       void createShip(bool isAlly,int goal);
        bool occupied(pair<int,int> spawn);
 };

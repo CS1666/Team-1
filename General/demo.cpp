@@ -104,13 +104,9 @@ void run_demo(gpRender gr){
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
-	SDL_Texture* fighter_tex = gr.loadImage("Assets/Objects/ship_fighter_hero.png");
-	SDL_Texture* cruiser_tex = gr.loadImage("Assets/Objects/ship_cruiser_hero.png");
-	SDL_Texture* capital_tex = gr.loadImage("Assets/Objects/ship_capital_hero.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	//Ship playerent(db, tex, 0);
-	Hero playerent(db, tex);
+	Hero playerent(db, allTextures.at(TEX_FIGHT_HERO));
 	//playerent.setRenderOrder(0);
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
@@ -232,7 +228,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid6ent);
 	osAst.push_back(&asteroid6ent);
 
-	
+	//hp bar
 	SDL_Texture* texhp = gr.loadImage("Assets/Objects/hp_bar.png");
 	SDL_Rect hp = {10,10,300,20};
 	HpBar hpent(hp, texhp, playerent.getCurrHp()/playerent.getMaxHp());
@@ -242,6 +238,15 @@ void run_demo(gpRender gr){
 	SDL_Rect mapRect = {1170,10,100,100};
 	HpBar mapent(mapRect, mapTex, 0);
 	osSprite.push_back(&mapent);
+
+	//AI order
+        SDL_Rect orderUI={10,650,200,50};
+        HpBar orderEnt(orderUI,allTextures.at(TEX_ORDER_ORDER),0);
+        osSprite.push_back(&orderEnt);
+	int curAIOrder=0;
+	orderUI={160,650,200,50};
+	HpBar curOrderEnt(orderUI,allTextures.at(TEX_ORDER_FOLLOW),0);
+	osSprite.push_back(&curOrderEnt);
 
 	SDL_Texture* tex_ss = gr.loadImage("Assets/Objects/spacestation.png");
 	SDL_Rect rect_ss = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200,PLAYER_WIDTH,PLAYER_HEIGHT};
@@ -541,7 +546,7 @@ void run_demo(gpRender gr){
 			}
 			else if(!galaxy.getInControl(curSector - 1))
 			{
-				ai.createShip(false);
+				ai.createShip(false,curAIOrder);//ai order dont affect enemy
 				
 			}
 		
@@ -598,6 +603,8 @@ void run_demo(gpRender gr){
 						    ship->setGoal(4);
                                                 }
                                             }
+					    curAIOrder=4;
+					    curOrderEnt.setTexture(allTextures.at(TEX_ORDER_AUTO));
                                             break;
 
 					case SDLK_1: //order allies to follow
@@ -610,6 +617,8 @@ void run_demo(gpRender gr){
 						    ship->setGoal(0);
 						}
 					    }
+					    curAIOrder=0;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_FOLLOW));
 					    break;
 					case SDLK_2: //order allies to defend
 	  				    for(AIShip* ship:*ai.getShips())
@@ -621,6 +630,8 @@ void run_demo(gpRender gr){
                                                     ship->setGoal(1);
                                                 }
                                             }
+					    curAIOrder=1;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_DEFEND));
 					    break;
 					case SDLK_3: //order allies to attack
 					    for(AIShip* ship:*ai.getShips())
@@ -632,6 +643,8 @@ void run_demo(gpRender gr){
                                                     ship->setGoal(2); //flee is 3
                                                 }
                                             }
+					    curAIOrder=2;
+                                            curOrderEnt.setTexture(allTextures.at(TEX_ORDER_ATTACK));
                                             break;
 					case SDLK_e:
 						if(e.type == SDL_KEYDOWN){
@@ -642,7 +655,8 @@ void run_demo(gpRender gr){
 								r_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&r_UI);
 								t_UI.set_spriteIndex(osSprite.size());
-								osSprite.push_back(&t_UI);
+								if(playerent.getType()!=2)
+								    osSprite.push_back(&t_UI);
 								y_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&y_UI);
 								u_UI.set_spriteIndex(osSprite.size());
@@ -673,7 +687,8 @@ void run_demo(gpRender gr){
 									in_space_station_menu = false;
 									osSprite.erase(osSprite.begin() + u_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + y_UI.get_spriteIndex());
-									osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
+									if(playerent.getType()!=2)
+									    osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 								}
@@ -682,38 +697,49 @@ void run_demo(gpRender gr){
 		
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
-								if(credits > 50){
-									ai.createShip(true);
+								if(credits >= 50){
+									ai.createShip(true,curAIOrder);
 									credits -= 50;
 								}
 								
 							}
 							break;
 						case SDLK_t:
-							if(e.type == SDL_KEYDOWN){
-								//INSERT T option here
-								if(credits > 50){
-									playerent.setTexture(fighter_tex);
-									credits -= 50;
-								}
+						    if(e.type == SDL_KEYDOWN)
+						    {
+							//INSERT T option here
+							if(playerent.getType()==0&&credits >= 50)
+							{
+							    playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
+							    playerent.upgradeType();
+							    playerent.setMaxHp(100);
+							    credits -= 50;
 							}
-							break;
+							else if(playerent.getType()==1&&credits>=100)
+							{
+							    playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
+							    playerent.upgradeType();
+							    playerent.setMaxHp(200);
+							    credits-=100;
+							}
+						    }
+						    break;
 						case SDLK_y:
 							if(e.type == SDL_KEYDOWN){
-								//INSERT Y option here
-								if(credits > 50){
-									playerent.setTexture(cruiser_tex);
-									credits -= 50;
+							    //Y = heal 10
+							    if(credits >= 5){
+								playerent.setCurrHp(playerent.getCurrHp()+10);
+								credits -= 5;
 								}
 							}
 							break;
 						case SDLK_u:
 							if(e.type == SDL_KEYDOWN){
-								//INSERT U option here
-								if(credits > 50){
-									playerent.setTexture(capital_tex);
-									credits -= 50;
-								}
+							    //U = full heal
+							    if(credits >= 50){
+								playerent.setCurrHp(playerent.getCurrHp());
+								credits -= 50;
+							    }
 							}
 							break;
 					}
