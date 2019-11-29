@@ -12,6 +12,7 @@
 #include "theta.h"
 #include "../General/Constants.h"
 #include <math.h>
+#include <pthread.h>
 
 //#include "Physics/BasicMovementFPSlimit.h"
 using namespace std;
@@ -24,26 +25,29 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-	      vector<Sprite*>* osSprite;
-	      vector<SDL_Texture*>* allTextures;
+	    vector<Sprite*>* osSprite;
+	    vector<SDL_Texture*>* allTextures;
 	    pair<int,int> sectorSize; //width, height
         Sector* sector;
         pair<int,int> ChooseEnemySpawn();
         pair<int,int> ChooseAllySpawn();
+        void followShip(AIShip* fship);
+        void followEnemy(AIShip* ship);
+        void followPlayer(AIShip* ship);
+        void findShip(AIShip* ship, int routine);
         
   
 
     public:
         void setCurrentSector(Sector* newSector);
         void setShips(vector<AIShip*>* newShips);
-        bool checkMapState(vector<vector<bool> > newState); //change mapstate
+      //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
-	      void setSprites(vector<Sprite*>* sprites);
-	      void setTextures(vector<SDL_Texture*>* textures);
-        void lineOfSight();
-        bool createMapState(Sector* currentSector);
-        bool createShipState(Sector* currentSector);
+	    void setSprites(vector<Sprite*>* sprites);
+	    void setTextures(vector<SDL_Texture*>* textures);
+       
+       
         queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
         void setPlayerShip(Hero* playerShip);
@@ -57,14 +61,13 @@ class AI
 	//3 = roam
 	   pair<int,int> generateCoordinate(pair<int,int> start,pair<int,int> stop, int typeGen);
 	   pair<int,int> getSectorSize();
-	void setSectorSize(pair<int,int> sector);
-	void followPlayer(AIShip* ship);
-	void defendPosition(AIShip* ship);
-	void pursueShip(AIShip* ship);
-	void fleeToCorner(AIShip* ship);
-	void roamAround(AIShip* ship);
-	void doNothing(AIShip* ship);
-	vector<AIShip*>* getShips();
+    	void setSectorSize(pair<int,int> sector);
+    	void defendPosition(AIShip* ship);
+    	void pursueShip(AIShip* ship);
+    	void fleeToCorner(AIShip* ship);
+    	void roamAround(AIShip* ship);
+    	void doNothing(AIShip* ship);
+	   vector<AIShip*>* getShips();
        pair<int, int> radar(AIShip& aiship);
        bool checkBounds(int x, int y);
        void createShip(bool isAlly);
