@@ -126,7 +126,6 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 		//std::cout << "W: " << entity->getW() << "H: " << entity->getH() << std::endl;
 		//To check if entity is player, player must be the first entity added
 		//Also checks if camera should be fixed
-		
 		if ((entity->getRenderOrder() == 0 || entity == osEntity.at(0)) && !fixed){
 			//std::cout << "Render 1" << std::endl;
 			SDL_Point center;

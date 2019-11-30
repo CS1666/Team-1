@@ -6,14 +6,15 @@ using namespace std;
 
 
 
-Planet::Planet(): Sprite() {orbitalVel = 100;mass = 10;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 10;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;};
+Planet::Planet(): Sprite() {orbitalVel = 100;mass = 25;type = 4;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;initVelocity(sun);};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;type = 2;};
 
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 10;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;type = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;
@@ -27,10 +28,10 @@ void Planet::initVelocity(Star& star)
 	{
 		pointAngle += 3.1415926;
 	}
-	angle += 1.57079632679;
-	//float vel = std::sqrt(1000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
-	vx = orbitalVel*cos(angle);
-	vy = orbitalVel*sin(angle);
+	pointAngle += 1.57079632679;
+	orbitalVel = std::sqrt(1000000/std::sqrt(((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0)));
+	vx = orbitalVel*cos(pointAngle);
+	vy = orbitalVel*sin(pointAngle);
 	//std::cout << angle * 180 / 3.1415926 << std::endl;
 	//std::cout << vx << std::endl;
 	//std::cout << vy << std::endl;
@@ -77,22 +78,51 @@ void Planet::updatePosition(Sprite& playerent)
 	std::vector<float> gravs = calulateGravity(sun);
 	fx = gravs[0];
 	fy = gravs[1];
-	std::cout << "fx : " << fx << std::endl;
-	std::cout << "fy : " << fy << std::endl;
-	std::cout << "vx : " << vx << std::endl;
-	std::cout << "vy : " << vy << std::endl;
+	//std::cout << "fx : " << fx << std::endl;
+	//std::cout << "fy : " << fy << std::endl;
+	//std::cout << "vx : " << vx << std::endl;
+	//std::cout << "vy : " << vy << std::endl;
 	vx += fx*TimeData::get_timestep();
 	vy += fy*TimeData::get_timestep();
 	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
 	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
 
-	if(check_collision(this->getDrawBox(), playerent.getDrawBox()))
+	if(check_collision(playerent.getDrawBox(),this->getCollisionCirc()))
 	{
+		//std::cout<<"planet collision" << std::endl;
 		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
 		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
 	}
-	std::cout << "planet X: " << this->getTrueX() << std::endl;
-	std::cout << "planet Y: " << this->getTrueY() << std::endl;
+	//std::cout << "planet X: " << this->getTrueX() << std::endl;
+	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
+}
+void Planet::updatePosition(std::vector<Sprite*> osSprite)
+{
+	std::vector<float> gravs = calulateGravity(sun);
+	fx = gravs[0];
+	fy = gravs[1];
+	//std::cout << "fx : " << fx << std::endl;
+	//std::cout << "fy : " << fy << std::endl;
+	//std::cout << "vx : " << vx << std::endl;
+	//std::cout << "vy : " << vy << std::endl;
+	vx += fx*TimeData::get_timestep();
+	vy += fy*TimeData::get_timestep();
+	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
+	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
+	for (auto ent : osSprite)
+	{
+		if(dynamic_cast<Ship*>(ent))
+		{
+			if(check_collision(ent->getDrawBox(),this->getCollisionCirc()))
+			{
+				//std::cout<<"planet collision" << std::endl;
+				ent->setX((float)(ent->getTrueX() + vx*TimeData::get_timestep()));
+				ent->setY((float)(ent->getTrueY() + vy*TimeData::get_timestep()));
+			}
+		}
+	}
+	//std::cout << "planet X: " << this->getTrueX() << std::endl;
+	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
 //for now only calculate the gravity contribution from the sun
 std::vector<float> Planet::calulateGravity(Star& sun)
@@ -107,7 +137,7 @@ std::vector<float> Planet::calulateGravity(Star& sun)
 	{
 		pointAngle += 3.1415926;
 	}
-	std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
+	//std::cout << "Star planet angle: " << pointAngle *180/3.14<< std::endl;
 
 	float grav = (orbitalVel*orbitalVel)/std::sqrt((bodyX-planetX)*(bodyX-planetX)*1.0 + (bodyY-planetY)*(bodyY-planetY)*1.0);
 	//grav *= TimeData::get_timestep()*TimeData::get_timestep();

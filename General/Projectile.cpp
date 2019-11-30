@@ -15,20 +15,11 @@ void Projectile::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 	float speedY = 10*sin((getAngle() - 90.0)*PI/180);
 	
 	setX(getTrueX() + speedX);
-	/*if(getTrueX() < 0 
-
-		|| (getX() + getW() > ZONE_WIDTH)
-		|| check_all_collisions(getDrawBox(), osSprite)){
-		remove = true;
-	}*/
 	setY(getTrueY() + speedY);
 	if(getY() < 0 
 		|| (getY() + getH() > ZONE_HEIGHT)
-		|| check_all_collisions(getDrawBox(), osSprite)){
-		
-		remove = true;
-
-		
+		|| this->check_all_collisions(this->getDrawBox(), osSprite)){
+		remove = true;		
 	}
 }
 
@@ -41,28 +32,33 @@ bool Projectile::isProjectile(){
 }
 
 bool Projectile::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
-		bool isCollision = false;
-		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-		for (int i = 1; i < osSprite.size(); i++) {
-			//so, one of these should result in collison if they are the same box
-			if (osSprite.at(i)->isCircEnt()){
-				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
-			}
-			else{
-				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
-				bool isColl2 = check_collision(a, osSprite.at(i)->getDrawBox());
-				
-				if (isColl2 && dynamic_cast<Ship*>(osSprite.at(i))){
-					std::cout << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
-					int oldHP = dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp();
-					int newHP = oldHP - getDamage();
-					dynamic_cast<Ship*>(osSprite.at(i))->setCurrHp(newHP);
-					std::cout << "Hit ship HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
-				}
-			}
-			//std::cout << "Is last command Illegal?" << std::endl;
-			//std::cout << "Checked collisions: " << i << std::endl;
+	bool isCollision = false;
+	for (int i = 0; i < osSprite.size(); i++) {
+		//so, one of these should result in collison if they are the same box
+		if (osSprite.at(i)->isCircEnt()){
+			isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 		}
-		
-		return isCollision;
+		else{
+			bool isColl2 = check_collision(a, osSprite.at(i)->getDrawBox());
+			isCollision |= isColl2;
+			if (isColl2 && dynamic_cast<Ship*>(osSprite.at(i))){
+				std::cout << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
+				int oldHP = dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp();
+				int newHP = oldHP - getDamage();
+				dynamic_cast<Ship*>(osSprite.at(i))->setCurrHp(newHP);
+				std::cout << "Hit ship HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
+			}
+			else if (isColl2 && dynamic_cast<Hero*>(osSprite.at(i))){
+				std::cout << dynamic_cast<Hero*>(osSprite.at(i))->getCurrHp() << std::endl;
+				int oldHP = dynamic_cast<Hero*>(osSprite.at(i))->getCurrHp();
+				int newHP = oldHP - getDamage();
+				dynamic_cast<Hero*>(osSprite.at(i))->setCurrHp(newHP);
+				std::cout << "player HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
+			}
+		}
+		//std::cout << "Is last command Illegal?" << std::endl;
+		//std::cout << "Checked collisions: " << i << std::endl;
+	}
+
+	return isCollision;
 }

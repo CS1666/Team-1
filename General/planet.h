@@ -4,7 +4,9 @@
 #include <tuple>
 #include "Sprite.h"
 #include "Star.h"
+#include "Ship.h"
 #include <cmath>
+#include <vector>
 #include "../Physics/TimeData.h"
 
 class Planet : public Sprite
@@ -12,6 +14,7 @@ class Planet : public Sprite
 public:
 	Planet();
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc);
+	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int mass, Star &sun, float vel);
 	Planet(SDL_Rect dBox, SDL_Texture* aTex);
@@ -26,6 +29,7 @@ public:
 	void setSprite(string s);
 	void setMass(int newMass);
 	void updatePosition(Sprite& playerent);
+	void updatePosition(std::vector<Sprite*> osSprite);
 	//for now only calculate the gravity contribution from the sun
 	std::vector<float> calulateGravity(Star& sun);
 
