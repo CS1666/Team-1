@@ -239,6 +239,11 @@ void run_demo(gpRender gr){
 	HpBar mapent(mapRect, mapTex, 0);
 	osSprite.push_back(&mapent);
 
+	SDL_Texture* credit_tex = gr.loadText("Credits: 0");
+	SDL_Rect credit_rect = {hp.x, hp.y + hp.h, 128, 32};
+	Credits credit(credit_rect, credit_tex);
+	osSprite.push_back(&credit);
+
 	//AI order
         SDL_Rect orderUI={10,650,200,50};
         HpBar orderEnt(orderUI,allTextures.at(TEX_ORDER_ORDER),0);
@@ -256,7 +261,7 @@ void run_demo(gpRender gr){
 	sector.setSpaceStation(&ss_ent);
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
-	SDL_Rect e_rect = {50, 50, 100, 100};
+	SDL_Rect e_rect = {50, 60, 100, 100};
 	SpaceStationUI e_UI(e_rect, e_tex);
 
 	SDL_Texture* r_tex = gr.loadImage("Assets/Objects/R.png");
@@ -700,6 +705,9 @@ void run_demo(gpRender gr){
 								if(credits >= 50){
 									ai.createShip(true,curAIOrder);
 									credits -= 50;
+
+									credit_tex = gr.loadText("Credits: " + to_string(credits));
+									credit.updateCredits(credit_tex);
 								}
 								
 							}
@@ -714,6 +722,9 @@ void run_demo(gpRender gr){
 							    playerent.upgradeType();
 							    playerent.setMaxHp(100);
 							    credits -= 50;
+
+								credit_tex = gr.loadText("Credits: " + to_string(credits));
+								credit.updateCredits(credit_tex);
 							}
 							else if(playerent.getType()==1&&credits>=100)
 							{
@@ -721,6 +732,9 @@ void run_demo(gpRender gr){
 							    playerent.upgradeType();
 							    playerent.setMaxHp(200);
 							    credits-=100;
+
+								credit_tex = gr.loadText("Credits: " + to_string(credits));
+								credit.updateCredits(credit_tex);
 							}
 						    }
 						    break;
@@ -730,6 +744,9 @@ void run_demo(gpRender gr){
 							    if(credits >= 5){
 								playerent.setCurrHp(playerent.getCurrHp()+10);
 								credits -= 5;
+
+								credit_tex = gr.loadText("Credits: " + to_string(credits));
+								credit.updateCredits(credit_tex);
 								}
 							}
 							break;
@@ -739,6 +756,9 @@ void run_demo(gpRender gr){
 							    if(credits >= 50){
 								playerent.setCurrHp(playerent.getCurrHp());
 								credits -= 50;
+		
+								credit_tex = gr.loadText("Credits: " + to_string(credits));
+								credit.updateCredits(credit_tex);
 							    }
 							}
 							break;
@@ -752,6 +772,8 @@ void run_demo(gpRender gr){
 			if(SDL_GetTicks() - creditInterval > 2000){
 				credits += 5;
 				creditInterval = SDL_GetTicks();
+				credit_tex = gr.loadText("Credits: " + to_string(credits));
+				credit.updateCredits(credit_tex);
 			}
 
 			std::cout << "credits: " << credits << std::endl;
