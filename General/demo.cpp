@@ -55,8 +55,8 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 			break;
 	}
 }
-constexpr int PLAYER_WIDTH = 52;
-constexpr int PLAYER_HEIGHT = 60;
+constexpr int PLAYER_WIDTH = 50;
+constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
@@ -100,7 +100,7 @@ void run_demo(gpRender gr){
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
-	SDL_Texture* tex = gr.loadImage("Assets/Objects/ship_player.png");
+	SDL_Texture* tex = gr.loadImage("Assets/Objects/ships.png");
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
 	//Ship playerent(db, tex, 0);
 	Hero playerent(db, tex);
@@ -473,9 +473,10 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
-							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
-						}
+						/*if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
+							osSprite.push_back(playerent.fireWeapon(ltex));					
+						}*/
+						playerent.fireWeapon();
 						break;
 					
 					case SDLK_e:
@@ -524,8 +525,9 @@ void run_demo(gpRender gr){
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
 
-
 			for(auto ent : osSprite) {
+				if (dynamic_cast<Ship*>(ent))
+					dynamic_cast<Ship*>(ent)->getFired(osSprite, allTextures.at(TEX_LASER));
 				if(!ent->getIsAI())
 					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
 				if(ent->getRenderOrder() == 0 && ent->getAnimate())
@@ -624,8 +626,6 @@ void run_demo(gpRender gr){
 				camera.y = ZONE_HEIGHT - SCREEN_HEIGHT;
 				fixed = true;bgzonelayer1;
 			}
-			
-			
 			
 			for(std::size_t i = 0; i != osSprite.size(); i++){
 				if(osSprite.at(i)->shouldRemove())

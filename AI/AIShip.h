@@ -5,6 +5,7 @@ class AIShip: public Ship{
     public:
 	AIShip();
 	AIShip(SDL_Rect dbox,SDL_Texture* aTex,bool ally);
+	AIShip(SDL_Rect dbox,SDL_Texture* aTex, int anim, bool ally);
 	void followPath();
 	void setGoal(int newGoal);
 	int getGoal();
@@ -29,4 +30,19 @@ class AIShip: public Ship{
         bool pathset;
 	bool freeForm;
 	Uint32 timeActivated;
+};
+
+class Fighter: public AIShip{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
+};
+
+class Cruiser: public AIShip{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
+};
+
+class Capital: public AIShip{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
 };

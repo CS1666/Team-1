@@ -45,8 +45,9 @@ class Sprite{
 		double getAngle();
 		int getH();
 		int getW();
+		void setF(std::pair<int,int> anim);
 		void setF(int anim);
-		int getF();
+		std::pair<int,int> getF();
 
 		void updateAnimation();
 		bool getAnimate();
@@ -83,7 +84,7 @@ class Sprite{
 		SDL_Rect collisionBox;
 		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
-		int animFrame;
+		std::pair<int,int> animFrame;
 		bool animate = false;
 		Uint32 animLastTime = SDL_GetTicks();
 		int type = 0;

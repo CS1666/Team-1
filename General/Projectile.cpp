@@ -20,6 +20,7 @@ void Projectile::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, 
 		|| (getY() + getH() > ZONE_HEIGHT)
 		|| check_all_collisions(getDrawBox(), osSprite)){
 		remove = true;
+		delete this;
 
 		
 	}
