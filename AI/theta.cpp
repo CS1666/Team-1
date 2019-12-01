@@ -198,7 +198,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
     }
     else{
   
-        if (line_of_sight(s, neighbor))
+        if (line_of_sight(parent[s], neighbor))
         {   
 
             if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])

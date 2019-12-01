@@ -242,7 +242,7 @@ bool AIShip::colRes(vector<Sprite *>* osSprite, int cur_x, int cur_y,int xmov, i
 	bool reCalc = false;
 	setX(cur_x);
     if(check_all_collisions(getDrawBox(), *osSprite)){
-    	
+    	std::cout << "Collison on x" << std::endl;
     	if(xai){
     		xVelocity--;
     	}
@@ -262,6 +262,7 @@ bool AIShip::colRes(vector<Sprite *>* osSprite, int cur_x, int cur_y,int xmov, i
 	
 	setY(cur_y);
 	if(check_all_collisions(getDrawBox(), *osSprite)){
+		std::cout << "Collison on Y" << std::endl;
 		if(yai){
     		yVelocity--;
     	}

@@ -55,11 +55,13 @@ void AI::followShip(AIShip* ship){
     bool recalc = ship->followPath(osSprite);
 
     if(recalc){
+        cout<<"Re Calc"<<endl;
         ship->setPath(calculatePath(*ship));
     }
     else if(ship->getPathComplete())
     {
         
+        cout<<"Path Complete"<<endl;
         ship->setDestination(ship->getTargetShip()->getPosition());
         ship->setPath(calculatePath(*ship));
     }
