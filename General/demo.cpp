@@ -344,7 +344,7 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 8;
 	
-	Credits mapSprites[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
+	Credits* mapSprites[] = {&sector1ent, &sector2ent, &sector3ent, &sector4ent, &sector5ent, &sector6ent, &sector7ent, &sector8ent, &sector9ent};
 	
 	/*
 	//Ship Cruiser initilization
