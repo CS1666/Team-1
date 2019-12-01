@@ -294,6 +294,7 @@ void run_demo(gpRender gr){
 	SDL_Texture* enemyMapTex = gr.loadImage("Assets/Objects/enemySector.png");
 	SDL_Texture* curMapTex = gr.loadImage("Assets/Objects/currentSector.png");
 	
+	
 	//Sector 1
 	SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
 	SDL_Rect sector1Rect = {1184,25,15,15};
@@ -339,10 +340,10 @@ void run_demo(gpRender gr){
 	SDL_Rect sector9Rect = {1242,79,15,15};
 	HpBar sector9ent(sector9Rect, sector9Tex, 0);
 	osSprite.push_back(&sector9ent);
+	
 	//current sector
 	int curSector = 8;
 	
-	SDL_Texture* mapTexs[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 	HpBar mapSprites[] = {sector1ent, sector2ent, sector3ent, sector4ent, sector5ent, sector6ent, sector7ent, sector8ent, sector9ent};
 	
 	/*
@@ -794,6 +795,54 @@ void run_demo(gpRender gr){
 				credit_tex = gr.loadText("Credits: " + to_string(credits));
 				credit.updateCredits(credit_tex);
 			}
+			
+			/*
+			//Sector 1
+			SDL_Texture* sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector1Rect = {1184,25,15,15};
+			HpBar sector1ent(sector1Rect, sector1Tex, 0);
+			osSprite.push_back(&sector1ent);
+			//Sector 2
+			SDL_Texture* sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector2Rect = {1213,25,15,15};
+			HpBar sector2ent(sector2Rect, sector2Tex, 0);
+			osSprite.push_back(&sector2ent);
+			//Sector 3
+			SDL_Texture* sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector3Rect = {1242,25,15,15};
+			HpBar sector3ent(sector3Rect, sector3Tex, 0);
+			osSprite.push_back(&sector3ent);
+			//Sector 4
+			SDL_Texture* sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector4Rect = {1184,52,15,15};
+			HpBar sector4ent(sector4Rect, sector4Tex, 0);
+			osSprite.push_back(&sector4ent);
+			//Sector 5
+			SDL_Texture* sector5Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector5Rect = {1213,52,15,15};
+			HpBar sector5ent(sector5Rect, sector5Tex, 0);
+			osSprite.push_back(&sector5ent);
+			//Sector 6
+			SDL_Texture* sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector6Rect = {1242,52,15,15};
+			HpBar sector6ent(sector6Rect, sector6Tex, 0);
+			osSprite.push_back(&sector6ent);
+			//Sector 7
+			SDL_Texture* sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector7Rect = {1184,79,15,15};
+			HpBar sector7ent(sector7Rect, sector7Tex, 0);
+			osSprite.push_back(&sector7ent);
+			//Sector 8
+			SDL_Texture* sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
+			SDL_Rect sector8Rect = {1213,79,15,15};
+			HpBar sector8ent(sector8Rect, sector8Tex, 0);
+			osSprite.push_back(&sector8ent);
+			//Sector 9
+			SDL_Texture* sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
+			SDL_Rect sector9Rect = {1242,79,15,15};
+			HpBar sector9ent(sector9Rect, sector9Tex, 0);
+			osSprite.push_back(&sector9ent);
+			*/
 
 			std::cout << "credits: " << credits << std::endl;
 
@@ -896,76 +945,20 @@ void run_demo(gpRender gr){
       
 			
 			frames++;
-			if(frames > 120){
-				SDL_Texture* curTex = gr.loadImage("Assets/Objects/currentSector.png");
-				mapSprites[curSector-1].setTexture(curTex);
+			if(frames > 120)
+			{
+				mapSprites[curSector-1].setTexture(curMapTex);
 				frames = 0;
-				/*
-				if(curSector == 1){
-					sector1Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 2){
-					sector2Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 3){
-					sector3Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 4){
-					sector4Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 5){
-					sector5Tex = gr.loadImage("Assets/Objects/currentSector.png");
-					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
-					osSprite.push_back(&sector5ent2);
-				}
-				else if(curSector == 6){
-					sector6Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 7){
-					sector7Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 8){
-					sector8Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				else if(curSector == 9){
-					sector9Tex = gr.loadImage("Assets/Objects/currentSector.png");
-				}
-				*/
 			}
 			else if(frames > 60){
-				SDL_Texture* tempTex = gr.loadImage("Assets/Objects/enemySector.png");
-				mapSprites[curSector-1].setTexture(tempTex);
-				/*
-				if(curSector == 1){
-					sector1Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				if(galaxy.getInControl(curSector-1))
+				{
+					mapSprites[curSector-1].setTexture(playerMapTex);
 				}
-				else if(curSector == 2){
-					sector2Tex = gr.loadImage("Assets/Objects/enemySector.png");
+				else
+				{
+					mapSprites[curSector-1].setTexture(enemyMapTex);
 				}
-				else if(curSector == 3){
-					sector3Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				else if(curSector == 4){
-					sector4Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				else if(curSector == 5){
-					sector5Tex = gr.loadImage("Assets/Objects/enemySector.png");
-					HpBar sector5ent2(sector5Rect, sector5Tex, 1);
-					osSprite.push_back(&sector5ent2);
-				}
-				else if(curSector == 6){
-					sector6Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				else if(curSector == 7){
-					sector7Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				else if(curSector == 8){
-					sector8Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				else if(curSector == 9){
-					sector9Tex = gr.loadImage("Assets/Objects/enemySector.png");
-				}
-				*/
 			}
 			
 			
