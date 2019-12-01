@@ -342,7 +342,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&sector9ent);
 	
 	//current sector
-	int curSector = 8;
+	int curSector = 5;
 	
 	Credits* mapSprites[] = {&sector1ent, &sector2ent, &sector3ent, &sector4ent, &sector5ent, &sector6ent, &sector7ent, &sector8ent, &sector9ent};
 	
