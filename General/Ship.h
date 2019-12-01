@@ -42,8 +42,7 @@ class Ship : public Sprite
         bool damageTaken;
         bool rotationSet;
         bool isUser;
-        bool isAlly;
-
+	bool isAlly;
         string sprite;
         pair<int, int> size;
         pair<int,int> position;
@@ -55,7 +54,6 @@ class Ship : public Sprite
         float rotationRate = 0;
         float rotationSpeed = 0;
         float direction;
-
         Ship();
         Ship(const Ship& ship);
         Ship(SDL_Rect dBox, SDL_Texture* aTex);
@@ -98,6 +96,7 @@ class Ship : public Sprite
         int getMaxHp();
         void fireWeapon(); 
         void getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture);
+        Projectile fireWeaponatme(SDL_Texture* texture); 
         Uint32 getFireLastTime();
 		void setFireLastTime();
 
@@ -106,13 +105,16 @@ class Ship : public Sprite
         bool getIsAlly();
 };
 
-class Hero: public Ship{        
+class Hero: public Ship{
+	private:
+	    int shipType;
         public:
-                Hero(SDL_Rect dBox, SDL_Texture* aTex);
-                
-                bool handleKeyEvents(SDL_Event e);
-                void handleKeyUpEvent(SDL_Event e);
-                void handleKeyDownEvent(SDL_Event e);
+            Hero(SDL_Rect dBox, SDL_Texture* aTex);
+            bool handleKeyEvents(SDL_Event e);
+            void handleKeyUpEvent(SDL_Event e);
+            void handleKeyDownEvent(SDL_Event e);
+	    int getType();
+	    void upgradeType();
 };
 
 /*class Fighter: public Ship{

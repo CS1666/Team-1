@@ -7,14 +7,14 @@ using namespace std;
 
 
 Planet::Planet(): Sprite() {orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;initVelocity(sun);};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;type = 4;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc,Star &sun): Sprite(dBox, aTex, dCirc) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;initVelocity(sun);};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m, Star &sun, float vel): Sprite(dBox, aTex, dCirc), orbitalVel{vel}{initVelocity(sun);renderOrder = 2;mass = m;type = 2;};
 
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;type = 4;};
-Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;type = 4;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex) {renderOrder = 2;orbitalVel = 100;mass = 25;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;orbitalVel = 100;mass = m;type = 2;};
+Planet::Planet(SDL_Rect dBox, SDL_Texture* aTex, int m, Star &sun, float vel): Sprite(dBox, aTex),  orbitalVel{vel}{initVelocity(sun);mass = m;type = 2;};
 void Planet::initVelocity(Star& star)
 {
 	sun = star;
@@ -92,6 +92,34 @@ void Planet::updatePosition(Sprite& playerent)
 		//std::cout<<"planet collision" << std::endl;
 		playerent.setX((float)(playerent.getTrueX() + vx*TimeData::get_timestep()));
 		playerent.setY((float)(playerent.getTrueY() + vy*TimeData::get_timestep()));
+	}
+	//std::cout << "planet X: " << this->getTrueX() << std::endl;
+	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
+}
+void Planet::updatePosition(std::vector<Sprite*> osSprite)
+{
+	std::vector<float> gravs = calulateGravity(sun);
+	fx = gravs[0];
+	fy = gravs[1];
+	//std::cout << "fx : " << fx << std::endl;
+	//std::cout << "fy : " << fy << std::endl;
+	//std::cout << "vx : " << vx << std::endl;
+	//std::cout << "vy : " << vy << std::endl;
+	vx += fx*TimeData::get_timestep();
+	vy += fy*TimeData::get_timestep();
+	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
+	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
+	for (auto ent : osSprite)
+	{
+		if(dynamic_cast<Ship*>(ent))
+		{
+			if(check_collision(ent->getDrawBox(),this->getCollisionCirc()))
+			{
+				//std::cout<<"planet collision" << std::endl;
+				ent->setX((float)(ent->getTrueX() + vx*TimeData::get_timestep()));
+				ent->setY((float)(ent->getTrueY() + vy*TimeData::get_timestep()));
+			}
+		}
 	}
 	//std::cout << "planet X: " << this->getTrueX() << std::endl;
 	//std::cout << "planet Y: " << this->getTrueY() << std::endl;

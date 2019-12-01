@@ -18,7 +18,7 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	isAI = true;
 	setX(dBox.x);
 	setY(dBox.y);
-	maxVelocity=10;
+	maxVelocity=20;
 	maxRotation=10;
 	isUser=false;
 	maxHp=50;
@@ -49,8 +49,9 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, int anim, bool ally): Ship(dBox
 };
 
 //ai follows path assigned to it by ai class
-void AIShip::followPath()
+bool AIShip::followPath(vector<Sprite *>* osSprite)
     {
+    	bool reCalPath = false;
 	    //note: change the path in Ship.h to whatever is returned.
 	    if(!path->empty())
 	    {
@@ -66,103 +67,37 @@ void AIShip::followPath()
 			if(!rotationSet)
 			{
 				calculateNewAngle(coords);
-				//cout<<"rotation: "<<newAngle<<endl;
-				//int n;
-				//cin>>n;
 				rotationSet=true;
 			}
 			float angle=getAngle();
-			//cout<<"newAngle:"<<newAngle<<endl;
-			//cout<<"cur angle: "<<angle<<endl;
 			bool angleChanged=rotateToAngle();
-			//entity.setAngle(122);
-			//cout<<"cur_x: "<<cur_x<<" cur_y : "<<cur_y<<endl;
-	        ////std::cout << "x: " << x_coord << " y: " << y_coord << "points remaing: " << path->size() << endl;
+
+			
+
 			//note: since we don't have updateMovement implemented, most
 			//of the stuff here can probably be removed/handled by that
 			//simulate turning, acceleration of ship
 			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 			{	
-				//cout<<"Here 1 "<<cur_y<<endl;
-			    if(cur_x-maxVelocity>x_coord)
-			    {
-			    	//cout<<"Here 2 "<<cur_y<<endl;
-					if(maxVelocity>xVelocity){
-						//cout<<"Here 3 "<<cur_y<<endl;
-					    cur_x-=xVelocity++;
-					}
-					else{
-						//cout<<"Here 4 "<<cur_y<<endl;
-					    cur_x-=xVelocity;
-					}
-			    }
-			    else if(cur_x>x_coord)
-			    {
-			    	///cout<<"Here 5 "<<cur_y<<endl;
-					cur_x=x_coord; //skipped
-					rotationSet=false;
-			    }
-			    else if(cur_x+maxVelocity<x_coord)
-			    {
-			    	//cout<<"Here 6 "<<cur_y<<endl;
-					if(maxVelocity>xVelocity){
-						//cout<<"Here 7 "<<cur_y<<endl;
-					    cur_x+=xVelocity++;
-					}
-					else{
-						//cout<<"Here 8 "<<cur_y<<endl;
-					    cur_x+=xVelocity;
-					}
-			    }
-			    else if(cur_x<x_coord)
-			    {
-			    	//cout<<"Here 9 "<<cur_y<<endl;
-					cur_x=x_coord; //skipped
-					rotationSet=false;
-			    }
-			    if(cur_y-maxVelocity>y_coord)
-			    {
-			    	//cout<<"Here 10 "<<cur_y<<endl;
-					if(maxVelocity>yVelocity){
-						//cout<<"Here 11 "<<cur_y<<endl;
-					    cur_y-=yVelocity++;
-					}
-					else{
-						//cout<<"Here 12 "<<cur_y<<endl;
-					    cur_y-=yVelocity;
-					}
-			    }
-			    else if(cur_y>y_coord)
-			    {
-			    	//cout<<"Here 13 "<<cur_y<<endl;
-					cur_y=y_coord; //skipped
-					rotationSet=false;
-			    }
-			    else if(cur_y+maxVelocity<y_coord)
-			    {
-			    	//cout<<"Here 13"<<cur_y<<endl;
-					if(maxVelocity>yVelocity){
-						//cout<<"Here 14 "<<cur_y<<endl;
-					    cur_y+=yVelocity++;
-					}
-					else{
-						//cout<<"Here 15 "<<cur_y<<endl;
-					    cur_y+=yVelocity;
-					}
-			    }
-			    else if(cur_y<y_coord)
-			    {
-			    	//cout<<"Here 16 "<<cur_y<<endl;
-					cur_y=y_coord; //skipped
-					rotationSet=false;
-			    }
-			    //cout<<"Here 17 "<<cur_y<<endl;
-			    setX(cur_x);
-			    setY(cur_y);
+				
+			   	int xmov = 0;
+			   	int ymov = 0;
+
+			   	bool xai = false;
+			   	bool yai = false; 
+
+			  	cur_x = deterXAxisMovement(cur_x, x_coord, &xmov, &xai);
+			  	cur_y = deterYAxisMovement(cur_y, y_coord, &ymov, &yai);
+
+
+			  	reCalPath = colRes(osSprite, cur_x, cur_y, xmov, ymov, xai, yai);
+			
+			    
+			    
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
-				//cout<<"Here 18 "<<cur_y<<endl;
+				
 			    path->pop();
 			    rotationSet=false;
 			}
@@ -173,7 +108,201 @@ void AIShip::followPath()
 			setSpeedX(0);
 	        pathComplete=true;
 	    }
+
+	    return reCalPath;
 	}
+
+
+int AIShip::deterXAxisMovement(int cur_x, int x_coord, int* xmov, bool* xai){
+
+	int px = cur_x;
+	cur_x= moveRight(cur_x, x_coord, xai);
+
+	if(px != cur_x){
+		*xmov = 1;
+		return cur_x;
+	}
+
+	cur_x= moveLeft(cur_x, x_coord, xai);
+
+	if(px != cur_x){
+		*xmov = -1;
+		return cur_x;
+	}
+	
+	*xmov = 0;	
+	return cur_x;
+	
+}
+
+
+int AIShip::moveRight(int cur_x, int x_coord, bool* xai){
+
+	if(cur_x+maxVelocity<x_coord)
+	{
+	    
+		if(maxVelocity>xVelocity){
+			*xai = true;
+		    cur_x+=xVelocity++;
+		}
+		else{
+			
+		    cur_x+=xVelocity;
+		}
+	}
+	else if(cur_x<x_coord)
+	{
+	    	
+		cur_x=x_coord; //skipped
+		rotationSet=false;
+	}
+
+	return cur_x;
+}
+
+int AIShip::moveLeft(int cur_x, int x_coord, bool* xai){
+
+    if(cur_x-maxVelocity>x_coord)
+    {
+    	
+		if(maxVelocity>xVelocity){
+			
+			*xai = true;
+		    cur_x-=xVelocity++;
+		}
+		else{
+	
+		    cur_x-=xVelocity;
+		}
+    }
+    else if(cur_x>x_coord)
+    {
+    	
+		cur_x=x_coord; //skipped
+		rotationSet=false;
+    }
+
+  	return cur_x;
+
+}
+
+int AIShip::deterYAxisMovement(int cur_y, int y_coord, int * ymov, bool* yai){
+
+	int py = cur_y;
+	
+	cur_y= moveDown(cur_y, y_coord, yai);
+
+	if(py != cur_y){
+		*ymov = 1;
+		return cur_y;
+	}
+
+	cur_y= moveUp(cur_y, y_coord, yai);
+
+	if(py != cur_y){
+		*ymov = -1;
+		return cur_y;
+	}
+
+	
+	
+	*ymov = 0;	
+	return cur_y;
+
+}
+
+int AIShip::moveUp(int cur_y, int y_coord, bool* yai){
+
+    if(cur_y-maxVelocity>y_coord)
+    {
+    	
+		if(maxVelocity>yVelocity){
+			*yai = true;
+		    cur_y-=yVelocity++;
+		}
+		else{
+			
+		    cur_y-=yVelocity;
+		}
+    }
+    else if(cur_y>y_coord)
+    {
+    	
+		cur_y=y_coord; //skipped
+		rotationSet=false;
+    }
+
+    return cur_y;
+}
+
+int AIShip::moveDown(int cur_y, int y_coord, bool* yai){
+
+
+	if(cur_y+maxVelocity<y_coord)
+    {
+    	
+		if(maxVelocity>yVelocity){
+			*yai = true;
+		    cur_y+=yVelocity++;
+		}
+		else{
+			
+		    cur_y+=yVelocity;
+		}
+    }
+    else if(cur_y<y_coord)
+    {
+    	
+		cur_y=y_coord; //skipped
+		rotationSet=false;
+    }
+			    
+
+	return cur_y;
+}	
+
+bool AIShip::colRes(vector<Sprite *>* osSprite, int cur_x, int cur_y,int xmov, int ymov, bool xai, bool yai){
+	bool reCalc = false;
+	setX(cur_x);
+    if(check_all_collisions(getDrawBox(), *osSprite)){
+    	
+    	if(xai){
+    		xVelocity--;
+    	}
+
+    	if(xmov == 1){
+    		setX(cur_x - xVelocity);
+    		reCalc = true;
+    	}
+    	else if(xmov == -1){
+    		setX(cur_x + xVelocity);
+    		reCalc = true;
+    	}
+
+    		
+	}
+	
+	
+	setY(cur_y);
+	if(check_all_collisions(getDrawBox(), *osSprite)){
+		if(yai){
+    		yVelocity--;
+    	}
+		
+		if(ymov == 1){
+    		setY(cur_y - yVelocity);
+    		reCalc = true;
+    	}
+    	else if(ymov == -1){
+    		setY(cur_y + yVelocity);
+    		reCalc = true;
+    	}	
+
+	}
+
+	return reCalc;
+}
+
 //calculates the new angle and sets it in its own function
 void AIShip::calculateNewAngle(pair<int,int> destination)
 {
@@ -301,7 +430,6 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
 Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 {
     //first calculate the angle to rotate to
-    rotationSet=false;
     if(!rotationSet)
     {
 	calculateNewAngle(otherShip);
@@ -319,6 +447,23 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	//return fireWeapon(laser);
     }
     return Projectile(); //null/empty sprite
+}
+
+void AIShip::setHasTarget(bool nht){
+	hasTarget = nht;
+}
+bool AIShip::getHasTarget(){
+	return hasTarget;
+}
+
+void AIShip::setTargetShip(Ship* ts){
+	targetShip = ts;
+}
+Ship* AIShip::getTargetShip(){
+	return targetShip;
+}
+pair<int, int> AIShip::getTargetShipPos(){
+	return targetShip->getPosition();
 }
 
 Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 2, ally) {weaponType = 1;} ;

@@ -1,10 +1,10 @@
 #include "Star.h"
 Star::Star(): Sprite() {mass = 100;};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;initMass();};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;mass = m;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc): Sprite(dBox, aTex, dCirc){renderOrder = 2;initMass();type = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, NSDL_Circ dCirc, int m): Sprite(dBox, aTex, dCirc){renderOrder = 2;mass = m;type = 2;};
 //to be deprecated
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;initMass();};
-Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;mass = m;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex): Sprite(dBox, aTex){renderOrder = 2;initMass();type = 2;};
+Star::Star(SDL_Rect dBox, SDL_Texture* aTex, int m): Sprite(dBox, aTex){renderOrder = 2;mass = m;type = 2;};
 
 	int Star::getRadius()
 	{

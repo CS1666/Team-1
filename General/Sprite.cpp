@@ -58,6 +58,9 @@
 	bool Sprite::getIsAI(){
 		return isAI;
 	}
+	bool Sprite::getIsAsteroid(){
+		return isAst;
+	}
 	void Sprite::setX(float x){
 		Sprite::x = x;
 		drawBox.x = (int)Sprite::x;
@@ -134,7 +137,7 @@
 
 	bool Sprite::check_collision(SDL_Rect* a, SDL_Rect* b) {
 		// Check vertical overlap
-		if (a == b)
+		if (a->x==b->x && a->y==b->y && a->w==b->w && a->h==b->h)
 			return false;
 		if (a->y + a->h <= b->y)
 			return false;
@@ -201,16 +204,15 @@
 
 	bool Sprite::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 		bool isCollision = false;
-		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-		for (int i = 1; i < osSprite.size(); i++) {
-			//so, one of these should result in collison if they are the same box
+		
+		for (int i = 0; i < osSprite.size(); i++) {
+		
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
 			}
 			else
 				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
-			//std::cout << "Is last command Illegal?" << std::endl;
-			//std::cout << "Checked collisions: " << i << std::endl;
+			
 		}
 		
 		return isCollision;
@@ -219,14 +221,12 @@
 	bool Sprite::check_all_collisions(NSDL_Circ* a, std::vector<Sprite*> &osSprite){
 		bool isCollision = false;
 		//std::cout << "osEntity.size() = " << osEntity.size() << std::endl;
-		for (int i = 1; i < osSprite.size(); i++) {
+		for (int i = 0; i < osSprite.size(); i++) {
 			//so, one of these should result in collison if they are the same box
 			if (osSprite.at(i)->isCircEnt()){
 				isCollision = check_collision(a, osSprite.at(i)->getCollisionCirc());
 			}
-			
-			//std::cout << "Is last command Illegal?" << std::endl;
-			//std::cout << "Checked collisions: " << i << std::endl;
+		
 		}
 		return isCollision;
 	}
@@ -287,7 +287,10 @@
 		animLastTime = SDL_GetTicks();
 	}
 
-
+	bool Sprite::isHole()
+	{
+		return type == -1;
+	}
 
 	
 	
