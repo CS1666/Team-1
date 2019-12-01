@@ -519,18 +519,6 @@ void run_demo(gpRender gr){
 			ss_ent.setTexture(tex_ess);
 		}
 		
-		
-		for(int i=0;i<9;i++)
-		{
-			if(galaxy.getInControl(i)){
-				mapSprites[i].setTexture(playerMapTex);
-			}
-			else
-			{
-				mapSprites[i].setTexture(enemyMapTex);	
-			}	
-		}
-		
 
 		bool solar = true;
 
@@ -798,16 +786,16 @@ void run_demo(gpRender gr){
 				if(blink)
 				{
 					blink = false;
-					mapSprites[curSector-1].updateCredits(curMapTex);
+					mapSprites[curSector-1]->updateCredits(curMapTex);
 				}
 				else if(galaxy.getInControl(curSector-1))
 				{	
-					mapSprites[curSector-1].updateCredits(playerMapTex);
+					mapSprites[curSector-1]->updateCredits(playerMapTex);
 					blink = true;
 				}
 				else
 				{
-					mapSprites[curSector-1].updateCredits(enemyMapTex);
+					mapSprites[curSector-1]->updateCredits(enemyMapTex);
 					blink = true;
 				}
 			}
