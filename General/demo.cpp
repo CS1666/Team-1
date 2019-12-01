@@ -818,8 +818,6 @@ void run_demo(gpRender gr){
 					}
 					
 					blink = false;
-					
-					std::cout << "Blink: " << blink << std::endl;
 				}
 				else if(galaxy.getInControl(curSector-1))
 				{	
@@ -852,7 +850,6 @@ void run_demo(gpRender gr){
 					}
 					
 					blink = true;
-					std::cout << "PlayerMapTex: " << blink << std::endl;
 				}
 				else
 				{
@@ -885,12 +882,11 @@ void run_demo(gpRender gr){
 						sector9ent.updateCredits(enemyMapTex);
 					}
 					blink = true;
-					std::cout << "EnemyMapText: " << blink << std::endl;
 				}
 			}
 			
 
-			std::cout << "credits: " << credits << std::endl;
+			//std::cout << "credits: " << credits << std::endl;
 
 			hpent.setPercentage((float)playerent.getCurrHp()/(float)playerent.getMaxHp());
 			hpent.changeBar(playerent);
