@@ -449,7 +449,7 @@ bool AI::checkBounds(int x, int y)
 	return false;
 }
 
-void AI::createShip(bool isAlly){
+void AI::createShip(bool isAlly,int goal){
 
     //Create New Ally Ship
     if(isAlly){
@@ -465,7 +465,7 @@ void AI::createShip(bool isAlly){
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
                 newShip->setF(-1);
-                newShip->setGoal(0);
+                newShip->setGoal(goal);
                 newShip->setCurrHp(100);
                 newShip->setMaxHp(100);
                 osSprite->push_back(newShip);
