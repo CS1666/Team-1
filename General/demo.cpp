@@ -786,7 +786,7 @@ void run_demo(gpRender gr){
 				//SDL_Texture* playerMapTex = gr.loadImage("Assets/Objects/playerSector.png");
 				//SDL_Texture* enemyMapTex = gr.loadImage("Assets/Objects/enemySector.png");
 				//SDL_Texture* curMapTex = gr.loadImage("Assets/Objects/currentSector.png");
-				if(blink)
+				if(blink == true)
 				{
 					if(curSector == 1){
 						sector1ent.updateCredits(curMapTex);
