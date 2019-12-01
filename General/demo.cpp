@@ -851,6 +851,7 @@ void run_demo(gpRender gr){
 					}
 					
 					blink = true;
+					std::cout << "PlayerMapTex: " << blink << std::endl;
 				}
 				else
 				{
@@ -883,6 +884,7 @@ void run_demo(gpRender gr){
 						sector9ent.updateCredits(enemyMapTex);
 					}
 					blink = true;
+					std::cout << "EnemyMapText: " << blink << std::endl;
 				}
 			}
 			
