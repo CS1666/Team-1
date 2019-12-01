@@ -70,7 +70,7 @@ void AI::followShip(AIShip* ship){
 void AI::followPlayer(AIShip* ship){
 
     int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
-    cout<<distance<<endl;
+    //cout<<distance<<endl;
     if(distance > 150){
         followShip(ship);
     }
