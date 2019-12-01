@@ -783,33 +783,36 @@ void run_demo(gpRender gr){
 				credit.updateCredits(credit_tex);
 				
 				//Map UI
+				//SDL_Texture* playerMapTex = gr.loadImage("Assets/Objects/playerSector.png");
+				//SDL_Texture* enemyMapTex = gr.loadImage("Assets/Objects/enemySector.png");
+				//SDL_Texture* curMapTex = gr.loadImage("Assets/Objects/currentSector.png");
 				if(blink)
 				{
 					if(curSector == 1){
 						sector1ent.updateCredits(curMapTex);
 					}
-					else if curSector == 2){
+					else if (curSector == 2){
 						sector2ent.updateCredits(curMapTex);
 					}
-					else if curSector == 3){
+					else if (curSector == 3){
 						sector3ent.updateCredits(curMapTex);
 					}
-					else if curSector == 4){
+					else if (curSector == 4){
 						sector4ent.updateCredits(curMapTex);
 					}
-					else if curSector == 5){
+					else if (curSector == 5){
 						sector5ent.updateCredits(curMapTex);
 					}
-					else if curSector == 6){
+					else if (curSector == 6){
 						sector6ent.updateCredits(curMapTex);
 					}
-					else if curSector == 7){
+					else if (curSector == 7){
 						sector7ent.updateCredits(curMapTex);
 					}
-					else if curSector == 8){
+					else if (curSector == 8){
 						sector8ent.updateCredits(curMapTex);
 					}
-					else if curSector == 9){
+					else if (curSector == 9){
 						sector9ent.updateCredits(curMapTex);
 					}
 					
@@ -820,28 +823,28 @@ void run_demo(gpRender gr){
 					if(curSector == 1){
 						sector1ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 2){
+					else if (curSector == 2){
 						sector2ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 3){
+					else if (curSector == 3){
 						sector3ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 4){
+					else if (curSector == 4){
 						sector4ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 5){
+					else if (curSector == 5){
 						sector5ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 6){
+					else if (curSector == 6){
 						sector6ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 7){
+					else if (curSector == 7){
 						sector7ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 8){
+					else if (curSector == 8){
 						sector8ent.updateCredits(playerMapTex);
 					}
-					else if curSector == 9){
+					else if (curSector == 9){
 						sector9ent.updateCredits(playerMapTex);
 					}
 					
@@ -851,29 +854,30 @@ void run_demo(gpRender gr){
 				{
 					if(curSector == 1){
 						sector1ent.updateCredits(enemyMapTex);
+						
 					}
-					else if curSector == 2){
+					else if (curSector == 2){
 						sector2ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 3){
+					else if (curSector == 3){
 						sector3ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 4){
+					else if (curSector == 4){
 						sector4ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 5){
+					else if (curSector == 5){
 						sector5ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 6){
+					else if (curSector == 6){
 						sector6ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 7){
+					else if (curSector == 7){
 						sector7ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 8){
+					else if (curSector == 8){
 						sector8ent.updateCredits(enemyMapTex);
 					}
-					else if curSector == 9){
+					else if (curSector == 9){
 						sector9ent.updateCredits(enemyMapTex);
 					}
 					blink = true;
