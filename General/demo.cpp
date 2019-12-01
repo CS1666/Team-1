@@ -775,7 +775,7 @@ void run_demo(gpRender gr){
 			}
 			//--- END OF SPACE STATION UI SUB LOOP ---
 
-			bool blink = false;
+			bool blink = true;
 			if(SDL_GetTicks() - creditInterval > 2000){
 				credits += 5;
 				creditInterval = SDL_GetTicks();
