@@ -6,6 +6,7 @@ class AIShip: public Ship{
     public:
 		AIShip();
 		AIShip(SDL_Rect dbox,SDL_Texture* aTex,bool ally);
+    AIShip(SDL_Rect dbox,SDL_Texture* aTex, int anim, bool ally);
 		bool followPath(vector<Sprite *>* osSprite);
 		void setGoal(int newGoal);
 		int getGoal();
@@ -28,6 +29,7 @@ class AIShip: public Ship{
 		Ship* getTargetShip();
 
 		pair<int,int> getTargetShipPos();
+
     private:
 		void calculateNewAngle(pair<int,int> destination);
 		void collision_check(int x, int y, vector<Sprite *>* osSprite);
@@ -54,4 +56,19 @@ class AIShip: public Ship{
 
 		bool hasTarget = false;
 		Ship* targetShip;
+};
+
+class Fighter: public AIShip{
+    public:
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
+};
+
+class Cruiser: public AIShip{
+    public:
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
+};
+
+class Capital: public AIShip{
+    public:
+        Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
 };

@@ -1,3 +1,4 @@
+#include "../AI/AIShip.h"
 #include "Ship.h"
 #include <SDL.h> //temp
 #include <iostream>
@@ -300,15 +301,24 @@ int Ship::getMass()
 	return mass;	
 }
 
-Projectile Ship::fireWeapon(SDL_Texture* texture)
+void Ship::fireWeapon()
 {
-	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*1.1*.0174533);
-	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*1.1*.0174533);
-	SDL_Rect ldb = {X, Y, 2, 10};
-	Projectile laser(ldb, texture, weaponType);	
-	laser.setAngle(getAngle());
-	setFireLastTime();
-	return laser;
+	if (SDL_GetTicks() - getFireLastTime() > 500) {	
+		fired = true;
+		setFireLastTime();
+	}
+}
+
+void Ship::getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture){
+	if(fired){
+		int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*.0174533);
+		int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*.0174533);
+		SDL_Rect projBox = {X, Y, 2, 10};
+		Projectile* laser = new Projectile(projBox, texture, weaponType);	
+		laser->setAngle(getAngle());
+		osSprite.push_back(laser);
+		fired = false;
+	}
 }
 
 Projectile Ship::fireWeaponatme(SDL_Texture* texture)
@@ -449,8 +459,9 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 	}
 }
 
-Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 1;} ;
+/*Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 2, ally) {weaponType = 1;} ;
 
-Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 3;} ;
+Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 4, ally) {weaponType = 3;} ;
 
-Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 4;} ;
+Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 6, ally) {weaponType = 4;} ;*/
+
