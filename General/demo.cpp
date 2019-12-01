@@ -343,6 +343,7 @@ void run_demo(gpRender gr){
 	
 	//current sector
 	int curSector = 8;
+	bool blink = false;
 	
 	//Credits* mapSprites[] = {&sector1ent, &sector2ent, &sector3ent, &sector4ent, &sector5ent, &sector6ent, &sector7ent, &sector8ent, &sector9ent};
 	
@@ -775,7 +776,7 @@ void run_demo(gpRender gr){
 			}
 			//--- END OF SPACE STATION UI SUB LOOP ---
 
-			bool blink = true;
+			
 			if(SDL_GetTicks() - creditInterval > 2000){
 				credits += 5;
 				creditInterval = SDL_GetTicks();
