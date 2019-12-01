@@ -531,7 +531,7 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-	
+			
 			
 			if(galaxy.getInControl(curSector - 1))
 			{
@@ -931,6 +931,46 @@ void run_demo(gpRender gr){
 					if(curSector != 1 && curSector != 4 && curSector != 7)
 					{
 						side = 2;
+						if(galaxy.getInControl(curSector-1)){
+							if(curSector == 2){
+								sector2ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 3){
+								sector3ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 9){
+								sector9ent.updateCredits(playerMapTex);
+							}
+						}
+						else{
+							if(curSector == 2){
+								sector2ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 3){
+								sector3ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 9){
+								sector9ent.updateCredits(enemyMapTex);
+							}
+						}
 						curSector--;
 					}
 					else
@@ -945,6 +985,47 @@ void run_demo(gpRender gr){
 					if(curSector != 3 && curSector != 6 && curSector != 9)
 					{
 						side = 0;
+						
+						if(galaxy.getInControl(curSector-1)){
+							if(curSector == 2){
+								sector2ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 1){
+								sector1ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 4){
+								sector4ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 7){
+								sector7ent.updateCredits(playerMapTex);
+							}
+						}
+						else{
+							if(curSector == 2){
+								sector2ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 1){
+								sector1ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 4){
+								sector4ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 7){
+								sector7ent.updateCredits(enemyMapTex);
+							}
+						}
 						curSector++;
 					}
 					else
@@ -959,6 +1040,46 @@ void run_demo(gpRender gr){
 					if(curSector != 1 && curSector != 2 && curSector != 3)
 					{
 						side = 1;
+						if(galaxy.getInControl(curSector-1)){
+							if(curSector == 4){
+								sector4ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 7){
+								sector7ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 9){
+								sector9ent.updateCredits(playerMapTex);
+							}
+						}
+						else{
+							if(curSector == 4){
+								sector4ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 7){
+								sector7ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 8){
+								sector8ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 9){
+								sector9ent.updateCredits(enemyMapTex);
+							}
+						}
 						curSector -= 3;
 					}
 					else
@@ -973,6 +1094,46 @@ void run_demo(gpRender gr){
 					if(curSector != 7 && curSector != 8 && curSector != 9)
 					{
 						side = 3;
+						if(galaxy.getInControl(curSector-1)){
+							if(curSector == 2){
+								sector2ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 3){
+								sector3ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 1){
+								sector1ent.updateCredits(playerMapTex);
+							}
+							else if(curSector == 4){
+								sector4ent.updateCredits(playerMapTex);
+							}
+						}
+						else{
+							if(curSector == 2){
+								sector2ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 3){
+								sector3ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 5){
+								sector5ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 6){
+								sector6ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 1){
+								sector1ent.updateCredits(enemyMapTex);
+							}
+							else if(curSector == 4){
+								sector4ent.updateCredits(enemyMapTex);
+							}
+						}
 						curSector += 3;
 					}
 					else
