@@ -808,6 +808,7 @@ void run_demo(gpRender gr){
 				else
 				{
 					mapSprites[curSector-1].updateCredits(enemyMapTex);
+					blink = true;
 				}
 			}
 			
