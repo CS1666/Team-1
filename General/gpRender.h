@@ -2,6 +2,7 @@
 #include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <string>
 #include "Sprite.h"
 #include "../General/Ship.h"
@@ -32,6 +33,7 @@ class gpRender{
 
 		//Loads Images into a Texture
 		SDL_Texture* loadImage(std::string fname);
+		SDL_Texture* loadText(std::string text);
 
 		void setFrameStart(Uint32 tick);
 		Uint32 getFrameStart();

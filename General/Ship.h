@@ -94,6 +94,7 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
+        Projectile fireWeaponatme(SDL_Texture* texture); 
         Uint32 getFireLastTime();
 		void setFireLastTime();
 
@@ -102,13 +103,16 @@ class Ship : public Sprite
         bool getIsAlly();
 };
 
-class Hero: public Ship{        
+class Hero: public Ship{
+	private:
+	    int shipType;
         public:
-                Hero(SDL_Rect dBox, SDL_Texture* aTex);
-                
-                bool handleKeyEvents(SDL_Event e);
-                void handleKeyUpEvent(SDL_Event e);
-                void handleKeyDownEvent(SDL_Event e);
+            Hero(SDL_Rect dBox, SDL_Texture* aTex);
+            bool handleKeyEvents(SDL_Event e);
+            void handleKeyUpEvent(SDL_Event e);
+            void handleKeyDownEvent(SDL_Event e);
+	    int getType();
+	    void upgradeType();
 };
 
 class Fighter: public Ship{
