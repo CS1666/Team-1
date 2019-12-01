@@ -1,7 +1,7 @@
 #include "theta.h"
 
 
-constexpr int MAX_DEPTH=5000; //max depth before we force backtrack rebuild
+constexpr int MAX_DEPTH=10000; //max depth before we force backtrack rebuild
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 Pathfinder::Pathfinder(Mesh  m, int v) : visionRange(v), mesh(m){
@@ -198,7 +198,7 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
     }
     else{
   
-        if (line_of_sight(s, neighbor))
+        if (line_of_sight(parent[s], neighbor))
         {   
 
             if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
