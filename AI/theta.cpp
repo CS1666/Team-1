@@ -9,8 +9,6 @@ Pathfinder::Pathfinder(Mesh  m, int v) : visionRange(v), mesh(m){
     parent = std::unordered_map<Point, Point, CantorHash>();
     closed = std::unordered_set<Point, CantorHash>();
     open =  new p_queue(ZONE_WIDTH, ZONE_HEIGHT);
-    
-
 }
 // Takes 2 points and gives a queue representing a path of points to the destination
 Path Pathfinder::pathfind(Point start, Point goal, Sprite* currShip)
@@ -29,17 +27,11 @@ Path Pathfinder::pathfind(Point start, Point goal, Sprite* currShip)
     //std::cout<<start.second<<std::endl;
     // Parent is used for backtracing in reconstruct_path()
     parent.insert(std::pair<Point, Point>(start, start));
-    //std::cout<<parent[start].first<<std::endl;
-    //std::cout<<parent[start].second<<std::endl;
+   
     // Open is the open set, aka a priority queue of points with their 'cost'
     // For now I'm using euclidean distance from the goal as my heuristic
-    ////std::cout << "Before p_queue" << std::endl;
-    ////std::cout << "After p_queue" << std::endl;
-
-    ////std::cout << "Before insert" << std::endl;
+   
     open->insert(start, 0);
-    ////std::cout << "After insert" << std::endl;
-
     
     // Closed is the closed set unsurprisingly
 
@@ -52,57 +44,41 @@ Path Pathfinder::pathfind(Point start, Point goal, Sprite* currShip)
         // Get the point with the LOWEST expected cost
         //std::cout << "Before pop" << std::endl;
         Point s = open->pop();
-        //std::cout << "After pop" << std::endl;
-        //std::cout << "x: " << s.first << "y: " << s.second << std::endl;
+
         if (s == goal||counter++==MAX_DEPTH)
         {   
-            //std::cout << "reconstructing" << std::endl;
             return reconstruct_path(s);
         }
 
-        //std::cout << "size 2 " << open->getSize() << std::endl;
         closed.insert(s);
 
-        //std::cout << "size:  " << open->getSize() << std::endl;
-
+      
         std::vector<Point> npath = neighborhood(s, currShip);
         //std::cout << "--------Begining Neigh--------"<< std::endl;
         for (std::pair<int,int> neighbor : npath)
         {
             
-            //std::cout << "Iter " << i << "Size " << npath.size() << std::endl;
+
             i = i + 1;
 
             auto inClosed = closed.find(neighbor);
-            //std::cout << "Stuck c" << i << std::endl;
-
 
             if (inClosed == closed.end())
             {   
 
-                
-                //std::cout << "Stuck d" << i << std::endl;
-
                 if (!open->contains(neighbor))
                 {
-                    //std::cout << "Stuck b " << i + 20 << std::endl;
                     //setting cost to 'infinite'
                     gScore.insert(std::pair<Point, double>(neighbor, std::numeric_limits<double>::max()));
                     parent.insert(std::pair<Point, Point>(neighbor, start));
                 }
-                //std::cout << "UP V " << i + 20 << std::endl;
                 update_vertex(s, neighbor, goal);
-                 //if(neighbor.first == 100 and neighbor.second == 200){
-                    //open->print_pque();
-                //}
-    
-                //std::cout << "Done up V " << i + 20 << std::endl;
+
             }
         }
-        //std::cout << "-----------End  Neigh--------"<< std::endl;
     }
-    std::cout << "Stuck 4" << std::endl;
-   
+
+   std::cout<<"Stuck"<<std::endl;
     return new std::queue<Point>();
 }
 
@@ -133,16 +109,14 @@ std::vector<Point> Pathfinder::neighborhood(Point s, Sprite* currShip)
     
     std::vector<Point> result = defineNeighbors(s);
     std::vector<Point> fresult;
-    //std::cout << "Bf iter "  << std::endl;                    
+               
     for(Point itr : result)
     {   
         
         if (isTraversable(itr, currShip))
-        {
-            
+        {    
             fresult.push_back(itr);
         }
-        //std::cout << "Lff iter"  << std::endl;
     }
     return fresult;
 }
@@ -219,15 +193,12 @@ bool Pathfinder::isOutofBound(Point s, int xdif, int ydif){
 void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
 {       
     if(neighbor == goal){
-
         open->ndelete(neighbor);
-               
         open->insert(neighbor, 0);
     }
-
     else{
   
-        if (line_of_sight(s, neighbor))
+        if (line_of_sight(parent[s], neighbor))
         {   
 
             if (gScore[parent[s]] + distance(parent[s], neighbor) < gScore[neighbor])
@@ -246,17 +217,12 @@ void Pathfinder::update_vertex(Point s, Point neighbor, Point goal)
             {
                 gScore[neighbor] = gScore[s] + distance(s, neighbor);
                 parent[neighbor] = s;
-               
-                open->ndelete(neighbor);
-                
+                open->ndelete(neighbor); 
                 open->insert(neighbor, gScore[neighbor] + heuristic(neighbor, goal));
             }
         }
 
-    }
-
-    
-   
+    }   
 }
 
 

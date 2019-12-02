@@ -32,6 +32,7 @@ typedef std::vector<Sprite *>* Mesh;
             Path pathfind(Point start, Point goal, Sprite* currShip);
             void update_mesh(Mesh m);
             bool isTraversable(Point s, Sprite* currShips);
+            int distance(Point p1, Point p2);
 
     
         private:
@@ -42,7 +43,7 @@ typedef std::vector<Sprite *>* Mesh;
             p_queue* open;
             std::unordered_set<Point, CantorHash> closed;
             int heuristic(Point p1, Point p2);
-            int distance(Point p1, Point p2);
+            
             bool line_of_sight(Point p1, Point p2);
             std::vector<Point> neighborhood(Point s, Sprite* currShip);
 

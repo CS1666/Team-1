@@ -97,17 +97,19 @@ void p_queue::swap_nodes(int a, int b){
     Point pa = container->begin()[a].first;
     Point pb = container->begin()[b].first;
 
-    indirection[pa] = b;
-    indirection[pb] = a;
+    indirection[pa] = a;
+    indirection[pb] = b;
 
 }
 void p_queue::insert(Point& x, double p)
 {   
     auto elem = std::pair<Point, double>(x,p);
 
+    //std::cout << "Before insert " << container->size() << std::endl;
     //Addes element to bottom of heap and adds to indirection
     container->push_back(elem);
     indirection[x] = (container->size() - 1);
+    //std::cout << "After insert " << container->size() << std::endl;
 
     //Begins heapify process
     push_up_heap(container->size() - 1); 
@@ -142,11 +144,25 @@ Point& p_queue::pop()
 void p_queue::ndelete(Point& P){
     //std::cout << "Deleting 1" << std::endl;
     if(contains(P)){
+        //std::cout << "Before Delete " << container->size() << std::endl;
         //std::cout << "Deleting 2" << std::endl;
+
         int index = indirection[P];
-        swap_nodes(index, container->size() - 1);
-        pop();
-        push_down_heap(index);
+
+        if(index == container->size() - 1){
+            container->pop_back();
+            indirection[P] = -1;
+
+        }
+        else{
+            swap_nodes(index, container->size() - 1);
+            container->pop_back();
+            indirection[P] = -1;
+            push_down_heap(index);
+        }
+
+        //std::cout << "After Delete " << container->size() << std::endl;
+        
     }
     
 }

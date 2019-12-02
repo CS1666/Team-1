@@ -18,7 +18,7 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	isAI = true;
 	setX(dBox.x);
 	setY(dBox.y);
-	maxVelocity=10;
+	maxVelocity=20;
 	maxRotation=10;
 	isUser=false;
 	maxHp=50;
@@ -32,6 +32,7 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 	    //note: change the path in Ship.h to whatever is returned.
 	    if(!path->empty())
 	    {
+	    	std::cout << path->size() << std::endl;
 			//note: assumed whatever we're using is some (x,y)
 			pair<int,int> coords=path->front();
 			int x_coord=coords.first;
@@ -40,6 +41,16 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			int cur_y=getY();
 			double xSlope=x_coord-cur_x;
 			double ySlope=y_coord-cur_y;
+
+			if(cur_x==x_coord&&cur_y==y_coord)
+			{
+				
+			    path->pop();
+			   	coords=path->front();
+				x_coord=coords.first;
+				y_coord=coords.second;
+			    rotationSet=false;
+			}
 			//get angle of destination
 			if(!rotationSet)
 			{
@@ -54,7 +65,7 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			//note: since we don't have updateMovement implemented, most
 			//of the stuff here can probably be removed/handled by that
 			//simulate turning, acceleration of ship
-			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
+			if((cur_x != x_coord || cur_y != y_coord))
 			{	
 				
 			   	int xmov = 0;
@@ -72,12 +83,7 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			    
 			    
 			}
-			else if(cur_x==x_coord&&cur_y==y_coord)
-			{
-				
-			    path->pop();
-			    rotationSet=false;
-			}
+		
 	    }
 	    else
 	    {
@@ -242,7 +248,7 @@ bool AIShip::colRes(vector<Sprite *>* osSprite, int cur_x, int cur_y,int xmov, i
 	bool reCalc = false;
 	setX(cur_x);
     if(check_all_collisions(getDrawBox(), *osSprite)){
-    	
+    	//std::cout << "Collison on x" << std::endl;
     	if(xai){
     		xVelocity--;
     	}
@@ -262,6 +268,7 @@ bool AIShip::colRes(vector<Sprite *>* osSprite, int cur_x, int cur_y,int xmov, i
 	
 	setY(cur_y);
 	if(check_all_collisions(getDrawBox(), *osSprite)){
+		//std::cout << "Collison on Y" << std::endl;
 		if(yai){
     		yVelocity--;
     	}
@@ -424,4 +431,22 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	return fireWeapon(laser);
     }
     return Projectile(); //null/empty sprite
+}
+
+
+void AIShip::setHasTarget(bool nht){
+	hasTarget = nht;
+}
+bool AIShip::getHasTarget(){
+	return hasTarget;
+}
+
+void AIShip::setTargetShip(Ship* ts){
+	targetShip = ts;
+}
+Ship* AIShip::getTargetShip(){
+	return targetShip;
+}
+pair<int, int> AIShip::getTargetShipPos(){
+	return targetShip->getPosition();
 }

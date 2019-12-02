@@ -20,6 +20,14 @@ class AIShip: public Ship{
 		Uint32 getTime();
 		void switchFreeForm();
 		void setTime(Uint32 startTime);
+
+		void setHasTarget(bool nht);
+		bool getHasTarget();
+
+		void setTargetShip(Ship* ts);
+		Ship* getTargetShip();
+
+		pair<int,int> getTargetShipPos();
     private:
 		void calculateNewAngle(pair<int,int> destination);
 		void collision_check(int x, int y, vector<Sprite *>* osSprite);
@@ -43,4 +51,7 @@ class AIShip: public Ship{
         bool pathset;
 		bool freeForm;
 		Uint32 timeActivated;
+
+		bool hasTarget = false;
+		Ship* targetShip;
 };
