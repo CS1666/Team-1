@@ -157,12 +157,12 @@ void run_lg_enviro(gpRender gr){
 				}
 				
 				anim_last_time = SDL_GetTicks();
-				playerent.setF(animation);
+				playerent.setF1(animation);
 			}
 		}
 		else{
 			animation = 0;
-			playerent.setF(animation);
+			playerent.setF1(animation);
 		}
 
 		//Renders all renderable objects onto the screen
