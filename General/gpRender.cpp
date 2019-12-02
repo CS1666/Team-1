@@ -132,7 +132,7 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
 			SDL_Rect camcenter = {SCREEN_WIDTH/2 - entity->getW()/2, SCREEN_HEIGHT/2 - entity->getH()/2, entity->getW(), entity->getH()};
-			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+			SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
 
@@ -146,13 +146,13 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 		
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
-			if(entity->getF() < 0){
+			if(entity->getF().second < 0){
 				//std::cout << "Render 2" << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
 			else{
 				//std::cout << "Render 3" << std::endl;
-				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 				//std::cout << entity->getTexture() << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
@@ -168,13 +168,13 @@ void gpRender::renderOnScreenEntity(std::vector<Sprite*> osEntity, std::vector<i
 		
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
-			if(entity->getF() < 0){
+			if(entity->getF().second < 0){
 				//std::cout << "Render 4" << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
 			else{
 				//std::cout << "Render 5" << std::endl;
-				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
 		
@@ -259,7 +259,7 @@ void gpRender::renderOnScreenEntity(std::vector<int> galaxies, std::vector<std::
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
 			SDL_Rect camcenter = {SCREEN_WIDTH/2 - entity->getW()/2, SCREEN_HEIGHT/2 - entity->getH()/2, entity->getW(), entity->getH()};
-			SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+			SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 			SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &camcenter, entity->getAngle(), &center, SDL_FLIP_NONE);
 		}
 
@@ -273,13 +273,13 @@ void gpRender::renderOnScreenEntity(std::vector<int> galaxies, std::vector<std::
 		
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
-			if(entity->getF() < 0){
+			if(entity->getF().second < 0){
 				//std::cout << "Render 2" << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
 			else{
 				//std::cout << "Render 3" << std::endl;
-				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 				//std::cout << entity->getTexture() << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
@@ -295,13 +295,13 @@ void gpRender::renderOnScreenEntity(std::vector<int> galaxies, std::vector<std::
 		
 			center.x = entity->getW()/2;
 			center.y = entity->getH()/2;
-			if(entity->getF() < 0){
+			if(entity->getF().second < 0){
 				//std::cout << "Render 4" << std::endl;
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), nullptr, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);
 			}
 			else{
 				//std::cout << "Render 5" << std::endl;
-				SDL_Rect animBox = {entity->getF() * entity->getW(), 0, entity->getW(), entity->getH()};
+				SDL_Rect animBox = {entity->getF().first * entity->getW(), entity->getF().second * entity->getH(), entity->getW(), entity->getH()};
 				SDL_RenderCopyEx(gRenderer, entity->getTexture(), &animBox, &campos, entity->getAngle(), &center, SDL_FLIP_NONE);		
 			}
 		
@@ -352,6 +352,41 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 	newText = SDL_CreateTextureFromSurface(gRenderer, startSurf);
 	if (newText == nullptr) {
 		std::cout << "Unable to create texture from " << fname << "! SDL Error: " << SDL_GetError() << std::endl;
+	}
+
+	image_width = startSurf->w;
+	image_height = startSurf->h;
+	
+	SDL_FreeSurface(startSurf);
+
+	return newText;
+}
+
+SDL_Texture* gpRender::loadText(std::string text)
+{
+	TTF_Init();
+	SDL_Texture* newText = nullptr;
+	SDL_Color color = {255, 255, 255};
+	TTF_Font *font = TTF_OpenFont("Assets/OpenSans-Bold.ttf", 20);
+	if(font == nullptr)
+	{
+		std::cout << "Failed to load font." << std::endl 
+			<< "SDL_ttf Error: " << TTF_GetError() << std::endl;
+		return nullptr;
+	}
+	
+
+	SDL_Surface* startSurf = TTF_RenderText_Solid(font, text.c_str(), color);
+	if (startSurf == nullptr) {
+		std::cout << "Unable to render text surface." << endl
+		<< "SDL Error: " << SDL_GetError() << std::endl;
+		return nullptr;
+	}
+
+	newText = SDL_CreateTextureFromSurface(gRenderer, startSurf);
+	if (newText == nullptr) {
+		std::cout << "Unable to create texture from text."
+		<<  "SDL Error: " << SDL_GetError() << std::endl;
 	}
 
 	image_width = startSurf->w;

@@ -18,6 +18,7 @@ class Projectile : public Sprite
 	    float rotation;
         string currKey;
         int damage;
+        bool ally = false;//true if from ally faction to prevent friendly fire
 
     public:
         Projectile();
@@ -25,6 +26,7 @@ class Projectile : public Sprite
         Projectile(const Projectile &spr);
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         int getDamage();
+        void setAlly(bool isAlly);
         bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);
         bool isProjectile();
 };
