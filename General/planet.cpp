@@ -96,6 +96,34 @@ void Planet::updatePosition(Sprite& playerent)
 	//std::cout << "planet X: " << this->getTrueX() << std::endl;
 	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
 }
+void Planet::updatePosition(std::vector<Sprite*> osSprite)
+{
+	std::vector<float> gravs = calulateGravity(sun);
+	fx = gravs[0];
+	fy = gravs[1];
+	//std::cout << "fx : " << fx << std::endl;
+	//std::cout << "fy : " << fy << std::endl;
+	//std::cout << "vx : " << vx << std::endl;
+	//std::cout << "vy : " << vy << std::endl;
+	vx += fx*TimeData::get_timestep();
+	vy += fy*TimeData::get_timestep();
+	this->setX((float)(this->getTrueX() + vx*TimeData::get_timestep()));
+	this->setY((float)(this->getTrueY() + vy*TimeData::get_timestep()));
+	for (auto ent : osSprite)
+	{
+		if(dynamic_cast<Ship*>(ent))
+		{
+			if(check_collision(ent->getDrawBox(),this->getCollisionCirc()))
+			{
+				//std::cout<<"planet collision" << std::endl;
+				ent->setX((float)(ent->getTrueX() + vx*TimeData::get_timestep()));
+				ent->setY((float)(ent->getTrueY() + vy*TimeData::get_timestep()));
+			}
+		}
+	}
+	//std::cout << "planet X: " << this->getTrueX() << std::endl;
+	//std::cout << "planet Y: " << this->getTrueY() << std::endl;
+}
 //for now only calculate the gravity contribution from the sun
 std::vector<float> Planet::calulateGravity(Star& sun)
 {

@@ -8,11 +8,13 @@
 #include <algorithm>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <chrono>
 #include "../General/Sprite.h"
 #include "../General/HpBar.h"
 #include "../General/Ship.h"
 #include "../General/planet.h"
 #include "../General/Star.h"
+#include "../General/Blackhole.h"
 #include "../General/SpaceStation.h"
 #include "../General/SpaceStationUI.h"
 #include "../General/asteroid.h"
@@ -23,4 +25,9 @@
 #include "../Level_Generation/Ellers_Maze.h"
 #include "../AI/AI.h"
 #include "../General/Sector.h"
+#include "../General/GalaxyControl.h"
+#include "../General/Constants.h"
+#include "../General/Credits.h"
+#include <thread>
 void run_demo(gpRender gr);
+void aiRoutine(AI ai, bool* computePath, bool* run, bool* done);

@@ -7,7 +7,7 @@ FOLDERS = $(wildcard ./General/*.o)\
 		
 CC = clang++
 COMPILER_FLAGS = -g -Wall -I/usr/include/SDL2 -std=c++11
-LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+LINKER_FLAGS = -lpthread -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
 
 all: 
