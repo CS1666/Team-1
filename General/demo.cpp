@@ -268,20 +268,58 @@ void run_demo(gpRender gr){
 	SDL_Rect r_rect = {50, 170, 100, 100};
 	SpaceStationUI r_UI(r_rect, r_tex);
 
+	SDL_Texture* R50_tex = gr.loadImage("Assets/Objects/50.png");
+	SDL_Rect R50_rect = {150, 170, 100, 100};
+	SpaceStationUI R50_UI(R50_rect, R50_tex);
+
+	SDL_Texture* AISHIP_tex = gr.loadImage("Assets/Objects/AISHIP.png");
+	SDL_Rect AISHIP_rect = {250, 170, 100, 100};
+	SpaceStationUI AISHIP_UI(AISHIP_rect, AISHIP_tex);
+
+	int prev_upgrade_state = 0;
+
 	SDL_Texture* t_tex = gr.loadImage("Assets/Objects/T.png");
 	SDL_Rect t_rect = {50, 290, 100, 100};
 	SpaceStationUI t_UI(t_rect, t_tex);
+
+	SDL_Texture* T50_tex = gr.loadImage("Assets/Objects/50.png");
+	SDL_Rect T50_rect = {150, 290, 100, 100};
+	SpaceStationUI T50_UI(T50_rect, T50_tex);
+
+	SDL_Texture* T100_tex = gr.loadImage("Assets/Objects/100.png");
+	SDL_Rect T100_rect = {150, 290, 100, 100};
+	SpaceStationUI T100_UI(T100_rect, T100_tex);
+
+	SDL_Texture* upgrade_tex = gr.loadImage("Assets/Objects/upgrade.png");
+	SDL_Rect upgrade_rect = {250, 290, 100, 100};
+	SpaceStationUI upgrade_UI(upgrade_rect, upgrade_tex);
 
 	SDL_Texture* y_tex = gr.loadImage("Assets/Objects/Y.png");
 	SDL_Rect y_rect = {50, 410, 100, 100};
 	SpaceStationUI y_UI(y_rect, y_tex);
 
+	SDL_Texture* Y5_tex = gr.loadImage("Assets/Objects/5.png");
+	SDL_Rect Y5_rect = {150, 410, 100, 100};
+	SpaceStationUI Y5_UI(Y5_rect, Y5_tex);
+
+	SDL_Texture* smallheal_tex = gr.loadImage("Assets/Objects/smallheal.png");
+	SDL_Rect smallheal_rect = {250, 410, 100, 100};
+	SpaceStationUI smallheal_UI(smallheal_rect, smallheal_tex);
+
 	SDL_Texture* u_tex = gr.loadImage("Assets/Objects/U.png");
 	SDL_Rect u_rect = {50, 530, 100, 100};
 	SpaceStationUI u_UI(u_rect, u_tex);
 
+	SDL_Texture* U50_tex = gr.loadImage("Assets/Objects/50.png");
+	SDL_Rect U50_rect = {150, 530, 100, 100};
+	SpaceStationUI U50_UI(U50_rect, U50_tex);
+
+	SDL_Texture* fullheal_tex = gr.loadImage("Assets/Objects/fullheal.png");
+	SDL_Rect fullheal_rect = {250, 530, 100, 100};
+	SpaceStationUI fullheal_UI(fullheal_rect, fullheal_tex);
+	
 	SDL_Texture* ss_UI_tex = gr.loadImage("Assets/Objects/spaceStation.png");
-	SDL_Rect ss_UI_rect = { 300, 100, 200, 200};
+	SDL_Rect ss_UI_rect = { 300, 0, 200, 200};
 	SpaceStationUI ss_UI(ss_UI_rect, ss_UI_tex);
 	
 	SDL_Texture * tex_ess = gr.loadImage("Assets/Objects/enemyStation.png");
@@ -665,15 +703,41 @@ void run_demo(gpRender gr){
 								in_space_station_menu = true;
 								ss_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&ss_UI);
+
 								r_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&r_UI);
-								t_UI.set_spriteIndex(osSprite.size());
-								if(playerent.getType()!=2)
+								R50_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&R50_UI);
+								AISHIP_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&AISHIP_UI);
+
+								prev_upgrade_state = playerent.getType();
+								if(prev_upgrade_state!=2) {
+									t_UI.set_spriteIndex(osSprite.size());
 								    osSprite.push_back(&t_UI);
+									if(prev_upgrade_state == 0) {
+										T50_UI.set_spriteIndex(osSprite.size());
+								    	osSprite.push_back(&T50_UI);
+									} else if(prev_upgrade_state == 1) {
+										T100_UI.set_spriteIndex(osSprite.size());
+								    	osSprite.push_back(&T100_UI);
+									}
+									upgrade_UI.set_spriteIndex(osSprite.size());
+								    osSprite.push_back(&upgrade_UI);
+								}
 								y_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&y_UI);
+								Y5_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&Y5_UI);
+								smallheal_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&smallheal_UI);
+
 								u_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&u_UI);
+								U50_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&U50_UI);
+								fullheal_UI.set_spriteIndex(osSprite.size());
+								osSprite.push_back(&fullheal_UI);
 							}
 						}
 						break;
@@ -693,11 +757,27 @@ void run_demo(gpRender gr){
 							if(e.type == SDL_KEYDOWN){
 								if(in_space_station_menu && is_space_station_in_range) {
 									in_space_station_menu = false;
+									osSprite.erase(osSprite.begin() + fullheal_UI.get_spriteIndex() );
+									osSprite.erase(osSprite.begin() + U50_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + u_UI.get_spriteIndex());
+
+									osSprite.erase(osSprite.begin() + smallheal_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + Y5_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + y_UI.get_spriteIndex());
-									if(playerent.getType()!=2)
-									    osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
+
+									if(prev_upgrade_state!=2) {
+										osSprite.erase(osSprite.begin() + upgrade_UI.get_spriteIndex());
+										if(prev_upgrade_state == 0) {
+											osSprite.erase(osSprite.begin() + T50_UI.get_spriteIndex());
+										} else if(prev_upgrade_state == 1) {
+											osSprite.erase(osSprite.begin() + T100_UI.get_spriteIndex());
+										}
+										osSprite.erase(osSprite.begin() + t_UI.get_spriteIndex());
+									}
+									osSprite.erase(osSprite.begin() + AISHIP_UI.get_spriteIndex());
+									osSprite.erase(osSprite.begin() + R50_UI.get_spriteIndex());
 									osSprite.erase(osSprite.begin() + r_UI.get_spriteIndex());
+
 									osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
 								}
 							}
@@ -705,7 +785,7 @@ void run_demo(gpRender gr){
 		
 						case SDLK_r:
 							if(e.type == SDL_KEYDOWN){
-								if(credits >= 50){
+								if(credits >= 50){ //create AI ship for 50 credits
 									ai.createShip(true,curAIOrder);
 									credits -= 50;
 
@@ -719,6 +799,7 @@ void run_demo(gpRender gr){
 						    if(e.type == SDL_KEYDOWN)
 						    {
 							//INSERT T option here
+							// Upgrade player ship if credits over or equal to 50
 							if(playerent.getType()==0&&credits >= 50)
 							{
 							    playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
@@ -729,7 +810,7 @@ void run_demo(gpRender gr){
 								credit_tex = gr.loadText("Credits: " + to_string(credits));
 								credit.updateCredits(credit_tex);
 							}
-							else if(playerent.getType()==1&&credits>=100)
+							else if(playerent.getType()==1&&credits>=100) //Upgrade if credits over 100 and have good ship
 							{
 							    playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
 							    playerent.upgradeType();
