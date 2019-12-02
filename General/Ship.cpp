@@ -313,8 +313,8 @@ Projectile Ship::fireWeapon(SDL_Texture* texture)
 
 Projectile Ship::fireWeapon(SDL_Texture* texture, bool isAlly)
 {
-	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*1.2*sin(getAngle()*.0174533);
-	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*1.2*-cos(getAngle()*.0174533);
+	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*1.5*sin(getAngle()*.0174533);
+	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*1.5*-cos(getAngle()*.0174533);
 	SDL_Rect ldb = {X, Y, 2, 10};
 	Projectile laser(ldb, texture, weaponType);	
 	laser.setAngle(getAngle());
