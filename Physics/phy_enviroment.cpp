@@ -396,12 +396,12 @@ void run_phy_enviro(gpRender gr){
 				}
 				
 				TimeData::update_anim_last_time();
-				playerent.setF(animation);
+				playerent.setF1(animation);
 			}
 		}
 		else{
 			animation = 0;
-			playerent.setF(animation);
+			playerent.setF1(animation);
 		}
 		//Renders all renderable objects onto the screen
 		

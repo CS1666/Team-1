@@ -55,6 +55,10 @@
 	{
 		return type == 3;
 	}
+	bool Sprite::isProjectile()
+	{
+		return type == 5;
+	}
 	bool Sprite::getIsAI(){
 		return isAI;
 	}
@@ -116,11 +120,11 @@
 	int Sprite::getW(){
 		return drawBox.w;
 	}
-	void Sprite::setF(std::pair<int,int> anim){
-		animFrame = anim;
-	}
-	void Sprite::setF(int anim){
+	void Sprite::setF1(int anim){
 		animFrame.first = anim;
+	}
+	void Sprite::setF2(int anim){
+		animFrame.second = anim;
 	}
 	std::pair<int,int> Sprite::getF(){
 		return animFrame;
@@ -206,12 +210,13 @@
 		bool isCollision = false;
 		
 		for (int i = 0; i < osSprite.size(); i++) {
-		
-			if (osSprite.at(i)->isCircEnt()){
-				isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
+			if (!osSprite.at(i)->isProjectile()){
+				if (osSprite.at(i)->isCircEnt()){
+					isCollision |= check_collision(a, osSprite.at(i)->getCollisionCirc());
+				}
+				else
+					isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 			}
-			else
-				isCollision |= check_collision(a, osSprite.at(i)->getDrawBox());
 			
 		}
 		
@@ -275,7 +280,7 @@
 			}
 
 			setAnimLastTime();
-			setF(animation);
+			setF1(animation);
 		}
 	}
 

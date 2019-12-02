@@ -426,8 +426,8 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
     pathComplete=false;
   pathset = true;
 }
-//note: need the texture for fireWeapon, idk why though
-Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
+
+void AIShip::attackShip(pair<int,int> otherShip)
 {
     //first calculate the angle to rotate to
     if(!rotationSet)
@@ -444,9 +444,9 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	cout<<"fired"<<endl;
 	rotationSet=false;
 	timeActivated=SDL_GetTicks();
-	//return fireWeapon(laser);
+	fireWeapon();
     }
-    return Projectile(); //null/empty sprite
+    //return Projectile(); //null/empty sprite
 }
 
 void AIShip::setHasTarget(bool nht){
