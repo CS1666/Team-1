@@ -362,6 +362,41 @@ SDL_Texture* gpRender::loadImage(std::string fname) {
 	return newText;
 }
 
+SDL_Texture* gpRender::loadText(std::string text)
+{
+	TTF_Init();
+	SDL_Texture* newText = nullptr;
+	SDL_Color color = {255, 255, 255};
+	TTF_Font *font = TTF_OpenFont("Assets/OpenSans-Bold.ttf", 20);
+	if(font == nullptr)
+	{
+		std::cout << "Failed to load font." << std::endl 
+			<< "SDL_ttf Error: " << TTF_GetError() << std::endl;
+		return nullptr;
+	}
+	
+
+	SDL_Surface* startSurf = TTF_RenderText_Solid(font, text.c_str(), color);
+	if (startSurf == nullptr) {
+		std::cout << "Unable to render text surface." << endl
+		<< "SDL Error: " << SDL_GetError() << std::endl;
+		return nullptr;
+	}
+
+	newText = SDL_CreateTextureFromSurface(gRenderer, startSurf);
+	if (newText == nullptr) {
+		std::cout << "Unable to create texture from text."
+		<<  "SDL Error: " << SDL_GetError() << std::endl;
+	}
+
+	image_width = startSurf->w;
+	image_height = startSurf->h;
+	
+	SDL_FreeSurface(startSurf);
+
+	return newText;
+}
+
 
 
 void gpRender::setFrameStart(Uint32 tick){

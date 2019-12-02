@@ -27,6 +27,7 @@
 #include "../General/Sector.h"
 #include "../General/GalaxyControl.h"
 #include "../General/Constants.h"
+#include "../General/Credits.h"
 #include <thread>
 void run_demo(gpRender gr);
 void aiRoutine(AI ai, bool* computePath, bool* run, bool* done);
