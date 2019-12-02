@@ -55,8 +55,8 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 			break;
 	}
 }
-constexpr int PLAYER_WIDTH = 50;
-constexpr int PLAYER_HEIGHT = 50;
+constexpr int PLAYER_WIDTH = 52;
+constexpr int PLAYER_HEIGHT = 60;
 constexpr int ZONE_WIDTH = 3840; 
 constexpr int ZONE_HEIGHT = 2160;
 
@@ -83,8 +83,7 @@ void run_demo(gpRender gr){
 	vector<SDL_Texture*> allTextures=initTextures(gr);
 
 	//Audio Initilization
-	Audio::load_chunk0("Assets/Objects/thrustSoundSmall.wav");
-	Audio::load_chunk1("Assets/Objects/laserSound.wav");
+	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
 
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	Audio::set_solar(true);
@@ -105,11 +104,10 @@ void run_demo(gpRender gr){
 	std::vector <std::pair<int, int>> randCoords = randNum();
 
 	//Player Entity Initilizaiton
-
 	SDL_Rect db = {SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT};
-	//Hero playerent(db, allTextures.at(TEX_FIGHT_HERO));
-	Hero playerent(db, allTextures.at(TEX_SHIPS));
-	playerent.setRenderOrder(0);
+	//Ship playerent(db, tex, 0);
+	Hero playerent(db, allTextures.at(TEX_FIGHT_HERO));
+	//playerent.setRenderOrder(0);
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
@@ -185,10 +183,9 @@ void run_demo(gpRender gr){
 
 	int astSize = rand() % 50 + 30;
 
-	//SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
-	
+	SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db9 = {randCoords[6].first + 1000,randCoords[6].second + 1000,astSize,astSize};
-	Asteroid asteroid1ent(db9, allTextures.at(rand() % 4 + 22));
+	Asteroid asteroid1ent(db9, tex9);
 	osSprite.push_back(&asteroid1ent);
 	osAst.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
@@ -196,7 +193,7 @@ void run_demo(gpRender gr){
 	astSize = rand() % 50 + 30;
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,astSize,astSize};
-	Asteroid asteroid2ent(db10, allTextures.at(rand() % 4 + 22));
+	Asteroid asteroid2ent(db10, tex10);
 	sector.addAsteroid(&asteroid2ent);
 	osSprite.push_back(&asteroid2ent);
 	osAst.push_back(&asteroid2ent);
@@ -204,7 +201,7 @@ void run_demo(gpRender gr){
 	astSize = rand() % 50 + 30;
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000, astSize,astSize};
-	Asteroid asteroid3ent(db11, allTextures.at(rand() % 4 + 22));
+	Asteroid asteroid3ent(db11, tex11);
 	sector.addAsteroid(&asteroid3ent);
 	osSprite.push_back(&asteroid3ent);
 	osAst.push_back(&asteroid3ent);
@@ -212,21 +209,21 @@ void run_demo(gpRender gr){
 	astSize = rand() % 50 + 30;
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000, astSize,astSize};
-	Asteroid asteroid4ent(db12, allTextures.at(rand() % 4 + 22));
+	Asteroid asteroid4ent(db12, tex12);
 	sector.addAsteroid(&asteroid4ent);
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
 	astSize = rand() % 50 + 30;
 	SDL_Rect db13 = {400,500, astSize,astSize};
-	Asteroid asteroid5ent(db13, allTextures.at(rand() % 4 + 22));
+	Asteroid asteroid5ent(db13, tex11);
 	sector.addAsteroid(&asteroid5ent);
 	osSprite.push_back(&asteroid5ent);
 	osAst.push_back(&asteroid5ent);
 
 	astSize = rand() % 50 + 30;
 	SDL_Rect db14 = {300,500,astSize,astSize};
-	Asteroid asteroid6ent(db14, allTextures.at(rand() % 4 + 22), 2, 0);
+	Asteroid asteroid6ent(db14, tex11, 2, 0);
 	sector.addAsteroid(&asteroid6ent);
 	osSprite.push_back(&asteroid6ent);
 	osAst.push_back(&asteroid6ent);
@@ -605,10 +602,9 @@ void run_demo(gpRender gr){
 						}
 						break;
 					case SDLK_SPACE:
-						/*if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
-							osSprite.push_back(playerent.fireWeapon(ltex));					
-						}*/
-						playerent.fireWeapon();
+						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
+							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex, true)));					
+						}
 						break;
 					case SDLK_0: //allow ally ships to freeform
 					   for(AIShip* ship:*ai.getShips())
@@ -681,11 +677,6 @@ void run_demo(gpRender gr){
 							}
 						}
 						break;
-					case SDLK_r:
-						/*if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
-							osSprite.push_back(new Projectile(playerent.fireWeaponatme(ltex)));					
-						}*/
-						break;
 
 				}
 			}
@@ -730,7 +721,7 @@ void run_demo(gpRender gr){
 							//INSERT T option here
 							if(playerent.getType()==0&&credits >= 50)
 							{
-							    //playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
+							    playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
 							    playerent.upgradeType();
 							    playerent.setMaxHp(100);
 							    credits -= 50;
@@ -740,7 +731,7 @@ void run_demo(gpRender gr){
 							}
 							else if(playerent.getType()==1&&credits>=100)
 							{
-							    //playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
+							    playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
 							    playerent.upgradeType();
 							    playerent.setMaxHp(200);
 							    credits-=100;
@@ -897,13 +888,10 @@ void run_demo(gpRender gr){
 
 			//auto start = std::chrono::high_resolution_clock::now(); 
 			for(auto ent : osSprite) {
-        		if (dynamic_cast<Ship*>(ent))
-					dynamic_cast<Ship*>(ent)->getFired(osSprite, allTextures.at(TEX_LASER));
 				if(!ent->getIsAI() && !ent->getIsAsteroid())
-					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);				
-				if(ent->getAnimate()){
+					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+				if(ent->getRenderOrder() == 0 && ent->getAnimate())
 					ent->updateAnimation();
-				}
 			}
 
 	
@@ -1209,7 +1197,7 @@ void run_demo(gpRender gr){
 				gameon = false;
 				endGame = true;
 			}
-
+			
 			for(std::size_t i = 0; i != osSprite.size(); i++){
 				if(osSprite.at(i)->shouldRemove())
 				{
