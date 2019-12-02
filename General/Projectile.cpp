@@ -30,7 +30,10 @@ int Projectile::getDamage(){
 bool Projectile::isProjectile(){
 	return true;
 }
-
+void Projectile::setAlly(bool isAlly)
+{
+	ally = isAlly;
+}
 bool Projectile::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite){
 	bool isCollision = false;
 	for (int i = 0; i < osSprite.size(); i++) {
@@ -41,20 +44,21 @@ bool Projectile::check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprit
 		else{
 			bool isColl2 = check_collision(a, osSprite.at(i)->getDrawBox());
 			isCollision |= isColl2;
-			if (isColl2 && dynamic_cast<Ship*>(osSprite.at(i))){
-				std::cout << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
-				int oldHP = dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp();
-				int newHP = oldHP - getDamage();
-				dynamic_cast<Ship*>(osSprite.at(i))->setCurrHp(newHP);
-				std::cout << "Hit ship HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
-			}
-			else if (isColl2 && dynamic_cast<Hero*>(osSprite.at(i))){
+			if (isColl2 && dynamic_cast<Hero*>(osSprite.at(i)) && !ally){
 				std::cout << dynamic_cast<Hero*>(osSprite.at(i))->getCurrHp() << std::endl;
 				int oldHP = dynamic_cast<Hero*>(osSprite.at(i))->getCurrHp();
 				int newHP = oldHP - getDamage();
 				dynamic_cast<Hero*>(osSprite.at(i))->setCurrHp(newHP);
 				std::cout << "player HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
 			}
+			else if (isColl2 && dynamic_cast<Ship*>(osSprite.at(i)) ){
+				std::cout << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
+				int oldHP = dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp();
+				int newHP = oldHP - getDamage();
+				dynamic_cast<Ship*>(osSprite.at(i))->setCurrHp(newHP);
+				std::cout << "Hit ship HP now " << oldHP << " - " << getDamage() << " = " << dynamic_cast<Ship*>(osSprite.at(i))->getCurrHp() << std::endl;
+			}
+			
 		}
 		//std::cout << "Is last command Illegal?" << std::endl;
 		//std::cout << "Checked collisions: " << i << std::endl;

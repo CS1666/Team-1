@@ -94,7 +94,8 @@ class Ship : public Sprite
         void setMaxHp(int newMaxHp);
         int getMaxHp();
         Projectile fireWeapon(SDL_Texture* texture); 
-        Projectile fireWeaponatme(SDL_Texture* texture); 
+        Projectile fireWeaponatme(SDL_Texture* texture); //for testing only 
+        Projectile fireWeapon(SDL_Texture* texture, bool isAlly); 
         Uint32 getFireLastTime();
 		void setFireLastTime();
 
