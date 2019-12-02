@@ -327,6 +327,7 @@ void Ship::getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture){
 		laser->setAngle(getAngle());
 		osSprite.push_back(laser);
 		fired = false;
+		Audio::play_laser_sound();
 	}
 }
 

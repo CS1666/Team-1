@@ -57,7 +57,8 @@ void run_phy_enviro(gpRender gr){
 	std::vector<Ship*> osShip;
 	
 	//load audio for sound
-	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk0("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk1("Assets/Objects/laserSound.wav");
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	Audio::set_solar(true);
 	bool gameon = false;

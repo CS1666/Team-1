@@ -83,7 +83,8 @@ void run_demo(gpRender gr){
 	vector<SDL_Texture*> allTextures=initTextures(gr);
 
 	//Audio Initilization
-	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk0("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk1("Assets/Objects/laserSound.wav");
 
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	Audio::set_solar(true);

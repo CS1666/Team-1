@@ -79,6 +79,8 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			//simulate turning, acceleration of ship
 			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 			{	
+				setAnimate(true);
+				Audio::play_thrust_sound();
 				
 			   	int xmov = 0;
 			   	int ymov = 0;
@@ -97,9 +99,10 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
-				
 			    path->pop();
 			    rotationSet=false;
+				setAnimate(false);
+				setF1(0);
 			}
 	    }
 	    else
