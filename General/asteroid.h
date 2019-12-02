@@ -18,7 +18,7 @@ class Asteroid : public Sprite
 		float direction;
 		std::pair<int, int> position;
 		std::string sprite;
-		float mass = ((float)getW() - 30)/5 + 1;
+		float mass = ((float)getW() - 20)/5 + 1;
 		float hp = 10 * mass;
 		float veloX = (float(rand()) / float(RAND_MAX)) - .5;
 		float veloY = (float(rand()) / float(RAND_MAX)) - .5;
