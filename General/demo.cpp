@@ -382,6 +382,26 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 8;
 	bool blink = false;
+		
+	std::vector<Sector> sectors;
+	Sector sector1();
+	Sector sector2();
+	Sector sector3();
+	Sector sector4();
+	Sector sector5();
+	Sector sector6();
+	Sector sector7();
+	Sector sector8();
+	Sector sector9();
+	sectors.push_back(&sector1);
+	sectors.push_back(&sector2);
+	sectors.push_back(&sector3);
+	sectors.push_back(&sector4);
+	sectors.push_back(&sector5);
+	sectors.push_back(&sector6);
+	sectors.push_back(&sector7);
+	sectors.push_back(&sector8);
+	sectors.push_back(&sector9);
 	
 	//Credits* mapSprites[] = {&sector1ent, &sector2ent, &sector3ent, &sector4ent, &sector5ent, &sector6ent, &sector7ent, &sector8ent, &sector9ent};
 	
