@@ -14,7 +14,7 @@ class AIShip: public Ship{
 		void setDestination(pair<int,int> newDestination);
 		pair<int,int> getDestination();
 		void setPath(queue<pair<int,int>>* thePath);
-		Projectile attackShip(pair<int,int> otherShip, SDL_Texture* laser);
+		void attackShip(pair<int,int> otherShip);
 		void resetVariables();
 		bool isPathSet();
 		bool isFreeForm(); //can autonomously switch states

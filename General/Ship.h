@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
-#include "Projectile.h"
+//#include "Projectile.h"
 #include <queue>
 #include "gpRender.h"
 #include "../Physics/Audio.h"
@@ -96,7 +96,7 @@ class Ship : public Sprite
         int getMaxHp();
         void fireWeapon(); 
         void getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture);
-        Projectile fireWeaponatme(SDL_Texture* texture); 
+        //Projectile fireWeaponatme(SDL_Texture* texture); 
         Uint32 getFireLastTime();
 		void setFireLastTime();
 

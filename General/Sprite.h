@@ -45,8 +45,8 @@ class Sprite{
 		double getAngle();
 		int getH();
 		int getW();
-		void setF(std::pair<int,int> anim);
-		void setF(int anim);
+		void setF1(int anim);
+		void setF2(int anim);
 		std::pair<int,int> getF();
 
 		void updateAnimation();
@@ -78,6 +78,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
+		bool isProjectile();
 		bool isHole();
 		
 		bool shouldRemove();

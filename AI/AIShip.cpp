@@ -79,6 +79,8 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			//simulate turning, acceleration of ship
 			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 			{	
+				setAnimate(true);
+				Audio::play_thrust_sound();
 				
 			   	int xmov = 0;
 			   	int ymov = 0;
@@ -97,9 +99,10 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
-				
 			    path->pop();
 			    rotationSet=false;
+				setAnimate(false);
+				setF1(0);
 			}
 	    }
 	    else
@@ -426,8 +429,8 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
     pathComplete=false;
   pathset = true;
 }
-//note: need the texture for fireWeapon, idk why though
-Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
+
+void AIShip::attackShip(pair<int,int> otherShip)
 {
     //first calculate the angle to rotate to
     if(!rotationSet)
@@ -444,9 +447,9 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	cout<<"fired"<<endl;
 	rotationSet=false;
 	timeActivated=SDL_GetTicks();
-	//return fireWeapon(laser);
+	fireWeapon();
     }
-    return Projectile(); //null/empty sprite
+    //return Projectile(); //null/empty sprite
 }
 
 void AIShip::setHasTarget(bool nht){
