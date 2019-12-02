@@ -16,7 +16,6 @@ std::vector<SDL_Texture*> initTextures(gpRender& gr)
     allTextures.push_back(gr.loadImage("Assets/Objects/red_giant.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/white_dwarf.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/yellow_dwarf.png"));
-    ///allTextures.push_back(gr.loadImage("Assets/Objects/asteroids.png"))
     allTextures.push_back(gr.loadImage("Assets/Objects/Asteroid.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/spaceStation.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/laser.png")); 
@@ -24,7 +23,12 @@ std::vector<SDL_Texture*> initTextures(gpRender& gr)
     allTextures.push_back(gr.loadImage("Assets/Objects/order_follow.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/order_defend.png"));
     allTextures.push_back(gr.loadImage("Assets/Objects/order_attack.png"));
-    allTextures.push_back(gr.loadImage("Assets/Objects/order_auto.png")); //20
+    allTextures.push_back(gr.loadImage("Assets/Objects/order_auto.png")); 
+    allTextures.push_back(gr.loadImage("Assets/Objects/ships.png"));
+    allTextures.push_back(gr.loadImage("Assets/Objects/Asteroid0.png"));
+    allTextures.push_back(gr.loadImage("Assets/Objects/Asteroid1.png"));
+    allTextures.push_back(gr.loadImage("Assets/Objects/Asteroid2.png"));
+    allTextures.push_back(gr.loadImage("Assets/Objects/Asteroid3.png")); //25
     //MORE ADDED TEXTURES HERE
     return allTextures;
 }
