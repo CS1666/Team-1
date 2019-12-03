@@ -472,7 +472,9 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
-
+	ai.setTimeSpawn(SDL_GetTicks());
+	//should be galaxy.findNeighbor()
+	ai.setAttackSector(&sector);
 	Audio::play_music();
 
 	bool titleCard = true;
@@ -576,8 +578,19 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-	
-			
+			//add a ship to an adjacent every 2 seconds
+			if(SDL_GetTicks()-ai.getTimeSpawn()>2000)
+			{
+			    ai.getAttackSector()->setNumEnemy(ai.getAttackSector()->getNumEnemy()+1);
+			    ai.setTimeSpawn(SDL_GetTicks());
+			}
+			//begin attack once reach limit
+			if(ai.getAttackSector()->getNumEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
+			{
+			    ai.setTimeAttack(SDL_GetTicks());
+			    ai.getAttackSector()->setNumEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			    //insert attack function
+			}
 			if(galaxy.getInControl(curSector - 1))
 			{
 				// Checking for if the Space Station is in range of the player ship.
