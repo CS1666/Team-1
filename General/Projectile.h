@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
+#include "Ship.h"
 #include <queue>
 
 using namespace std;
@@ -18,11 +19,14 @@ class Projectile : public Sprite
 	    float rotation;
         string currKey;
         int damage = 5;
+        Ship* origin;
+        SDL_Texture* texHold;
 
     public:
         Projectile();
-        Projectile(SDL_Rect dBox, SDL_Texture* aTex, int damage);
+        Projectile(SDL_Rect dBox, SDL_Texture* aTex, int damage, Ship* origin);
         Projectile(const Projectile &spr);
+
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
         int getDamage();
         bool check_all_collisions(SDL_Rect* a, std::vector<Sprite*> &osSprite);

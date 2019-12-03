@@ -1,4 +1,6 @@
+#include "../AI/AIShip.h"
 #include "Ship.h"
+#include "Projectile.h"
 #include <SDL.h> //temp
 #include <iostream>
 #include <math.h>
@@ -171,6 +173,57 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	}
 }
 
+void Ship::updateMovement(std::vector<Sprite*> &osSprite,std::vector<Sprite*> otherSprites, int ZONE_WIDTH, int ZONE_HEIGHT)
+{
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < 0)
+	{
+		speed = 0;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
+
+	//////std::cout << getVX() << ", " << getVY() <<std::endl;
+	setAngle(getAngle() + rotationSpeed);
+	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
+
+	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	setSpeedX(speedX);
+	setSpeedY(speedY);
+	setX(getTrueX() + speedX);
+	setY(getTrueY() + speedY);
+	
+	if(check_all_collisions(getDrawBox(), osSprite) || check_all_collisions(getDrawBox(), otherSprites)){
+
+		setX(getTrueX() - speedX);
+		setY(getTrueY() - speedY);
+	}
+	
+}
+
 void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT)
 {
 	speed += deltaV;
@@ -300,18 +353,36 @@ int Ship::getMass()
 	return mass;	
 }
 
-Projectile Ship::fireWeapon(SDL_Texture* texture)
+void Ship::fireWeapon()
 {
-	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*1.1*.0174533);
-	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*1.1*.0174533);
-	SDL_Rect ldb = {X, Y, 2, 10};
-	Projectile laser(ldb, texture, weaponType);	
-	laser.setAngle(getAngle());
-	setFireLastTime();
-	return laser;
+	if (SDL_GetTicks() - getFireLastTime() > 500) {	
+		fired = true;
+		setFireLastTime();
+	}
 }
 
-Projectile Ship::fireWeaponatme(SDL_Texture* texture)
+void Ship::getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture){
+	if(fired){
+		int X = getTrueX() + (getW()/2.0);// + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*1.1*.0174533) + 10*sin(getAngle()*1.1*.0174533);
+		int Y = getTrueY() + (getH()/2.0);// + (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*1.1*.0174533) - 10*cos(getAngle()*1.1*.0174533);
+		
+		std::cout << "Angle: " << getAngle() << std::endl;
+		std::cout << "Sin: " << sin(getAngle() *.0174533) << std::endl;
+		std::cout << "Cos: " << cos(getAngle() *.0174533) << std::endl;
+		std::cout << "Ship X: " << getTrueX() << std::endl;
+		std::cout << "Ship Y: " << getTrueY() << std::endl;
+		std::cout << "Laser X: " << X << std::endl;
+		std::cout << "Laser Y: " << Y << std::endl;
+		SDL_Rect projBox = {X, Y, 2, 10};
+		Projectile* laser = new Projectile(projBox, texture, weaponType, this);	
+		laser->setAngle(getAngle());
+		osSprite.push_back(laser);
+		fired = false;
+		Audio::play_laser_sound();
+	}
+}
+
+/*Projectile Ship::fireWeaponatme(SDL_Texture* texture)
 {
 	int X = getTrueX() + (getH()/2.0)+  (getH()/2.0)*1.1*sin(getAngle()*.0174533);
 	int Y = getTrueY()+ (getW()/2.0)+ (getW()/2.0)*1.1*-cos(getAngle()*.0174533);
@@ -320,7 +391,7 @@ Projectile Ship::fireWeaponatme(SDL_Texture* texture)
 	laser.setAngle(getAngle()+180);
 	setFireLastTime();
 	return laser;
-}
+}*/
 
 
 Uint32 Ship::getFireLastTime(){
@@ -331,7 +402,7 @@ void Ship::setFireLastTime(){
 	fireLastTime = SDL_GetTicks();
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 0) {weaponType = 2; renderOrder = 1; isAlly = true;shipType=0;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 2) {weaponType = 2; renderOrder = 1; isAlly = true; shipType=0;};
 
 int Hero::getType()
 {
@@ -340,6 +411,7 @@ int Hero::getType()
 void Hero::upgradeType()
 {
     shipType++;
+	setF2(getF().second + 2);
 }
 //General wrapper function to handle Key evenets
 bool Hero::handleKeyEvents(SDL_Event e){
@@ -363,7 +435,7 @@ void Hero::handleKeyUpEvent(SDL_Event e){
 		switch(e.key.keysym.sym){
 			case SDLK_w:
 				setAnimate(false);
-				setF(0);
+				setF1(0);
 
 			case SDLK_s:
 							
@@ -387,7 +459,6 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 
 	switch(e.key.keysym.sym) {
 		case SDLK_w:
-			
 			deltaV += (ACCEL * TimeData::get_timestep());
 			setAnimate(true);
 			Audio::play_thrust_sound();
@@ -449,8 +520,9 @@ void Hero::handleKeyDownEvent(SDL_Event e){
 	}
 }
 
-Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 1;} ;
+/*Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 2, ally) {weaponType = 1;} ;
 
-Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 3;} ;
+Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 4, ally) {weaponType = 3;} ;
 
-Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex/*, 0*/) {weaponType = 4;} ;
+Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 6, ally) {weaponType = 4;} ;*/
+

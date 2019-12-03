@@ -57,7 +57,8 @@ void run_phy_enviro(gpRender gr){
 	std::vector<Ship*> osShip;
 	
 	//load audio for sound
-	Audio::load_chunk("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk0("Assets/Objects/thrustSoundSmall.wav");
+	Audio::load_chunk1("Assets/Objects/laserSound.wav");
 	Audio::load_music("Assets/Sound/spacegamemainsound.wav");
 	Audio::set_solar(true);
 	bool gameon = false;
@@ -396,12 +397,12 @@ void run_phy_enviro(gpRender gr){
 				}
 				
 				TimeData::update_anim_last_time();
-				playerent.setF(animation);
+				playerent.setF1(animation);
 			}
 		}
 		else{
 			animation = 0;
-			playerent.setF(animation);
+			playerent.setF1(animation);
 		}
 		//Renders all renderable objects onto the screen
 		

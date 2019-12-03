@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "Sprite.h"
-#include "Projectile.h"
+//#include "Projectile.h"
 #include <queue>
 #include "gpRender.h"
 #include "../Physics/Audio.h"
@@ -37,6 +37,7 @@ class Ship : public Sprite
 
         float max_deltaV = 1;
 
+        bool fired = false;
         Uint32 fireLastTime = SDL_GetTicks();
         bool damageTaken;
         bool rotationSet;
@@ -71,6 +72,7 @@ class Ship : public Sprite
         float getSpeedX();
         float getSpeedY();
         void updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZONE_HEIGHT);
+        void updateMovement(std::vector<Sprite*> &osSprite, std::vector<Sprite*> otherSprites, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT);
         void updateHull(int newHull);
         void setPosition(pair<int,int> newPosition);
@@ -93,8 +95,9 @@ class Ship : public Sprite
         int getCurrHp();
         void setMaxHp(int newMaxHp);
         int getMaxHp();
-        Projectile fireWeapon(SDL_Texture* texture); 
-        Projectile fireWeaponatme(SDL_Texture* texture); 
+        void fireWeapon(); 
+        void getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture);
+        //Projectile fireWeaponatme(SDL_Texture* texture); 
         Uint32 getFireLastTime();
 		void setFireLastTime();
 
@@ -115,17 +118,17 @@ class Hero: public Ship{
 	    void upgradeType();
 };
 
-class Fighter: public Ship{
+/*class Fighter: public Ship{
     public:
-        Fighter(SDL_Rect dBox, SDL_Texture* aTex);
+        Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
 };
 
 class Cruiser: public Ship{
     public:
-        Cruiser(SDL_Rect dBox, SDL_Texture* aTex);
+        Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
 };
 
 class Capital: public Ship{
     public:
-        Capital(SDL_Rect dBox, SDL_Texture* aTex);
-};
+        Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally);
+};*/
