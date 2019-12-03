@@ -62,6 +62,7 @@ constexpr int ZONE_HEIGHT = 2160;
 
 void run_demo(gpRender gr){
 	Sector sector;
+	sector.init(&gr, ZONE_WIDTH, ZONE_HEIGHT);
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	GalaxyControl galaxy;
 	Ellers_Maze seed;
