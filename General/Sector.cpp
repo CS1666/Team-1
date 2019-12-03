@@ -97,7 +97,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 		}
 
 		planet_rect.push_back({dist, winWidth/2 + stagger, 200, 200});
-		addPlanet(new Planet(planet_rect.back(), planet_tex.back(), {planet_rect.back()}));
+		addPlanet(new Planet(planet_rect.back(), planet_tex.back(), {planet_rect.back()}, *star));
 		std::cout << "Created planet" << std::endl;
 		bodySprites.push_back(__planets.back());
 		
