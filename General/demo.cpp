@@ -982,8 +982,16 @@ void run_demo(gpRender gr){
 			for(auto ent : osSprite) {
         		if (dynamic_cast<Ship*>(ent))
 					dynamic_cast<Ship*>(ent)->getFired(osSprite, allTextures.at(TEX_LASER));
-				if(!ent->getIsAI() && !ent->getIsAsteroid())
-					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);				
+				if(!ent->getIsAI() && !ent->getIsAsteroid()){
+					if(dynamic_cast<Ship*>(ent))
+					{
+						dynamic_cast<Ship*>(ent)->updateMovement(osSprite, sector.getBodySprites(), ZONE_WIDTH, ZONE_HEIGHT);				
+					}
+					else
+					{
+						ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+					}
+				}
 				if(ent->getAnimate()){
 					ent->updateAnimation();
 				}

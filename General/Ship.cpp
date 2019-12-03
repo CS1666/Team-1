@@ -173,6 +173,57 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite, int ZONE_WIDTH, int ZO
 	}
 }
 
+void Ship::updateMovement(std::vector<Sprite*> &osSprite,std::vector<Sprite*> otherSprites, int ZONE_WIDTH, int ZONE_HEIGHT)
+{
+	speed += deltaV;
+	rotationSpeed += rotationRate;
+	if (rotationSpeed < 0)
+	{
+		rotationSpeed++;
+	}
+	else if (rotationSpeed > 0)
+	{
+		rotationSpeed--;
+	}
+	if(speed >MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	else if(speed < 0)
+	{
+		speed = 0;
+	}
+	if(rotationSpeed > MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = MAX_ROTATIONSPEED;
+	}
+	else if(rotationSpeed < -MAX_ROTATIONSPEED)
+	{
+		rotationSpeed = -MAX_ROTATIONSPEED;
+	}
+
+	//////std::cout << getVX() << ", " << getVY() <<std::endl;
+	setAngle(getAngle() + rotationSpeed);
+	float speedX = speed*cos((getAngle() - 90.0)*PI/180);
+	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
+	// Try to move Horizontally
+
+	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
+	speedX = speedX+gravPulls[0];
+	speedY = speedY+gravPulls[1];
+	setSpeedX(speedX);
+	setSpeedY(speedY);
+	setX(getTrueX() + speedX);
+	setY(getTrueY() + speedY);
+	
+	if(check_all_collisions(getDrawBox(), osSprite) || check_all_collisions(getDrawBox(), otherSprites)){
+
+		setX(getTrueX() - speedX);
+		setY(getTrueY() - speedY);
+	}
+	
+}
+
 void Ship::updateMovementShips(std::vector<Sprite*> &osSprite, std::vector<Ship*> &osShip, int ZONE_WIDTH, int ZONE_HEIGHT)
 {
 	speed += deltaV;
