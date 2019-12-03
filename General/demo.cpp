@@ -998,7 +998,8 @@ void run_demo(gpRender gr){
 			{
 				for( auto ent : sector.getPlanets())
 				{
-					ent->updatePosition(osSprite);
+					/*Commented out until orbits work*/
+					//ent->updatePosition(osSprite);
 				}
 			}
 			/*else
