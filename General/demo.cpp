@@ -389,6 +389,26 @@ void run_demo(gpRender gr){
 	//current sector
 	int curSector = 8;
 	bool blink = false;
+		
+	std::vector<Sector> sectors;
+	Sector sector1();
+	Sector sector2();
+	Sector sector3();
+	Sector sector4();
+	Sector sector5();
+	Sector sector6();
+	Sector sector7();
+	Sector sector8();
+	Sector sector9();
+	sectors.push_back(&sector1);
+	sectors.push_back(&sector2);
+	sectors.push_back(&sector3);
+	sectors.push_back(&sector4);
+	sectors.push_back(&sector5);
+	sectors.push_back(&sector6);
+	sectors.push_back(&sector7);
+	sectors.push_back(&sector8);
+	sectors.push_back(&sector9);
 	
 	//Credits* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 
@@ -982,8 +1002,16 @@ void run_demo(gpRender gr){
 			for(auto ent : osSprite) {
         		if (dynamic_cast<Ship*>(ent))
 					dynamic_cast<Ship*>(ent)->getFired(osSprite, allTextures.at(TEX_LASER));
-				if(!ent->getIsAI() && !ent->getIsAsteroid())
-					ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);				
+				if(!ent->getIsAI() && !ent->getIsAsteroid()){
+					if(dynamic_cast<Ship*>(ent))
+					{
+						dynamic_cast<Ship*>(ent)->updateMovement(osSprite, sector.getBodySprites(), ZONE_WIDTH, ZONE_HEIGHT);				
+					}
+					else
+					{
+						ent->updateMovement(osSprite, ZONE_WIDTH, ZONE_HEIGHT);
+					}
+				}
 				if(ent->getAnimate()){
 					ent->updateAnimation();
 				}
