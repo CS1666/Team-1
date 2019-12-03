@@ -25,6 +25,29 @@ AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, bool ally): Ship(dBox, aTex, 0)
 	currHp=50;
 };
 
+AIShip::AIShip(SDL_Rect dBox, SDL_Texture* aTex, int anim, bool ally): Ship(dBox, aTex, anim + ally) {
+	renderOrder = 1;
+	pathset = false;
+	if(ally)
+	{
+	    isAlly=true;
+	    freeForm=false;
+	}
+	else
+	{
+	    isAlly=false;
+	    freeForm=true;
+	}
+	isAI = true;
+	setX(dBox.x);
+	setY(dBox.y);
+	maxVelocity=10;
+	maxRotation=10;
+	isUser=false;
+	maxHp=50;
+	currHp=50;
+};
+
 //ai follows path assigned to it by ai class
 bool AIShip::followPath(vector<Sprite *>* osSprite)
     {
@@ -56,6 +79,8 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			//simulate turning, acceleration of ship
 			if(!angleChanged&&(cur_x != x_coord || cur_y != y_coord))
 			{	
+				setAnimate(true);
+				Audio::play_thrust_sound();
 				
 			   	int xmov = 0;
 			   	int ymov = 0;
@@ -74,9 +99,10 @@ bool AIShip::followPath(vector<Sprite *>* osSprite)
 			}
 			else if(cur_x==x_coord&&cur_y==y_coord)
 			{
-				
 			    path->pop();
 			    rotationSet=false;
+				setAnimate(false);
+				setF1(0);
 			}
 	    }
 	    else
@@ -403,8 +429,8 @@ void AIShip::setPath(queue<pair<int,int>>* thePath)
     pathComplete=false;
   pathset = true;
 }
-//note: need the texture for fireWeapon, idk why though
-Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
+
+void AIShip::attackShip(pair<int,int> otherShip)
 {
     //first calculate the angle to rotate to
     if(!rotationSet)
@@ -421,11 +447,10 @@ Projectile AIShip::attackShip(pair<int,int> otherShip,SDL_Texture* laser)
 	cout<<"fired"<<endl;
 	rotationSet=false;
 	timeActivated=SDL_GetTicks();
-	return fireWeapon(laser);
+	fireWeapon();
     }
-    return Projectile(); //null/empty sprite
+    //return Projectile(); //null/empty sprite
 }
-
 
 void AIShip::setHasTarget(bool nht){
 	hasTarget = nht;
@@ -443,3 +468,9 @@ Ship* AIShip::getTargetShip(){
 pair<int, int> AIShip::getTargetShipPos(){
 	return targetShip->getPosition();
 }
+
+Fighter::Fighter(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 2, ally) {weaponType = 1;} ;
+
+Cruiser::Cruiser(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 4, ally) {weaponType = 3;} ;
+
+Capital::Capital(SDL_Rect dBox, SDL_Texture* aTex, bool ally): AIShip(dBox, aTex, 6, ally) {weaponType = 4;} ;

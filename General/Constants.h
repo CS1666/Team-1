@@ -28,7 +28,6 @@
 //15 is the laser projectile
 //16-20 are orders UI
 //ADD MORE AS REQUIRED HERE AND IN initTextures
-//#define TEX_SHIPS 0
 #define TEX_FIGHT_HERO 0
 #define TEX_FIGHT_ALLY 1
 #define TEX_FIGHT_ENEMY 2
@@ -42,7 +41,6 @@
 #define TEX_SUN_RED 10
 #define TEX_SUN_WHITE 11
 #define TEX_SUN_YELLOW 12
-//#define TEX_ASTEROIDS 5
 #define TEX_ASTEROID 13
 #define TEX_STATION 14
 #define TEX_LASER 15
@@ -51,6 +49,11 @@
 #define TEX_ORDER_DEFEND 18
 #define TEX_ORDER_ATTACK 19
 #define TEX_ORDER_AUTO 20
+#define TEX_SHIPS 21
+#define TEX_ASTEROID0 22
+#define TEX_ASTEROID1 23
+#define TEX_ASTEROID2 24
+#define TEX_ASTEROID3 25
 
 //INIT TEXTURES INTO A VECTOR
 std::vector<SDL_Texture*> initTextures(gpRender& gr);

@@ -90,10 +90,7 @@ void AI::defendPosition(AIShip* ship)
 {   
     
     if(SDL_GetTicks() - ship->getFireLastTime() > 200){
-        Projectile* proj= new Projectile(ship->attackShip(ship->getTargetShipPos(), allTextures->at(TEX_LASER)));
-       
-        if(proj->getTexture()!=nullptr)
-            osSprite->push_back(proj);
+        ship->attackShip(ship->getTargetShipPos());
     }
     
     
@@ -123,10 +120,7 @@ void AI::pursueShip(AIShip* ship)
     
     followEnemy(ship);
     if(SDL_GetTicks() - ship->getFireLastTime() > 200){
-        Projectile* proj= new Projectile(ship->attackShip(ship->getTargetShipPos(), allTextures->at(TEX_LASER)));
-       
-        if(proj->getTexture()!=nullptr)
-            osSprite->push_back(proj);
+        ship->attackShip(ship->getTargetShipPos());
     }
     
     if(ship->isFreeForm())
@@ -459,12 +453,12 @@ void AI::createShip(bool isAlly,int goal){
 
             if(asp.first != -1 && asp.second != -1){
                 SDL_Rect db = {asp.first,asp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
-                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ALLY);
+                SDL_Texture* tex  = allTextures->at(TEX_SHIPS);
                 AIShip* newShip = new AIShip(db, tex,true);
                 newShip->setPosition(asp);
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
-                newShip->setF(-1);
+                newShip->setF2(2);
                 newShip->setGoal(goal);
                 newShip->setCurrHp(100);
                 newShip->setMaxHp(100);
@@ -488,13 +482,13 @@ void AI::createShip(bool isAlly,int goal){
             if(esp.first != -1 && esp.second != -1){
                 
                 SDL_Rect db = {esp.first,esp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
-                SDL_Texture* tex  = allTextures->at(TEX_FIGHT_ENEMY);
+                SDL_Texture* tex  = allTextures->at(TEX_SHIPS);
     
                 AIShip* newShip = new  AIShip(db, tex,false);
                 newShip->setPosition(esp);
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
-                newShip->setF(-1);
+                newShip->setF2(1);
                 newShip->setGoal(2);
                 newShip->setCurrHp(100);
                 newShip->setMaxHp(100);
