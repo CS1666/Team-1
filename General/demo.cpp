@@ -390,7 +390,7 @@ void run_demo(gpRender gr){
 	int curSector = 8;
 	bool blink = false;
 		
-	std::vector<Sector> sectors;
+	std::vector<Sector*> sectors;
 	Sector* sector1 = new Sector();
 	Sector* sector2 = new Sector();
 	Sector* sector3 = new Sector();
