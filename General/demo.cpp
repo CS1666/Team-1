@@ -391,24 +391,24 @@ void run_demo(gpRender gr){
 	bool blink = false;
 		
 	std::vector<Sector> sectors;
-	Sector sector1();
-	Sector sector2();
-	Sector sector3();
-	Sector sector4();
-	Sector sector5();
-	Sector sector6();
-	Sector sector7();
-	Sector sector8();
-	Sector sector9();
-	sectors.push_back(&sector1);
-	sectors.push_back(&sector2);
-	sectors.push_back(&sector3);
-	sectors.push_back(&sector4);
-	sectors.push_back(&sector5);
-	sectors.push_back(&sector6);
-	sectors.push_back(&sector7);
-	sectors.push_back(&sector8);
-	sectors.push_back(&sector9);
+	Sector sector1;
+	Sector sector2;
+	Sector sector3;
+	Sector sector4;
+	Sector sector5;
+	Sector sector6;
+	Sector sector7;
+	Sector sector8;
+	Sector sector9;
+	sectors.push_back(sector1);
+	sectors.push_back(sector2);
+	sectors.push_back(sector3);
+	sectors.push_back(sector4);
+	sectors.push_back(sector5);
+	sectors.push_back(sector6);
+	sectors.push_back(sector7);
+	sectors.push_back(sector8);
+	sectors.push_back(sector9);
 	
 	//Credits* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 
@@ -493,8 +493,9 @@ void run_demo(gpRender gr){
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
 	ai.setTimeSpawn(SDL_GetTicks());
-	//should be galaxy.findNeighbor()
-	ai.setAttackSector(&sector);
+	int targetSector=galaxy.findTarget();
+	ai.setTargetSector(&sectors.at(targetSector));
+	ai.setAttackSector(&sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
 
 	bool titleCard = true;

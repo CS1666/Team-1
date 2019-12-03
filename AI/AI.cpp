@@ -233,6 +233,14 @@ Sector* AI::getAttackSector()
 {
     return attackSector;
 }
+void AI::setTargetSector(Sector* newSector)
+{
+    targetSector=newSector;
+}
+Sector* AI::getTargetSector()
+{
+    return targetSector;
+}
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;

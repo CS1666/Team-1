@@ -38,6 +38,7 @@ class AI
         Uint32 timeSpawn;
 	Uint32 timeAttack;
   	Sector* attackSector; //which sector attacking from
+	Sector* targetSector; //which sector to be attacked
 
     public:
 	void setTimeSpawn(Uint32 time);
@@ -46,6 +47,8 @@ class AI
 	Uint32 getTimeAttack();
 	Sector* getAttackSector();
 	void setAttackSector(Sector* newSector);
+	Sector* getTargetSector();
+	void setTargetSector(Sector* newSector);
         void setCurrentSector(Sector* newSector);
         void setShips(vector<AIShip*>* newShips);
       //change mapstate
