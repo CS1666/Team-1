@@ -11,23 +11,6 @@ Asteroid::~Asteroid()
 	assetTex = nullptr;
 }
 
-int Asteroid::getRadius()
-{
-	return radius;
-}
-
-int Asteroid::getVelocity()
-{
-	
-	return velocity;
-}
-
-float Asteroid::getDirection()
-{
-	
-	return direction;
-}
-
 float Asteroid::getMass()
 {
 	return mass;	
@@ -41,26 +24,6 @@ pair<int, int> Asteroid::getPosition()
 string Asteroid::getSprite()
 {
 	return sprite;
-}
-
-void Asteroid::setRadius(int r)
-{
-	radius = r;
-}
-
-void Asteroid::setVelocity(int v)
-{
-	velocity = v;
-}
-
-void Asteroid::setDirection(float d)
-{
-	direction = d;
-}
-
-void Asteroid::setPosition(pair<int, int> newPos)
-{
-	position = newPos;
 }
 
 void Asteroid::setSprite(string s)
