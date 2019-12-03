@@ -183,7 +183,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&planet6ent);
 	sector.addPlanet(&planet6ent);
 
-	int astSize = rand() % 50 + 30;
+	int astSize = rand() % 40 + 20;
 
 	//SDL_Texture* tex9 = gr.loadImage("Assets/Objects/Asteroid.png");
 	
@@ -193,7 +193,7 @@ void run_demo(gpRender gr){
 	osAst.push_back(&asteroid1ent);
 	sector.addAsteroid(&asteroid1ent);	
 
-	astSize = rand() % 50 + 30;
+	astSize = rand() % 40 + 20;
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,astSize,astSize};
 	Asteroid asteroid2ent(db10, allTextures.at(rand() % 4 + 22));
@@ -201,7 +201,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid2ent);
 	osAst.push_back(&asteroid2ent);
 
-	astSize = rand() % 50 + 30;
+	astSize = rand() % 40 + 20;
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000, astSize,astSize};
 	Asteroid asteroid3ent(db11, allTextures.at(rand() % 4 + 22));
@@ -209,7 +209,7 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid3ent);
 	osAst.push_back(&asteroid3ent);
 
-	astSize = rand() % 50 + 30;
+	astSize = rand() % 40 + 20;
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000, astSize,astSize};
 	Asteroid asteroid4ent(db12, allTextures.at(rand() % 4 + 22));
@@ -217,16 +217,16 @@ void run_demo(gpRender gr){
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
-	astSize = rand() % 50 + 30;
+	astSize = rand() % 40 + 20;
 	SDL_Rect db13 = {400,500, astSize,astSize};
 	Asteroid asteroid5ent(db13, allTextures.at(rand() % 4 + 22));
 	sector.addAsteroid(&asteroid5ent);
 	osSprite.push_back(&asteroid5ent);
 	osAst.push_back(&asteroid5ent);
 
-	astSize = rand() % 50 + 30;
+	astSize = rand() % 40 + 20;
 	SDL_Rect db14 = {300,500,astSize,astSize};
-	Asteroid asteroid6ent(db14, allTextures.at(rand() % 4 + 22), 2, 0);
+	Asteroid asteroid6ent(db14, allTextures.at(rand() % 4 + 22), .5, 0);
 	sector.addAsteroid(&asteroid6ent);
 	osSprite.push_back(&asteroid6ent);
 	osAst.push_back(&asteroid6ent);
