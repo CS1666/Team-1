@@ -58,10 +58,11 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
-constexpr int ZONE_HEIGHT = 2160;
+constexpr int ZONE_HEIGHT = 3840;
 
 void run_demo(gpRender gr){
 	Sector sector;
+	sector.init(&gr, ZONE_WIDTH, ZONE_HEIGHT);
 	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
 	GalaxyControl galaxy;
 	Ellers_Maze seed;
@@ -117,22 +118,22 @@ void run_demo(gpRender gr){
 	std::cout << "player " << db.x << ", " << db.y << endl;
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
-	SDL_Texture* tex2 = gr.loadImage(z);
+	/*SDL_Texture* tex2 = gr.loadImage(z);
 	SDL_Rect db2 = {ZONE_WIDTH/2,ZONE_HEIGHT/2,sunHeight,sunWidth};
 	NSDL_Circ dc2 = {db2};
 	Star starent(db2, tex2, dc2);
 	starent.setSize({sunHeight,sunWidth});
 	starent.setPosition({ZONE_WIDTH/2,ZONE_HEIGHT/2});
-	osSprite.push_back(&starent);
+	osSprite.push_back(&starent);*/
 	/*
 	//make sure that the black hole is fairly large like at least 2x the sunwidth and height
 	Blackhole hole(db2, gr.loadImage("Assets/Objects/hole.png"),dc2);
 	osSprite.push_back(&hole);
 	*/
 	//}
-	sector.addStars(&starent);
+	//sector.addStars(&starent);
 
-	SDL_Texture* tex3 = gr.loadImage(q);
+	/*SDL_Texture* tex3 = gr.loadImage(q);
 	SDL_Rect db3 = {randCoords[0].first,randCoords[0].second,200,200};
 	NSDL_Circ dc3 = {db3};
 	Planet planet1ent(db3, tex3, dc3,starent);
@@ -181,7 +182,7 @@ void run_demo(gpRender gr){
 	Planet planet6ent(db8, tex8, dc8,starent);
 
 	osSprite.push_back(&planet6ent);
-	sector.addPlanet(&planet6ent);
+	sector.addPlanet(&planet6ent);*/
 
 	int astSize = rand() % 40 + 20;
 
@@ -859,7 +860,7 @@ void run_demo(gpRender gr){
 							break;
 					}
 				}
-				gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+				gr.renderOnScreenEntity(osSprite, sector.getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 			}
 			//--- END OF SPACE STATION UI SUB LOOP ---
 
@@ -998,15 +999,16 @@ void run_demo(gpRender gr){
 			{
 				for( auto ent : sector.getPlanets())
 				{
-					ent->updatePosition(osSprite);
+					/*Commented out until orbits work*/
+					//ent->updatePosition(osSprite);
 				}
 			}
-			else
+			/*else
 			{
 				planet1ent.updatePosition(playerent);	
 				planet2ent.updatePosition(playerent);	
 				planet4ent.updatePosition(playerent);	
-			}
+			}*/
 			if(playerent.getTrueX() < 0 || (playerent.getX() + playerent.getW() > ZONE_WIDTH) || playerent.getY() < 0 || (playerent.getY() + playerent.getH() > ZONE_HEIGHT))
 			{
 				
@@ -1329,7 +1331,7 @@ void run_demo(gpRender gr){
 			// member function on the duration object 
 			//cout << duration.count() << endl; 
 			
-			gr.renderOnScreenEntity(osSprite, bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
+			gr.renderOnScreenEntity(osSprite, sector.getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 			
 			if(galaxy.getWinGame())
