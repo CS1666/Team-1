@@ -45,8 +45,9 @@ class Sprite{
 		double getAngle();
 		int getH();
 		int getW();
-		void setF(int anim);
-		int getF();
+		void setF1(int anim);
+		void setF2(int anim);
+		std::pair<int,int> getF();
 
 		void updateAnimation();
 		bool getAnimate();
@@ -77,6 +78,7 @@ class Sprite{
 		bool isShip();
 		bool isCelestialBody();
 		bool isUI();
+		bool isProjectile();
 		bool isHole();
 		
 		bool shouldRemove();
@@ -85,7 +87,7 @@ class Sprite{
 		SDL_Rect collisionBox;
 		NSDL_Circ collisionCirc;
 		SDL_Texture* assetTex;
-		int animFrame;
+		std::pair<int,int> animFrame;
 		bool animate = false;
 		Uint32 animLastTime = SDL_GetTicks();
 		int type = 0;
