@@ -58,7 +58,7 @@ std::tuple<int, int, std::string, std::string, std::string, std::string> callAss
 constexpr int PLAYER_WIDTH = 50;
 constexpr int PLAYER_HEIGHT = 50;
 constexpr int ZONE_WIDTH = 3840; 
-constexpr int ZONE_HEIGHT = 2160;
+constexpr int ZONE_HEIGHT = 3840;
 
 void run_demo(gpRender gr){
 	Sector sector;
