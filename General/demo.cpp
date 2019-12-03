@@ -641,7 +641,7 @@ void run_demo(gpRender gr){
 						break;
 					case SDLK_SPACE:
 						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
-							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex)));					
+							osSprite.push_back(new Projectile(playerent.fireWeapon(ltex, true)));					
 						}
 						break;
 					case SDLK_0: //allow ally ships to freeform
@@ -739,11 +739,6 @@ void run_demo(gpRender gr){
 								fullheal_UI.set_spriteIndex(osSprite.size());
 								osSprite.push_back(&fullheal_UI);
 							}
-						}
-						break;
-					case SDLK_r:
-						if (SDL_GetTicks() - playerent.getFireLastTime() > 200) {
-							osSprite.push_back(new Projectile(playerent.fireWeaponatme(ltex)));					
 						}
 						break;
 

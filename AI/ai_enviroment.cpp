@@ -47,27 +47,27 @@ void run_ai_enviro(gpRender gr){
 
 	//AI Ship 1 init
 	SDL_Rect db1 = {100,200,PLAYER_WIDTH,PLAYER_HEIGHT};
-	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ship_capital_enemy.png");
+	SDL_Texture* tex1 = gr.loadImage("Assets/Objects/ships.png");
 	
 	AIShip aiShip(db1, tex1,true);
 	aiShip.setPosition(pair<int,int>(100,200));
 	aiShip.setDestination(playerShip.getPosition());
 	aiShip.setRenderOrder(0);
-	aiShip.setF(-1);
+	aiShip.setF2(5);
 	aiShip.setGoal(0);
 	//cout<<"aiShip texture: "<<aiShip.getTexture()<<endl;
 	osSprite.push_back(&aiShip);
 
 	/**
 	//AI Ship 2 init
-	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ship_capital_hero.png");
+	SDL_Texture* tex3 = gr.loadImage("Assets/Objects/ships.png");
 	SDL_Rect db3 = {1000, 400, PLAYER_WIDTH,PLAYER_HEIGHT};
 
 	AIShip aiShip2(db3,tex3,false);
 	aiShip2.setPosition(pair<int,int>(1000,400)); //omega weird how some values will seg fault but not for others
 	aiShip2.setDestination(playerShip.getPosition());
 	aiShip2.setRenderOrder(0);
-	aiShip2.setF(-1);
+	aiShip2.setF2(6);
 	aiShip2.setGoal(1);
 	//cout<<"aiShip2 texture: "<<aiShip2.getTexture()<<endl;
 	//osSprite.push_back(&aiShip2);
