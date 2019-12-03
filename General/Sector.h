@@ -47,7 +47,7 @@ class Sector
 	public:
 
 		Sector();
-		vector<Sprite *> getBodies();
+		vector<Sprite *> getBodySprites();
 		Star * getStar();
 		void init(gpRender * g, int winWidth, int winHeight);
 		vector<Sprite *>* getSectEnts();
