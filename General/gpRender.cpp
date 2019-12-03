@@ -374,7 +374,7 @@ SDL_Texture* gpRender::loadText(std::string text)
 			<< "SDL_ttf Error: " << TTF_GetError() << std::endl;
 		return nullptr;
 	}
-	
+
 
 	SDL_Surface* startSurf = TTF_RenderText_Solid(font, text.c_str(), color);
 	if (startSurf == nullptr) {
@@ -391,7 +391,7 @@ SDL_Texture* gpRender::loadText(std::string text)
 
 	image_width = startSurf->w;
 	image_height = startSurf->h;
-	
+
 	SDL_FreeSurface(startSurf);
 
 	return newText;
