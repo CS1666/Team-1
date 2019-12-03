@@ -55,13 +55,11 @@ void AI::followShip(AIShip* ship){
     bool recalc = ship->followPath(osSprite);
 
     if(recalc){
-        cout<<"Re Calc"<<endl;
         ship->setPath(calculatePath(*ship));
     }
     else if(ship->getPathComplete())
     {
         
-        cout<<"Path Complete"<<endl;
         ship->setDestination(ship->getTargetShip()->getPosition());
         ship->setPath(calculatePath(*ship));
     }
@@ -70,7 +68,7 @@ void AI::followShip(AIShip* ship){
 void AI::followPlayer(AIShip* ship){
 
     int distance = calculateDistance(ship->getPosition(), ship->getTargetShipPos());
-    //cout<<distance<<endl;
+    cout<<distance<<endl;
     if(distance > 150){
         followShip(ship);
     }
