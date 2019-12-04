@@ -536,9 +536,10 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
-	ai.setTimeAttack(999999999);
+	ai.setTimeAttack(SDL_GetTicks());
 	ai.setTimeSpawn(SDL_GetTicks());
 	int targetSector=galaxy.findTarget();
+	//cout<<"target: "<<targetSector<<endl;
 	ai.setTargetSector(sectors.at(targetSector));
 	ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
@@ -662,10 +663,15 @@ void run_demo(gpRender gr){
 			//trigger battle/takeover if player doesn't respond in time (2 minutes)
 			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
+			    //cout<<"attack begins?"<<endl;
+			    //cout<<"time: "<<ai.getTimeAttack()<<endl;
+			    cout<<SDL_GetTicks()<<endl;
+			    cout<<SDL_GetTicks()-ai.getTimeAttack()<<endl;
 			    //ratio of ally:enemy
-			    double chance=1;
+			    double chance=10;
 			    if(ai.getTargetSector()->getCurEnemy()!=0)
 				chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    //cout<<"chance: "<<chance<<endl;
 			    //successful takeover
 			    if(rand()%100>chance*100)
 			    {
