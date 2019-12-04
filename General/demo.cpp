@@ -495,8 +495,8 @@ void run_demo(gpRender gr){
 	ai.setTimeAttack(999999999);
 	ai.setTimeSpawn(SDL_GetTicks());
 	int targetSector=galaxy.findTarget();
-	ai.setTargetSector(&sectors.at(targetSector));
-	ai.setAttackSector(&sectors.at(galaxy.findNeighbor(targetSector)));
+	ai.setTargetSector(sectors.at(targetSector));
+	ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
 
 	bool titleCard = true;
