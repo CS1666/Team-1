@@ -657,11 +657,12 @@ void run_demo(gpRender gr){
 			{
 			    //cout<<"begin attack?"<<endl;
 			    ai.setTimeAttack(SDL_GetTicks());
+			    ai.attackFlip();
 			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			}
 			//trigger battle/takeover if player doesn't respond in time (2 minutes)
-			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
+			if(ai.getAttackStatus()&&SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
 			    //cout<<"attack begins?"<<endl;
 			    //cout<<"time: "<<ai.getTimeAttack()<<endl;
@@ -687,6 +688,7 @@ void run_demo(gpRender gr){
 			    {
 				ai.getTargetSector()->setCurEnemy(0);
 			    }
+			    ai.attackFlip();
 			}
 			if(galaxy.getInControl(curSector - 1))
 			{
