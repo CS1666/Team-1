@@ -1428,9 +1428,12 @@ void run_demo(gpRender gr){
 							if(numEnemy <= 0)
 							{
 								//also reset attacking (but not currently massed)
-								targetSector=galaxy.findTarget();
-        							ai.setTargetSector(sectors.at(targetSector));
-        							ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+								if(galaxy.getEnemyCount()>0)
+								{
+								    targetSector=galaxy.findTarget();
+        							    ai.setTargetSector(sectors.at(targetSector));
+        							    ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+								}
 								ai.setTimeAttack(SDL_GetTicks());
         							ai.setTimeSpawn(SDL_GetTicks());
 								galaxy.playerWinZone(curSector - 1);
