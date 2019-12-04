@@ -208,7 +208,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite,std::vector<Sprite*> ot
 	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
-	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
+	std::vector<float> gravPulls = calculateGravityPull(*this, otherSprites);
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
 	setSpeedX(speedX);
@@ -411,6 +411,7 @@ int Hero::getType()
 void Hero::upgradeType()
 {
     shipType++;
+    weaponType = weaponType*2;
 	setF2(getF().second + 2);
 }
 //General wrapper function to handle Key evenets
