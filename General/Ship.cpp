@@ -402,7 +402,7 @@ void Ship::setFireLastTime(){
 	fireLastTime = SDL_GetTicks();
 }
 
-Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 2) {weaponType = 2; renderOrder = 1; isAlly = true; shipType=0;};
+Hero::Hero(SDL_Rect dBox, SDL_Texture* aTex): Ship(dBox, aTex, 2) {weaponType = 13; renderOrder = 1; isAlly = true; shipType=0;};
 
 int Hero::getType()
 {
