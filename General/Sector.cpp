@@ -66,7 +66,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 	//SDL_Texture* evalPlanet;
 	
 
-	std::cout << "star x: " << star_rect.x << " star y: " << star_rect.y << endl;
+	//std::cout << "star x: " << star_rect.x << " star y: " << star_rect.y << endl;
 	
 
 	while(dist < winWidth)
@@ -113,6 +113,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 
 
 }
+
 
 vector<Sprite *> Sector::getBodySprites()
 {
@@ -277,13 +278,6 @@ void Sector::setNumEnemy(int nume){
 	num_enemy = nume;
 }
 
-void Sector::AddAI(AIShip* ai){
-	__ai.push_back(ai);
-}
-
-vector<AIShip *> Sector::getAI(){
-	return __ai;
-}
 void Sector::setSpaceStation(SpaceStation* nss){
 	ss = nss;
 	__SectEnts->push_back(ss);
@@ -338,4 +332,40 @@ vector<pair<int,int>> Sector::getAllySpawn(){
 
 Pathfinder* Sector::getPathfinder(){
 	return pf;
+}
+
+void Sector::clearDeadEnts(){
+	for(int i = 0; i < __SectEnts->size();){
+		//std::cout << "Clearing Dead ent" << std::endl;
+		if(__SectEnts->at(i)->getIsAI()){
+			if(((dynamic_cast<AIShip*>(__SectEnts->at(i)))->getCurrHp()) <= 0){
+                
+                __SectEnts->erase(__SectEnts->begin() + i);
+       		}
+        	else{
+           		i++;
+    		}
+		}
+		else{
+			i++;
+		}
+        
+	}
+
+	for(int i = 0; i < __ships.size();){
+
+		if(__ships.at(i)->getIsAI()){
+			if((dynamic_cast<AIShip*>(__ships.at(i)))->getCurrHp() <= 0){
+                
+                __ships.erase(__ships.begin() + i);
+       		}
+        	else{
+           		i++;
+    		}
+		}
+		else{
+           		i++;
+    	}
+        
+	}
 }

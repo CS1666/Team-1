@@ -29,7 +29,6 @@ class Sector
 		vector<Star *>    __stars;
 		vector<Ship *>    __ships;
 		vector<Planet *>  __planets;
-		vector<AIShip *>  __ai;
 
 		vector<Asteroid *> __asteroids;
 		vector<BlackHole *> __blackholes;
@@ -78,8 +77,7 @@ class Sector
 		vector<int> getSize();
 
 		vector<vector<int> > getState();
-		void AddAI(AIShip* ai);
-		vector<AIShip *> getAI();
+		void clearDeadEnts();
 	
 		int getNumAlly();
 		int getNumEnemy();
