@@ -15,6 +15,7 @@
 #include "../General/gpRender.h"
 #include "../General/Sprite.h"
 #include "../General/Constants.h"
+#include "../AI/theta.h"
 
 
 
@@ -22,11 +23,12 @@ class Sector
 {
 	private:
 
-		
+		Pathfinder* pf;
 		vector <Sprite *>* __SectEnts;
 		vector<Star *> __stars;
 		vector<Ship *> __ships;
 		vector<Planet *> __planets;
+		
 
 		vector<Asteroid *> __asteroids;
 		vector<BlackHole *> __blackholes;
@@ -85,4 +87,5 @@ class Sector
 		SpaceStation* getSpaceStation();
 		vector<pair<int,int>> getEnemySpawn(int spawnloc);
 		vector<pair<int,int>> getAllySpawn();
+		Pathfinder* getPathfinder();
 };
