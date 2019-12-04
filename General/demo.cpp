@@ -538,6 +538,9 @@ void run_demo(gpRender gr){
 	ai.setTextures(&allTextures);
 	ai.setTimeAttack(SDL_GetTicks());
 	ai.setTimeSpawn(SDL_GetTicks());
+	if(ai.getAttackStatus()==true)
+	    ai.attackFlip();
+	//cout<<ai.getAttackStatus()<<endl;
 	int targetSector=galaxy.findTarget();
 	//cout<<"target: "<<targetSector<<endl;
 	ai.setTargetSector(sectors.at(targetSector));
@@ -653,21 +656,22 @@ void run_demo(gpRender gr){
 			    ai.setTimeSpawn(SDL_GetTicks());
 			}
 			//begin attack once reach limit
-			if(ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
+			if(!ai.getAttackStatus()&&ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
 			{
 			    //cout<<"begin attack?"<<endl;
 			    ai.setTimeAttack(SDL_GetTicks());
 			    ai.attackFlip();
 			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			    //note: if enemy attacks sector player currently is in it wont render them
 			}
 			//trigger battle/takeover if player doesn't respond in time (2 minutes)
 			if(ai.getAttackStatus()&&SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
-			    //cout<<"attack begins?"<<endl;
+			    //cout<<"attack concludes?"<<endl;
 			    //cout<<"time: "<<ai.getTimeAttack()<<endl;
-			    cout<<SDL_GetTicks()<<endl;
-			    cout<<SDL_GetTicks()-ai.getTimeAttack()<<endl;
+			    //cout<<SDL_GetTicks()<<endl;
+			    //cout<<SDL_GetTicks()-ai.getTimeAttack()<<endl;
 			    //ratio of ally:enemy
 			    double chance=10;
 			    if(ai.getTargetSector()->getCurEnemy()!=0)
@@ -679,9 +683,12 @@ void run_demo(gpRender gr){
 				//note: need to do something with changing ownership of sector
 				ai.getTargetSector()->setCurEnemy(rand()%SHIP_ENEMY_SECTOR_LIMIT);
 				galaxy.enemyWinZone(targetSector); //maybe this does it?
-				targetSector=galaxy.findTarget();
-        			ai.setTargetSector(sectors.at(targetSector));
-        			ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+				if(galaxy.getPlayerCount()>0)
+				{
+				    targetSector=galaxy.findTarget();
+        			    ai.setTargetSector(sectors.at(targetSector));
+        			    ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+				}
 			    }
 			    //fail
 			    else
@@ -978,7 +985,7 @@ void run_demo(gpRender gr){
 
 
 			if(SDL_GetTicks() - creditInterval > 2000){
-				credits += 5;
+				credits += 5*galaxy.getPlayerCount();
 				creditInterval = SDL_GetTicks();
 				credit_tex = gr.loadText("Credits: " + to_string(credits));
 				credit.updateCredits(credit_tex);
@@ -1424,11 +1431,19 @@ void run_demo(gpRender gr){
 							numEnemy--;
 							if(numEnemy <= 0)
 							{
+								//also reset attacking (but not currently massed)
+								if(galaxy.getEnemyCount()>0)
+								{
+								    targetSector=galaxy.findTarget();
+        							    ai.setTargetSector(sectors.at(targetSector));
+        							    ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+								}
+								ai.setTimeAttack(SDL_GetTicks());
+        							ai.setTimeSpawn(SDL_GetTicks());
 								galaxy.playerWinZone(curSector - 1);
 								ss_ent.setTexture(tex_ss);
 							}
-							
-						}	
+						}
 					}
 					toErase.push_back(i);
 				}
