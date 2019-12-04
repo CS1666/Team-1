@@ -933,7 +933,7 @@ void run_demo(gpRender gr){
 								//Upgrade player ship if credits over or equal to 50
 								if(playerent.getType()==0&&credits >= 50)
 								{
-									playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
+									//playerent.setTexture(allTextures.at(TEX_CRUIS_HERO));
 									playerent.upgradeType();
 									playerent.setMaxHp(100);
 									credits -= 50;
@@ -943,7 +943,7 @@ void run_demo(gpRender gr){
 								}
 								else if(playerent.getType()==1&&credits>=100)//upgrade if credits over 100 and have good ship
 								{
-									playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
+									//playerent.setTexture(allTextures.at(TEX_CAPT_HERO));
 									playerent.upgradeType();
 									playerent.setMaxHp(200);
 									credits-=100;
