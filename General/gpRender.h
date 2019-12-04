@@ -24,7 +24,8 @@ class gpRender{
 
 		//Renders passend in entities on screen
 
-
+		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<Sprite*> bodies, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
+		
 		void renderOnScreenEntity(std::vector<Sprite*> osSprite, std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
 		void renderOnScreenEntity(std::vector<int> galaxies, std::vector<std::vector<SDL_Rect*> > background1, std::vector<std::vector<SDL_Rect*> > background2, SDL_Rect camera, bool fixed);
 
