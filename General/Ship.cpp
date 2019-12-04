@@ -208,7 +208,7 @@ void Ship::updateMovement(std::vector<Sprite*> &osSprite,std::vector<Sprite*> ot
 	float speedY = speed*sin((getAngle() - 90.0)*PI/180);
 	// Try to move Horizontally
 
-	std::vector<float> gravPulls = calculateGravityPull(*this, osSprite);
+	std::vector<float> gravPulls = calculateGravityPull(*this, otherSprites);
 	speedX = speedX+gravPulls[0];
 	speedY = speedY+gravPulls[1];
 	setSpeedX(speedX);
