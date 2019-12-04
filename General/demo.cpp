@@ -390,7 +390,7 @@ void run_demo(gpRender gr){
 	int curSector = 8;
 	bool blink = false;
 		
-	std::vector<Sector> sectors;
+	std::vector<Sector*> sectors;
 	Sector sector1;
 	Sector sector2;
 	Sector sector3;
@@ -400,15 +400,15 @@ void run_demo(gpRender gr){
 	Sector sector7;
 	Sector sector8;
 	Sector sector9;
-	sectors.push_back(sector1);
-	sectors.push_back(sector2);
-	sectors.push_back(sector3);
-	sectors.push_back(sector4);
-	sectors.push_back(sector5);
-	sectors.push_back(sector6);
-	sectors.push_back(sector7);
-	sectors.push_back(sector8);
-	sectors.push_back(sector9);
+	sectors.push_back(&sector1);
+	sectors.push_back(&sector2);
+	sectors.push_back(&sector3);
+	sectors.push_back(&sector4);
+	sectors.push_back(&sector5);
+	sectors.push_back(&sector6);
+	sectors.push_back(&sector7);
+	sectors.push_back(&sector8);
+	sectors.push_back(&sector9);
 	
 	//Credits* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 
