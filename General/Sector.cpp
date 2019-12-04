@@ -133,7 +133,14 @@ vector<Planet *> Sector::getPlanets()
 {
 	return __planets;
 }
-
+void Sector::setCurEnemy(int num)
+{
+    curEnemy=num;
+}
+int Sector::getCurEnemy()
+{
+    return curEnemy;
+}
 void Sector::addPlanet(Planet* newPlanet)
 {
 	__planets.push_back(newPlanet);

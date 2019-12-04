@@ -14,7 +14,7 @@
 #include "../General/SpaceStation.h"
 #include "../General/gpRender.h"
 #include "../General/Sprite.h"
-
+#include "../General/Constants.h"
 
 
 
@@ -34,7 +34,7 @@ class Sector
 		SpaceStation* ss;
 		int num_ally = 0;
 		int num_enemy = 0;
-
+		int curEnemy = SHIP_ENEMY_SECTOR_INIT_LIMIT;
 		vector<int> sunPos;
 		SDL_Rect star_rect = {0};
 		SDL_Texture* star_tex;
@@ -42,8 +42,6 @@ class Sector
 		vector<SDL_Rect> planet_rect;
 		vector<Sprite *> bodySprites;
 		Star* star;
-		
-
 	public:
 
 		Sector();
@@ -54,7 +52,8 @@ class Sector
 		void setPlanets(vector<Planet *> newPlanets);
 		vector<Planet *> getPlanets();
 		void addPlanet(Planet* newPlanet);
-
+		void setCurEnemy(int num);
+		int getCurEnemy();
 		void setAsteroids(vector<Asteroid *> newAsteroids);
 		vector<Asteroid *> getAsteroids();
 		void addAsteroid(Asteroid* newAsteroid);

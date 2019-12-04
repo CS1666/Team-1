@@ -366,13 +366,13 @@ void Ship::getFired(std::vector<Sprite*> &osSprite, SDL_Texture* texture){
 		int X = getTrueX() + (getW()/2.0);// + (getH()/2.0)+  (getH()/2.0)*sin(getAngle()*1.1*.0174533) + 10*sin(getAngle()*1.1*.0174533);
 		int Y = getTrueY() + (getH()/2.0);// + (getW()/2.0)+ (getW()/2.0)*-cos(getAngle()*1.1*.0174533) - 10*cos(getAngle()*1.1*.0174533);
 		
-		std::cout << "Angle: " << getAngle() << std::endl;
-		std::cout << "Sin: " << sin(getAngle() *.0174533) << std::endl;
-		std::cout << "Cos: " << cos(getAngle() *.0174533) << std::endl;
-		std::cout << "Ship X: " << getTrueX() << std::endl;
-		std::cout << "Ship Y: " << getTrueY() << std::endl;
-		std::cout << "Laser X: " << X << std::endl;
-		std::cout << "Laser Y: " << Y << std::endl;
+		//std::cout << "Angle: " << getAngle() << std::endl;
+		//std::cout << "Sin: " << sin(getAngle() *.0174533) << std::endl;
+		//std::cout << "Cos: " << cos(getAngle() *.0174533) << std::endl;
+		//std::cout << "Ship X: " << getTrueX() << std::endl;
+		//std::cout << "Ship Y: " << getTrueY() << std::endl;
+		//std::cout << "Laser X: " << X << std::endl;
+		//std::cout << "Laser Y: " << Y << std::endl;
 		SDL_Rect projBox = {X, Y, 2, 10};
 		Projectile* laser = new Projectile(projBox, texture, weaponType, this);	
 		laser->setAngle(getAngle());
