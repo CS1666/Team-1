@@ -277,6 +277,13 @@ void Sector::setNumEnemy(int nume){
 	num_enemy = nume;
 }
 
+void Sector::AddAI(AIShip* ai){
+	__ai.push_back(ai);
+}
+
+vector<AIShip *> Sector::getAI(){
+	return __ai;
+}
 void Sector::setSpaceStation(SpaceStation* nss){
 	ss = nss;
 	__SectEnts->push_back(ss);
@@ -319,9 +326,9 @@ vector<pair<int,int>> Sector::getEnemySpawn(int spawnloc){
 
 
 vector<pair<int,int>> Sector::getAllySpawn(){
-	std::cout << "1" << std::endl;
+	//std::cout << "1" << std::endl;
 	vector<int> sspos = ss->getPosition();
-	std::cout << "2" <<  std::endl;
+	//std::cout << "2" <<  std::endl;
 	std::cout << sspos[0] <<  std::endl;
 	std::cout << sspos[1] <<  std::endl;
 
