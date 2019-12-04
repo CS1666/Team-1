@@ -981,7 +981,7 @@ void run_demo(gpRender gr){
 
 
 			if(SDL_GetTicks() - creditInterval > 2000){
-				credits += 5;
+				credits += 5*galaxy.getPlayerCount();
 				creditInterval = SDL_GetTicks();
 				credit_tex = gr.loadText("Credits: " + to_string(credits));
 				credit.updateCredits(credit_tex);
@@ -1427,6 +1427,12 @@ void run_demo(gpRender gr){
 							numEnemy--;
 							if(numEnemy <= 0)
 							{
+								//also reset attacking (but not currently massed)
+								targetSector=galaxy.findTarget();
+        							ai.setTargetSector(sectors.at(targetSector));
+        							ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+								ai.setTimeAttack(SDL_GetTicks());
+        							ai.setTimeSpawn(SDL_GetTicks());
 								galaxy.playerWinZone(curSector - 1);
 								ss_ent.setTexture(tex_ss);
 							}
