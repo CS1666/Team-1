@@ -408,6 +408,8 @@ void AI::setCurrentSector(Sector* newSector, bool change)
     if(change){
         for(AIShip* ship: *ships){
             ship->setRemove(true);
+            if(!ship->getIsAlly())
+                sector->setNumEnemy(sector->getNumEnemy() + 1);
         }
         ships->clear();
         for(Sprite* ship: *sector->getSectEnts()){
