@@ -711,9 +711,9 @@ void run_demo(gpRender gr){
 				} else {
 					//we need to check if our ship has left the range of the space station
 					if(!check_proximity(playerent, ss_ent, 3)){
-						if(in_space_station_menu) {
-							osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
-						}
+						//if(in_space_station_menu) {
+							//osSprite.erase(osSprite.begin() + ss_UI.get_spriteIndex());
+						//}
 						osSprite.erase(osSprite.begin() + e_UI.get_spriteIndex());
 
 						is_space_station_in_range = false;
