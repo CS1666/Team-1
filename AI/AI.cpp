@@ -11,7 +11,7 @@ void AI::executeAIActions(){
                 followPlayer(ship);
                 break;
             case(1)://Action 2: Defend position
-                cout<<"Defending Positon"<<endl;
+                //cout<<"Defending Positon"<<endl;
                 if(!ship->getHasTarget()){
                     findShip(ship, 1);
                 }
@@ -21,7 +21,7 @@ void AI::executeAIActions(){
                 break;
 
             case(2)://Action 3: Attack Enemy
-                cout<<"Attack Enemy"<<endl;
+                //cout<<"Attack Enemy"<<endl;
                 if(!ship->getHasTarget()){
                     findShip(ship, 2);
                 }
@@ -30,15 +30,15 @@ void AI::executeAIActions(){
                 }
                 break;
             case(3)://Action 4: Run away from enemy
-                cout<<"Flee"<<endl;
+                //cout<<"Flee"<<endl;
                 fleeToCorner(ship);
                 break;
 	        case(4): //Action 5: roam around for enemies
-		        cout<<"Roaming"<<endl;
+		        //cout<<"Roaming"<<endl;
 		        roamAround(ship);
 		        break;
             default://If not assigned goal do nothing
-                cout<<"Do nothing"<<endl;
+                //cout<<"Do nothing"<<endl;
                 doNothing(ship);
                 break;
         }
@@ -192,7 +192,7 @@ void AI::doNothing(AIShip* ship)
 	//swap goals upon coming back in range
 	else if(SDL_GetTicks()-ship->getTime()>1000)
 	{
-	    cout<<"alert: ship activated"<<endl;
+	    //cout<<"alert: ship activated"<<endl;
 	    ship->setGoal(1);
 	}
     }
@@ -209,7 +209,46 @@ void AI::setTextures(vector<SDL_Texture*>* textures)
 {
     allTextures=textures;
 }
-
+void AI::setTimeSpawn(Uint32 time)
+{
+    timeSpawn=time;
+}
+Uint32 AI::getTimeSpawn()
+{
+    return timeSpawn;
+}
+void AI::setTimeAttack(Uint32 time)
+{
+    timeAttack=time;
+}
+Uint32 AI::getTimeAttack()
+{
+    return timeAttack;
+}
+void AI::setAttackSector(Sector* newSector)
+{
+    attackSector=newSector;
+}
+Sector* AI::getAttackSector()
+{
+    return attackSector;
+}
+void AI::setTargetSector(Sector* newSector)
+{
+    targetSector=newSector;
+}
+Sector* AI::getTargetSector()
+{
+    return targetSector;
+}
+void AI::attackFlip()
+{
+    isAttacking=!isAttacking;
+}
+bool AI::getAttackStatus()
+{
+    return isAttacking;
+}
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
@@ -395,7 +434,7 @@ pair<int, int> AI::radar(AIShip& aiShip)
 
 			pair<int, int> shipSize = ship->getSize();
 
-            std::cout << "Check ship location "<< ship->getIsAlly() << ", " << aiShip.getIsAlly() << std::endl;
+            //std::cout << "Check ship location "<< ship->getIsAlly() << ", " << aiShip.getIsAlly() << std::endl;
 
 			if (shipCheck != radarPosition && ship->getIsAlly() != aiShip.getIsAlly())
 			{
@@ -447,7 +486,7 @@ void AI::createShip(bool isAlly,int goal){
 
     //Create New Ally Ship
     if(isAlly){
-        if(sector->getNumAlly() < SHIP_SECTOR_LIMIT){
+        if(sector->getNumAlly() < SHIP_ALLY_SECTOR_LIMIT){
             sector->setNumAlly(sector->getNumAlly() + 1);
             pair<int,int> asp = ChooseAllySpawn();
 
@@ -476,7 +515,7 @@ void AI::createShip(bool isAlly,int goal){
     }
     else{//Create New Enemy Ship
 
-        if(sector->getNumEnemy() < SHIP_SECTOR_LIMIT){
+        if(sector->getNumEnemy() < sector->getCurEnemy()){
             sector->setNumEnemy(sector->getNumEnemy() + 1);
             pair<int,int> esp = ChooseEnemySpawn();
             if(esp.first != -1 && esp.second != -1){
