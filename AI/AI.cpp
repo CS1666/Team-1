@@ -43,6 +43,18 @@ void AI::executeAIActions(){
                 doNothing(ship);
                 break;
         }
+
+          for(int i = 0; i < ships->size(); i++){
+
+        if(ships->at(i)->getCurrHp() <= 0){
+            
+            ships->erase(ships->begin() + i);
+        }
+        else{
+            i++;
+        }
+
+    }
         
     }
 
