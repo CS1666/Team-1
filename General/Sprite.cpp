@@ -278,7 +278,6 @@
 			else{
 				animation--;
 			}
-
 			setAnimLastTime();
 			setF1(animation);
 		}

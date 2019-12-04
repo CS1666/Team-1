@@ -411,6 +411,7 @@ int Hero::getType()
 void Hero::upgradeType()
 {
     shipType++;
+    weaponType = weaponType*2;
 	setF2(getF().second + 2);
 }
 //General wrapper function to handle Key evenets
