@@ -107,7 +107,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 		bodySprites.push_back(__planets.back());
 		
 
-		lastBody = dist + 200;
+		lastBody = dist + 250;
 
 	}
 
