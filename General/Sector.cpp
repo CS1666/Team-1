@@ -10,7 +10,7 @@ Sector::Sector(){
 void Sector::init(gpRender *g, int winWidth, int winHeight)
 {
 
-	srand(time(NULL));
+	//srand(time(NULL));
 
 	star_rect.x = winWidth / 2;
 	star_rect.y = winHeight/2;
