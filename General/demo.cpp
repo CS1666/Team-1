@@ -647,14 +647,14 @@ void run_demo(gpRender gr){
 			//add a ship to an adjacent every 15 seconds
 			if(SDL_GetTicks()-ai.getTimeSpawn()>DELAY_ATTACK_SPAWN)
 			{
-			    cout<<"add a ship?"<<endl;
+			    //cout<<"add a ship?"<<endl;
 			    ai.getAttackSector()->setCurEnemy(ai.getAttackSector()->getCurEnemy()+1);
 			    ai.setTimeSpawn(SDL_GetTicks());
 			}
 			//begin attack once reach limit
 			if(ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
 			{
-			    cout<<"begin attack?"<<endl;
+			    //cout<<"begin attack?"<<endl;
 			    ai.setTimeAttack(SDL_GetTicks());
 			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
@@ -663,7 +663,9 @@ void run_demo(gpRender gr){
 			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
 			    //ratio of ally:enemy
-			    double chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    double chance=1;
+			    if(ai.getTargetSector()->getCurEnemy()!=0)
+				chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
 			    //successful takeover
 			    if(rand()%100>chance*100)
 			    {
