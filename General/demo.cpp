@@ -625,6 +625,7 @@ void run_demo(gpRender gr){
 			    {
 				//note: need to do something with changing ownership of sector
 				ai.getTargetSector()->setCurEnemy(rand()%SHIP_ENEMY_SECTOR_LIMIT);
+				galaxy.enemyWinZone(targetSector); //maybe this does it?
 				targetSector=galaxy.findTarget();
         			ai.setTargetSector(sectors.at(targetSector));
         			ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
