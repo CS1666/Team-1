@@ -21,7 +21,7 @@ std::vector<std::pair<int, int>> randNum(){
 		[](int a, int b){return std::make_pair(a, b);});
 
 	for(int k = 0; k<10; k++){
-	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
+	 	//std::cout << coords[k].first << ", " << coords[k].second << endl;
 	}
 
 	 return coords;
@@ -61,9 +61,34 @@ constexpr int ZONE_WIDTH = 3840;
 constexpr int ZONE_HEIGHT = 3840;
 
 void run_demo(gpRender gr){
+	srand(time(NULL));
+	std::vector<Sector *> sectors;
+	Sector sector1;
+	Sector sector2;
+	Sector sector3;
+	Sector sector4;
+	Sector sector5;
+	Sector sector6;
+	Sector sector7;
+	Sector sector8;
+	Sector sector9;
+	sectors.push_back(&sector1);
+	sectors.push_back(&sector2);
+	sectors.push_back(&sector3);
+	sectors.push_back(&sector4);
+	sectors.push_back(&sector5);
+	sectors.push_back(&sector6);
+	sectors.push_back(&sector7);
+	sectors.push_back(&sector8);
+	sectors.push_back(&sector9);
+
+	for(auto sector : sectors)
+	{
+		sector->init(&gr, ZONE_WIDTH, ZONE_HEIGHT);
+		sector->setSize({ZONE_WIDTH, ZONE_HEIGHT});
+	}
 	Sector sector;
-	sector.init(&gr, ZONE_WIDTH, ZONE_HEIGHT);
-	sector.setSize({ZONE_WIDTH, ZONE_HEIGHT});
+	
 	GalaxyControl galaxy;
 	Ellers_Maze seed;
 	int sunSeed = seed.getSeed();
@@ -114,7 +139,11 @@ void run_demo(gpRender gr){
 	playerent.setCurrHp(100);
 	playerent.setMaxHp(100);
 	osSprite.push_back(&playerent);
-	sector.addShips(&playerent);
+	for(auto sector : sectors)
+	{
+		sector->addShips(&playerent);
+	}
+	
 	std::cout << "player " << db.x << ", " << db.y << endl;
 	//SDL_Texture* tex2 = gr.loadImage(z);
 	//if(something == true){
@@ -192,13 +221,21 @@ void run_demo(gpRender gr){
 	Asteroid asteroid1ent(db9, allTextures.at(rand() % 4 + 22));
 	osSprite.push_back(&asteroid1ent);
 	osAst.push_back(&asteroid1ent);
-	sector.addAsteroid(&asteroid1ent);	
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid1ent);
+	}
+		
 
 	astSize = rand() % 40 + 20;
 	SDL_Texture* tex10 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db10 = {randCoords[7].first + 800,randCoords[7].second + 1000,astSize,astSize};
 	Asteroid asteroid2ent(db10, allTextures.at(rand() % 4 + 22));
-	sector.addAsteroid(&asteroid2ent);
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid2ent);
+	}
+	
 	osSprite.push_back(&asteroid2ent);
 	osAst.push_back(&asteroid2ent);
 
@@ -206,7 +243,10 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex11 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db11 = {randCoords[8].first + 1100,randCoords[8].second + 1000, astSize,astSize};
 	Asteroid asteroid3ent(db11, allTextures.at(rand() % 4 + 22));
-	sector.addAsteroid(&asteroid3ent);
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid2ent);
+	}
 	osSprite.push_back(&asteroid3ent);
 	osAst.push_back(&asteroid3ent);
 
@@ -214,21 +254,35 @@ void run_demo(gpRender gr){
 	SDL_Texture* tex12 = gr.loadImage("Assets/Objects/Asteroid.png");
 	SDL_Rect db12 = {randCoords[9].first + 600,randCoords[9].second + 1000, astSize,astSize};
 	Asteroid asteroid4ent(db12, allTextures.at(rand() % 4 + 22));
-	sector.addAsteroid(&asteroid4ent);
+
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid4ent);
+	}
+	
 	osSprite.push_back(&asteroid4ent);
 	osAst.push_back(&asteroid4ent);
 
 	astSize = rand() % 40 + 20;
 	SDL_Rect db13 = {400,500, astSize,astSize};
 	Asteroid asteroid5ent(db13, allTextures.at(rand() % 4 + 22));
-	sector.addAsteroid(&asteroid5ent);
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid5ent);
+	}
+	
 	osSprite.push_back(&asteroid5ent);
 	osAst.push_back(&asteroid5ent);
 
 	astSize = rand() % 40 + 20;
 	SDL_Rect db14 = {300,500,astSize,astSize};
 	Asteroid asteroid6ent(db14, allTextures.at(rand() % 4 + 22), .5, 0);
-	sector.addAsteroid(&asteroid6ent);
+
+	for(auto sector : sectors)
+	{
+		sector->addAsteroid(&asteroid6ent);
+	}	
+	
 	osSprite.push_back(&asteroid6ent);
 	osAst.push_back(&asteroid6ent);
 
@@ -262,7 +316,12 @@ void run_demo(gpRender gr){
 	SpaceStation ss_ent(rect_ss, tex_ss);
 	ss_ent.setPosition(std::vector<int>{SCREEN_WIDTH/2 - PLAYER_WIDTH/2,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2 - 200 });
 	osSprite.push_back(&ss_ent);
-	sector.setSpaceStation(&ss_ent);
+	for(auto sector : sectors)
+	{
+		sector->setSpaceStation(&ss_ent);
+	}
+
+	
 
 	SDL_Texture* e_tex = gr.loadImage("Assets/Objects/E.png");
 	SDL_Rect e_rect = {50, 60, 100, 100};
@@ -390,25 +449,6 @@ void run_demo(gpRender gr){
 	int curSector = 8;
 	bool blink = false;
 		
-	std::vector<Sector> sectors;
-	Sector sector1();
-	Sector sector2();
-	Sector sector3();
-	Sector sector4();
-	Sector sector5();
-	Sector sector6();
-	Sector sector7();
-	Sector sector8();
-	Sector sector9();
-	sectors.push_back(&sector1);
-	sectors.push_back(&sector2);
-	sectors.push_back(&sector3);
-	sectors.push_back(&sector4);
-	sectors.push_back(&sector5);
-	sectors.push_back(&sector6);
-	sectors.push_back(&sector7);
-	sectors.push_back(&sector8);
-	sectors.push_back(&sector9);
 	
 	//Credits* mapSectors[] = {sector1Tex, sector2Tex, sector3Tex, sector4Tex, sector5Tex, sector6Tex, sector7Tex, sector8Tex, sector9Tex};
 
@@ -469,14 +509,18 @@ void run_demo(gpRender gr){
 
 	AI ai;
 
-
-	sector.setShips({&playerent});
-	sector.setSpaceStation(&ss_ent);
+	for(auto sector : sectors)
+	{
+		sector->setShips({&playerent});
+		sector->setSpaceStation(&ss_ent);
+	}
 	
+	/*Need to address*/
 	ai.setCurrentSector(&sector);
 
-
-	vector<Sprite*>* mesh = sector.getSectEnts();
+	/*Need to fix*/
+	
+	vector<Sprite*>* mesh = sectors.at(0)->getSectEnts();
 	std::cout << "Inital size: "<< mesh->size()  << std::endl;
 
 	pair<int,int> sectorSize;
@@ -492,7 +536,15 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
-
+	ai.setTimeAttack(SDL_GetTicks());
+	ai.setTimeSpawn(SDL_GetTicks());
+	if(ai.getAttackStatus()==true)
+	    ai.attackFlip();
+	//cout<<ai.getAttackStatus()<<endl;
+	int targetSector=galaxy.findTarget();
+	//cout<<"target: "<<targetSector<<endl;
+	ai.setTargetSector(sectors.at(targetSector));
+	ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
 
 	bool titleCard = true;
@@ -596,8 +648,55 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-	
-			
+			//add a ship to an adjacent every 15 seconds
+			if(SDL_GetTicks()-ai.getTimeSpawn()>DELAY_ATTACK_SPAWN)
+			{
+			    //cout<<"add a ship?"<<endl;
+			    ai.getAttackSector()->setCurEnemy(ai.getAttackSector()->getCurEnemy()+1);
+			    ai.setTimeSpawn(SDL_GetTicks());
+			}
+			//begin attack once reach limit
+			if(!ai.getAttackStatus()&&ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
+			{
+			    //cout<<"begin attack?"<<endl;
+			    ai.setTimeAttack(SDL_GetTicks());
+			    ai.attackFlip();
+			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			    //note: if enemy attacks sector player currently is in it wont render them
+			}
+			//trigger battle/takeover if player doesn't respond in time (2 minutes)
+			if(ai.getAttackStatus()&&SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
+			{
+			    //cout<<"attack concludes?"<<endl;
+			    //cout<<"time: "<<ai.getTimeAttack()<<endl;
+			    //cout<<SDL_GetTicks()<<endl;
+			    //cout<<SDL_GetTicks()-ai.getTimeAttack()<<endl;
+			    //ratio of ally:enemy
+			    double chance=10;
+			    if(ai.getTargetSector()->getCurEnemy()!=0)
+				chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    //cout<<"chance: "<<chance<<endl;
+			    //successful takeover
+			    if(rand()%100>chance*100)
+			    {
+				//note: need to do something with changing ownership of sector
+				ai.getTargetSector()->setCurEnemy(rand()%SHIP_ENEMY_SECTOR_LIMIT);
+				galaxy.enemyWinZone(targetSector); //maybe this does it?
+				if(galaxy.getPlayerCount()>0)
+				{
+				    targetSector=galaxy.findTarget();
+        			    ai.setTargetSector(sectors.at(targetSector));
+        			    ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+				}
+			    }
+			    //fail
+			    else
+			    {
+				ai.getTargetSector()->setCurEnemy(0);
+			    }
+			    ai.attackFlip();
+			}
 			if(galaxy.getInControl(curSector - 1))
 			{
 				// Checking for if the Space Station is in range of the player ship.
@@ -880,13 +979,13 @@ void run_demo(gpRender gr){
 							break;
 					}
 				}
-				gr.renderOnScreenEntity(osSprite, sector.getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
+				gr.renderOnScreenEntity(osSprite, sectors.at(curSector - 1)->getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2, camera, fixed);
 			}
 			//--- END OF SPACE STATION UI SUB LOOP ---
 
 
 			if(SDL_GetTicks() - creditInterval > 2000){
-				credits += 5;
+				credits += 5*galaxy.getPlayerCount();
 				creditInterval = SDL_GetTicks();
 				credit_tex = gr.loadText("Credits: " + to_string(credits));
 				credit.updateCredits(credit_tex);
@@ -1005,7 +1104,7 @@ void run_demo(gpRender gr){
 				if(!ent->getIsAI() && !ent->getIsAsteroid()){
 					if(dynamic_cast<Ship*>(ent))
 					{
-						dynamic_cast<Ship*>(ent)->updateMovement(osSprite, sector.getBodySprites(), ZONE_WIDTH, ZONE_HEIGHT);				
+						dynamic_cast<Ship*>(ent)->updateMovement(osSprite, sectors.at(curSector - 1)->getBodySprites(), ZONE_WIDTH, ZONE_HEIGHT);				
 					}
 					else
 					{
@@ -1023,9 +1122,9 @@ void run_demo(gpRender gr){
 				
 			}
 
-			if(sector.getPlanets().size() > 0)
+			if(sectors.at(curSector - 1)->getPlanets().size() > 0)
 			{
-				for( auto ent : sector.getPlanets())
+				for( auto ent : sectors.at(curSector - 1)->getPlanets())
 				{
 					/*Commented out until orbits work*/
 					ent->updatePosition(osSprite);
@@ -1332,11 +1431,19 @@ void run_demo(gpRender gr){
 							numEnemy--;
 							if(numEnemy <= 0)
 							{
+								//also reset attacking (but not currently massed)
+								if(galaxy.getEnemyCount()>0)
+								{
+								    targetSector=galaxy.findTarget();
+        							    ai.setTargetSector(sectors.at(targetSector));
+        							    ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+								}
+								ai.setTimeAttack(SDL_GetTicks());
+        							ai.setTimeSpawn(SDL_GetTicks());
 								galaxy.playerWinZone(curSector - 1);
 								ss_ent.setTexture(tex_ss);
 							}
-							
-						}	
+						}
 					}
 					toErase.push_back(i);
 				}
@@ -1359,7 +1466,7 @@ void run_demo(gpRender gr){
 			// member function on the duration object 
 			//cout << duration.count() << endl; 
 			
-			gr.renderOnScreenEntity(osSprite, sector.getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
+			gr.renderOnScreenEntity(osSprite, sectors.at(curSector - 1)->getBodySprites(), bggalaxies, bgzonelayer1, bgzonelayer2,  camera, fixed);
 			Audio::set_solar(solar);
 			
 			if(galaxy.getWinGame())

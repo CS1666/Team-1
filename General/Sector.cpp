@@ -10,7 +10,7 @@ Sector::Sector(){
 void Sector::init(gpRender *g, int winWidth, int winHeight)
 {
 
-	srand(time(NULL));
+	//srand(time(NULL));
 
 	star_rect.x = winWidth / 2;
 	star_rect.y = winHeight/2;
@@ -133,7 +133,14 @@ vector<Planet *> Sector::getPlanets()
 {
 	return __planets;
 }
-
+void Sector::setCurEnemy(int num)
+{
+    curEnemy=num;
+}
+int Sector::getCurEnemy()
+{
+    return curEnemy;
+}
 void Sector::addPlanet(Planet* newPlanet)
 {
 	__planets.push_back(newPlanet);

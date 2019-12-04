@@ -444,7 +444,7 @@ void AIShip::attackShip(pair<int,int> otherShip)
     //also 2 seconds between shooting a laser
     if(!angleChanged&&SDL_GetTicks()-timeActivated>2000)
     {
-	cout<<"fired"<<endl;
+	//cout<<"fired"<<endl;
 	rotationSet=false;
 	timeActivated=SDL_GetTicks();
 	fireWeapon();
