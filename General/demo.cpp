@@ -21,7 +21,7 @@ std::vector<std::pair<int, int>> randNum(){
 		[](int a, int b){return std::make_pair(a, b);});
 
 	for(int k = 0; k<10; k++){
-	 	std::cout << coords[k].first << ", " << coords[k].second << endl;
+	 	//std::cout << coords[k].first << ", " << coords[k].second << endl;
 	}
 
 	 return coords;
@@ -492,10 +492,11 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
+	ai.setTimeAttack(999999999);
 	ai.setTimeSpawn(SDL_GetTicks());
 	int targetSector=galaxy.findTarget();
-	ai.setTargetSector(&sectors.at(targetSector));
-	ai.setAttackSector(&sectors.at(galaxy.findNeighbor(targetSector)));
+	ai.setTargetSector(sectors.at(targetSector));
+	ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
 
 	bool titleCard = true;
@@ -599,18 +600,41 @@ void run_demo(gpRender gr){
 		{	
 			gr.setFrameStart(SDL_GetTicks());
 			TimeData::update_timestep();
-			//add a ship to an adjacent every 2 seconds
-			if(SDL_GetTicks()-ai.getTimeSpawn()>2000)
+			//add a ship to an adjacent every 15 seconds
+			if(SDL_GetTicks()-ai.getTimeSpawn()>DELAY_ATTACK_SPAWN)
 			{
-			    ai.getAttackSector()->setNumEnemy(ai.getAttackSector()->getNumEnemy()+1);
+			    cout<<"add a ship?"<<endl;
+			    ai.getAttackSector()->setCurEnemy(ai.getAttackSector()->getCurEnemy()+1);
 			    ai.setTimeSpawn(SDL_GetTicks());
 			}
 			//begin attack once reach limit
-			if(ai.getAttackSector()->getNumEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
+			if(ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
 			{
+			    cout<<"begin attack?"<<endl;
 			    ai.setTimeAttack(SDL_GetTicks());
-			    ai.getAttackSector()->setNumEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
-			    //insert attack function
+			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
+			}
+			//trigger battle/takeover if player doesn't respond in time (2 minutes)
+			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
+			{
+			    //ratio of ally:enemy
+			    double chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    //successful takeover
+			    if(rand()%100>chance*100)
+			    {
+				//note: need to do something with changing ownership of sector
+				ai.getTargetSector()->setCurEnemy(rand()%SHIP_ENEMY_SECTOR_LIMIT);
+				galaxy.enemyWinZone(targetSector); //maybe this does it?
+				targetSector=galaxy.findTarget();
+        			ai.setTargetSector(sectors.at(targetSector));
+        			ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+			    }
+			    //fail
+			    else
+			    {
+				ai.getTargetSector()->setCurEnemy(0);
+			    }
 			}
 			if(galaxy.getInControl(curSector - 1))
 			{
