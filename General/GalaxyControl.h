@@ -1,3 +1,5 @@
+#include <vector>
+#include <stdlib.h>
 class GalaxyControl
 {
 
@@ -19,7 +21,9 @@ public:
 	void playerWinZone(int zone);
 
 	void setZone(int zone, bool contr);
-
+	//find an acceptable adjacent sector to attack from
+	int findNeighbor(int target);
+	int findTarget();
 private:
 
 	int enemy_contr_count;

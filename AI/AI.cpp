@@ -209,7 +209,38 @@ void AI::setTextures(vector<SDL_Texture*>* textures)
 {
     allTextures=textures;
 }
-
+void AI::setTimeSpawn(Uint32 time)
+{
+    timeSpawn=time;
+}
+Uint32 AI::getTimeSpawn()
+{
+    return timeSpawn;
+}
+void AI::setTimeAttack(Uint32 time)
+{
+    timeAttack=time;
+}
+Uint32 AI::getTimeAttack()
+{
+    return timeAttack;
+}
+void AI::setAttackSector(Sector* newSector)
+{
+    attackSector=newSector;
+}
+Sector* AI::getAttackSector()
+{
+    return attackSector;
+}
+void AI::setTargetSector(Sector* newSector)
+{
+    targetSector=newSector;
+}
+Sector* AI::getTargetSector()
+{
+    return targetSector;
+}
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
@@ -447,7 +478,7 @@ void AI::createShip(bool isAlly,int goal){
 
     //Create New Ally Ship
     if(isAlly){
-        if(sector->getNumAlly() < SHIP_SECTOR_LIMIT){
+        if(sector->getNumAlly() < SHIP_ALLY_SECTOR_LIMIT){
             sector->setNumAlly(sector->getNumAlly() + 1);
             pair<int,int> asp = ChooseAllySpawn();
 
@@ -476,7 +507,7 @@ void AI::createShip(bool isAlly,int goal){
     }
     else{//Create New Enemy Ship
 
-        if(sector->getNumEnemy() < SHIP_SECTOR_LIMIT){
+        if(sector->getNumEnemy() < SHIP_ENEMY_SECTOR_INIT_LIMIT){
             sector->setNumEnemy(sector->getNumEnemy() + 1);
             pair<int,int> esp = ChooseEnemySpawn();
             if(esp.first != -1 && esp.second != -1){
