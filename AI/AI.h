@@ -25,9 +25,9 @@ class AI
         vector<vector<bool> > storedShipState; //probably needs to be changed
         Hero* playerShip;
         Pathfinder* pathfinder;
-	    vector<Sprite*>* osSprite;
-	    vector<SDL_Texture*>* allTextures;
-	    pair<int,int> sectorSize; //width, height
+	vector<Sprite*>* osSprite;
+	vector<SDL_Texture*>* allTextures;
+	pair<int,int> sectorSize; //width, height
         Sector* sector;
         pair<int,int> ChooseEnemySpawn();
         pair<int,int> ChooseAllySpawn();
@@ -35,19 +35,29 @@ class AI
         void followEnemy(AIShip* ship);
         void followPlayer(AIShip* ship);
         void findShip(AIShip* ship, int routine);
-        
-  
-
+        Uint32 timeSpawn;
+	Uint32 timeAttack;
+  	Sector* attackSector; //which sector attacking from
+	Sector* targetSector; //which sector to be attacked
+	bool isAttacking; //if currently attacking a sector
     public:
+	void setTimeSpawn(Uint32 time);
+	Uint32 getTimeSpawn();
+	void setTimeAttack(Uint32 time);
+	Uint32 getTimeAttack();
+	Sector* getAttackSector();
+	void setAttackSector(Sector* newSector);
+	Sector* getTargetSector();
+	bool getAttackStatus();
+	void attackFlip();
+	void setTargetSector(Sector* newSector);
         void setCurrentSector(Sector* newSector);
         void setShips(vector<AIShip*>* newShips);
       //change mapstate
         void setShipPath(AIShip *shipToPath);
         vector<vector<bool>> getMapState();
-	    void setSprites(vector<Sprite*>* sprites);
-	    void setTextures(vector<SDL_Texture*>* textures);
-       
-       
+	void setSprites(vector<Sprite*>* sprites);
+	void setTextures(vector<SDL_Texture*>* textures);
         queue<pair<int,int>>* calculatePath(AIShip& theShip);
         void orderShip(AIShip theShip, Ship playerShip);//note: idk if this is best place to put this method
         void setPlayerShip(Hero* playerShip);

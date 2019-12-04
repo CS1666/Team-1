@@ -1,4 +1,12 @@
 Current modes for main.o
+BIG NOTE FOR ENEMY ATTACKING SECTOR:
+I don't know where exactly sector ownership is being handled, but wherever it is
+the AI should recalculate a new attack/target sector when one is taken over. These 3 lines
+in the demo change the attack/target sector, place them wherever it is being done.
+	int targetSector=galaxy.findTarget();
+        ai.setTargetSector(sectors.at(targetSector));
+        ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+
 
 a (AI), p (physics), l (level gen), c (credits)
 
