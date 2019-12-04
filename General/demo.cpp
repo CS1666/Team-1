@@ -516,7 +516,7 @@ void run_demo(gpRender gr){
 	}
 	
 	/*Need to address*/
-	ai.setCurrentSector(&sector);
+	ai.setCurrentSector(sectors[curSector - 1]);
 
 	/*Need to fix*/
 	
@@ -1361,36 +1361,16 @@ void run_demo(gpRender gr){
 				{
 					solar = true;
 				}
+
+				ai.setCurrentSector(sectors[curSector - 1]);
+
 				
 			}
 			
 			
 			TimeData::update_move_last_time();
 
-			/*if (animate){
-				if (TimeData::getTimeSinceAnim() > 100) {
-					if (animation <= 1){
-						cycle = true;
-					}
-					else if(animation == 3){
-						cycle = false;
-					}
-					
-					if (cycle){
-						animation++;
-					}
-					else{
-						animation--;
-					}
-					
-					TimeData::update_anim_last_time();
-					playerent.setF(animation);
-				}
-			}
-			else{
-				animation = 0;
-				playerent.setF(animation);
-			}*/
+			
 
 			//Renders all renderable objects onto the screen
 

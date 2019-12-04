@@ -5,6 +5,7 @@ using namespace std;
 
 Sector::Sector(){
 	__SectEnts = new vector<Sprite *>();
+	pf = new Pathfinder(__SectEnts, 10);
 }
 
 void Sector::init(gpRender *g, int winWidth, int winHeight)
@@ -24,6 +25,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 			star = new Star(star_rect, star_tex, {star_rect});
 			star->setPosition({star_rect.x, star_rect.y});			
 			bodySprites.push_back(star);
+			__SectEnts->push_back(star);
 			break;
 
 		case 1: //white dwarf
@@ -33,6 +35,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 			star = new Star(star_rect, star_tex, {star_rect});
 			star->setPosition({star_rect.x, star_rect.y});			
 			bodySprites.push_back(star);
+			__SectEnts->push_back(star);
 			break;
 
 		case 2:	//yellow dwarf
@@ -42,6 +45,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 			star = new Star(star_rect, star_tex, {star_rect});
 			star->setPosition({star_rect.x, star_rect.y});			
 			bodySprites.push_back(star);
+			__SectEnts->push_back(star);
 			break;
 
 		case 3: //blue giant
@@ -51,6 +55,7 @@ void Sector::init(gpRender *g, int winWidth, int winHeight)
 			star = new Star(star_rect, star_tex, {star_rect});
 			star->setPosition({star_rect.x, star_rect.y});			
 			bodySprites.push_back(star);
+			__SectEnts->push_back(star);
 			break;
 	}
 
@@ -322,4 +327,8 @@ vector<pair<int,int>> Sector::getAllySpawn(){
 
 	//                            left                               top                                     right										bottom
 	return {pair<int,int>(sspos[0] - 100, sspos[1]), pair<int,int>(sspos[0], sspos[1] - 100),  pair<int,int>(sspos[0] + 100, sspos[1]), pair<int,int>(sspos[0],  sspos[1] + 100) };
+}
+
+Pathfinder* Sector::getPathfinder(){
+	return pf;
 }
