@@ -5,7 +5,7 @@ void AI::executeAIActions(){
     //cout<<"Executing action"<<endl;
     for(AIShip* ship : *ships){
 
-        cout<<"is Ally"<< ship->getIsAlly() << endl;
+        //cout<<"is Ally"<< ship->getIsAlly() << endl;
         switch(ship->getGoal()){
             case(0)://Action 1: Follow Player
                 ship->setTargetShip(getPlayerShip());
@@ -43,6 +43,19 @@ void AI::executeAIActions(){
                 doNothing(ship);
                 break;
         }
+
+          for(int i = 0; i < ships->size();){
+
+            if(ships->at(i)->getCurrHp() <= 0){
+                
+                ships->erase(ships->begin() + i);
+            }
+            else{
+                i++;
+            }
+
+        }
+        sector->clearDeadEnts();
         
     }
 
@@ -387,12 +400,34 @@ void AI::orderShip(AIShip theShip, Ship player)
 }
 
 
-void AI::setCurrentSector(Sector* newSector)
+void AI::setCurrentSector(Sector* newSector, bool change)
 {
 	sector = newSector;
     setPathfinder(sector->getPathfinder());
 
-    //ships->clear();
+    if(change){
+        for(AIShip* ship: *ships){
+            ship->setRemove(true);
+        }
+        ships->clear();
+        for(Sprite* ship: *sector->getSectEnts()){
+            
+            if(ship->getIsAI()){
+   
+                ship->setRemove(false);
+                ships->push_back(dynamic_cast<AIShip*>(ship));
+                osSprite->push_back(ship);
+            }
+            
+
+        }
+     
+        setPathfinder(sector->getPathfinder());
+
+
+    }
+
+    
 
 }
 
@@ -488,25 +523,25 @@ bool AI::checkBounds(int x, int y)
 }
 
 void AI::createShip(bool isAlly,int goal){
-    cout<<"1"<<endl;
+    //cout<<"1"<<endl;
     //Create New Ally Ship
     if(isAlly){
-        cout<<"2"<<endl;
+       // cout<<"2"<<endl;
         if(sector->getNumAlly() < SHIP_ALLY_SECTOR_LIMIT){
-            cout<<"3"<<endl;
+            //cout<<"3"<<endl;
             sector->setNumAlly(sector->getNumAlly() + 1);
-            cout<<"4"<<endl;
-            pair<int,int> asp = ChooseAllySpawn();
-            cout<<"5"<<endl;
+            //cout<<"4"<<endl;
+            pair<int,int> asp = ChooseSSSpawn();
+            //cout<<"5"<<endl;
 
             if(asp.first != -1 && asp.second != -1){
-                cout<<"6"<<endl;
+                //cout<<"6"<<endl;
                 SDL_Rect db = {asp.first,asp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
-                cout<<"7"<<endl;
+                //cout<<"7"<<endl;
                 SDL_Texture* tex  = allTextures->at(TEX_SHIPS);
-                cout<<"8"<<endl;
+                //cout<<"8"<<endl;
                 AIShip* newShip = new AIShip(db, tex,true);
-                cout<<"9"<<endl;
+                //cout<<"9"<<endl;
                 newShip->setPosition(asp);
                 newShip->setDestination(playerShip->getPosition());
                 newShip->setRenderOrder(0);
@@ -517,7 +552,7 @@ void AI::createShip(bool isAlly,int goal){
                 osSprite->push_back(newShip);
                 ships->push_back(newShip);
                 sector->addShips(newShip);
-
+               
 
             }
             else{
@@ -527,26 +562,41 @@ void AI::createShip(bool isAlly,int goal){
         }
     }
     else{//Create New Enemy Ship
-
+        //cout<<"1 i"<<endl;
         if(sector->getNumEnemy() < sector->getCurEnemy()){
+             //cout<<"2 i"<<endl;
             sector->setNumEnemy(sector->getNumEnemy() + 1);
-            pair<int,int> esp = ChooseEnemySpawn();
+             ///cout<<"3i "<<endl;
+            pair<int,int> esp = ChooseBorderSpawn();
+             //cout<<"4 i"<<endl;
             if(esp.first != -1 && esp.second != -1){
+                 ///cout<<"5 i"<<endl;
                 
                 SDL_Rect db = {esp.first,esp.second,FIGHTER_WIDTH,FIGHTER_HEIGHT};
+                 //cout<<"6 i"<<endl;
                 SDL_Texture* tex  = allTextures->at(TEX_SHIPS);
-    
+                     //cout<<"7 i"<<endl;
                 AIShip* newShip = new  AIShip(db, tex,false);
+                 //cout<<"8 i"<<endl;
                 newShip->setPosition(esp);
+                 //cout<<"9 i"<<endl;
                 newShip->setDestination(playerShip->getPosition());
+                 //cout<<"10"<<endl;
                 newShip->setRenderOrder(0);
+                 //cout<<"11 i"<<endl;
                 newShip->setF2(1);
+                // cout<<"12 i"<<endl;
                 newShip->setGoal(2);
+                 //cout<<"13 i"<<endl;
                 newShip->setCurrHp(100);
+                //cout<<"14 i"<<endl;
                 newShip->setMaxHp(100);
-    
+                //cout<<"15 i"<<endl;
                 osSprite->push_back(newShip);
+                //cout<<"16 i "<<endl;
                 ships->push_back(newShip);
+                //cout<<"17 i"<<endl;
+
                 std::cout << "Spawned Enemy" << std::endl;
 
             }
@@ -564,7 +614,7 @@ void AI::createShip(bool isAlly,int goal){
 
 
 
-pair<int,int> AI::ChooseEnemySpawn(){
+pair<int,int> AI::ChooseBorderSpawn(){
     int decidedspawn = 3; //note: function will determine which spawn to choose
 
     vector<pair<int,int>> es = sector->getEnemySpawn(decidedspawn);
@@ -582,17 +632,17 @@ pair<int,int> AI::ChooseEnemySpawn(){
 
 }
 
-pair<int,int> AI::ChooseAllySpawn(){
-    std::cout << "1" << std::endl;
+pair<int,int> AI::ChooseSSSpawn(){
+    //std::cout << "1" << std::endl;
     vector<pair<int,int>> as = sector->getAllySpawn();
-    std::cout << "2" << std::endl;
+    //std::cout << "2" << std::endl;
     for(pair<int,int> spawn : as){
-        std::cout << "3" << std::endl;
+        //std::cout << "3" << std::endl;
         if(!occupied(spawn)){
             return spawn;
         }
     }
-    std::cout << "4" << std::endl;
+    //std::cout << "4" << std::endl;
     return pair<int,int>(-1,-1);
 }
 

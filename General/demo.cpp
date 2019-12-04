@@ -516,7 +516,7 @@ void run_demo(gpRender gr){
 	}
 	
 	/*Need to address*/
-	ai.setCurrentSector(sectors[curSector - 1]);
+	ai.setCurrentSector(sectors[curSector - 1], false);
 
 	/*Need to fix*/
 	
@@ -1308,7 +1308,7 @@ void run_demo(gpRender gr){
 					if(curSector != 7 && curSector != 8 && curSector != 9)
 					{
 						side = 3;
-												if(galaxy.getInControl(curSector-1)){
+						if(galaxy.getInControl(curSector-1)){
 							if(curSector == 4){
 								sector4ent.updateCredits(playerMapTex);
 							}
@@ -1362,7 +1362,7 @@ void run_demo(gpRender gr){
 					solar = true;
 				}
 
-				ai.setCurrentSector(sectors[curSector - 1]);
+				ai.setCurrentSector(sectors[curSector - 1], true);
 
 				
 			}

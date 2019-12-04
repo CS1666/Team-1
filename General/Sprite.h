@@ -67,6 +67,7 @@ class Sprite{
 		int getMass();
 		bool getIsAI();
 		bool getIsAsteroid();
+
 		//Methods that deal with Rectangle drawn entities
 		SDL_Rect* getDrawBox();
 		SDL_Rect* getCollisionBox();
@@ -82,6 +83,7 @@ class Sprite{
 		bool isHole();
 		
 		bool shouldRemove();
+		void setRemove(bool rm);
 	protected:
 		SDL_Rect drawBox;
 		SDL_Rect collisionBox;

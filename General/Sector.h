@@ -16,6 +16,7 @@
 #include "../General/Sprite.h"
 #include "../General/Constants.h"
 #include "../AI/theta.h"
+#include "../AI/AIShip.h"
 
 
 
@@ -24,11 +25,10 @@ class Sector
 	private:
 
 		Pathfinder* pf;
-		vector <Sprite *>* __SectEnts;
-		vector<Star *> __stars;
-		vector<Ship *> __ships;
-		vector<Planet *> __planets;
-		
+		vector<Sprite *>* __SectEnts;
+		vector<Star *>    __stars;
+		vector<Ship *>    __ships;
+		vector<Planet *>  __planets;
 
 		vector<Asteroid *> __asteroids;
 		vector<BlackHole *> __blackholes;
@@ -77,7 +77,7 @@ class Sector
 		vector<int> getSize();
 
 		vector<vector<int> > getState();
-
+		void clearDeadEnts();
 	
 		int getNumAlly();
 		int getNumEnemy();
