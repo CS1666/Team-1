@@ -618,6 +618,22 @@ void run_demo(gpRender gr){
 			//trigger battle/takeover if player doesn't respond in time (2 minutes)
 			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
+			    //ratio of ally:enemy
+			    double chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    //successful takeover
+			    if(rand()%100>chance*100)
+			    {
+				//note: need to do something with changing ownership of sector
+				ai.getTargetSector()->setCurEnemy(rand()%SHIP_ENEMY_SECTOR_LIMIT);
+				targetSector=galaxy.findTarget();
+        			ai.setTargetSector(sectors.at(targetSector));
+        			ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
+			    }
+			    //fail
+			    else
+			    {
+				ai.getTargetSector()->setCurEnemy(0);
+			    }
 			}
 			if(galaxy.getInControl(curSector - 1))
 			{
