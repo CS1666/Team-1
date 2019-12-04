@@ -89,6 +89,7 @@
 	int GalaxyControl::findTarget()
 	{
 	    std::vector<int> possible;
+	    //std::cout<<"?????"<<std::endl;
 	    for(int x=0;x<8;x++)
 	    {
 		if(inControl[x])

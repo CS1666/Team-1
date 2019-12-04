@@ -536,9 +536,10 @@ void run_demo(gpRender gr){
 	ai.setShips(&aiControlled);
 	ai.setSprites(&osSprite);
 	ai.setTextures(&allTextures);
-	ai.setTimeAttack(999999999);
+	ai.setTimeAttack(SDL_GetTicks());
 	ai.setTimeSpawn(SDL_GetTicks());
 	int targetSector=galaxy.findTarget();
+	//cout<<"target: "<<targetSector<<endl;
 	ai.setTargetSector(sectors.at(targetSector));
 	ai.setAttackSector(sectors.at(galaxy.findNeighbor(targetSector)));
 	Audio::play_music();
@@ -647,23 +648,31 @@ void run_demo(gpRender gr){
 			//add a ship to an adjacent every 15 seconds
 			if(SDL_GetTicks()-ai.getTimeSpawn()>DELAY_ATTACK_SPAWN)
 			{
-			    cout<<"add a ship?"<<endl;
+			    //cout<<"add a ship?"<<endl;
 			    ai.getAttackSector()->setCurEnemy(ai.getAttackSector()->getCurEnemy()+1);
 			    ai.setTimeSpawn(SDL_GetTicks());
 			}
 			//begin attack once reach limit
 			if(ai.getAttackSector()->getCurEnemy()==SHIP_ENEMY_SECTOR_LIMIT)
 			{
-			    cout<<"begin attack?"<<endl;
+			    //cout<<"begin attack?"<<endl;
 			    ai.setTimeAttack(SDL_GetTicks());
+			    ai.attackFlip();
 			    ai.getAttackSector()->setCurEnemy(SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			    ai.getTargetSector()->setCurEnemy(SHIP_ENEMY_SECTOR_LIMIT-SHIP_ENEMY_SECTOR_INIT_LIMIT);
 			}
 			//trigger battle/takeover if player doesn't respond in time (2 minutes)
-			if(SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
+			if(ai.getAttackStatus()&&SDL_GetTicks()-ai.getTimeAttack()>DELAY_ATTACK_ATTACK)
 			{
+			    //cout<<"attack begins?"<<endl;
+			    //cout<<"time: "<<ai.getTimeAttack()<<endl;
+			    cout<<SDL_GetTicks()<<endl;
+			    cout<<SDL_GetTicks()-ai.getTimeAttack()<<endl;
 			    //ratio of ally:enemy
-			    double chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    double chance=10;
+			    if(ai.getTargetSector()->getCurEnemy()!=0)
+				chance=ai.getTargetSector()->getNumAlly()/ai.getTargetSector()->getCurEnemy();
+			    //cout<<"chance: "<<chance<<endl;
 			    //successful takeover
 			    if(rand()%100>chance*100)
 			    {
@@ -679,6 +688,7 @@ void run_demo(gpRender gr){
 			    {
 				ai.getTargetSector()->setCurEnemy(0);
 			    }
+			    ai.attackFlip();
 			}
 			if(galaxy.getInControl(curSector - 1))
 			{

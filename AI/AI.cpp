@@ -241,6 +241,14 @@ Sector* AI::getTargetSector()
 {
     return targetSector;
 }
+void AI::attackFlip()
+{
+    isAttacking=!isAttacking;
+}
+bool AI::getAttackStatus()
+{
+    return isAttacking;
+}
 void AI::setShips(vector<AIShip*>* newShips)
 {
     ships = newShips;
